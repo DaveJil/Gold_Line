@@ -18,6 +18,7 @@ Future<void> main() async {
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackground);
   // pushNotification.initNotifacion();
   runApp(const MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: SenderDeliveryDetails(),
   ));
 }

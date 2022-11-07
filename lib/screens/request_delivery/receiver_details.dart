@@ -4,16 +4,16 @@ import '../../utility/helpers/constants.dart';
 import '../../utility/helpers/custom_button.dart';
 import '../../utility/helpers/delivery_input.dart';
 
-class SenderDeliveryDetails extends StatefulWidget {
+class ReceiverDeliveryDetails extends StatefulWidget {
   static const String iD = '/senderDeliveryScreen';
 
-  const SenderDeliveryDetails({Key? key}) : super(key: key);
+  const ReceiverDeliveryDetails({Key? key}) : super(key: key);
 
   @override
-  SenderDeliveryDetailsState createState() => SenderDeliveryDetailsState();
+  ReceiverDeliveryDetailsState createState() => ReceiverDeliveryDetailsState();
 }
 
-class SenderDeliveryDetailsState extends State<SenderDeliveryDetails> {
+class ReceiverDeliveryDetailsState extends State<ReceiverDeliveryDetails> {
   bool onTapped = false;
 
   bool value = false;
@@ -68,7 +68,7 @@ class SenderDeliveryDetailsState extends State<SenderDeliveryDetails> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  "Sender Details",
+                  "Receiver Details",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       fontSize: 24,
@@ -79,7 +79,7 @@ class SenderDeliveryDetailsState extends State<SenderDeliveryDetails> {
                   height: 10,
                 ),
                 const CustomDeliveryTextField(
-                    hint: "Sender Name", icon: Icon(Icons.person)),
+                    hint: "Receiver Name", icon: Icon(Icons.person)),
                 const SizedBox(
                   height: 12,
                 ),
@@ -127,9 +127,8 @@ class SenderDeliveryDetailsState extends State<SenderDeliveryDetails> {
                 const CustomDeliveryTextField(
                     hint: "Special Instruction",
                     icon: Icon(Icons.question_mark)),
-                const SizedBox(height: 15),
+                const SizedBox(height: 7),
                 const BuildCheckBox(),
-                const SizedBox(height: 15),
                 Row(
                   children: [
                     const Text(
@@ -148,7 +147,7 @@ class SenderDeliveryDetailsState extends State<SenderDeliveryDetails> {
                     )
                   ],
                 ),
-                SizedBox(height: size.width / 20),
+                SizedBox(height: size.width / 15),
                 const BuildDeliveryOption(),
                 SizedBox(height: size.width / 15),
                 const BuildContinueButton()
@@ -179,14 +178,13 @@ class _BuildCheckBoxState extends State<BuildCheckBox> {
         const Text(
           "Please tick if this parcel is considered as fragile",
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 12,
             color: Colors.black54,
             // fontWeight: FontWeight.w400,
           ),
         ),
         Checkbox(
             value: _isFragile,
-            activeColor: kPrimaryGoldColor,
             onChanged: (bool? value) {
               setState(() {
                 _isFragile = _isFragile;
@@ -207,16 +205,12 @@ class BuildDeliveryOption extends StatelessWidget {
       children: [
         CustomButton(
           onPressed: () {},
-          text: "Instant Delivery",
-          fontSize: 18,
-          height: 50,
+          text: "Instant\nDelivery",
           width: MediaQuery.of(context).size.width / 2.5,
         ),
         CustomButton(
           onPressed: () {},
-          text: "Scheduled Delivery",
-          fontSize: 18,
-          height: 50,
+          text: "Scheduled\nDelivery",
           width: MediaQuery.of(context).size.width / 2.5,
         )
       ],
@@ -229,6 +223,37 @@ class BuildContinueButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomButton(onPressed: () {}, text: "Continue");
+    return Center(
+      child: InkWell(
+        onTap: () {
+          // uploadData();
+        },
+        child: Container(
+          width: MediaQuery.of(context).size.width / 2,
+          height: MediaQuery.of(context).size.height / 20,
+          decoration: BoxDecoration(
+            color: kPrimaryGoldColor,
+            border: Border.all(),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text(
+                "Continue",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Icon(
+                Icons.arrow_forward_rounded,
+                color: Colors.white,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

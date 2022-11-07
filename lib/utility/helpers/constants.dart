@@ -21,7 +21,7 @@ const BASEURL = 'http://thesafedrop.herokuapp.com';
 
 //COLORS
 const Color kVistaWhite = Color.fromRGBO(253, 252, 250, 1);
-const Color kPrimaryGoldColor = Color.fromARGB(1, 228, 169, 13);
+const Color kPrimaryGoldColor = Color.fromRGBO(228, 169, 13, 1);
 const Color kSecondBlueColor = Color.fromRGBO(0, 162, 237, 1);
 const Color kTextGrey = Color.fromRGBO(243, 243, 243, 1);
 const Color kSecondaryColor = Color.fromRGBO(10, 36, 66, 1);

@@ -29,12 +29,14 @@ class CustomDeliveryTextField extends StatelessWidget {
               ),
               Expanded(
                 child: TextFormField(
+                  style: const TextStyle(fontSize: 18),
+                  cursorColor: Colors.black,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.only(left: 5, right: 5),
+                    border: InputBorder.none,
                     fillColor: kTextGrey,
                     focusColor: kTextGrey,
                     hintText: hint,
-                    filled: true,
                   ),
                 ),
               ),
