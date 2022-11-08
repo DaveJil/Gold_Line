@@ -84,7 +84,7 @@ class ReceiverDeliveryDetailsState extends State<ReceiverDeliveryDetails> {
                   height: 12,
                 ),
                 const CustomDeliveryTextField(
-                    hint: "Address", icon: Icon(Icons.home)),
+                    hint: "Delivery Address", icon: Icon(Icons.home)),
                 const SizedBox(
                   height: 12,
                 ),
@@ -95,32 +95,6 @@ class ReceiverDeliveryDetailsState extends State<ReceiverDeliveryDetails> {
                 ),
                 const CustomDeliveryTextField(
                     hint: "Mobile Number", icon: Icon(Icons.phone)),
-                const SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      "Item Details.",
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Expanded(
-                      child: Divider(
-                        color: Colors.grey[600],
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                const CustomDeliveryTextField(
-                    hint: "Item Description",
-                    icon: Icon(Icons.gif_box_rounded)),
                 const SizedBox(
                   height: 12,
                 ),
@@ -205,12 +179,12 @@ class BuildDeliveryOption extends StatelessWidget {
       children: [
         CustomButton(
           onPressed: () {},
-          text: "Instant\nDelivery",
+          text: "Sender Pays",
           width: MediaQuery.of(context).size.width / 2.5,
         ),
         CustomButton(
           onPressed: () {},
-          text: "Scheduled\nDelivery",
+          text: "Receiver Pays",
           width: MediaQuery.of(context).size.width / 2.5,
         )
       ],

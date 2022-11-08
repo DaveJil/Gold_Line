@@ -84,7 +84,7 @@ class SenderDeliveryDetailsState extends State<SenderDeliveryDetails> {
                   height: 12,
                 ),
                 const CustomDeliveryTextField(
-                    hint: "Address", icon: Icon(Icons.home)),
+                    hint: "Pick up Address", icon: Icon(Icons.home)),
                 const SizedBox(
                   height: 12,
                 ),
