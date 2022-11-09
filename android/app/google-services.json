@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "311325913216",
+    "project_id": "goldline-79ccc",
+    "storage_bucket": "goldline-79ccc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311325913216:android:92ad2c11ff72f737bab665",
+        "android_client_info": {
+          "package_name": "com.example.gold_line"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "311325913216-c85oifvbruuqal82qn4hutn5n6uqkbei.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANZT43ptN8jblMQE2qRC9UOn2R2W7pmGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "311325913216-c85oifvbruuqal82qn4hutn5n6uqkbei.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
