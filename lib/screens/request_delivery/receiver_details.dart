@@ -5,6 +5,8 @@ import '../../utility/helpers/constants.dart';
 import '../../utility/helpers/custom_button.dart';
 import '../../utility/helpers/delivery_input.dart';
 
+enum ProductSize { small, medium, large, multiple }
+
 class ReceiverDeliveryDetails extends StatefulWidget {
   static const String iD = '/senderDeliveryScreen';
 
@@ -211,7 +213,7 @@ class _BuildItemSizeState extends State<BuildItemSize> {
 
   void updateColor() {
     setState(() {
-      isSelected = !isSelected;
+      isActive = !isActive;
     });
   }
 
@@ -248,13 +250,14 @@ class _BuildItemSizeState extends State<BuildItemSize> {
             ),
           ),
           InkWell(
-            onTap: updateColor,
-            child: Card(
-              elevation: 10,
-              child: Container(
+            child: ElevatedButton(
+              onPressed: updateColor,
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: isActive ? kVistaWhite : kPrimaryGoldColor,
+                  elevation: 10),
+              child: SizedBox(
                 height: 100,
-                width: 100,
-                color: isActive ? kVistaWhite : kPrimaryGoldColor,
+                width: 80,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -262,11 +265,15 @@ class _BuildItemSizeState extends State<BuildItemSize> {
                     Icon(
                       FontAwesomeIcons.boxOpen,
                       size: 30,
+                      color: Colors.black,
                     ),
                     SizedBox(
                       height: 5,
                     ),
-                    Text("Medium"),
+                    Text(
+                      "Medium",
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ],
                 ),
               ),

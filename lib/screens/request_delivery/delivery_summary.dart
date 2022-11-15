@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterwave_standard/flutterwave.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 
 import '../../utility/helpers/custom_button.dart';
@@ -92,5 +93,28 @@ class _CheckoutDeliveryState extends State<CheckoutDelivery> {
         ),
       ),
     );
+  }
+
+  handlePaymentInitialization() async {
+    final Customer customer = Customer(
+        name: "FLW Developer",
+        phoneNumber: "07014261561",
+        email: "customer@customer.com");
+
+    final Flutterwave flutterwave = Flutterwave(
+        context: context,
+        publicKey: "FLWPUBK-45587fdb1c84335354ab0fa388b803d5-X",
+        currency: "NGN",
+        redirectUrl: '',
+        txRef: "trx",
+        amount: "5000",
+        customer: customer,
+        paymentOptions: "card,",
+        customization: Customization(title: "Test Payment"),
+        isTestMode: true);
+    final ChargeResponse response = await flutterwave.charge();
+    if (response == null) {
+      print("${response.toJson()}");
+    } else {}
   }
 }

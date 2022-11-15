@@ -208,16 +208,16 @@ class BuildDeliveryOption extends StatelessWidget {
       children: [
         CustomButton(
           onPressed: () {},
-          text: "Instant Delivery",
-          fontSize: 18,
+          text: "Instant \n Delivery",
+          fontSize: 12,
           height: 50,
           width: MediaQuery.of(context).size.width / 2.5,
         ),
         //ToggleButtons(children: children, isSelected: isSelected),
         CustomButton(
           onPressed: () {},
-          text: "Scheduled Delivery",
-          fontSize: 18,
+          text: "Scheduled \n Delivery",
+          fontSize: 12,
           height: 50,
           width: MediaQuery.of(context).size.width / 2.5,
         )

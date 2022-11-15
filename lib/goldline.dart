@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gold_line/screens/request_delivery/delivery_summary.dart';
+import 'package:gold_line/screens/splashscreen.dart';
 
 class GoldLine extends StatelessWidget {
   const GoldLine({Key? key}) : super(key: key);
@@ -8,7 +8,7 @@ class GoldLine extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: CheckoutDelivery(),
+      home: const SplashScreen(),
       theme: ThemeData(),
     );
   }
