@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../utility/helpers/constants.dart';
 import '../../utility/helpers/custom_button.dart';
@@ -103,6 +104,34 @@ class ReceiverDeliveryDetailsState extends State<ReceiverDeliveryDetails> {
                     icon: Icon(Icons.question_mark)),
                 const SizedBox(height: 7),
                 const BuildCheckBox(),
+                const SizedBox(
+                  height: 7,
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      "Size Of Item.",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Expanded(
+                      child: Divider(
+                        color: Colors.grey[600],
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 7,
+                ),
+                const BuildItemSize(),
+                const SizedBox(
+                  height: 7,
+                ),
                 Row(
                   children: [
                     const Text(
@@ -165,6 +194,136 @@ class _BuildCheckBoxState extends State<BuildCheckBox> {
               });
             })
       ],
+    );
+  }
+}
+
+class BuildItemSize extends StatefulWidget {
+  const BuildItemSize({Key? key}) : super(key: key);
+
+  @override
+  State<BuildItemSize> createState() => _BuildItemSizeState();
+}
+
+class _BuildItemSizeState extends State<BuildItemSize> {
+  bool isSelected = false;
+  bool isActive = true;
+
+  void updateColor() {
+    setState(() {
+      isSelected = !isSelected;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 120,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          InkWell(
+            onTap: updateColor,
+            child: Card(
+              elevation: 10,
+              child: Container(
+                height: 100,
+                width: 100,
+                color: isActive ? kVistaWhite : kPrimaryGoldColor,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      FontAwesomeIcons.boxOpen,
+                      size: 20,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text("Small"),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: updateColor,
+            child: Card(
+              elevation: 10,
+              child: Container(
+                height: 100,
+                width: 100,
+                color: isActive ? kVistaWhite : kPrimaryGoldColor,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      FontAwesomeIcons.boxOpen,
+                      size: 30,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text("Medium"),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: updateColor,
+            child: Card(
+              elevation: 10,
+              child: Container(
+                height: 100,
+                width: 100,
+                color: isActive ? kVistaWhite : kPrimaryGoldColor,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      FontAwesomeIcons.boxOpen,
+                      size: 40,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text("Large"),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: updateColor,
+            child: Card(
+              elevation: 10,
+              child: Container(
+                height: 100,
+                width: 100,
+                color: isActive ? kVistaWhite : kPrimaryGoldColor,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      FontAwesomeIcons.boxesStacked,
+                      size: 30,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text("Multiple"),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gold_line/screens/request_delivery/receiver_details.dart';
 
 import '../../utility/helpers/constants.dart';
 import '../../utility/helpers/custom_button.dart';
@@ -212,6 +213,7 @@ class BuildDeliveryOption extends StatelessWidget {
           height: 50,
           width: MediaQuery.of(context).size.width / 2.5,
         ),
+        //ToggleButtons(children: children, isSelected: isSelected),
         CustomButton(
           onPressed: () {},
           text: "Scheduled Delivery",
@@ -229,6 +231,13 @@ class BuildContinueButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomButton(onPressed: () {}, text: "Continue");
+    return CustomButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => const ReceiverDeliveryDetails()));
+        },
+        text: "Continue");
   }
 }
