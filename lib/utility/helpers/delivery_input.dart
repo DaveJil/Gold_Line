@@ -5,9 +5,15 @@ import 'constants.dart';
 class CustomDeliveryTextField extends StatelessWidget {
   final String hint;
   final Widget icon;
+  final TextEditingController controller;
+  final Function? onChanged;
 
   const CustomDeliveryTextField(
-      {Key? key, required this.hint, required this.icon})
+      {Key? key,
+      required this.hint,
+      required this.icon,
+      required this.controller,
+      this.onChanged})
       : super(key: key);
 
   @override
@@ -31,6 +37,9 @@ class CustomDeliveryTextField extends StatelessWidget {
                 child: TextFormField(
                   style: const TextStyle(fontSize: 18),
                   cursorColor: Colors.black,
+                  onChanged: (value) {
+                    onChanged;
+                  },
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.only(left: 5, right: 5),
                     border: InputBorder.none,

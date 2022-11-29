@@ -13,7 +13,6 @@ class AddressDialogBox {
 //     // size
 
   Future dialogBox(BuildContext context) {
-    Dimension dimension = Dimension(context: context);
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -22,14 +21,14 @@ class AddressDialogBox {
         ),
         // title: Text('Hello'),
         content: Container(
-          height: dimension.getHeight(280),
-          width: dimension.getWidth(365),
+          height: getHeight(280, context),
+          width: getWidth(365, context),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(
-            padding: EdgeInsets.all(dimension.getWidth(5)),
+            padding: EdgeInsets.all(getWidth(5, context)),
             child: Column(
               children: [
                 Container(
@@ -43,7 +42,7 @@ class AddressDialogBox {
                   ),
                 ),
                 SizedBox(
-                  height: dimension.getHeight(10),
+                  height: getHeight(10, context),
                 ),
                 Card(
                   shape: RoundedRectangleBorder(
@@ -95,7 +94,7 @@ class AddressDialogBox {
                   child: Container(),
                 ),
                 SizedBox(
-                  width: dimension.getWidth(70),
+                  width: getWidth(70, context),
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(

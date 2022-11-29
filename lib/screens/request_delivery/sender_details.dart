@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gold_line/screens/request_delivery/receiver_details.dart';
+import 'package:gold_line/utility/helpers/controllers.dart';
+import 'package:gold_line/utility/helpers/dimensions.dart';
+import 'package:google_place/google_place.dart';
 
 import '../../utility/helpers/constants.dart';
 import '../../utility/helpers/custom_button.dart';
@@ -19,7 +22,9 @@ class SenderDeliveryDetailsState extends State<SenderDeliveryDetails> {
 
   bool value = false;
 
+  GooglePlace googlePlace = GooglePlace(GOOGLE_MAPS_API_KEY);
   final _formKey = GlobalKey<FormState>();
+  List<AutocompletePrediction> predictions = [];
 
   @override
   void initState() {
@@ -31,6 +36,16 @@ class SenderDeliveryDetailsState extends State<SenderDeliveryDetails> {
     // deliveryProvider.disposeSenderDetails();
 
     super.dispose();
+  }
+
+  autoCompleteSearch(String value) async {
+    var result = await googlePlace.autocomplete.get(value);
+
+    if (result != null && result.predictions != null && mounted) {
+      setState(() {
+        predictions = result.predictions!;
+      });
+    }
   }
 
   @override
@@ -76,28 +91,44 @@ class SenderDeliveryDetailsState extends State<SenderDeliveryDetails> {
                       fontWeight: FontWeight.bold,
                       color: kPrimaryGoldColor),
                 ),
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: getHeight(10, context),
                 ),
-                const CustomDeliveryTextField(
-                    hint: "Sender Name", icon: Icon(Icons.person)),
-                const SizedBox(
-                  height: 12,
+                CustomDeliveryTextField(
+                  hint: "Sender Name",
+                  controller: senderName,
+                  icon: Icon(Icons.person),
                 ),
-                const CustomDeliveryTextField(
-                    hint: "Pick up Address", icon: Icon(Icons.home)),
-                const SizedBox(
-                  height: 12,
+                SizedBox(
+                  height: getHeight(12, context),
                 ),
-                const CustomDeliveryTextField(
-                    hint: "Nearest Landmark", icon: Icon(Icons.location_on)),
-                const SizedBox(
-                  height: 12,
+                CustomDeliveryTextField(
+                    hint: "Pick up Address",
+                    icon: Icon(Icons.home),
+                    controller: pickUpLocation,
+                    onChanged: (value) {
+                      if (value.isNotEmpty) {
+                        autoCompleteSearch(value);
+                      }
+                    }),
+                SizedBox(
+                  height: getHeight(12, context),
                 ),
-                const CustomDeliveryTextField(
-                    hint: "Mobile Number", icon: Icon(Icons.phone)),
-                const SizedBox(
-                  height: 15,
+                CustomDeliveryTextField(
+                  hint: "Nearest Landmark",
+                  icon: Icon(Icons.location_on),
+                  controller: pickUpLandMark,
+                ),
+                SizedBox(
+                  height: getHeight(12, context),
+                ),
+                CustomDeliveryTextField(
+                  hint: "Mobile Number",
+                  icon: Icon(Icons.phone),
+                  controller: senderPhone,
+                ),
+                SizedBox(
+                  height: getHeight(15, context),
                 ),
                 Row(
                   children: [
@@ -108,7 +139,7 @@ class SenderDeliveryDetailsState extends State<SenderDeliveryDetails> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(width: 5),
+                    SizedBox(width: getWidth(5, context)),
                     Expanded(
                       child: Divider(
                         color: Colors.grey[600],
@@ -116,21 +147,27 @@ class SenderDeliveryDetailsState extends State<SenderDeliveryDetails> {
                     )
                   ],
                 ),
-                const SizedBox(
-                  height: 12,
+                SizedBox(
+                  height: getHeight(12, context),
                 ),
-                const CustomDeliveryTextField(
+                CustomDeliveryTextField(
                     hint: "Item Description",
+                    controller: description,
                     icon: Icon(Icons.gif_box_rounded)),
-                const SizedBox(
-                  height: 12,
+                SizedBox(
+                  height: getHeight(12, context),
                 ),
-                const CustomDeliveryTextField(
+                CustomDeliveryTextField(
                     hint: "Special Instruction",
+                    controller: instruction,
                     icon: Icon(Icons.question_mark)),
-                const SizedBox(height: 15),
+                SizedBox(
+                  height: getHeight(15, context),
+                ),
                 const BuildCheckBox(),
-                const SizedBox(height: 15),
+                SizedBox(
+                  height: getHeight(15, context),
+                ),
                 Row(
                   children: [
                     const Text(
@@ -141,7 +178,7 @@ class SenderDeliveryDetailsState extends State<SenderDeliveryDetails> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(width: 5),
+                    SizedBox(width: getWidth(5, context)),
                     Expanded(
                       child: Divider(
                         color: Colors.grey[600],
@@ -170,7 +207,7 @@ class BuildCheckBox extends StatefulWidget {
 }
 
 class _BuildCheckBoxState extends State<BuildCheckBox> {
-  bool _isFragile = false;
+  bool isFragile = false;
 
   @override
   Widget build(BuildContext context) {
@@ -186,13 +223,11 @@ class _BuildCheckBoxState extends State<BuildCheckBox> {
           ),
         ),
         Checkbox(
-            value: _isFragile,
+            value: isFragile,
             activeColor: kPrimaryGoldColor,
-            onChanged: (bool? value) {
-              setState(() {
-                _isFragile = _isFragile;
-              });
-            })
+            onChanged: (isFragile) => setState(() {
+                  this.isFragile = isFragile!;
+                })),
       ],
     );
   }
@@ -209,16 +244,16 @@ class BuildDeliveryOption extends StatelessWidget {
         CustomButton(
           onPressed: () {},
           text: "Instant \n Delivery",
-          fontSize: 12,
-          height: 50,
+          fontSize: getFont(16, context),
+          height: getHeight(60, context),
           width: MediaQuery.of(context).size.width / 2.5,
         ),
         //ToggleButtons(children: children, isSelected: isSelected),
         CustomButton(
           onPressed: () {},
           text: "Scheduled \n Delivery",
-          fontSize: 12,
-          height: 50,
+          fontSize: getFont(16, context),
+          height: getHeight(60, context),
           width: MediaQuery.of(context).size.width / 2.5,
         )
       ],
@@ -232,6 +267,8 @@ class BuildContinueButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomButton(
+        height: getHeight(70, context),
+        fontSize: getHeight(20, context),
         onPressed: () {
           Navigator.push(
               context,

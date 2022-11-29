@@ -14,6 +14,7 @@ Future<void> _firebaseMessagingBackground(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   // await Firebase.initializeApp();
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackground);
   // pushNotification.initNotifacion();

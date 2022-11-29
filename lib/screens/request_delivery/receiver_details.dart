@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gold_line/screens/request_delivery/delivery_summary.dart';
+import 'package:gold_line/utility/helpers/controllers.dart';
+import 'package:gold_line/utility/helpers/dimensions.dart';
 
 import '../../utility/helpers/constants.dart';
 import '../../utility/helpers/custom_button.dart';
@@ -81,29 +84,43 @@ class ReceiverDeliveryDetailsState extends State<ReceiverDeliveryDetails> {
                 const SizedBox(
                   height: 10,
                 ),
-                const CustomDeliveryTextField(
-                    hint: "Receiver Name", icon: Icon(Icons.person)),
+                CustomDeliveryTextField(
+                  hint: "Receiver Name",
+                  icon: const Icon(Icons.person),
+                  controller: receiverName,
+                ),
                 const SizedBox(
                   height: 12,
                 ),
-                const CustomDeliveryTextField(
-                    hint: "Delivery Address", icon: Icon(Icons.home)),
+                CustomDeliveryTextField(
+                  hint: "Delivery Address",
+                  icon: const Icon(Icons.home),
+                  controller: dropOffLocation,
+                ),
                 const SizedBox(
                   height: 12,
                 ),
-                const CustomDeliveryTextField(
-                    hint: "Nearest Landmark", icon: Icon(Icons.location_on)),
+                CustomDeliveryTextField(
+                  hint: "Nearest Landmark",
+                  icon: const Icon(Icons.location_on),
+                  controller: dropOffLandMark,
+                ),
                 const SizedBox(
                   height: 12,
                 ),
-                const CustomDeliveryTextField(
-                    hint: "Mobile Number", icon: Icon(Icons.phone)),
+                CustomDeliveryTextField(
+                  hint: "Mobile Number",
+                  icon: const Icon(Icons.phone),
+                  controller: receiverPhone,
+                ),
                 const SizedBox(
                   height: 12,
                 ),
-                const CustomDeliveryTextField(
-                    hint: "Special Instruction",
-                    icon: Icon(Icons.question_mark)),
+                CustomDeliveryTextField(
+                  hint: "Special Instruction",
+                  icon: const Icon(Icons.question_mark),
+                  controller: instruction,
+                ),
                 const SizedBox(height: 7),
                 const BuildCheckBox(),
                 const SizedBox(
@@ -208,124 +225,143 @@ class BuildItemSize extends StatefulWidget {
 }
 
 class _BuildItemSizeState extends State<BuildItemSize> {
-  bool isSelected = false;
-  bool isActive = true;
-
-  void updateColor() {
-    setState(() {
-      isActive = !isActive;
-    });
-  }
+  bool isSmall = true;
+  bool isMedium = true;
+  bool isLarge = true;
+  bool isMultiple = true;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 120,
+      height: getHeight(250, context),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          InkWell(
-            onTap: updateColor,
-            child: Card(
-              elevation: 10,
-              child: Container(
-                height: 100,
-                width: 100,
-                color: isActive ? kVistaWhite : kPrimaryGoldColor,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      FontAwesomeIcons.boxOpen,
-                      size: 20,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text("Small"),
-                  ],
-                ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                isSmall = !isSmall;
+              });
+            },
+            style: ElevatedButton.styleFrom(
+                backgroundColor: isSmall ? kVistaWhite : kPrimaryGoldColor,
+                elevation: 10),
+            child: SizedBox(
+              height: getHeight(160, context),
+              width: getWidth(100, context),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const [
+                  Icon(
+                    FontAwesomeIcons.boxOpen,
+                    size: 20,
+                    color: Colors.black,
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    "Small",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
               ),
             ),
           ),
-          InkWell(
-            child: ElevatedButton(
-              onPressed: updateColor,
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: isActive ? kVistaWhite : kPrimaryGoldColor,
-                  elevation: 10),
-              child: SizedBox(
-                height: 100,
-                width: 80,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      FontAwesomeIcons.boxOpen,
-                      size: 30,
-                      color: Colors.black,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Medium",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
-                ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                isMedium = !isMedium;
+              });
+            },
+            style: ElevatedButton.styleFrom(
+                backgroundColor: isMedium ? kVistaWhite : kPrimaryGoldColor,
+                elevation: 10),
+            child: SizedBox(
+              height: getHeight(160, context),
+              width: getWidth(100, context),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const [
+                  Icon(
+                    FontAwesomeIcons.boxOpen,
+                    size: 30,
+                    color: Colors.black,
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    "Medium",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
               ),
             ),
           ),
-          InkWell(
-            onTap: updateColor,
-            child: Card(
-              elevation: 10,
-              child: Container(
-                height: 100,
-                width: 100,
-                color: isActive ? kVistaWhite : kPrimaryGoldColor,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      FontAwesomeIcons.boxOpen,
-                      size: 40,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text("Large"),
-                  ],
-                ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                isLarge = !isLarge;
+              });
+            },
+            style: ElevatedButton.styleFrom(
+                backgroundColor: isLarge ? kVistaWhite : kPrimaryGoldColor,
+                elevation: 10),
+            child: SizedBox(
+              height: getHeight(160, context),
+              width: getWidth(100, context),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const [
+                  Icon(
+                    FontAwesomeIcons.boxOpen,
+                    size: 40,
+                    color: Colors.black,
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    "Large",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
               ),
             ),
           ),
-          InkWell(
-            onTap: updateColor,
-            child: Card(
-              elevation: 10,
-              child: Container(
-                height: 100,
-                width: 100,
-                color: isActive ? kVistaWhite : kPrimaryGoldColor,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      FontAwesomeIcons.boxesStacked,
-                      size: 30,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text("Multiple"),
-                  ],
-                ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                isMultiple = !isMultiple;
+              });
+            },
+            style: ElevatedButton.styleFrom(
+                backgroundColor: isMultiple ? kVistaWhite : kPrimaryGoldColor,
+                elevation: 10),
+            child: SizedBox(
+              height: getHeight(160, context),
+              width: getWidth(100, context),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const [
+                  Icon(
+                    FontAwesomeIcons.boxesStacked,
+                    size: 30,
+                    color: Colors.black,
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    "Multiple",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
               ),
             ),
           ),
@@ -366,7 +402,8 @@ class BuildContinueButton extends StatelessWidget {
     return Center(
       child: InkWell(
         onTap: () {
-          // uploadData();
+          Navigator.push(context,
+              MaterialPageRoute(builder: (_) => const CheckoutDelivery()));
         },
         child: Container(
           width: MediaQuery.of(context).size.width / 2,

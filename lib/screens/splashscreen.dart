@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gold_line/screens/authentication/sign_in.dart';
+import 'package:gold_line/screens/authentication/user_navigation.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String iD = '/';
@@ -28,7 +29,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   goNext() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => SignInScreen()));
+        context, MaterialPageRoute(builder: (context) => const LoginChoice()));
+    var width = MediaQuery.of(context).size.width;
+    print(width);
+    var height = MediaQuery.of(context).size.height;
+    print(height);
   }
 
   @override

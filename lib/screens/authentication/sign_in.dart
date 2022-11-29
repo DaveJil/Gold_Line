@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gold_line/screens/authentication/sign_up.dart';
 import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
+import 'package:gold_line/utility/helpers/dimensions.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -28,19 +29,20 @@ class _SignInScreenState extends State<SignInScreen> {
                       fontSize: 28),
                 ),
               ),
-              const SizedBox(
-                height: 20,
+              SizedBox(
+                height: getHeight(20, context),
               ),
               SizedBox(
-                  width: 400,
-                  height: 400,
+                  width: getWidth(400, context),
+                  height: getWidth(400, context),
                   child: SvgPicture.asset("assets/login.svg")),
-              const SizedBox(
-                height: 20,
+              SizedBox(
+                height: getHeight(20, context),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: TextField(
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: getWidth(50, context)),
+                child: const TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Email',
@@ -48,12 +50,13 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 20,
+              SizedBox(
+                height: getHeight(40, context),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: TextField(
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: getWidth(50, context)),
+                child: const TextField(
                   obscureText: true,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -61,8 +64,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       hintText: 'Enter secure password'),
                 ),
               ),
-              const SizedBox(
-                height: 20,
+              SizedBox(
+                height: getHeight(50, context),
               ),
               TextButton(
                 onPressed: () {
@@ -74,12 +77,12 @@ class _SignInScreenState extends State<SignInScreen> {
                   style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
                 ),
               ),
-              const SizedBox(
-                height: 30,
+              SizedBox(
+                height: getHeight(30, context),
               ),
               Container(
-                height: 50,
-                width: 250,
+                height: getHeight(90, context),
+                width: getWidth(400, context),
                 decoration: BoxDecoration(
                     color: kPrimaryGoldColor,
                     borderRadius: BorderRadius.circular(20)),
@@ -94,8 +97,8 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 30,
+              SizedBox(
+                height: getHeight(30, context),
               ),
               TextButton(
                 onPressed: () {
