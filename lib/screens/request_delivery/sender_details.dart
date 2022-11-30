@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gold_line/screens/request_delivery/receiver_details.dart';
 import 'package:gold_line/utility/helpers/controllers.dart';
@@ -22,18 +24,26 @@ class SenderDeliveryDetailsState extends State<SenderDeliveryDetails> {
 
   bool value = false;
 
+  DetailsResult? pickUpLocationAddress;
+
   GooglePlace googlePlace = GooglePlace(GOOGLE_MAPS_API_KEY);
+  late FocusNode pickUpFocusNode;
+  Timer? _debounce;
+
   final _formKey = GlobalKey<FormState>();
   List<AutocompletePrediction> predictions = [];
 
   @override
   void initState() {
+    pickUpFocusNode = FocusNode();
+
     super.initState();
   }
 
   @override
   void dispose() {
     // deliveryProvider.disposeSenderDetails();
+    pickUpFocusNode.dispose();
 
     super.dispose();
   }
@@ -102,14 +112,79 @@ class SenderDeliveryDetailsState extends State<SenderDeliveryDetails> {
                 SizedBox(
                   height: getHeight(12, context),
                 ),
-                CustomDeliveryTextField(
-                    hint: "Pick up Address",
-                    icon: Icon(Icons.home),
-                    controller: pickUpLocation,
-                    onChanged: (value) {
-                      if (value.isNotEmpty) {
-                        autoCompleteSearch(value);
-                      }
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                      color: kTextGrey,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.house),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              style: const TextStyle(fontSize: 18),
+                              focusNode: pickUpFocusNode,
+                              cursorColor: Colors.black,
+                              onChanged: (value) {
+                                if (_debounce?.isActive ?? false)
+                                  _debounce!.cancel();
+                                _debounce = Timer(
+                                    const Duration(milliseconds: 1000), () {
+                                  if (value.isNotEmpty) {
+                                    //places api
+                                    autoCompleteSearch(value);
+                                  } else {
+                                    //clear out the results
+                                    setState(() {
+                                      predictions = [];
+                                      pickUpLocationAddress = null;
+                                    });
+                                  }
+                                });
+                              },
+                              decoration: const InputDecoration(
+                                contentPadding:
+                                    EdgeInsets.only(left: 5, right: 5),
+                                border: InputBorder.none,
+                                fillColor: kTextGrey,
+                                focusColor: kTextGrey,
+                                hintText: "Pick Up Location",
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: predictions.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: Icon(Icons.pin_drop),
+                        title: Text(predictions[index].description.toString()),
+                        onTap: () async {
+                          final placeId = predictions[index].placeId!;
+                          final details =
+                              await googlePlace.details.get(placeId);
+
+                          if (details != null &&
+                              details.result != null &&
+                              mounted) {
+                            if (pickUpFocusNode.hasFocus) {
+                              setState(() {});
+                            }
+                          }
+                        },
+                      );
                     }),
                 SizedBox(
                   height: getHeight(12, context),

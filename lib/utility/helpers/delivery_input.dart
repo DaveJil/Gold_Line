@@ -7,12 +7,14 @@ class CustomDeliveryTextField extends StatelessWidget {
   final Widget icon;
   final TextEditingController controller;
   final Function? onChanged;
+  final FocusNode? focusNode;
 
   const CustomDeliveryTextField(
       {Key? key,
       required this.hint,
       required this.icon,
       required this.controller,
+      this.focusNode,
       this.onChanged})
       : super(key: key);
 
@@ -36,6 +38,7 @@ class CustomDeliveryTextField extends StatelessWidget {
               Expanded(
                 child: TextFormField(
                   style: const TextStyle(fontSize: 18),
+                  focusNode: focusNode,
                   cursorColor: Colors.black,
                   onChanged: (value) {
                     onChanged;

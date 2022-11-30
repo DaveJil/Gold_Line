@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gold_line/screens/request_delivery/delivery_summary.dart';
 import 'package:gold_line/utility/helpers/controllers.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
+import 'package:google_place/google_place.dart';
 
 import '../../utility/helpers/constants.dart';
 import '../../utility/helpers/custom_button.dart';
@@ -25,17 +28,37 @@ class ReceiverDeliveryDetailsState extends State<ReceiverDeliveryDetails> {
   bool value = false;
 
   final _formKey = GlobalKey<FormState>();
+  DetailsResult? dropOffLocationAddress;
+
+  GooglePlace googlePlace = GooglePlace(GOOGLE_MAPS_API_KEY);
+  late FocusNode dropOffFocusNode;
+  Timer? _debounce;
+
+  List<AutocompletePrediction> predictions = [];
 
   @override
   void initState() {
+    dropOffFocusNode = FocusNode();
+
     super.initState();
   }
 
   @override
   void dispose() {
     // deliveryProvider.disposeSenderDetails();
+    dropOffFocusNode.dispose();
 
     super.dispose();
+  }
+
+  autoCompleteSearch(String value) async {
+    var result = await googlePlace.autocomplete.get(value);
+
+    if (result != null && result.predictions != null && mounted) {
+      setState(() {
+        predictions = result.predictions!;
+      });
+    }
   }
 
   @override
@@ -92,11 +115,80 @@ class ReceiverDeliveryDetailsState extends State<ReceiverDeliveryDetails> {
                 const SizedBox(
                   height: 12,
                 ),
-                CustomDeliveryTextField(
-                  hint: "Delivery Address",
-                  icon: const Icon(Icons.home),
-                  controller: dropOffLocation,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                      color: kTextGrey,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.house),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              style: const TextStyle(fontSize: 18),
+                              focusNode: dropOffFocusNode,
+                              cursorColor: Colors.black,
+                              onChanged: (value) {
+                                if (_debounce?.isActive ?? false)
+                                  _debounce!.cancel();
+                                _debounce = Timer(
+                                    const Duration(milliseconds: 1000), () {
+                                  if (value.isNotEmpty) {
+                                    //places api
+                                    autoCompleteSearch(value);
+                                  } else {
+                                    //clear out the results
+                                    setState(() {
+                                      predictions = [];
+                                      dropOffLocationAddress = null;
+                                    });
+                                  }
+                                });
+                              },
+                              decoration: const InputDecoration(
+                                contentPadding:
+                                    EdgeInsets.only(left: 5, right: 5),
+                                border: InputBorder.none,
+                                fillColor: kTextGrey,
+                                focusColor: kTextGrey,
+                                hintText: "Pick Up Location",
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
+                ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: predictions.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: Icon(Icons.pin_drop),
+                        title: Text(predictions[index].description.toString()),
+                        onTap: () async {
+                          final placeId = predictions[index].placeId!;
+                          final details =
+                              await googlePlace.details.get(placeId);
+
+                          if (details != null &&
+                              details.result != null &&
+                              mounted) {
+                            if (dropOffFocusNode.hasFocus) {
+                              setState(() {});
+                            }
+                          }
+                        },
+                      );
+                    }),
                 const SizedBox(
                   height: 12,
                 ),
@@ -233,9 +325,9 @@ class _BuildItemSizeState extends State<BuildItemSize> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: getHeight(250, context),
+      height: getHeight(150, context),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ElevatedButton(
             onPressed: () {
@@ -247,8 +339,8 @@ class _BuildItemSizeState extends State<BuildItemSize> {
                 backgroundColor: isSmall ? kVistaWhite : kPrimaryGoldColor,
                 elevation: 10),
             child: SizedBox(
-              height: getHeight(160, context),
-              width: getWidth(100, context),
+              height: getHeight(100, context),
+              width: getWidth(80, context),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -279,8 +371,8 @@ class _BuildItemSizeState extends State<BuildItemSize> {
                 backgroundColor: isMedium ? kVistaWhite : kPrimaryGoldColor,
                 elevation: 10),
             child: SizedBox(
-              height: getHeight(160, context),
-              width: getWidth(100, context),
+              height: getHeight(100, context),
+              width: getWidth(80, context),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -311,8 +403,8 @@ class _BuildItemSizeState extends State<BuildItemSize> {
                 backgroundColor: isLarge ? kVistaWhite : kPrimaryGoldColor,
                 elevation: 10),
             child: SizedBox(
-              height: getHeight(160, context),
-              width: getWidth(100, context),
+              height: getHeight(100, context),
+              width: getWidth(80, context),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -343,8 +435,8 @@ class _BuildItemSizeState extends State<BuildItemSize> {
                 backgroundColor: isMultiple ? kVistaWhite : kPrimaryGoldColor,
                 elevation: 10),
             child: SizedBox(
-              height: getHeight(160, context),
-              width: getWidth(100, context),
+              height: getHeight(100, context),
+              width: getWidth(80, context),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,

@@ -14,7 +14,8 @@ const String appFont = "Poppins";
 
 const HAS_PERMISSION = "has_permission";
 const LOCATION_ENABLED = "location_enabled";
-const GOOGLE_MAPS_API_KEY = "AIzaSyAbncVH9Pjn3jurZ2N12nnit6js3XPAqtc";
+// const GOOGLE_MAPS_API_KEY = "AIzaSyAbncVH9Pjn3jurZ2N12nnit6js3XPAqtc";
+const GOOGLE_MAPS_API_KEY = "AIzaSyDuBwnC0ov7JuH9XN6b6q9l8FUrtWwoBpw";
 
 const COUNTRY = "country";
 const BASEURL = 'http://thesafedrop.herokuapp.com';
