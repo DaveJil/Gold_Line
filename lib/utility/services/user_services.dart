@@ -110,15 +110,23 @@ class UserServices {
 
   Future requestDelivery(
     String senderName,
-    String pickUpLatitude,
-    String pickUpLongitude,
+    String receiverName,
+    double pickUpLatitude,
+    String pickupAddress,
+    String dropoffAddress,
+    double dropOffLongitude,
+    double dropOffLatitude,
+    double pickUpLongitude,
   ) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     Map<String, dynamic> request = {
       'sender_name': senderName,
       'pickup_latitude': pickUpLatitude,
       'pickup_longitude': pickUpLongitude,
-      'password': pas,
+      'dropoff_longitude': dropOffLongitude,
+      'dropoff_address': dropoffAddress,
+      'pickup_address': pickupAddress,
+      'dropoff_latitude': dropOffLatitude,
     };
 
     try {

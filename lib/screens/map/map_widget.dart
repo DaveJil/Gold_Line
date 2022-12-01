@@ -7,9 +7,14 @@ import 'package:gold_line/screens/my_deliveries/my_deliveries.dart';
 import 'package:gold_line/screens/request_delivery/sender_details.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_place/google_place.dart';
 
 class MapWidget extends StatefulWidget {
-  const MapWidget({Key? key}) : super(key: key);
+  final DetailsResult? pickupLocation;
+  final DetailsResult? dropoffLocation;
+
+  const MapWidget({Key? key, this.pickupLocation, this.dropoffLocation})
+      : super(key: key);
 
   @override
   State<MapWidget> createState() => _MapWidgetState();
@@ -19,60 +24,47 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   void initState() {
     // TODO: implement initState
-    getCurrentLocation();
     getPolyPoints();
     super.initState();
   }
 
+  // late CameraPosition _initialPosition;
+  final Completer<GoogleMapController> _controller = Completer();
+  Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
+  PolylinePoints polylinePoints = PolylinePoints();
+
+  _addPolyLine() {
+    PolylineId id = PolylineId("poly");
+    Polyline polyline = Polyline(
+        polylineId: id,
+        color: Colors.black,
+        points: polylineCoordinates,
+        width: 1);
+    polylines[id] = polyline;
+    setState(() {});
+  }
+
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      GOOGLE_MAPS_API_KEY, // Your Google Map Key
-      PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
-      PointLatLng(destination.latitude, destination.longitude),
-    );
+        GOOGLE_MAPS_API_KEY,
+        // Your Google Map Key
+
+        PointLatLng(widget.pickupLocation!.geometry!.location!.lat!,
+            widget.dropoffLocation!.geometry!.location!.lng!),
+        PointLatLng(widget.pickupLocation!.geometry!.location!.lat!,
+            widget.dropoffLocation!.geometry!.location!.lng!),
+        travelMode: TravelMode.driving);
     if (result.points.isNotEmpty) {
-      result.points.forEach(
-        (PointLatLng point) => polylineCoordinates.add(
-          LatLng(point.latitude, point.longitude),
-        ),
-      );
-      setState(() {});
+      result.points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
     }
+    _addPolyLine();
   }
 
-  LatLng? currentLocation;
-  void getCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled');
-    }
-
-    permission = await Geolocator.checkPermission();
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-
-      if (permission == LocationPermission.denied) {
-        return Future.error("Location permission denied");
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permissions are permanently denied');
-    }
-
-    Position position = await Geolocator.getCurrentPosition();
-    setState(() {
-      currentLocation = LatLng(position.latitude, position.longitude);
-    });
-    return;
-  }
 
   BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
@@ -101,12 +93,22 @@ class _MapWidgetState extends State<MapWidget> {
     );
   }
 
-  final Completer<GoogleMapController> _controller = Completer();
-  static const LatLng sourceLocation = LatLng(37.33500926, -122.03272188);
-  static const LatLng destination = LatLng(37.33429383, -122.06600055);
-
   @override
   Widget build(BuildContext context) {
+    Set<Marker> _markers = {
+      Marker(
+        markerId: const MarkerId("currentLocation"),
+        position: LatLng(currentLocation!.latitude, currentLocation!.longitude),
+      ),
+      Marker(
+          markerId: MarkerId('start'),
+          position: LatLng(widget.pickupLocation!.geometry!.location!.lat!,
+              widget.pickupLocation!.geometry!.location!.lng!)),
+      Marker(
+          markerId: MarkerId('end'),
+          position: LatLng(widget.dropoffLocation!.geometry!.location!.lat!,
+              widget.dropoffLocation!.geometry!.location!.lng!))
+    };
     return Scaffold(
       body: currentLocation == null
           ? const Center(child: Text("Loading"))
@@ -120,33 +122,12 @@ class _MapWidgetState extends State<MapWidget> {
                         target: currentLocation!,
                         zoom: 13.5,
                       ),
-                      markers: {
-                        Marker(
-                          markerId: const MarkerId("currentLocation"),
-                          position: LatLng(currentLocation!.latitude,
-                              currentLocation!.longitude),
-                        ),
-                        Marker(
-                            markerId: MarkerId("source"),
-                            position: LatLng(currentLocation!.latitude,
-                                currentLocation!.longitude),
-                            icon: currentLocationIcon),
-                        Marker(
-                            markerId: MarkerId("destination"),
-                            position: destination,
-                            icon: destinationIcon),
-                      },
+                      markers: _markers,
                       onMapCreated: (mapController) {
                         _controller.complete(mapController);
                       },
-                      polylines: {
-                        Polyline(
-                          polylineId: const PolylineId("route"),
-                          points: polylineCoordinates,
-                          color: const Color(0xFF7B61FF),
-                          width: 6,
-                        ),
-                      },
+                      polylines: Set<Polyline>.of(polylines.values),
+
                     ),
                     Align(
                         alignment: Alignment.bottomCenter,

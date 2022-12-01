@@ -121,46 +121,53 @@ class SenderDeliveryDetailsState extends State<SenderDeliveryDetails> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.house),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: TextFormField(
-                              style: const TextStyle(fontSize: 18),
-                              focusNode: pickUpFocusNode,
-                              cursorColor: Colors.black,
-                              onChanged: (value) {
-                                if (_debounce?.isActive ?? false)
-                                  _debounce!.cancel();
-                                _debounce = Timer(
-                                    const Duration(milliseconds: 1000), () {
-                                  if (value.isNotEmpty) {
-                                    //places api
-                                    autoCompleteSearch(value);
-                                  } else {
-                                    //clear out the results
-                                    setState(() {
-                                      predictions = [];
-                                      pickUpLocationAddress = null;
-                                    });
-                                  }
-                                });
-                              },
-                              decoration: const InputDecoration(
+                      child: Row(children: [
+                        const Icon(Icons.house),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            style: const TextStyle(fontSize: 18),
+                            focusNode: pickUpFocusNode,
+                            cursorColor: Colors.black,
+                            onChanged: (value) {
+                              if (_debounce?.isActive ?? false)
+                                _debounce!.cancel();
+                              _debounce =
+                                  Timer(const Duration(milliseconds: 1000), () {
+                                if (value.isNotEmpty) {
+                                  //places api
+                                  autoCompleteSearch(value);
+                                } else {
+                                  //clear out the results
+                                  setState(() {
+                                    predictions = [];
+                                    pickUpLocationAddress = null;
+                                  });
+                                }
+                              });
+                            },
+                            decoration: InputDecoration(
                                 contentPadding:
                                     EdgeInsets.only(left: 5, right: 5),
                                 border: InputBorder.none,
                                 fillColor: kTextGrey,
                                 focusColor: kTextGrey,
                                 hintText: "Pick Up Location",
-                              ),
-                            ),
+                                suffixIcon: pickUpLocation.text.isNotEmpty
+                                    ? IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            predictions = [];
+                                            pickUpLocation.clear();
+                                          });
+                                        },
+                                        icon: Icon(Icons.clear_outlined))
+                                    : null),
                           ),
-                        ],
-                      ),
+                        ),
+                      ]),
                     ),
                   ),
                 ),
