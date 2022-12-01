@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gold_line/screens/authentication/sign_in.dart';
-import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
+
+import '../map/trip_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -119,8 +120,10 @@ class SignUpScreenState extends State<SignUpScreen> {
                       borderRadius: BorderRadius.circular(20)),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => const MapWidget()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const TestMapWidget()));
                     },
                     child: const Text(
                       'Sign Up',

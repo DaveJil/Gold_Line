@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:gold_line/screens/request_delivery/receiver_details.dart';
 import 'package:gold_line/utility/helpers/controllers.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:google_place/google_place.dart';
@@ -9,6 +8,7 @@ import 'package:google_place/google_place.dart';
 import '../../utility/helpers/constants.dart';
 import '../../utility/helpers/custom_button.dart';
 import '../../utility/helpers/delivery_input.dart';
+import 'receiver_details.dart';
 
 class SenderDeliveryDetails extends StatefulWidget {
   static const String iD = '/senderDeliveryScreen';

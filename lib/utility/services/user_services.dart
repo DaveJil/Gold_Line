@@ -149,6 +149,7 @@ class UserServices {
       throw Exception(err.toString());
     }
   }
+
 //
   // // load user profile
   // Future<UserProfile> getUserProfile(BuildContext context) async {

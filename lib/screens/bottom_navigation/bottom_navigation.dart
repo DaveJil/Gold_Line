@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gold_line/screens/multiple_delivery/multiple_delivery.dart';
-import 'package:gold_line/screens/request_delivery/sender_details.dart';
 
 import '../my_deliveries/my_deliveries.dart';
+import '../request_delivery/delivery_details.dart';
 
 class BottomNavScreen extends StatefulWidget {
   const BottomNavScreen({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class BottomNavScreen extends StatefulWidget {
 class _BottomNavScreenState extends State<BottomNavScreen> {
   List pages = const [
     MyDeliveriesScreen(),
-    SenderDeliveryDetails(),
+    DeliveryDetails(),
     MultipleDelivery(),
   ];
 
