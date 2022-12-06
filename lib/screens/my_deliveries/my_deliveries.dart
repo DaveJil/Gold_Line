@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../utility/helpers/constants.dart';
-import '../request_delivery/sender_details.dart';
+import '../request_delivery/delivery_details.dart';
 
 class MyDeliveriesScreen extends StatefulWidget {
   static const String iD = '/myDeliveriesScreen';
@@ -69,7 +69,7 @@ class _MyDeliveriesScreenState extends State<MyDeliveriesScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (_) => const SenderDeliveryDetails()));
+              MaterialPageRoute(builder: (_) => const DeliveryDetails()));
         },
         backgroundColor: kPrimaryGoldColor.withOpacity(0.8),
         child: const Icon(Icons.add),

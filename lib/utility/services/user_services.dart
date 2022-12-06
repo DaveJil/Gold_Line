@@ -5,32 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../api.dart';
 
 class UserServices {
-  CallApi _callApi = CallApi();
-  void createUser(
-      {String? id,
-      String? name,
-      String? email,
-      String? phone,
-      String? dob,
-      String? gender,
-      String? photo,
-      String? token,
-      Map? position}) {
-    Map<String, dynamic> request = {
-      "name": name,
-      "id": id,
-      "phone": phone,
-      "email": email,
-      "position": position,
-      'dob': dob,
-      'gender': gender,
-      'photo': photo,
-      'token': token,
-    };
-
-    ///Update dataUrl
-    CallApi().postData(request, 'register');
-  }
+  final CallApi _callApi = CallApi();
 
   void updateUserData(Map<String, dynamic> values) {
     CallApi().updateData(values, 'profile');
@@ -51,7 +26,7 @@ class UserServices {
   }
 
   // create password
-  Future login(String email, String password) async {
+  Future signIn(String email, String password) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     Map<String, dynamic> request = {
       'email': email,
@@ -110,10 +85,13 @@ class UserServices {
 
   Future requestDelivery(
     String senderName,
+    String senderPhone,
     String receiverName,
+    String receiverPhone,
+    String description,
     double pickUpLatitude,
     String pickupAddress,
-    String dropoffAddress,
+    String dropOffAddress,
     double dropOffLongitude,
     double dropOffLatitude,
     double pickUpLongitude,
@@ -124,13 +102,14 @@ class UserServices {
       'pickup_latitude': pickUpLatitude,
       'pickup_longitude': pickUpLongitude,
       'dropoff_longitude': dropOffLongitude,
-      'dropoff_address': dropoffAddress,
+      'dropoff_address': dropOffAddress,
       'pickup_address': pickupAddress,
       'dropoff_latitude': dropOffLatitude,
+      'sender_phone': senderPhone
     };
 
     try {
-      final response = await _callApi.postData(request, 'register');
+      final response = await _callApi.postData(request, 'request_delivery');
 
       if (response['success'] == "success") {
         final body = response;

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gold_line/screens/request_delivery/select_location.dart';
 import 'package:gold_line/utility/helpers/controllers.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utility/helpers/constants.dart';
 import '../../utility/helpers/delivery_input.dart';
+import 'select_location.dart';
 
 enum ProductSize { small, medium, large, multiple }
 
@@ -37,6 +37,8 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
 
     super.dispose();
   }
+
+  void saveData() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +121,7 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                 CustomDeliveryTextField(
                   hint: "Package Description",
                   icon: const Icon(Icons.description),
-                  controller: receiverPhone,
+                  controller: description,
                 ),
                 const SizedBox(
                   height: 12,
@@ -174,7 +176,41 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                   ],
                 ),
                 SizedBox(height: size.width / 15),
-                const BuildContinueButton()
+                Center(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => SelectLocationScreen()));
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 2,
+                      height: MediaQuery.of(context).size.height / 20,
+                      decoration: BoxDecoration(
+                        color: kPrimaryGoldColor,
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Text(
+                            "Set Delivery Location",
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Icon(
+                            Icons.arrow_forward_rounded,
+                            color: Colors.white,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -374,46 +410,47 @@ class _BuildItemSizeState extends State<BuildItemSize> {
   }
 }
 
-class BuildContinueButton extends StatelessWidget {
-  const BuildContinueButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: InkWell(
-        onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => SelectLocationScreen()));
-        },
-        child: Container(
-          width: MediaQuery.of(context).size.width / 2,
-          height: MediaQuery.of(context).size.height / 20,
-          decoration: BoxDecoration(
-            color: kPrimaryGoldColor,
-            border: Border.all(),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text(
-                "Set Delivery Location",
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Icon(
-                Icons.arrow_forward_rounded,
-                color: Colors.white,
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+// class BuildContinueButton extends StatelessWidget {
+//   const BuildContinueButton({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: InkWell(
+//         onTap: () async {
+//           saveData();
+//           Navigator.push(
+//               context, MaterialPageRoute(builder: (_) => CheckoutDelivery()));
+//         },
+//         child: Container(
+//           width: MediaQuery.of(context).size.width / 2,
+//           height: MediaQuery.of(context).size.height / 20,
+//           decoration: BoxDecoration(
+//             color: kPrimaryGoldColor,
+//             border: Border.all(),
+//             borderRadius: BorderRadius.circular(15),
+//           ),
+//           child: Row(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: const [
+//               Text(
+//                 "Set Delivery Location",
+//                 style: TextStyle(color: Colors.white, fontSize: 20),
+//               ),
+//               SizedBox(
+//                 width: 10,
+//               ),
+//               Icon(
+//                 Icons.arrow_forward_rounded,
+//                 color: Colors.white,
+//               )
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class PayerRadioButton extends StatefulWidget {
   const PayerRadioButton({Key? key}) : super(key: key);

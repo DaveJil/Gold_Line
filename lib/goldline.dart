@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gold_line/screens/map/trip_screen.dart';
+import 'package:gold_line/screens/splashscreen.dart';
 
 class GoldLine extends StatefulWidget {
   const GoldLine({Key? key}) : super(key: key);
@@ -19,7 +19,7 @@ class _GoldLineState extends State<GoldLine> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: TestMapWidget(),
+      home: SplashScreen(),
       theme: ThemeData(),
     );
   }

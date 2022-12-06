@@ -12,3 +12,6 @@ TextEditingController receiverPhone = TextEditingController();
 
 TextEditingController dropOffLocation = TextEditingController();
 TextEditingController dropOffLandMark = TextEditingController();
+
+final pickUpLocationController = TextEditingController();
+final dropoffLocationController = TextEditingController();

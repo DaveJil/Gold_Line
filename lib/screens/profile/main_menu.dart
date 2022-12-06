@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/custom_button.dart';
+import 'package:gold_line/utility/helpers/dimensions.dart';
 
 class MainMenu extends StatelessWidget {
   const MainMenu({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class MainMenu extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Main Menu',
+            'Account',
             style: TextStyle(
                 color: Colors.black, fontSize: 28, fontWeight: FontWeight.w600),
           ),
@@ -23,8 +24,47 @@ class MainMenu extends StatelessWidget {
               width: 500,
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 50,
+                  SizedBox(
+                    height: getHeight(50, context),
+                  ),
+                  Stack(children: [
+                    Container(
+                      height: getHeight(150, context),
+                      width: getHeight(136, context),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey,
+                        border: Border.all(
+                          width: 1.appWidth(context),
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                    ),
+                    const Positioned(
+                      right: 7.23,
+                      bottom: 0,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.amber,
+                        child: Icon(
+                          Icons.camera_enhance_rounded,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                      ),
+                    ),
+                  ]),
+                  SizedBox(
+                    height: getHeight(15, context),
+                  ),
+                  Text(
+                    'Layade Joshua',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: getHeight(16, context),
+                    ),
+                  ),
+                  SizedBox(
+                    height: getHeight(45, context),
                   ),
                   ListTile(
                     leading: SvgPicture.asset("assets/my history.svg"),
@@ -35,8 +75,8 @@ class MainMenu extends StatelessWidget {
                       color: kPrimaryGoldColor,
                     ),
                   ),
-                  const SizedBox(
-                    height: 35,
+                  SizedBox(
+                    height: getHeight(35, context),
                   ),
                   ListTile(
                     leading: SvgPicture.asset("assets/wallet balance.svg"),
@@ -48,8 +88,8 @@ class MainMenu extends StatelessWidget {
                       color: kPrimaryGoldColor,
                     ),
                   ),
-                  const SizedBox(
-                    height: 35,
+                  SizedBox(
+                    height: getHeight(35, context),
                   ),
                   ListTile(
                     leading: SvgPicture.asset("assets/refferals.svg"),
@@ -60,8 +100,8 @@ class MainMenu extends StatelessWidget {
                       color: kPrimaryGoldColor,
                     ),
                   ),
-                  const SizedBox(
-                    height: 35,
+                  SizedBox(
+                    height: getHeight(35, context),
                   ),
                   ListTile(
                     leading: SvgPicture.asset("assets/my coupons.svg"),
@@ -72,8 +112,8 @@ class MainMenu extends StatelessWidget {
                       color: kPrimaryGoldColor,
                     ),
                   ),
-                  const SizedBox(
-                    height: 35,
+                  SizedBox(
+                    height: getHeight(35, context),
                   ),
                   ListTile(
                     leading: SvgPicture.asset("assets/settings.svg"),
@@ -84,12 +124,14 @@ class MainMenu extends StatelessWidget {
                       color: kPrimaryGoldColor,
                     ),
                   ),
-                  const SizedBox(height: 35),
+                  SizedBox(
+                    height: getHeight(12, context),
+                  ),
                   CustomButton(
                     onPressed: () {},
                     text: 'Log Out',
-                    width: 161,
-                    height: 38,
+                    width: getWidth(161, context),
+                    height: getHeight(38, context),
                   ),
                 ],
               )),

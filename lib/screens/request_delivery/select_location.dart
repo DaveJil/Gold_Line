@@ -4,10 +4,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:gold_line/screens/map/map_widget.dart';
+import 'package:gold_line/screens/request_delivery/delivery_summary.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
+
+import '../../utility/helpers/controllers.dart';
 
 class SelectLocationScreen extends StatefulWidget {
   @override
@@ -15,14 +17,12 @@ class SelectLocationScreen extends StatefulWidget {
 }
 
 class _SelectLocationScreenState extends State<SelectLocationScreen> {
-  final pickUpLocationController = TextEditingController();
-  final dropoffLocationController = TextEditingController();
-
   DetailsResult? pickupLocation;
   DetailsResult? dropoffLocation;
 
   late LatLng? pickUpLatLng;
   late LatLng? dropOffLatLng;
+
   late FocusNode startFocusNode;
   late FocusNode endFocusNode;
   bool _useCurrentLocationPickUp = false;
@@ -259,7 +259,7 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MapWidget(
+                              builder: (context) => CheckoutDelivery(
                                   pickupLatLng: pickUpLatLng,
                                   dropoffLatLng: dropOffLatLng),
                             ),
@@ -270,7 +270,7 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MapWidget(
+                              builder: (context) => CheckoutDelivery(
                                   pickupLatLng: pickUpLatLng,
                                   dropoffLatLng: dropOffLatLng),
                             ),

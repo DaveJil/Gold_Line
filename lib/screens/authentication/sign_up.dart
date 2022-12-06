@@ -47,7 +47,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
                   child: const TextField(
-                    obscureText: true,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Full Name',

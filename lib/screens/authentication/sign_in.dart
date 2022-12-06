@@ -20,9 +20,9 @@ class _SignInScreenState extends State<SignInScreen> {
         child: Center(
           child: Column(
             children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.only(top: 150),
-                child: Text(
+              Padding(
+                padding: EdgeInsets.only(top: getHeight(150, context)),
+                child: const Text(
                   "Welcome, Enter your Login Details",
                   style: TextStyle(
                       color: Colors.black,
@@ -47,7 +47,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Email',
-                    hintText: 'Enter valid email',
+                    hintText: 'Enter your email',
                   ),
                 ),
               ),
@@ -62,7 +62,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Password',
-                      hintText: 'Enter secure password'),
+                      hintText: 'Enter your password'),
                 ),
               ),
               SizedBox(

@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:gold_line/screens/my_deliveries/my_deliveries.dart';
-import 'package:gold_line/screens/request_delivery/sender_details.dart';
+import 'package:gold_line/screens/profile/main_menu.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../request_delivery/delivery_details.dart';
 
 class TestMapWidget extends StatefulWidget {
   const TestMapWidget({Key? key}) : super(key: key);
@@ -118,7 +120,7 @@ class _TestMapWidgetState extends State<TestMapWidget> {
                     GoogleMap(
                       initialCameraPosition: CameraPosition(
                         target: currentLocation!,
-                        zoom: 13.5,
+                        zoom: 30,
                       ),
                       markers: {
                         Marker(
@@ -163,7 +165,13 @@ class _TestMapWidgetState extends State<TestMapWidget> {
                                     children: [
                                       Expanded(
                                         child: IconButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        const MainMenu()));
+                                          },
                                           icon: const Icon(
                                             Icons.home_outlined,
                                             color: kPrimaryGoldColor,
@@ -191,7 +199,7 @@ class _TestMapWidgetState extends State<TestMapWidget> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (_) =>
-                                                        const SenderDeliveryDetails()));
+                                                        const DeliveryDetails()));
                                           },
                                           icon: const Icon(
                                             Icons.add_circle,

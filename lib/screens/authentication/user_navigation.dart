@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gold_line/screens/authentication/sign_up.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
+import 'package:gold_line/utility/helpers/dimensions.dart';
 
 class LoginChoice extends StatefulWidget {
   const LoginChoice({super.key});
@@ -20,15 +21,15 @@ class LoginChoiceState extends State<LoginChoice> {
           child: Center(
             child: Column(
               children: <Widget>[
-                const SizedBox(
-                  height: 40,
+                SizedBox(
+                  height: getHeight(40, context),
                 ),
                 SizedBox(
                     width: 300,
                     height: 300,
                     child: SvgPicture.asset("assets/started.svg")),
-                const SizedBox(
-                  height: 20,
+                SizedBox(
+                  height: getHeight(20, context),
                 ),
                 const Text(
                   'Lets get you Started',
@@ -37,8 +38,8 @@ class LoginChoiceState extends State<LoginChoice> {
                       fontWeight: FontWeight.bold,
                       fontSize: 28),
                 ),
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: getHeight(10, context),
                 ),
                 const Text(
                   'Welcome, Please Choose your Login / SignUp Option',
@@ -47,8 +48,8 @@ class LoginChoiceState extends State<LoginChoice> {
                       fontWeight: FontWeight.w300,
                       fontSize: 18),
                 ),
-                const SizedBox(
-                  height: 40,
+                SizedBox(
+                  height: getHeight(40, context),
                 ),
                 const Text(
                   'Are you an Agent or a User?',
@@ -57,8 +58,8 @@ class LoginChoiceState extends State<LoginChoice> {
                       fontWeight: FontWeight.w500,
                       fontSize: 18),
                 ),
-                const SizedBox(
-                  height: 40,
+                SizedBox(
+                  height: getHeight(40, context),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -66,8 +67,8 @@ class LoginChoiceState extends State<LoginChoice> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        height: 50,
-                        width: 250,
+                        height: getHeight(50, context),
+                        width: getWidth(250, context),
                         decoration: BoxDecoration(
                             color: kPrimaryGoldColor,
                             borderRadius: BorderRadius.circular(20)),
@@ -84,12 +85,12 @@ class LoginChoiceState extends State<LoginChoice> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        width: 20,
+                      SizedBox(
+                        width: getWidth(20, context),
                       ),
                       Container(
-                        height: 50,
-                        width: 250,
+                        height: getHeight(50, context),
+                        width: getWidth(250, context),
                         decoration: BoxDecoration(
                             color: kPrimaryGoldColor,
                             borderRadius: BorderRadius.circular(20)),
@@ -109,8 +110,8 @@ class LoginChoiceState extends State<LoginChoice> {
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 50,
+                SizedBox(
+                  height: getHeight(50, context),
                 ),
                 const BuildCheckBox(),
               ],
@@ -130,7 +131,7 @@ class BuildCheckBox extends StatefulWidget {
 }
 
 class _BuildCheckBoxState extends State<BuildCheckBox> {
-  bool _isFragile = false;
+  bool _isAgree = false;
 
   @override
   Widget build(BuildContext context) {
@@ -138,11 +139,11 @@ class _BuildCheckBoxState extends State<BuildCheckBox> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Checkbox(
-            value: _isFragile,
+            value: _isAgree,
             activeColor: kPrimaryGoldColor,
             onChanged: (bool? value) {
               setState(() {
-                _isFragile = _isFragile;
+                _isAgree = !_isAgree;
               });
             }),
         SizedBox(
