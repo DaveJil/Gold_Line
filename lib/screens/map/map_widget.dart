@@ -31,7 +31,7 @@ class _MapWidgetState extends State<MapWidget> {
     getCurrentLocation();
     _initialPosition = CameraPosition(
       target: widget.pickupLatLng!,
-      zoom: 50,
+      zoom: 30,
     );
     super.initState();
   }
@@ -125,7 +125,9 @@ class _MapWidgetState extends State<MapWidget> {
       return Future.error('Location permissions are permanently denied');
     }
 
-    Position position = await Geolocator.getCurrentPosition();
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.bestForNavigation,
+        forceAndroidLocationManager: true);
     setState(() {
       currentLocation = LatLng(position.latitude, position.longitude);
     });

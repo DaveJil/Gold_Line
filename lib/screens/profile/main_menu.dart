@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gold_line/screens/profile/referral.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/custom_button.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
+
+import '../my_deliveries/my_deliveries.dart';
 
 class MainMenu extends StatelessWidget {
   const MainMenu({Key? key}) : super(key: key);
@@ -11,6 +14,14 @@ class MainMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            iconSize: getHeight(20, context),
+            color: kPrimaryGoldColor,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
           title: const Text(
             'Account',
             style: TextStyle(
@@ -74,6 +85,12 @@ class MainMenu extends StatelessWidget {
                       Icons.arrow_circle_right_sharp,
                       color: kPrimaryGoldColor,
                     ),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => MyDeliveriesScreen()));
+                    },
                   ),
                   SizedBox(
                     height: getHeight(35, context),
@@ -99,6 +116,10 @@ class MainMenu extends StatelessWidget {
                       Icons.arrow_circle_right_sharp,
                       color: kPrimaryGoldColor,
                     ),
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => ReferralPage()));
+                    },
                   ),
                   SizedBox(
                     height: getHeight(35, context),
