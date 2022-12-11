@@ -6,10 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/delivery_model/delivery.dart';
 import '../../models/transaction/transaction.dart';
 import '../api.dart';
-i
+
 class GetListProvider extends ChangeNotifier {
-
-
   List<RideRequestModel> _tripList = [];
   List<RideRequestModel> get tripList => _tripList;
   RideRequestModel? tripModel;
