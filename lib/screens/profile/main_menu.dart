@@ -22,10 +22,12 @@ class MainMenu extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
-          title: const Text(
+          title: Text(
             'Account',
             style: TextStyle(
-                color: Colors.black, fontSize: 28, fontWeight: FontWeight.w600),
+                color: Colors.black,
+                fontSize: getHeight(28, context),
+                fontWeight: FontWeight.w600),
           ),
           backgroundColor: Colors.white,
         ),

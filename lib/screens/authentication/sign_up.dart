@@ -49,8 +49,21 @@ class SignUpScreenState extends State<SignUpScreen> {
                   child: const TextField(
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: 'Full Name',
-                        hintText: 'Enter your Full Name'),
+                        labelText: 'First Name',
+                        hintText: 'Enter your First Name'),
+                  ),
+                ),
+                SizedBox(
+                  height: getHeight(20, context),
+                ),
+                Padding(
+                  padding:
+                  EdgeInsets.symmetric(horizontal: getWidth(30, context)),
+                  child: const TextField(
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Last Name',
+                        hintText: 'Enter your Last Name'),
                   ),
                 ),
                 SizedBox(
