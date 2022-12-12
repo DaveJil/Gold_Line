@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:safedrop_user/utility/provider/map_provider/map_provider.dart';
-import 'package:safedrop_user/utility/provider/user_provider/user_provider.dart';
+
+import '../../../utility/providers/map_provider.dart';
+import '../../../utility/providers/user_provider.dart';
 
 class PaymentMethodSelectionWidget extends StatelessWidget {
   final GlobalKey<ScaffoldState>? scaffoldState;

@@ -49,11 +49,17 @@ class SignUpScreenState extends State<SignUpScreen> {
                 Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: const TextField(
+                  child: TextFormField(
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Full Name',
                         hintText: 'Enter your Full Name'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter full Name';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 SizedBox(
@@ -62,7 +68,13 @@ class SignUpScreenState extends State<SignUpScreen> {
                 Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: const TextField(
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter valid email';
+                      }
+                      return null;
+                    },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Email',
@@ -76,7 +88,14 @@ class SignUpScreenState extends State<SignUpScreen> {
                 Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: const TextField(
+                  child: TextFormField(
+                    controller: userProvider.password,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter password';
+                      }
+                      return null;
+                    },
                     obscureText: true,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),

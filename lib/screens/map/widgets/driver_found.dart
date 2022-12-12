@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:safedrop_user/helpers/constants.dart';
-import 'package:safedrop_user/utility/locators/service_locator.dart';
-import 'package:safedrop_user/utility/provider/map_provider/map_provider.dart';
-import 'package:safedrop_user/utility/services/calls_and_sms/calls_and_sms.dart';
+
+import '../../../utility/helpers/constants.dart';
+import '../../../utility/providers/map_provider.dart';
+import '../../../utility/services/calls_and_sms.dart';
 
 class DriverFoundWidget extends StatelessWidget {
-  final CallsAndMessagesService? _service = locator<CallsAndMessagesService>();
+  final CallsAndMessagesService? _service = CallsAndMessagesService();
 
   DriverFoundWidget({Key? key}) : super(key: key);
 
@@ -141,7 +141,7 @@ class DriverFoundWidget extends StatelessWidget {
                             child: Container(
                               height: 45,
                               width: 2,
-                              color: kPrimaryBlueColor,
+                              color: kPrimaryGoldColor,
                             ),
                           ),
                           const Icon(Icons.flag),

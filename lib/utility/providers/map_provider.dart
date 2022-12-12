@@ -30,13 +30,7 @@ import '../services/delivery_services.dart';
 import '../services/driver_service.dart';
 import '../services/map_request.dart';
 
-enum Show {
-  DESTINATION_SELECTION,
-  PICKUP_SELECTION,
-  PAYMENT_METHOD_SELECTION,
-  DRIVER_FOUND,
-  TRIP
-}
+enum Show { HOME, PAYMENT_METHOD_SELECTION, DRIVER_FOUND, TRIP }
 
 class MapProvider with ChangeNotifier {
   static const ACCEPTED = 'accepted';
@@ -78,7 +72,7 @@ class MapProvider with ChangeNotifier {
   UserProfile? user;
 
   DriverService _driverService = DriverService();
-  Show show = Show.DESTINATION_SELECTION;
+  Show show = Show.HOME;
 
   DriverModel? driverModel;
   RouteModel? routeModel;
@@ -183,24 +177,22 @@ class MapProvider with ChangeNotifier {
 
   onCameraMove(CameraPosition position) {
     //  MOVE the pickup marker only when selecting the pickup location
-    if (show == Show.PICKUP_SELECTION) {
-      lastPosition = position.target;
-      changePickupLocationAddress(address: "loading...");
-      if (_markers.isNotEmpty) {
-        _markers.forEach((element) async {
-          if (element.markerId.value == PICKUP_MARKER_ID) {
-            _markers.remove(element);
-            pickupCoordinates = position.target;
-            addPickupMarker(position.target);
-            // List<Placemark> placemark = await placemarkFromCoordinates(
-            //     position.target.latitude, position.target.longitude);
-            // pickupLocationController.text = placemark[0].name!;
-            notifyListeners();
-          }
-        });
-      }
-      notifyListeners();
+    lastPosition = position.target;
+    changePickupLocationAddress(address: "loading...");
+    if (_markers.isNotEmpty) {
+      _markers.forEach((element) async {
+        if (element.markerId.value == PICKUP_MARKER_ID) {
+          _markers.remove(element);
+          pickupCoordinates = position.target;
+          addPickupMarker(position.target);
+          // List<Placemark> placemark = await placemarkFromCoordinates(
+          //     position.target.latitude, position.target.longitude);
+          // pickupLocationController.text = placemark[0].name!;
+          notifyListeners();
+        }
+      });
     }
+    notifyListeners();
   }
 
   _animateCamera({required LatLng point}) async {
