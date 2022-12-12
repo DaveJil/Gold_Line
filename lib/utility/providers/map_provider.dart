@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
+import 'package:google_place/google_place.dart' as compon;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
@@ -42,6 +43,23 @@ class MapProvider with ChangeNotifier {
   static const DRIVER_AT_LOCATION_NOTIFICATION = 'DRIVER_AT_LOCATION';
   static const REQUEST_ACCEPTED_NOTIFICATION = 'REQUEST_ACCEPTED';
   static const TRIP_STARTED_NOTIFICATION = 'TRIP_STARTED';
+
+  compon.DetailsResult? pickupLocation;
+  compon.DetailsResult? dropoffLocation;
+
+  String? pickUpLocationAddress;
+  String? dropOffLocationAddress;
+
+  late LatLng? pickUpLatLng;
+  late LatLng? dropOffLatLng;
+
+  FocusNode startFocusNode = FocusNode();
+  FocusNode endFocusNode = FocusNode();
+  bool _useCurrentLocationPickUp = false;
+  bool _useCurrentLocationDropOff = false;
+
+  compon.GooglePlace googlePlace = compon.GooglePlace(GOOGLE_MAPS_API_KEY);
+  List<compon.AutocompletePrediction> predictions = [];
 
   Position? position;
   late bool isLoading = false;
@@ -120,6 +138,7 @@ class MapProvider with ChangeNotifier {
     _listenToDrivers();
     Geolocator.getPositionStream().listen(_updatePosition);
   }
+
   _updatePosition(Position newPosition) {
     position = newPosition;
     notifyListeners();
@@ -295,6 +314,16 @@ class MapProvider with ChangeNotifier {
     //     points: _convertToLatLong(_decodePoly(decodeRoute))));
     // notifyListeners();
   }
+
+  autoCompleteSearch(String value) async {
+    var result = await googlePlace.autocomplete.get(value);
+    if (result != null && result.predictions != null) {
+      print(result.predictions!.first.description);
+      predictions = result.predictions!;
+      notifyListeners();
+    }
+  }
+
 
 //   List<LatLng> _convertToLatLong(List points) {
 //     List<LatLng> result = <LatLng>[];

@@ -3,98 +3,41 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:gold_line/screens/request_delivery/delivery_summary.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
+import 'package:gold_line/utility/providers/map_provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_place/google_place.dart';
+import 'package:provider/provider.dart';
 
 import '../../utility/helpers/controllers.dart';
 
 class SelectLocationScreen extends StatefulWidget {
+  const SelectLocationScreen({super.key});
+
   @override
-  _SelectLocationScreenState createState() => _SelectLocationScreenState();
+  SelectLocationScreenState createState() => SelectLocationScreenState();
 }
 
-class _SelectLocationScreenState extends State<SelectLocationScreen> {
-  DetailsResult? pickupLocation;
-  DetailsResult? dropoffLocation;
-
-  late LatLng? pickUpLatLng;
-  late LatLng? dropOffLatLng;
-
-  late FocusNode startFocusNode;
-  late FocusNode endFocusNode;
+class SelectLocationScreenState extends State<SelectLocationScreen> {
+  Timer? _debounce;
   bool _useCurrentLocationPickUp = false;
   bool _useCurrentLocationDropOff = false;
-
-  late GooglePlace googlePlace;
-  List<AutocompletePrediction> predictions = [];
-  Timer? _debounce;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    googlePlace = GooglePlace(GOOGLE_MAPS_API_KEY);
-    getCurrentLocation();
-    startFocusNode = FocusNode();
-    endFocusNode = FocusNode();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    startFocusNode.dispose();
-    endFocusNode.dispose();
-  }
-
-  LatLng? currentLocation;
-
-  void getCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled');
-    }
-
-    permission = await Geolocator.checkPermission();
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-
-      if (permission == LocationPermission.denied) {
-        return Future.error("Location permission denied");
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permissions are permanently denied');
-    }
-
-    Position position = await Geolocator.getCurrentPosition();
-    setState(() {
-      currentLocation = LatLng(position.latitude, position.longitude);
-    });
-    return;
-  }
-
-  void autoCompleteSearch(String value) async {
-    var result = await googlePlace.autocomplete.get(value);
-    if (result != null && result.predictions != null && mounted) {
-      print(result.predictions!.first.description);
-      setState(() {
-        predictions = result.predictions!;
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final MapProvider mapProvider = Provider.of<MapProvider>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -108,7 +51,7 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
             TextField(
               controller: pickUpLocation,
               autofocus: false,
-              focusNode: startFocusNode,
+              focusNode: mapProvider.startFocusNode,
               style: TextStyle(fontSize: 24),
               decoration: InputDecoration(
                   hintText: 'Pickup Location',
@@ -121,7 +64,7 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
                       ? IconButton(
                           onPressed: () {
                             setState(() {
-                              predictions = [];
+                              mapProvider.predictions = [];
                               pickUpLocation.clear();
                             });
                           },
@@ -133,15 +76,15 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
                 _debounce = Timer(const Duration(milliseconds: 1000), () {
                   if (value.isNotEmpty) {
                     //places api
-                    autoCompleteSearch(value);
+                    mapProvider.autoCompleteSearch(value);
                   } else {
                     //clear out the results
                     setState(() {
-                      predictions = [];
-                      pickupLocation = null;
-                      pickUpLatLng = LatLng(
-                          pickupLocation!.geometry!.location!.lat!,
-                          pickupLocation!.geometry!.location!.lng!);
+                      mapProvider.predictions = [];
+                      mapProvider.pickupLocation = null;
+                      mapProvider.pickUpLatLng = LatLng(
+                          mapProvider.pickupLocation!.geometry!.location!.lat!,
+                          mapProvider.pickupLocation!.geometry!.location!.lng!);
                     });
                   }
                 });
@@ -173,8 +116,9 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
             TextField(
               controller: dropOffLocation,
               autofocus: false,
-              focusNode: endFocusNode,
-              enabled: pickUpLocation.text.isNotEmpty && pickupLocation != null,
+              focusNode: mapProvider.endFocusNode,
+              enabled: pickUpLocation.text.isNotEmpty &&
+                  mapProvider.pickupLocation != null,
               style: TextStyle(fontSize: 24),
               decoration: InputDecoration(
                   hintText: 'DropOff Location',
@@ -187,7 +131,7 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
                       ? IconButton(
                           onPressed: () {
                             setState(() {
-                              predictions = [];
+                              mapProvider.predictions = [];
                               dropOffLocation.clear();
                             });
                           },
@@ -199,20 +143,18 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
                 _debounce = Timer(const Duration(milliseconds: 1000), () {
                   if (value.isNotEmpty) {
                     //places api
-                    autoCompleteSearch(value);
+                    mapProvider.autoCompleteSearch(value);
                   } else {
                     //clear out the results
-                    setState(() {
-                      predictions = [];
-                      dropoffLocation = null;
-                    });
+                    mapProvider.predictions = [];
+                    mapProvider.dropoffLocation = null;
                   }
                 });
               },
             ),
             ListView.builder(
                 shrinkWrap: true,
-                itemCount: predictions.length,
+                itemCount: mapProvider.predictions.length,
                 itemBuilder: (context, index) {
                   return ListTile(
                     leading: CircleAvatar(
@@ -222,54 +164,60 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
                       ),
                     ),
                     title: Text(
-                      predictions[index].description.toString(),
+                      mapProvider.predictions[index].description.toString(),
                     ),
                     onTap: () async {
-                      final placeId = predictions[index].placeId!;
-                      final details = await googlePlace.details.get(placeId);
+                      final placeId = mapProvider.predictions[index].placeId!;
+                      final details =
+                          await mapProvider.googlePlace.details.get(placeId);
                       if (details != null &&
                           details.result != null &&
                           mounted) {
-                        if (startFocusNode.hasFocus) {
+                        if (mapProvider.startFocusNode.hasFocus) {
                           setState(() {
-                            pickupLocation = details.result;
+                            mapProvider.pickupLocation = details.result;
                             pickUpLocation.text = details.result!.name!;
-                            predictions = [];
+                            mapProvider.predictions = [];
                           });
                         } else {
                           setState(() {
-                            dropoffLocation = details.result;
+                            mapProvider.dropoffLocation = details.result;
                             dropOffLocation.text = details.result!.name!;
-                            predictions = [];
-                            pickUpLatLng = LatLng(
-                                pickupLocation!.geometry!.location!.lat!,
-                                pickupLocation!.geometry!.location!.lng!);
+                            mapProvider.predictions = [];
+                            mapProvider.pickUpLatLng = LatLng(
+                                mapProvider
+                                    .pickupLocation!.geometry!.location!.lat!,
+                                mapProvider
+                                    .pickupLocation!.geometry!.location!.lng!);
 
-                            dropOffLatLng = LatLng(
-                                dropoffLocation!.geometry!.location!.lat!,
-                                dropoffLocation!.geometry!.location!.lng!);
+                            mapProvider.dropOffLatLng = LatLng(
+                                mapProvider
+                                    .dropoffLocation!.geometry!.location!.lat!,
+                                mapProvider
+                                    .dropoffLocation!.geometry!.location!.lng!);
                           });
                         }
 
-                        if (pickupLocation != null && dropoffLocation != null) {
+                        if (mapProvider.pickupLocation != null &&
+                            mapProvider.dropoffLocation != null) {
                           print('navigate');
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => CheckoutDelivery(
-                                  pickupLatLng: pickUpLatLng,
-                                  dropoffLatLng: dropOffLatLng),
+                                  pickupLatLng: mapProvider.pickUpLatLng,
+                                  dropoffLatLng: mapProvider.dropOffLatLng),
                             ),
                           );
                         } else if (_useCurrentLocationPickUp == true &&
-                            dropoffLocation != null) {
+                            mapProvider.dropoffLocation != null) {
                           print('navigate');
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => CheckoutDelivery(
-                                  pickupLatLng: pickUpLatLng,
-                                  dropoffLatLng: dropOffLatLng),
+                                  pickupLatLng: mapProvider.pickUpLatLng,
+                                  dropoffLatLng: mapProvider.dropOffLatLng),
                             ),
                           );
                         }

@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 
 import '../../utility/providers/user_provider.dart';
 
-
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -51,10 +50,17 @@ class SignUpScreenState extends State<SignUpScreen> {
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
                   child: TextFormField(
-                    decoration: InputDecoration(
+                    controller: userProvider.firstName,
+                    decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'First Name',
                         hintText: 'Enter your First Name'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter first name';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 SizedBox(
@@ -62,13 +68,19 @@ class SignUpScreenState extends State<SignUpScreen> {
                 ),
                 Padding(
                   padding:
-                  EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: const TextField(
-                    decoration: InputDecoration(
+                      EdgeInsets.symmetric(horizontal: getWidth(30, context)),
+                  child: TextFormField(
+                    controller: userProvider.lastName,
+                    decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Last Name',
                         hintText: 'Enter your Last Name'),
-
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter last name';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 SizedBox(
@@ -84,7 +96,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                       }
                       return null;
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Email',
                       hintText: 'Enter valid email',
@@ -106,7 +118,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                       return null;
                     },
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Password',
                         hintText: 'Enter secure password'),
@@ -118,12 +130,18 @@ class SignUpScreenState extends State<SignUpScreen> {
                 Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: const TextField(
+                  child: TextFormField(
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Confirm Password',
-                        hintText: 'Enter secure password'),
+                        hintText: 'Enter password again'),
+                    validator: (value) {
+                      if (value != userProvider.password.text) {
+                        return 'Confirm password must match password';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 SizedBox(
@@ -149,7 +167,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                       color: kPrimaryGoldColor,
                       borderRadius: BorderRadius.circular(20)),
                   child: TextButton(
-
                     onPressed: () async {
                       await userProvider.signUp(context);
                     },
