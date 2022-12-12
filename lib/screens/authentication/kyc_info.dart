@@ -1,20 +1,22 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gold_line/screens/authentication/sign_in.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../map/trip_screen.dart';
-import 'kyc_info.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class KycInfo extends StatefulWidget {
+  const KycInfo({super.key});
 
   @override
-  SignUpScreenState createState() => SignUpScreenState();
+  KycInfoState createState() => KycInfoState();
 }
 
-class SignUpScreenState extends State<SignUpScreen> {
+class KycInfoState extends State<KycInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,23 +26,85 @@ class SignUpScreenState extends State<SignUpScreen> {
           child: Center(
             child: Column(
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: getHeight(100, context)),
-                  child: const Text(
-                    'Lets get you Started',
-                    style: TextStyle(
+                SizedBox(
+                  height: getHeight(30, context),
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: getWidth(20, context),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon:  Icon(
+                        Icons.arrow_back,
                         color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28),
-                  ),
+                        size: getHeight(24, context),
+                      ),
+                    ),
+                    SizedBox(
+                      width: getWidth(150, context),
+                    ),
+                    const Text(
+                      'Fill in your details',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 28),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: getHeight(20, context),
+                ),
+                const Text(
+                  'Kindly fill in your Information below.',
+                  style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
                 ),
                 SizedBox(
                   height: getHeight(40, context),
                 ),
+                Stack(children: [
+                  Container(
+                    height: getHeight(150, context),
+                    width: getHeight(136, context),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey,
+                      border: Border.all(
+                        width: 1.appWidth(context),
+                        style: BorderStyle.solid,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 7.23,
+                    bottom: 0,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.amber,
+                      child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.camera_enhance_rounded,
+                            color: Colors.white,
+                            size: 16,
+                          )),
+                    ),
+                  ),
+                ]),
                 SizedBox(
-                    width: getHeight(300, context),
-                    height: getHeight(300, context),
-                    child: SvgPicture.asset("assets/signup.svg")),
+                  height: getHeight(15, context),
+                ),
+                Text(
+                  'Click to Upload Profile Image',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    color: Colors.black,
+                    fontSize: getHeight(16, context),
+                  ),
+                ),
                 SizedBox(
                   height: getHeight(20, context),
                 ),
@@ -50,8 +114,8 @@ class SignUpScreenState extends State<SignUpScreen> {
                   child: const TextField(
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: 'First Name',
-                        hintText: 'Enter your First Name'),
+                        labelText: 'Other Name',
+                        hintText: 'Enter your Other/Middle Name'),
                   ),
                 ),
                 SizedBox(
@@ -59,12 +123,12 @@ class SignUpScreenState extends State<SignUpScreen> {
                 ),
                 Padding(
                   padding:
-                  EdgeInsets.symmetric(horizontal: getWidth(30, context)),
+                      EdgeInsets.symmetric(horizontal: getWidth(30, context)),
                   child: const TextField(
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: 'Last Name',
-                        hintText: 'Enter your Last Name'),
+                        labelText: 'Gender',
+                        hintText: 'Are you Male or Female?'),
                   ),
                 ),
                 SizedBox(
@@ -76,8 +140,8 @@ class SignUpScreenState extends State<SignUpScreen> {
                   child: const TextField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'Email',
-                      hintText: 'Enter valid email',
+                      labelText: 'Enter Address',
+                      hintText: 'Enter valid Address',
                     ),
                   ),
                 ),
@@ -88,11 +152,10 @@ class SignUpScreenState extends State<SignUpScreen> {
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
                   child: const TextField(
-                    obscureText: true,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: 'Password',
-                        hintText: 'Enter secure password'),
+                        labelText: 'Enter your LGA',
+                        hintText: 'Enter your Residental LGA'),
                   ),
                 ),
                 SizedBox(
@@ -102,25 +165,14 @@ class SignUpScreenState extends State<SignUpScreen> {
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
                   child: const TextField(
-                    obscureText: true,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: 'Confirm Password',
-                        hintText: 'Enter secure password'),
+                        labelText: 'Enter your State',
+                        hintText: 'Enter your Residental State'),
                   ),
                 ),
                 SizedBox(
                   height: getHeight(20, context),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => SignInScreen()));
-                  },
-                  child: const Text(
-                    'Already have an account? Login',
-                    style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
-                  ),
                 ),
                 SizedBox(
                   height: getHeight(30, context),
@@ -136,10 +188,10 @@ class SignUpScreenState extends State<SignUpScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => const KycInfo()));
+                              builder: (_) => const TestMapWidget()));
                     },
                     child: const Text(
-                      'Sign Up',
+                      'Continue',
                       style: TextStyle(color: Colors.white, fontSize: 25),
                     ),
                   ),

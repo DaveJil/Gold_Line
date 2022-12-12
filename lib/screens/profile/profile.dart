@@ -15,6 +15,7 @@ class _UserProfileState extends State<UserProfile> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.white,
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -31,6 +32,7 @@ class _UserProfileState extends State<UserProfile> {
             fontSize: getHeight(28, context)
           ),),
         ),
+        body: ,
       ),
     );
   }
