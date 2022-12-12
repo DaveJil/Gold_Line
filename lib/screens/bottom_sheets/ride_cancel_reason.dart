@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:safedrop_user/helpers/constants.dart';
 
-import '../../utility/provider/map_provider/map_provider.dart';
-import '../button.dart';
+import '../../utility/helpers/constants.dart';
+import '../../utility/helpers/custom_button.dart';
+import '../../utility/providers/map_provider.dart';
 
 class RideCancelReason extends StatefulWidget {
   const RideCancelReason({Key? key}) : super(key: key);
@@ -26,7 +26,7 @@ class _RideCancelReasonState extends State<RideCancelReason> {
 //                            topRight: Radius.circular(20)),
                 boxShadow: [
                   BoxShadow(
-                      color: kPrimaryBlueColor,
+                      color: kPrimaryGoldColor,
                       offset: Offset(3, 2),
                       blurRadius: 7)
                 ]),
@@ -117,14 +117,14 @@ class _RideCancelReasonState extends State<RideCancelReason> {
           height: MediaQuery.of(context).size.width / 18,
           decoration: BoxDecoration(
               color:
-                  select == reason[btnValue] ? kPrimaryBlueColor : Colors.white,
+                  select == reason[btnValue] ? kPrimaryGoldColor : Colors.white,
               border: Border.all(
-                color: kPrimaryBlueColor,
+                color: kPrimaryGoldColor,
               ),
               borderRadius: const BorderRadius.all(Radius.circular(3))),
           child: Radio<String>(
             fillColor: MaterialStateColor.resolveWith((states) =>
-                select == reason[btnValue] ? kPrimaryBlueColor : Colors.white),
+                select == reason[btnValue] ? kPrimaryGoldColor : Colors.white),
             activeColor: Theme.of(context).primaryColor,
             value: reason[btnValue],
             groupValue: select,

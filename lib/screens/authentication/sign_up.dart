@@ -50,7 +50,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                 Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: const TextField(
+                  child: TextFormField(
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'First Name',
@@ -68,6 +68,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                         border: OutlineInputBorder(),
                         labelText: 'Last Name',
                         hintText: 'Enter your Last Name'),
+
                   ),
                 ),
                 SizedBox(
@@ -76,7 +77,13 @@ class SignUpScreenState extends State<SignUpScreen> {
                 Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: const TextField(
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter valid email';
+                      }
+                      return null;
+                    },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Email',
@@ -90,7 +97,14 @@ class SignUpScreenState extends State<SignUpScreen> {
                 Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: const TextField(
+                  child: TextFormField(
+                    controller: userProvider.password,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter password';
+                      }
+                      return null;
+                    },
                     obscureText: true,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
