@@ -106,7 +106,7 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
         child: Column(
           children: [
             TextField(
-              controller: pickUpLocationController,
+              controller: pickUpLocation,
               autofocus: false,
               focusNode: startFocusNode,
               style: TextStyle(fontSize: 24),
@@ -117,12 +117,12 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
                   filled: true,
                   fillColor: Colors.grey[200],
                   border: InputBorder.none,
-                  suffixIcon: pickUpLocationController.text.isNotEmpty
+                  suffixIcon: pickUpLocation.text.isNotEmpty
                       ? IconButton(
                           onPressed: () {
                             setState(() {
                               predictions = [];
-                              pickUpLocationController.clear();
+                              pickUpLocation.clear();
                             });
                           },
                           icon: Icon(Icons.clear_outlined),
@@ -171,11 +171,10 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
             ),
             SizedBox(height: 30),
             TextField(
-              controller: dropoffLocationController,
+              controller: dropOffLocation,
               autofocus: false,
               focusNode: endFocusNode,
-              enabled: pickUpLocationController.text.isNotEmpty &&
-                  pickupLocation != null,
+              enabled: pickUpLocation.text.isNotEmpty && pickupLocation != null,
               style: TextStyle(fontSize: 24),
               decoration: InputDecoration(
                   hintText: 'DropOff Location',
@@ -184,12 +183,12 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
                   filled: true,
                   fillColor: Colors.grey[200],
                   border: InputBorder.none,
-                  suffixIcon: dropoffLocationController.text.isNotEmpty
+                  suffixIcon: dropOffLocation.text.isNotEmpty
                       ? IconButton(
                           onPressed: () {
                             setState(() {
                               predictions = [];
-                              dropoffLocationController.clear();
+                              dropOffLocation.clear();
                             });
                           },
                           icon: Icon(Icons.clear_outlined),
@@ -234,15 +233,13 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
                         if (startFocusNode.hasFocus) {
                           setState(() {
                             pickupLocation = details.result;
-                            pickUpLocationController.text =
-                                details.result!.name!;
+                            pickUpLocation.text = details.result!.name!;
                             predictions = [];
                           });
                         } else {
                           setState(() {
                             dropoffLocation = details.result;
-                            dropoffLocationController.text =
-                                details.result!.name!;
+                            dropOffLocation.text = details.result!.name!;
                             predictions = [];
                             pickUpLatLng = LatLng(
                                 pickupLocation!.geometry!.location!.lat!,

@@ -3,9 +3,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gold_line/screens/authentication/sign_in.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
+import 'package:provider/provider.dart';
 
-import '../map/trip_screen.dart';
-import 'kyc_info.dart';
+import '../../utility/providers/user_provider.dart';
+
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -17,6 +18,8 @@ class SignUpScreen extends StatefulWidget {
 class SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -132,11 +135,9 @@ class SignUpScreenState extends State<SignUpScreen> {
                       color: kPrimaryGoldColor,
                       borderRadius: BorderRadius.circular(20)),
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const KycInfo()));
+
+                    onPressed: () async {
+                      await userProvider.signUp(context);
                     },
                     child: const Text(
                       'Sign Up',

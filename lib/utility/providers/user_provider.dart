@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:gold_line/screens/map/map_widget.dart';
+import 'package:gold_line/screens/authentication/user_navigation.dart';
+import 'package:gold_line/screens/map/trip_screen.dart';
+import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../models/user_profile/user_profile.dart';
@@ -32,6 +34,9 @@ class UserProvider with ChangeNotifier {
   final formkey = GlobalKey<FormState>();
 
   TextEditingController email = TextEditingController();
+  TextEditingController firstName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
+
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
   TextEditingController fullName = TextEditingController();
@@ -74,8 +79,7 @@ class UserProvider with ChangeNotifier {
         prefs.setString(ID, json.encode(body['id']));
         await prefs.setBool(LOGGED_IN, true);
 
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const MapWidget()));
+        changeScreenReplacement(context, TestMapWidget());
       } else {
         _showMsg(body['message'], context);
       }
@@ -99,6 +103,8 @@ class UserProvider with ChangeNotifier {
       _status = Status.Authenticating;
 
       Map<String, dynamic> request = {
+        'first_name': firstName.text.trim(),
+        'last_name': lastName.text.trim(),
         'email': email.text.trim(),
         'password': password.text.trim(),
       };
@@ -111,8 +117,7 @@ class UserProvider with ChangeNotifier {
         prefs.setString(ID, json.encode(body['id']));
         await prefs.setBool(LOGGED_IN, true);
 
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const MapWidget()));
+        changeScreenReplacement(context, TestMapWidget());
       } else {
         _showMsg(body['message'], context);
       }
@@ -129,7 +134,7 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future signOut() async {
+  Future signOut(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     await CallApi().getData('logout');
@@ -137,6 +142,8 @@ class UserProvider with ChangeNotifier {
     await prefs.setString(ID, "");
     await prefs.setString(TOKEN, "");
     await prefs.setBool(LOGGED_IN, false);
+    changeScreenReplacement(context, LoginChoice());
+
     notifyListeners();
     return Future.delayed(Duration.zero);
   }

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -112,7 +113,7 @@ class MapProvider with ChangeNotifier {
   double? requestedDestinationLat;
 
   double? requestedDestinationLng;
-  RideRequestModel? rideRequestModel;
+  DeliveryRequestModel? rideRequestModel;
   BuildContext? mainContext;
 
   // FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
@@ -161,13 +162,14 @@ class MapProvider with ChangeNotifier {
 
     return center;
   }
-  //
-  // Future _getAddressFromCoordinates({required LatLng point}) async {
-  //   // final address = Placemark(point.latitude, point.longitude);
-  //   List<Placemark> addresses =
-  //       await placemarkFromCoordinates(point.latitude, point.longitude);
-  //   address = addresses[0];
-  // }
+
+  Future<String> getAddressFromCoordinates({required LatLng point}) async {
+    List<Placemark> addresses =
+        await placemarkFromCoordinates(point.latitude, point.longitude);
+    String address =
+        "${addresses.first.administrativeArea}, ${addresses.first.street}";
+    return address;
+  }
 
   onCreate(mapController) {
     _controller.complete(mapController);

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gold_line/screens/authentication/sign_up.dart';
-import 'package:gold_line/screens/map/trip_screen.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/providers/user_provider.dart';
@@ -93,10 +92,6 @@ class _SignInScreenState extends State<SignInScreen> {
                 child: TextButton(
                   onPressed: () async {
                     await userProvider.signIn(context);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const TestMapWidget()));
                   },
                   child: const Text(
                     'Login',

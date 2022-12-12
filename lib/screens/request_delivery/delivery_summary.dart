@@ -97,8 +97,8 @@ class _CheckoutDeliveryState extends State<CheckoutDelivery> {
             ),
             Text('''
            Delivery Status: Pending
-           PickUp Address: ${pickUpLocationController.text}  
-           Delivery Address: ${dropoffLocationController.text}  
+           PickUp Address: ${pickUpLocation.text}  
+           Delivery Address: ${dropOffLocation.text}  
            Sender Pays
            ''', style: TextStyle(fontSize: 20)),
             Padding(
