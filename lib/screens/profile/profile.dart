@@ -2,37 +2,199 @@ import 'package:flutter/material.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 
-class UserProfile extends StatefulWidget {
-  const UserProfile({Key? key}) : super(key: key);
+class UserProfileScreen extends StatefulWidget {
+  const UserProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<UserProfile> createState() => _UserProfileState();
+  State<UserProfileScreen> createState() => _UserProfileState();
 }
 
-class _UserProfileState extends State<UserProfile> {
+class _UserProfileState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back,
-              size: getHeight(16, context),
-              color: kPrimaryGoldColor,
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: getHeight(30, context),
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: getWidth(20, context),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon:  Icon(
+                          Icons.arrow_back,
+                          color: Colors.black,
+                          size: getHeight(24, context),
+                        ),
+                      ),
+                      SizedBox(
+                        width: getWidth(150, context),
+                      ),
+                      const Text(
+                        'Fill in your details',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 28),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: getHeight(20, context),
+                  ),
+                  const Text(
+                    'Kindly fill in your Information below.',
+                    style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
+                  ),
+                  SizedBox(
+                    height: getHeight(40, context),
+                  ),
+                  Stack(children: [
+                    Container(
+                      height: getHeight(150, context),
+                      width: getHeight(136, context),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey,
+                        border: Border.all(
+                          width: 1.appWidth(context),
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 7.23,
+                      bottom: 0,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.amber,
+                        child: IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.camera_enhance_rounded,
+                              color: Colors.white,
+                              size: 16,
+                            )),
+                      ),
+                    ),
+                  ]),
+                  SizedBox(
+                    height: getHeight(15, context),
+                  ),
+                  Text(
+                    'Click to Upload Profile Image',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: Colors.black,
+                      fontSize: getHeight(16, context),
+                    ),
+                  ),
+                  SizedBox(
+                    height: getHeight(20, context),
+                  ),
+                  Padding(
+                    padding:
+                    EdgeInsets.symmetric(horizontal: getWidth(30, context)),
+                    child: const TextField(
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Other Name',
+                          hintText: 'Enter your Other/Middle Name'),
+                    ),
+                  ),
+                  SizedBox(
+                    height: getHeight(20, context),
+                  ),
+                  Padding(
+                    padding:
+                    EdgeInsets.symmetric(horizontal: getWidth(30, context)),
+                    child: const TextField(
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Gender',
+                          hintText: 'Are you Male or Female?'),
+                    ),
+                  ),
+                  SizedBox(
+                    height: getHeight(20, context),
+                  ),
+                  Padding(
+                    padding:
+                    EdgeInsets.symmetric(horizontal: getWidth(30, context)),
+                    child: const TextField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Enter Address',
+                        hintText: 'Enter valid Address',
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: getHeight(20, context),
+                  ),
+                  Padding(
+                    padding:
+                    EdgeInsets.symmetric(horizontal: getWidth(30, context)),
+                    child: const TextField(
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Enter your LGA',
+                          hintText: 'Enter your Residental LGA'),
+                    ),
+                  ),
+                  SizedBox(
+                    height: getHeight(20, context),
+                  ),
+                  Padding(
+                    padding:
+                    EdgeInsets.symmetric(horizontal: getWidth(30, context)),
+                    child: const TextField(
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Enter your State',
+                          hintText: 'Enter your Residental State'),
+                    ),
+                  ),
+                  SizedBox(
+                    height: getHeight(20, context),
+                  ),
+                  SizedBox(
+                    height: getHeight(30, context),
+                  ),
+                  Container(
+                    height: getHeight(50, context),
+                    width: getWidth(250, context),
+                    decoration: BoxDecoration(
+                        color: kPrimaryGoldColor,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'Save',
+                        style: TextStyle(color: Colors.white, fontSize: 25),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: getHeight(130, context),
+                  ),
+                ],
+              ),
             ),
           ),
-          title: Text('User Profile',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: getHeight(28, context)
-          ),),
         ),
-        body: ,
       ),
     );
   }
