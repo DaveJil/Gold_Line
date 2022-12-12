@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gold_line/models/user_profile/user_profile.dart';
 import 'package:gold_line/screens/profile/referral.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/custom_button.dart';
@@ -69,12 +70,19 @@ class MainMenu extends StatelessWidget {
                   SizedBox(
                     height: getHeight(15, context),
                   ),
-                  Text(
-                    'Layade Joshua',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: getHeight(16, context),
-                    ),
+                  TextButton(
+    onPressed: () {
+    Navigator.push(
+    context,
+    MaterialPageRoute(
+    builder: (_) => const UserProfile())); },
+                    child: Text('Click to View Profile',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.grey,
+                        fontSize: getHeight(16, context),
+                      ),),
+
                   ),
                   SizedBox(
                     height: getHeight(45, context),
