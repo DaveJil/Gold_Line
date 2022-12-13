@@ -153,10 +153,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
           ),
           CustomButton(
             onPressed: () {
-              const snackBar = SnackBar(
-                content: Text('Card Saved Successfully'),
-              );
-              //Save card details
               ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Card Saved Successfully")));
             },
@@ -173,111 +169,109 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Widget AddCardDetails(size) {
-    return Container(
-      child: Column(
-        children: [
-          SizedBox(height: size.height / 30),
-          // SvgPicture.asset("assets/images/atm_card.svg"),
-          SizedBox(height: size.height / 60),
-          TextField(
-            controller: fullNameController,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-            ),
-            decoration: const InputDecoration(
-                labelText: "Full Name",
-                hintText: "Enter your full name as it appears on the card",
-                filled: false,
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white54),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.cyan),
-                ),
-                contentPadding: EdgeInsets.all(5)),
+    return Column(
+      children: [
+        SizedBox(height: size.height / 30),
+        // SvgPicture.asset("assets/images/atm_card.svg"),
+        SizedBox(height: size.height / 60),
+        TextField(
+          controller: fullNameController,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 15,
           ),
-          SizedBox(height: size.height / 40),
-          TextField(
-            controller: cardNumberController,
-            keyboardType: TextInputType.number,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-            ),
-            decoration: InputDecoration(
-              labelText: "Card Number",
-              hintText: "Enter your card number",
+          decoration: const InputDecoration(
+              labelText: "Full Name",
+              hintText: "Enter your full name as it appears on the card",
               filled: false,
-              enabledBorder: const UnderlineInputBorder(
+              enabledBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.white54),
               ),
-              focusedBorder: const UnderlineInputBorder(
+              focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.cyan),
               ),
-              suffixIcon: IconButton(
-                icon: const Icon(
-                  Icons.camera_alt,
-                  color: Colors.white54,
-                ),
-                onPressed: () {
-                  //Open Camera
-                },
+              contentPadding: EdgeInsets.all(5)),
+        ),
+        SizedBox(height: size.height / 40),
+        TextField(
+          controller: cardNumberController,
+          keyboardType: TextInputType.number,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 15,
+          ),
+          decoration: InputDecoration(
+            labelText: "Card Number",
+            hintText: "Enter your card number",
+            filled: false,
+            enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white54),
+            ),
+            focusedBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.cyan),
+            ),
+            suffixIcon: IconButton(
+              icon: const Icon(
+                Icons.camera_alt,
+                color: Colors.white54,
               ),
+              onPressed: () {
+                //Open Camera
+              },
             ),
           ),
-          SizedBox(height: size.height / 40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: size.width * 0.50,
-                child: TextField(
-                  controller: expiryDateController,
-                  keyboardType: TextInputType.datetime,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
+        ),
+        SizedBox(height: size.height / 40),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: size.width * 0.50,
+              child: TextField(
+                controller: expiryDateController,
+                keyboardType: TextInputType.datetime,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                ),
+                decoration: const InputDecoration(
+                  labelText: "Expiry Date",
+                  hintText: "11/2024",
+                  filled: false,
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white54),
                   ),
-                  decoration: const InputDecoration(
-                    labelText: "Expiry Date",
-                    hintText: "11/2024",
-                    filled: false,
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white54),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.cyan),
-                    ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.cyan),
                   ),
                 ),
               ),
-              SizedBox(
-                width: size.width * 0.28,
-                child: TextField(
-                  controller: cvvController,
-                  keyboardType: TextInputType.phone,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
+            ),
+            SizedBox(
+              width: size.width * 0.28,
+              child: TextField(
+                controller: cvvController,
+                keyboardType: TextInputType.phone,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                ),
+                decoration: const InputDecoration(
+                  labelText: "CVV",
+                  hintText: "892",
+                  filled: false,
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white54),
                   ),
-                  decoration: const InputDecoration(
-                    labelText: "CVV",
-                    hintText: "892",
-                    filled: false,
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white54),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.cyan),
-                    ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.cyan),
                   ),
                 ),
-              )
-            ],
-          )
-        ],
-      ),
+              ),
+            )
+          ],
+        )
+      ],
     );
   }
 }

@@ -105,78 +105,79 @@ class _CheckoutDeliveryState extends State<CheckoutDelivery> {
             const SizedBox(
               height: 7,
             ),
-        Column(
-          children: [
-            CheckboxListTile(
-              title: const Text('Same Day Delivery'),
-              value: timeDilation != 1.0,
-              onChanged: (bool? value) {
-                setState(() {
-                  timeDilation = value! ? 10.0 : 1.0;
-                });
-              },
-              secondary: const Icon(Icons.hourglass_empty),
-            ),
-            const SizedBox(
-              height: 7,
-            ),
-            CheckboxListTile(
-              title: const Text('Express Delivery'),
-              value: timeDilation != 1.0,
-              onChanged: (bool? value) {
-                setState(() {
-                  timeDilation = value! ? 10.0 : 1.0;
-                });
-              },
-              secondary: const Icon(Icons.bike_scooter),
-            ),
-          ],
-        ),
-            const SizedBox(
-              height: 7,
-            ),
-            Row(
+            Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(40.0),
-                  child: CustomButton(
-                    height: 60,
-                    fontSize: 22,
-                    onPressed: () async {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => MapWidget(
-                                    pickupLatLng: widget.pickupLatLng,
-                                    dropoffLatLng: widget.dropoffLatLng,
-                                  )));
-                    },
-                    text: "Pay with Cash",
-                  ),
+                CheckboxListTile(
+                  title: const Text('Same Day Delivery'),
+                  value: timeDilation != 1.0,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      timeDilation = value! ? 10.0 : 1.0;
+                    });
+                  },
+                  secondary: const Icon(Icons.hourglass_empty),
                 ),
                 const SizedBox(
-                  width: 7,
+                  height: 7,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(40.0),
-                  child: CustomButton(
-                    height: 60,
-                    fontSize: 22,
-                    onPressed: () async {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => MapWidget(
-                                pickupLatLng: widget.pickupLatLng,
-                                dropoffLatLng: widget.dropoffLatLng,
-                              )));
-                    },
-                    text: "Online Payment",
-                  ),
+                CheckboxListTile(
+                  title: Text('Express Delivery'),
+                  value: timeDilation != 1.0,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      timeDilation = value! ? 10.0 : 1.0;
+                    });
+                  },
+                  secondary: const Icon(Icons.bike_scooter),
                 ),
               ],
             ),
-
+            const SizedBox(
+              height: 7,
+            ),
+            Center(
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: CustomButton(
+                      height: 60,
+                      fontSize: 22,
+                      onPressed: () async {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => MapWidget(
+                                      pickupLatLng: widget.pickupLatLng,
+                                      dropoffLatLng: widget.dropoffLatLng,
+                                    )));
+                      },
+                      text: "Pay with Cash",
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: CustomButton(
+                      height: 60,
+                      fontSize: 22,
+                      onPressed: () async {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => MapWidget(
+                                      pickupLatLng: widget.pickupLatLng,
+                                      dropoffLatLng: widget.dropoffLatLng,
+                                    )));
+                      },
+                      text: "Online Payment",
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

@@ -11,3 +11,8 @@ TextEditingController receiverPhone = TextEditingController();
 TextEditingController dropOffLocation = TextEditingController();
 
 TextEditingController fullName = TextEditingController();
+
+TextEditingController fullNameController = TextEditingController();
+TextEditingController cardNumberController = TextEditingController();
+TextEditingController expiryDateController = TextEditingController();
+TextEditingController cvvController = TextEditingController();

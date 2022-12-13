@@ -2,11 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../utility/helpers/constants.dart';
 
-TextEditingController fullNameController = TextEditingController();
-TextEditingController cardNumberController = TextEditingController();
-TextEditingController expiryDateController = TextEditingController();
-TextEditingController cvvController = TextEditingController();
-
 class CashPaymentScreen extends StatefulWidget {
   static const String iD = '/paymentScreen';
   const CashPaymentScreen({Key? key}) : super(key: key);

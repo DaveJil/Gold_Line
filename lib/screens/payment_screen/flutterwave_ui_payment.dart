@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutterwave_standard/flutterwave.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utility/api.dart';
 import '../../utility/helpers/constants.dart';
 import '../../utility/helpers/custom_button.dart';
 import '../../utility/helpers/routing.dart';
-import '../map/map_widget.dart';
 import 'cash_payment screen.dart';
-
-TextEditingController fullNameController = TextEditingController();
-TextEditingController cardNumberController = TextEditingController();
-TextEditingController expiryDateController = TextEditingController();
-TextEditingController cvvController = TextEditingController();
 
 class FlutterwavePaymentScreen extends StatefulWidget {
   static const String iD = '/paymentScreen';
