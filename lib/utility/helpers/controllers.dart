@@ -9,3 +9,5 @@ TextEditingController instruction = TextEditingController();
 TextEditingController receiverName = TextEditingController();
 TextEditingController receiverPhone = TextEditingController();
 TextEditingController dropOffLocation = TextEditingController();
+
+TextEditingController fullName = TextEditingController();

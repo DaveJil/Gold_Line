@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CallApi {
-  final String _url = 'http://thesafedrop.herokuapp.com/api/';
+  final String _url = 'https://goldline.herokuapp.com/api/';
 
   postData(data, apiUrl) async {
     var fullUrl = _url + apiUrl;

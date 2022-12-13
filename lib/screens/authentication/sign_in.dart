@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gold_line/screens/authentication/sign_up.dart';
+import 'package:gold_line/screens/map/trip_screen.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/providers/user_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../../utility/helpers/routing.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -91,7 +94,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     borderRadius: BorderRadius.circular(20)),
                 child: TextButton(
                   onPressed: () async {
-                    await userProvider.signIn(context);
+                    await userProvider.signIn();
+                    changeScreenReplacement(context, TestMapWidget());
                   },
                   child: const Text(
                     'Login',

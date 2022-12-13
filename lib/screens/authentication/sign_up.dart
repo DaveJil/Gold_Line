@@ -5,7 +5,9 @@ import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:provider/provider.dart';
 
+import '../../utility/helpers/routing.dart';
 import '../../utility/providers/user_provider.dart';
+import '../map/trip_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -90,6 +92,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
                   child: TextFormField(
+                    controller: userProvider.email,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter valid email';
@@ -168,7 +171,8 @@ class SignUpScreenState extends State<SignUpScreen> {
                       borderRadius: BorderRadius.circular(20)),
                   child: TextButton(
                     onPressed: () async {
-                      await userProvider.signUp(context);
+                      await userProvider.signUp();
+                      changeScreenReplacement(context, TestMapWidget());
                     },
                     child: const Text(
                       'Sign Up',

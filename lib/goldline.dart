@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gold_line/screens/authentication/kyc_info.dart';
 import 'package:gold_line/screens/splashscreen.dart';
 
 class GoldLine extends StatefulWidget {
@@ -20,7 +19,7 @@ class _GoldLineState extends State<GoldLine> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: KycInfo(),
+      home: SplashScreen(),
       theme: ThemeData(),
     );
   }

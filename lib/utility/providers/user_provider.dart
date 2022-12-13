@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gold_line/screens/authentication/user_navigation.dart';
-import 'package:gold_line/screens/map/trip_screen.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,6 +24,13 @@ class UserProvider with ChangeNotifier {
   UserProfile? _userModel;
   UserProfile? _userProfile;
 
+  TextEditingController email = TextEditingController();
+  TextEditingController firstName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
+
+  TextEditingController password = TextEditingController();
+  TextEditingController confirmPassword = TextEditingController();
+
 //  getter
   UserProfile get userModel => _userModel!;
   Status get status => _status;
@@ -32,14 +38,6 @@ class UserProvider with ChangeNotifier {
 
   // public variables
   final formkey = GlobalKey<FormState>();
-
-  TextEditingController email = TextEditingController();
-  TextEditingController firstName = TextEditingController();
-  TextEditingController lastName = TextEditingController();
-
-  TextEditingController password = TextEditingController();
-  TextEditingController confirmPassword = TextEditingController();
-  TextEditingController fullName = TextEditingController();
 
   UserProvider.initialize() {
     _initialize();
@@ -60,77 +58,61 @@ class UserProvider with ChangeNotifier {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  Future<bool> signIn(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future signIn() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    Map<String, dynamic> request = {
+      'email': email.text,
+      'password': password.text,
+    };
 
     try {
-      _status = Status.Authenticating;
+      final response = await CallApi().postData(request, 'login');
+      if (response['success'] == "success") {
+        final body = response;
+        print('working');
 
-      Map<String, dynamic> request = {
-        'login': email.text.trim(),
-        'password': password.text.trim(),
-      };
-
-      var response = await CallApi().postData(request, 'login');
-      var body = json.decode(response.body);
-      print(body);
-      if (response.statusCode == 200) {
-        prefs.setString(TOKEN, body['token']);
-        prefs.setString(ID, json.encode(body['id']));
-        await prefs.setBool(LOGGED_IN, true);
-
-        changeScreenReplacement(context, TestMapWidget());
-      } else {
-        _showMsg(body['message'], context);
+        print(body);
+        if ((body as Map<String, dynamic>).containsKey('token')) {
+          pref.setString('token', body["token"]);
+          print(body["token"]);
+        } else {
+          print('no token added');
+        }
       }
-      notifyListeners();
-
-      // _userModel = await _userServices.getUserById(value.user!.uid);
-
-      return true;
-    } catch (e) {
-      _status = Status.Unauthenticated;
-      notifyListeners();
-      print(e.toString());
-      return false;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
     }
   }
 
-  Future<bool> signUp(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future signUp() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    Map<String, dynamic> request = {
+      'first_name': firstName.text,
+      'last_name': lastName.text,
+      'email': email.text,
+      'password': password.text,
+    };
 
     try {
-      _status = Status.Authenticating;
+      final response = await CallApi().postData(request, 'signup');
+      if (response['success'] == "success") {
+        final body = response;
+        print('working');
 
-      Map<String, dynamic> request = {
-        'first_name': firstName.text.trim(),
-        'last_name': lastName.text.trim(),
-        'email': email.text.trim(),
-        'password': password.text.trim(),
-      };
-
-      var response = await CallApi().postData(request, 'login');
-      var body = json.decode(response.body);
-      print(body);
-      if (response.statusCode == 200) {
-        prefs.setString(TOKEN, body['token']);
-        prefs.setString(ID, json.encode(body['id']));
-        await prefs.setBool(LOGGED_IN, true);
-
-        changeScreenReplacement(context, TestMapWidget());
-      } else {
-        _showMsg(body['message'], context);
+        print(body);
+        if ((body as Map<String, dynamic>).containsKey('token')) {
+          pref.setString('token', body["token"]);
+          print(body["token"]);
+        } else {
+          print('no token added');
+        }
       }
-      notifyListeners();
-
-      // _userModel = await _userServices.getUserById(value.user!.uid);
-
-      return true;
-    } catch (e) {
-      _status = Status.Unauthenticated;
-      notifyListeners();
-      print(e.toString());
-      return false;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
     }
   }
 
@@ -148,11 +130,11 @@ class UserProvider with ChangeNotifier {
     return Future.delayed(Duration.zero);
   }
 
-  void clearController() {
-    password.text = "";
-    email.text = "";
-    fullName.text = "";
-  }
+  // void clearController() {
+  //   password.text = "";
+  //   email.text = "";
+  //   fullName.text = "";
+  // }
 
   Future<void> reloadUserModel() async {
     ///TODO FIX THIS

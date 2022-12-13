@@ -54,7 +54,7 @@ class UserServices {
   }
 
   // create password
-  Future createPassword(String phone, String password) async {
+  Future signUps(String phone, String password) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     Map<String, dynamic> request = {
       'phone': phone,
@@ -62,7 +62,7 @@ class UserServices {
     };
 
     try {
-      final response = await _callApi.postData(request, 'create-password');
+      final response = await _callApi.postData(request, 'signup/');
 
       if (response['success'] == "success") {
         final body = response;
