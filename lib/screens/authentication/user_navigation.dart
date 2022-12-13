@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gold_line/screens/authentication/sign_in.dart';
 import 'package:gold_line/screens/authentication/sign_up.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
@@ -112,6 +113,26 @@ class LoginChoiceState extends State<LoginChoice> {
                 ),
                 SizedBox(
                   height: getHeight(50, context),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => SignInScreen()));
+                  },
+                  child: Text(
+                    'or Proceed to Login',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                        color: kPrimaryGoldColor,
+                        fontWeight: FontWeight.w300,
+                        fontSize: getHeight(18, context),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: getHeight(40, context),
                 ),
                 const BuildCheckBox(),
               ],

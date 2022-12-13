@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/controllers.dart';
@@ -101,23 +102,81 @@ class _CheckoutDeliveryState extends State<CheckoutDelivery> {
            Delivery Address: ${dropOffLocation.text}  
            Sender Pays
            ''', style: TextStyle(fontSize: 20)),
-            Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: CustomButton(
-                height: 60,
-                fontSize: 22,
-                onPressed: () async {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => MapWidget(
+            const SizedBox(
+              height: 7,
+            ),
+        Column(
+          children: [
+            CheckboxListTile(
+              title: const Text('Same Day Delivery'),
+              value: timeDilation != 1.0,
+              onChanged: (bool? value) {
+                setState(() {
+                  timeDilation = value! ? 10.0 : 1.0;
+                });
+              },
+              secondary: const Icon(Icons.hourglass_empty),
+            ),
+            const SizedBox(
+              height: 7,
+            ),
+            CheckboxListTile(
+              title: const Text('Express Delivery'),
+              value: timeDilation != 1.0,
+              onChanged: (bool? value) {
+                setState(() {
+                  timeDilation = value! ? 10.0 : 1.0;
+                });
+              },
+              secondary: const Icon(Icons.bike_scooter),
+            ),
+          ],
+        ),
+            const SizedBox(
+              height: 7,
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(40.0),
+                  child: CustomButton(
+                    height: 60,
+                    fontSize: 22,
+                    onPressed: () async {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => MapWidget(
+                                    pickupLatLng: widget.pickupLatLng,
+                                    dropoffLatLng: widget.dropoffLatLng,
+                                  )));
+                    },
+                    text: "Pay with Cash",
+                  ),
+                ),
+                const SizedBox(
+                  width: 7,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(40.0),
+                  child: CustomButton(
+                    height: 60,
+                    fontSize: 22,
+                    onPressed: () async {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => MapWidget(
                                 pickupLatLng: widget.pickupLatLng,
                                 dropoffLatLng: widget.dropoffLatLng,
                               )));
-                },
-                text: "Pay 5000",
-              ),
+                    },
+                    text: "Online Payment",
+                  ),
+                ),
+              ],
             ),
+
           ],
         ),
       ),
