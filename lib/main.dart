@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
           return UserProfileProvider(context: context);
         }),
       ],
-      child: const GoldLine(),
+      child: const MaterialApp(home: GoldLine()),
     );
   }
 }

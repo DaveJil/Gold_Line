@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gold_line/utility/helpers/controllers.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utility/helpers/constants.dart';
@@ -15,8 +16,8 @@ class DriverFoundWidget extends StatelessWidget {
     MapProvider mapProvider = Provider.of<MapProvider>(context);
 
     return DraggableScrollableSheet(
-        initialChildSize: 0.2,
-        minChildSize: 0.05,
+        initialChildSize: 0.5,
+        minChildSize: 0.3,
         maxChildSize: 0.8,
         builder: (BuildContext context, myScrollController) {
           return Container(
@@ -42,16 +43,16 @@ class DriverFoundWidget extends StatelessWidget {
                     Container(
                         child: mapProvider.driverArrived == false
                             ? Text(
-                                'Your ride arrives in ${mapProvider.routeModel!.timeNeeded.toString()}',
+                                'Your delivery rider is on his way',
                                 style: const TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.w300,
                                 ),
                               )
                             : const Text(
-                                'Your ride has arrived',
+                                'Your rider has arrived',
                                 style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 20,
                                   color: Colors.green,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -60,20 +61,12 @@ class DriverFoundWidget extends StatelessWidget {
                 ),
                 const Divider(),
                 ListTile(
-                  leading: Container(
-                    child: mapProvider.driverModel?.photo == null
-                        ? const CircleAvatar(
-                            radius: 30,
-                            child: Icon(
-                              Icons.person_outline,
-                              size: 25,
-                            ),
-                          )
-                        : CircleAvatar(
-                            radius: 30,
-                            backgroundImage:
-                                NetworkImage(mapProvider.driverModel!.photo!),
-                          ),
+                  leading: const CircleAvatar(
+                    radius: 40,
+                    child: Icon(
+                      Icons.person_outline,
+                      size: 30,
+                    ),
                   ),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -81,13 +74,10 @@ class DriverFoundWidget extends StatelessWidget {
                       RichText(
                           text: TextSpan(children: [
                         TextSpan(
-                            text: mapProvider.driverModel!.first_name! + "\n",
+                            // text: mapProvider.driverModel!.first_name! + "\n",
+                            text: "Rider Name" + "\n",
                             style: const TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold)),
-                        TextSpan(
-                            text: mapProvider.driverModel!.car,
-                            style: const TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w300)),
+                                fontSize: 22, fontWeight: FontWeight.bold)),
                       ], style: const TextStyle(color: Colors.black))),
                     ],
                   ),
@@ -97,8 +87,10 @@ class DriverFoundWidget extends StatelessWidget {
                       ),
                       onPressed: null,
                       child: Text(
-                        mapProvider.driverModel!.plate!,
-                        style: const TextStyle(color: Colors.white),
+                        // mapProvider.driverModel!.plate!,
+                        "Rider No: 1234",
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 22),
                       )),
                   trailing: Container(
                       decoration: BoxDecoration(
@@ -106,9 +98,11 @@ class DriverFoundWidget extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20)),
                       child: IconButton(
                         onPressed: () {
-                          _service!.call(mapProvider.driverModel!.phone!);
+                          _service!.call("07014261561");
                         },
-                        icon: const Icon(Icons.call),
+                        icon: const Icon(
+                          Icons.call,
+                        ),
                       )),
                 ),
                 const Divider(),
@@ -152,24 +146,24 @@ class DriverFoundWidget extends StatelessWidget {
                       width: 30,
                     ),
                     RichText(
-                        text: const TextSpan(children: [
-                      TextSpan(
+                        text: TextSpan(children: [
+                      const TextSpan(
                           text: "\nPick up location \n",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
                       TextSpan(
-                          text: "25th avenue, flutter street \n\n\n",
-                          style: TextStyle(
+                          text: "${pickUpLocation.text} \n\n\n",
+                          style: const TextStyle(
                               fontWeight: FontWeight.w300, fontSize: 16)),
-                      TextSpan(
+                      const TextSpan(
                           text: "Destination \n",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
                       TextSpan(
-                          text: "25th avenue, flutter street \n",
-                          style: TextStyle(
+                          text: "${dropOffLocation.text} \n",
+                          style: const TextStyle(
                               fontWeight: FontWeight.w300, fontSize: 16)),
-                    ], style: TextStyle(color: Colors.black))),
+                    ], style: const TextStyle(color: Colors.black))),
                   ],
                 ),
                 const Divider(),
@@ -179,7 +173,7 @@ class DriverFoundWidget extends StatelessWidget {
                     const Padding(
                       padding: EdgeInsets.all(12),
                       child: Text(
-                        "Ride price",
+                        "Delivery price",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -189,7 +183,7 @@ class DriverFoundWidget extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(12),
                       child: Text(
-                        "\$${mapProvider.ridePrice}",
+                        "\₦${mapProvider.deliveryPrice}",
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -198,16 +192,42 @@ class DriverFoundWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(primary: Colors.red),
-                    child: const Text(
-                      "Cancel Ride",
-                      style: TextStyle(color: Colors.white),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // mapProvider.updateDeliveryStatus();
+                            mapProvider.changeWidgetShowed(
+                                showWidget: Show.ORDER_STATUS);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              primary: kPrimaryGoldColor),
+                          child: const Text(
+                            "Confirm Pick up",
+                            style: TextStyle(color: Colors.white, fontSize: 22),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            mapProvider.cancelRequest();
+                          },
+                          style: ElevatedButton.styleFrom(primary: Colors.red),
+                          child: const Text(
+                            "Cancel Delivery",
+                            style: TextStyle(color: Colors.white, fontSize: 22),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 )
               ],
             ),

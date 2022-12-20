@@ -1,13 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:gold_line/screens/authentication/sign_in.dart';
+import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
-import 'package:gold_line/utility/helpers/dimensions.dart';
-import 'package:image_picker/image_picker.dart';
 
-import '../map/trip_screen.dart';
+import '../../utility/helpers/dimensions.dart';
 
 class KycInfo extends StatefulWidget {
   const KycInfo({super.key});
@@ -38,7 +33,7 @@ class KycInfoState extends State<KycInfo> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      icon:  Icon(
+                      icon: Icon(
                         Icons.arrow_back,
                         color: Colors.black,
                         size: getHeight(24, context),
@@ -89,7 +84,7 @@ class KycInfoState extends State<KycInfo> {
                           icon: Icon(
                             Icons.camera_enhance_rounded,
                             color: Colors.white,
-                            size: 16,
+                            size: getHeight(16, context),
                           )),
                     ),
                   ),
@@ -185,10 +180,8 @@ class KycInfoState extends State<KycInfo> {
                       borderRadius: BorderRadius.circular(20)),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const TestMapWidget()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => const MapWidget()));
                     },
                     child: const Text(
                       'Continue',

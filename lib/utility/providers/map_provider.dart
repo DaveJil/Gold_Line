@@ -1,15 +1,19 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:date_format/date_format.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_google_places/flutter_google_places.dart';
+// import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:gold_line/screens/map/map_widget.dart';
+import 'package:gold_line/utility/helpers/controllers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_place/google_place.dart' as compon;
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
@@ -20,7 +24,6 @@ import '../../models/delivery_model/delivery.dart';
 import '../../models/driver_model/driver_model.dart';
 import '../../models/route_model.dart';
 import '../../models/user_profile/user_profile.dart';
-import '../../screens/payment_screen/flutterwave_ui_payment.dart';
 import '../api.dart';
 import '../helpers/constants.dart';
 import '../helpers/custom_button.dart';
@@ -31,7 +34,16 @@ import '../services/delivery_services.dart';
 import '../services/driver_service.dart';
 import '../services/map_request.dart';
 
-enum Show { HOME, PAYMENT_METHOD_SELECTION, DRIVER_FOUND, TRIP }
+enum Show {
+  HOME,
+  CASH_PAYMENT,
+  FLUTTERWAVE_PAYMENT,
+  SEARCHING_FOR_DRIVER,
+  DRIVER_FOUND,
+  TRIP,
+  CHECKOUT_DELIVERY,
+  ORDER_STATUS
+}
 
 class MapProvider with ChangeNotifier {
   static const ACCEPTED = 'accepted';
@@ -68,7 +80,7 @@ class MapProvider with ChangeNotifier {
 
   LatLng? pickupCoordinates;
   LatLng? destinationCoordinates;
-  double? ridePrice = 0;
+  int? deliveryPrice = 0;
   String? notificationType = "";
   late bool _isPickupSet = false;
   late bool _isDropOffSet = false;
@@ -104,6 +116,7 @@ class MapProvider with ChangeNotifier {
   bool alertsOnUi = false;
   bool driverFound = false;
   bool driverArrived = false;
+  bool deliveryCompleted = false;
   DeliveryRequestServices _requestServices = DeliveryRequestServices();
   int timeCounter = 0;
   double percentage = 0;
@@ -111,6 +124,7 @@ class MapProvider with ChangeNotifier {
   List<LatLng> polylineCoordinates = [];
 
   String? requestedDestination;
+  int? deliveryId;
 
   //  this variable will listen to the status of the ride request
   StreamSubscription<AsyncSnapshot>? requestStream;
@@ -127,6 +141,19 @@ class MapProvider with ChangeNotifier {
   double? requestedDestinationLng;
   DeliveryRequestModel? rideRequestModel;
   BuildContext? mainContext;
+
+  String? setTime, setDate;
+
+  String? hour, minute, time;
+
+  String? dateTime;
+
+  DateTime selectedDate = DateTime.now();
+
+  TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
+
+  TextEditingController dateController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
 
   // FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
@@ -171,12 +198,21 @@ class MapProvider with ChangeNotifier {
 
     Position position = await Geolocator.getCurrentPosition();
     center = LatLng(position.latitude, position.longitude);
+
+    List<Placemark> placemark =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+
+    if (prefs.getString(COUNTRY) == null) {
+      String country = placemark[0].isoCountryCode!.toLowerCase();
+      await prefs.setString(COUNTRY, "ng");
+    }
+
     notifyListeners();
 
     return center;
   }
 
-  Future<String> getAddressFromCoordinates({required LatLng point}) async {
+  Future<String> _getAddressFromCoordinates({required LatLng point}) async {
     List<Placemark> addresses =
         await placemarkFromCoordinates(point.latitude, point.longitude);
     String address =
@@ -219,35 +255,13 @@ class MapProvider with ChangeNotifier {
         CameraPosition(target: point, tilt: 15, zoom: 19)));
   }
 
-  displayPlacesSearchWidget(BuildContext context) async {
-    Prediction? prediction = await PlacesAutocomplete.show(
-        context: context,
-        apiKey: GOOGLE_MAPS_API_KEY,
-        mode: Mode.overlay,
-        components: [Component(Component.country, "ng")]);
-    GoogleMapsPlaces places = GoogleMapsPlaces(apiKey: GOOGLE_MAPS_API_KEY);
-
-    PlacesDetailsResponse detail =
-        await places.getDetailsByPlaceId(prediction!.placeId!);
-    double lat = detail.result.geometry!.location.lat;
-    double lng = detail.result.geometry!.location.lng;
-    LatLng _point = LatLng(lat, lng);
-
-    _changeAddress(address: prediction.description!);
-    FocusScopeNode currentFocus = FocusScope.of(context);
-    currentFocus.unfocus();
-    _animateCamera(point: _point);
-    notifyListeners();
-  }
-
-  Future sendRequest(
-      {LatLng? origin, LatLng? destination, UserProfile? user}) async {
+  Future sendRequest({LatLng? origin, LatLng? destination}) async {
     LatLng _org;
     LatLng _dest;
 
     if (origin == null && destination == null) {
-      _org = pickupCoordinates!;
-      _dest = destinationCoordinates!;
+      _org = pickUpLatLng!;
+      _dest = dropOffLatLng!;
     } else {
       _org = origin!;
       _dest = destination!;
@@ -258,8 +272,8 @@ class MapProvider with ChangeNotifier {
     routeModel = route;
 
     if (origin == null) {
-      ridePrice =
-          double.parse((routeModel!.distance.value! / 500).toStringAsFixed(2));
+      deliveryPrice =
+          int.parse((routeModel!.distance.value! / 500).toStringAsFixed(2));
     }
     List<Marker> mks = _markers
         .where((element) => element.markerId.value == "location")
@@ -270,13 +284,12 @@ class MapProvider with ChangeNotifier {
 // ! another method will be created just to draw the polys and add markers
     _addLocationMarker(destinationCoordinates!, routeModel!.distance.text!);
     center = destinationCoordinates;
-    _createRoute(route.points, color: Colors.deepOrange);
-    _createRoute(
-      route.points,
-    );
+    // _createRoute(route.points, color: Colors.deepOrange);
+    // _createRoute(
+    //   route.points,
+    // );
     _routeToDestinationPolys = _poly;
-    requestDriver(user: user!);
-
+    createDeliveryRequest();
     notifyListeners();
   }
 
@@ -285,7 +298,7 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  _createRoute(String decodeRoute, {Color? color}) async {
+  createRoute({Color? color}) async {
     clearPoly();
     var uuid = const Uuid();
     String polyId = uuid.v1();
@@ -293,9 +306,8 @@ class MapProvider with ChangeNotifier {
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       GOOGLE_MAPS_API_KEY, // Your Google Map Key
-      PointLatLng(pickupCoordinates!.latitude, pickupCoordinates!.longitude),
-      PointLatLng(
-          destinationCoordinates!.latitude, destinationCoordinates!.longitude),
+      PointLatLng(pickUpLatLng!.latitude, pickUpLatLng!.longitude),
+      PointLatLng(dropOffLatLng!.latitude, dropOffLatLng!.longitude),
     );
     if (result.points.isNotEmpty) {
       result.points.forEach(
@@ -305,14 +317,22 @@ class MapProvider with ChangeNotifier {
       );
       notifyListeners();
     }
+    addPolyLine(polylineCoordinates);
+    notifyListeners();
+  }
 
-    // _poly.add(Polyline(
-    //     polylineId: PolylineId(polyId),
-    //     width: 12,
-    //     color: color ?? kPrimaryBlueColor,
-    //     onTap: () {},
-    //     points: _convertToLatLong(_decodePoly(decodeRoute))));
-    // notifyListeners();
+  Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
+
+  addPolyLine(List<LatLng> polylineCoordinates) {
+    PolylineId id = PolylineId("poly");
+    Polyline polyline = Polyline(
+      polylineId: id,
+      color: Colors.redAccent,
+      points: polylineCoordinates,
+      width: 8,
+    );
+    polylines[id] = polyline;
+    notifyListeners();
   }
 
   autoCompleteSearch(String value) async {
@@ -323,51 +343,6 @@ class MapProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
-
-//   List<LatLng> _convertToLatLong(List points) {
-//     List<LatLng> result = <LatLng>[];
-//     for (int i = 0; i < points.length; i++) {
-//       if (i % 2 != 0) {
-//         result.add(LatLng(points[i - 1], points[i]));
-//       }
-//     }
-//     return result;
-//   }
-//
-//   List _decodePoly(String poly) {
-//     var list = poly.codeUnits;
-//     var lList = [];
-//     int index = 0;
-//     int len = poly.length;
-//     int c = 0;
-// // repeating until all attributes are decoded
-//     do {
-//       var shift = 0;
-//       int result = 0;
-//
-//       // for decoding value of one attribute
-//       do {
-//         c = list[index] - 63;
-//         result |= (c & 0x1F) << (shift * 5);
-//         index++;
-//         shift++;
-//       } while (c >= 32);
-//       /* if value is negetive then bitwise not the value */
-//       if (result & 1 == 1) {
-//         result = ~result;
-//       }
-//       var result1 = (result >> 1) * 0.00001;
-//       lList.add(result1);
-//     } while (index < len);
-//
-// /*adding to previous value as done in encoding */
-//     for (var i = 2; i < lList.length; i++) lList[i] += lList[i - 2];
-//
-//     print(lList.toString());
-//
-//     return lList;
-//   }
 
 // ANCHOR: MARKERS AND POLYS
   _addLocationMarker(LatLng position, String distance) {
@@ -441,10 +416,11 @@ class MapProvider with ChangeNotifier {
   }
 
   _setCustomMapPin() async {
-    driverPin = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+    driverPin = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 2.5), 'assets/pins/taxi.png');
 
-    locationPin =
-        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+    locationPin = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 2.5), 'assets/pins/pin.png');
   }
 
   clearMarkers() {
@@ -655,52 +631,160 @@ class MapProvider with ChangeNotifier {
         });
   }
 
-  requestDriver(
-      {required UserProfile user,
-      double? lat,
-      double? lng,
-      BuildContext? context,
-      Map? distance}) {
-    alertsOnUi = true;
-    notifyListeners();
-    var uuid = const Uuid();
-    String id = uuid.v1();
-    _requestServices!.createRideRequest(
-      user_id: user.id,
-      first_name: user.profile!.firstName,
-      distance: distance,
-      dropoff_latitude: requestedDestinationLat,
-      dropoff_longitude: requestedDestinationLng,
-      pickup_latitude: lat,
-      pickup_longitude: lng,
-      dropoff_address: requestedDestination,
+  Future createDeliveryRequest() async {
+    Map<String, dynamic> values = {
+      "receiver_name": receiverName.text,
+      "receiver_phone": receiverPhone.text,
+      "sender_name": senderName.text,
+      "sender_phone": senderPhone.text,
+      "pickup_longitude": pickUpLatLng!.longitude,
+      "pickup_latitude": pickUpLatLng!.longitude,
+      "dropoff_latitude": dropOffLatLng!.latitude,
+      "dropoff_longitude": dropOffLatLng!.longitude,
+      "status": 'pending',
+      "city": city.text,
+      "state": state.text,
+      "pickup_time": selectedDate.toString() + selectedTime.toString(),
+      // "distance": routeModel!.distance,
+      // "duration": routeModel!.timeNeeded,
+      "pickup_address": pickUpLocation.text,
+      "dropoff_address": dropOffLocation.text,
+      "payment_method": "card"
+    };
+    SharedPreferences pref = await SharedPreferences.getInstance();
 
-      // destination: {
-      //   "address": requestedDestination,
-      //   "latitude": requestedDestinationLat,
-      //   "longitude": requestedDestinationLng
-      // },
-      // position: {
-      //   "latitude": lat,
-      //   "longitude": lng
-      // }
+    try {
+      final response = await CallApi().postData(values, 'user/delivery/new');
+
+      final body = response;
+      print('delivery sent');
+      deliveryId = body['data']['id'];
+      notifyListeners();
+      print(deliveryId);
+      pref.setInt('deliveryId', deliveryId!);
+      if (response['success'] == "success") {
+        final body = response;
+        print('delivery sent');
+        String deliveryId = response['id'];
+        print(deliveryId);
+        pref.setString('deliveryId', response['id']);
+
+        print(body);
+        if ((body as Map<String, dynamic>).containsKey('id')) {
+          pref.setString('deliveryId', body["id"]);
+          print(body["id"]);
+        } else {
+          print('no token added');
+        }
+      }
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future updatePaymentMethod() async {
+    Map<String, dynamic> values = {
+      "delivery_id": deliveryId,
+      "payment_method": "cash"
+    };
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    try {
+      final response = await CallApi().postData(values, 'user/delivery/update');
+      print(response);
+      if (response['success'] == "success") {
+        final body = response;
+        print('delivery sent');
+        String deliveryId = response['id'];
+        print(deliveryId);
+        pref.setString('deliveryId', response['id']);
+
+        print(body);
+        if ((body as Map<String, dynamic>).containsKey('id')) {
+          pref.setString('deliveryId', body["id"]);
+          print(body["id"]);
+        } else {
+          print('no token added');
+        }
+      }
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future updateDeliveryStatus() async {
+    Map<String, dynamic> values = {
+      "delivery_id": deliveryId,
+      "status": "pending"
+    };
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    try {
+      final response = await CallApi().postData(values, 'user/delivery/update');
+      if (response['success'] == "success") {
+        final body = response;
+        print('delivery sent');
+        String deliveryId = response['id'];
+        print(deliveryId);
+        pref.setString('deliveryId', response['id']);
+
+        print(body);
+        if ((body as Map<String, dynamic>).containsKey('id')) {
+          pref.setString('deliveryId', body["id"]);
+          print(body["id"]);
+        } else {
+          print('no token added');
+        }
+      }
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        initialDatePickerMode: DatePickerMode.day,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2101));
+    if (picked != null) selectedDate = picked;
+    dateController.text = DateFormat.yMd().format(selectedDate);
+    notifyListeners();
+  }
+
+  Future selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
     );
-    listenToRequest(id: id, context: context);
-    percentageCounter(requestId: id, context: context);
+    if (picked != null) selectedTime = picked;
+    hour = selectedTime.hour.toString();
+    minute = selectedTime.minute.toString();
+    time = hour! + ' : ' + minute!;
+    timeController.text = time!;
+    timeController.text = formatDate(
+        DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
+        [hh, ':', nn, " ", am]).toString();
+    notifyListeners();
   }
 
 // cancel trip endpoint
   cancelRequest() async {
     lookingForDriver = false;
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    String trip_id = preferences.getString("trip_id")!;
-    // _requestServices!
-    //     .updateRequest({"id": rideRequestModel!.id, "status": "cancelled"});
+    String deliveryId = preferences.getString("deliveryId")!;
 
     await CallApi().postData({
-      "trip_id": trip_id,
+      "delivery_id": deliveryId,
       "reason": "",
-    }, "user/trip/cancel");
+    }, "user/delivery/cancel");
 
     periodicTimer!.cancel();
     notifyListeners();
@@ -711,10 +795,68 @@ class MapProvider with ChangeNotifier {
     // allDriversStream = _driverService.getDrivers().listen(_updateMarkers);
   }
 // trip process endpoint
-  _processTrip() async {
+
+  Future processDelivery() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    String trip_id = preferences.getString("trip_id")!;
-    CallApi().postData("", "user/trip/process/$trip_id");
+
+    try {
+      final response =
+          await CallApi().postData(null, "user/delivery/process/$deliveryId");
+      final body = response;
+      print(body);
+      print('delivery processing');
+      // deliveryPrice = response['data']['price'];
+      print(deliveryPrice);
+      preferences.setInt('price', deliveryPrice!);
+      if (response['success'] == "success") {
+        print(body);
+        if ((body as Map<String, dynamic>).containsKey('id')) {
+          preferences.setString('deliveryId', body["id"]);
+          print(body["id"]);
+        } else {
+          print('no token added');
+        }
+        return deliveryPrice;
+      }
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future tryProcessDelivery() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    Map<String, dynamic> values = {
+      "sender_address": pickUpLocation.text + "," + state.text,
+      "receiver_address": dropOffLocation.text + "," + state.text,
+      "size": "small"
+    };
+
+    try {
+      final response = await CallApi().postTryData(values, "price");
+      final body = response;
+      print(body);
+      print('delivery processing');
+      deliveryPrice = response['data']['price'];
+      print(deliveryPrice);
+      preferences.setInt('price', deliveryPrice!);
+      if (response['success'] == "success") {
+        print(body);
+        if ((body as Map<String, dynamic>).containsKey('id')) {
+          preferences.setString('deliveryId', body["id"]);
+          print(body["id"]);
+        } else {
+          print('no token added');
+        }
+        return deliveryPrice;
+      }
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
   }
 
   _listenToDriver(Map<String, dynamic> json) {
@@ -875,15 +1017,15 @@ class MapProvider with ChangeNotifier {
   }
 
   ///tofix
-  // _setCoordinates({required LatLng coordinates}) {
-  //   if (_isPickupSet == false) {
-  //     pickupCoordinates = coordinates;
-  //   } else {
-  //     destinationCoordinates = coordinates;
-  //   }
-  //   notifyListeners();
-  // }
-  //
+  _setCoordinates({required LatLng coordinates}) {
+    if (_isPickupSet == false) {
+      pickupCoordinates = coordinates;
+    } else {
+      destinationCoordinates = coordinates;
+    }
+    notifyListeners();
+  }
+
   // _setCountryCode() {
   //   countryCode = address!.country;
   //   notifyListeners();
@@ -952,7 +1094,6 @@ class MapProvider with ChangeNotifier {
         await CallApi().postData(null, "user/trip/process/$trip_id");
     if (response["code"] == "success") {
       String price = response["price"];
-      initPayment(price);
       print(response["data"]);
       return Success(data: response["data"], message: "${response["message"]}");
     } else {
@@ -963,30 +1104,30 @@ class MapProvider with ChangeNotifier {
   }
 
   // sumbit trip
-  Future initPayment(String price) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    final trip_id = pref.getString("trip_id");
-
-    final response =
-        await CallApi().postData(null, "user/trip/initialize-payment/$trip_id");
-    if (response["code"] == "success") {
-      String ref_id = response["ref_id"];
-      changeScreen(
-          mainContext!,
-          FlutterwavePaymentScreen(
-              price: price,
-              email: user!.email!,
-              phone: user!.phone!,
-              ref_id: ref_id));
-
-      print(response["data"]);
-      return Success(data: response["data"], message: "${response["message"]}");
-    } else {
-      print(response["data"]);
-      return Failure(
-          errorData: response["data"], message: "${response["message"]}");
-    }
-  }
+  // Future initPayment(String price) async {
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   final trip_id = pref.getString("trip_id");
+  //
+  //   final response =
+  //       await CallApi().postData(null, "user/trip/initialize-payment/$trip_id");
+  //   if (response["code"] == "success") {
+  //     String ref_id = response["ref_id"];
+  //     changeScreen(
+  //         mainContext!,
+  //         FlutterwavePaymentScreen(
+  //           price: price,
+  //           email: user!.email!,
+  //           phone: user!.phone!,
+  //         ));
+  //
+  //     print(response["data"]);
+  //     return Success(data: response["data"], message: "${response["message"]}");
+  //   } else {
+  //     print(response["data"]);
+  //     return Failure(
+  //         errorData: response["data"], message: "${response["message"]}");
+  //   }
+  // }
 
   // cancel trip
   Future cancelTrip(String? reason) async {

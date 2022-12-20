@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:gold_line/screens/request_delivery/delivery_summary.dart';
+import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/screens/splashscreen.dart';
+import 'package:provider/provider.dart';
 
-class GoldLine extends StatefulWidget {
-  const GoldLine({Key? key}) : super(key: key);
+import 'utility/providers/user_provider.dart';
 
-  @override
-  State<GoldLine> createState() => _GoldLineState();
-}
-
-class _GoldLineState extends State<GoldLine> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+class GoldLine extends StatelessWidget {
+  const GoldLine({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: CheckoutDelivery(),
-      theme: ThemeData(),
-    );
+    UserProvider auth = Provider.of<UserProvider>(context);
+    switch (auth.status) {
+      case Status.Uninitialized:
+        return const SplashScreen();
+      case Status.Unauthenticated:
+        return SplashScreen();
+      case Status.Authenticated:
+        return const MapWidget();
+      default:
+        return SplashScreen();
+    }
   }
 }

@@ -6,9 +6,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CallApi {
   final String _url = 'https://goldline.herokuapp.com/api/';
+  final String _urlTry = 'https://areaconnect.com.ng/api/';
 
   postData(data, apiUrl) async {
     var fullUrl = _url + apiUrl;
+    var res = await http.post(Uri.parse(fullUrl),
+        body: jsonEncode(data), headers: await _setHeaders());
+    return _processResponse(res);
+  }
+
+  postTryData(data, apiUrl) async {
+    var fullUrl = _urlTry + apiUrl;
     var res = await http.post(Uri.parse(fullUrl),
         body: jsonEncode(data), headers: await _setHeaders());
     return _processResponse(res);
@@ -72,7 +80,7 @@ class CallApi {
     switch (response.statusCode) {
       case 200:
         var resJson = jsonDecode(response.body);
-        print(resJson);
+        // print(resJson);
         return resJson;
       case 400:
         throw SocketException(

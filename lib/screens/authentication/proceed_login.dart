@@ -7,16 +7,15 @@ import 'package:provider/provider.dart';
 
 import '../../utility/helpers/routing.dart';
 import '../../utility/providers/user_provider.dart';
-import '../map/map_widget.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class ProceedLogin extends StatefulWidget {
+  const ProceedLogin({super.key});
 
   @override
-  SignUpScreenState createState() => SignUpScreenState();
+  ProceedLoginState createState() => ProceedLoginState();
 }
 
-class SignUpScreenState extends State<SignUpScreen> {
+class ProceedLoginState extends State<ProceedLogin> {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
@@ -28,6 +27,13 @@ class SignUpScreenState extends State<SignUpScreen> {
           child: Center(
             child: Column(
               children: <Widget>[
+                SizedBox(
+                    width: getHeight(300, context),
+                    height: getHeight(300, context),
+                    child: SvgPicture.asset("assets/signup.svg")),
+                SizedBox(
+                  height: getHeight(20, context),
+                ),
                 Padding(
                   padding: EdgeInsets.only(top: getHeight(100, context)),
                   child: const Text(
@@ -40,13 +46,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                 ),
                 SizedBox(
                   height: getHeight(40, context),
-                ),
-                SizedBox(
-                    width: getHeight(300, context),
-                    height: getHeight(300, context),
-                    child: SvgPicture.asset("assets/signup.svg")),
-                SizedBox(
-                  height: getHeight(20, context),
                 ),
                 Padding(
                   padding:
@@ -171,11 +170,10 @@ class SignUpScreenState extends State<SignUpScreen> {
                       borderRadius: BorderRadius.circular(20)),
                   child: TextButton(
                     onPressed: () async {
-                      await userProvider.signUp(context);
-                      changeScreenReplacement(context, MapWidget());
+                      changeScreenReplacement(context, SignInScreen());
                     },
                     child: const Text(
-                      'Sign Up',
+                      'Proceed to Login',
                       style: TextStyle(color: Colors.white, fontSize: 25),
                     ),
                   ),

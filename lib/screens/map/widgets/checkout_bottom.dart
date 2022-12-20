@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../utility/helpers/controllers.dart';
 import '../../../utility/helpers/custom_button.dart';
 import '../../../utility/providers/map_provider.dart';
 import '../../../utility/providers/user_provider.dart';
 import '../../../utility/services/calls_and_sms.dart';
 
-class CashPaymentWidget extends StatelessWidget {
+class SummaryWidget extends StatelessWidget {
   final CallsAndMessagesService? _service = CallsAndMessagesService();
 
-  CashPaymentWidget({Key? key}) : super(key: key);
+  SummaryWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,20 +43,61 @@ class CashPaymentWidget extends StatelessWidget {
                     const SizedBox(
                       height: 12,
                     ),
-                    const Center(
-                      child: Text(
-                        "Cash Payment",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 28),
-                      ),
+                    const Text(
+                      "Summary",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
                     ),
                     const SizedBox(
-                      height: 15,
+                      height: 10,
                     ),
-                    Text(
-                        "You will pay ₦${mapProvider.deliveryPrice} to the driver on arrival"),
+                    const Text(
+                      "Sender Details",
+                      style: TextStyle(fontSize: 22),
+                    ),
                     const SizedBox(
-                      height: 15,
+                      height: 7,
+                    ),
+                    Text('''
+                ${senderName.text}
+                ${senderPhone.text}            
+                           ''', style: TextStyle(fontSize: 20)),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      "Receiver",
+                      style: TextStyle(fontSize: 22),
+                    ),
+                    const SizedBox(
+                      height: 7,
+                    ),
+                    Text('''
+                ${receiverName.text}
+                ${receiverPhone.text}            
+                 ''', style: TextStyle(fontSize: 20)),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    const Text("Parcel Details:",
+                        style: TextStyle(fontSize: 22)),
+                    const SizedBox(
+                      height: 7,
+                    ),
+                    Text('''
+             Delivery Status: Pending
+             PickUp Address: ${pickUpLocation.text}  
+             Delivery Address: ${dropOffLocation.text}  
+             Sender Pays
+             ''', style: TextStyle(fontSize: 20)),
+                    const SizedBox(
+                      height: 7,
+                    ),
+                    const SizedBox(
+                      height: 7,
                     ),
                     Center(
                       child: Padding(
@@ -64,14 +106,15 @@ class CashPaymentWidget extends StatelessWidget {
                           height: 60,
                           fontSize: 22,
                           onPressed: () async {
-                            await mapProvider.updatePaymentMethod();
                             mapProvider.changeWidgetShowed(
-                                showWidget: Show.SEARCHING_FOR_DRIVER);
+                                showWidget: Show.FLUTTERWAVE_PAYMENT);
                           },
-                          text: "Continue",
+                          text: "Proceed to pay ₦${mapProvider.deliveryPrice}",
                         ),
                       ),
                     ),
+                    Text(
+                        'Note that this price is an estimated price. Price may differ after delivery.'),
                   ],
                 ),
               ),

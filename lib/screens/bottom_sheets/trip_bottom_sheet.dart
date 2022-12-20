@@ -180,7 +180,7 @@ class TripBottomSheet extends StatelessWidget {
                     Padding(
                         padding: const EdgeInsets.all(12),
                         child: Text(
-                          "\$${mapProvider.ridePrice}",
+                          "\$${mapProvider.deliveryPrice}",
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

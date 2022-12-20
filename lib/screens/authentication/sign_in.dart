@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gold_line/screens/authentication/forgot_password.dart';
 import 'package:gold_line/screens/authentication/sign_up.dart';
-import 'package:gold_line/screens/map/trip_screen.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/providers/user_provider.dart';
 import 'package:provider/provider.dart';
-
-import '../../utility/helpers/routing.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -48,8 +46,9 @@ class _SignInScreenState extends State<SignInScreen> {
               Padding(
                 padding:
                     EdgeInsets.symmetric(horizontal: getWidth(50, context)),
-                child: const TextField(
-                  decoration: InputDecoration(
+                child: TextFormField(
+                  controller: userProvider.email,
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Email',
                     hintText: 'Enter your email',
@@ -62,9 +61,10 @@ class _SignInScreenState extends State<SignInScreen> {
               Padding(
                 padding:
                     EdgeInsets.symmetric(horizontal: getWidth(50, context)),
-                child: const TextField(
+                child: TextFormField(
+                  controller: userProvider.password,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Password',
                       hintText: 'Enter your password'),
@@ -80,22 +80,24 @@ class _SignInScreenState extends State<SignInScreen> {
                 },
                 child: const Text(
                   'New User? Create an account',
-                  style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
+                  style: TextStyle(
+                      color: kPrimaryGoldColor,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w500),
                 ),
               ),
               SizedBox(
                 height: getHeight(30, context),
               ),
               Container(
-                height: getHeight(90, context),
-                width: getWidth(400, context),
+                height: getHeight(45, context),
+                width: getWidth(200, context),
                 decoration: BoxDecoration(
                     color: kPrimaryGoldColor,
                     borderRadius: BorderRadius.circular(20)),
                 child: TextButton(
                   onPressed: () async {
-                    await userProvider.signIn();
-                    changeScreenReplacement(context, TestMapWidget());
+                    var message = await userProvider.signIn(context);
                   },
                   child: const Text(
                     'Login',
@@ -109,11 +111,15 @@ class _SignInScreenState extends State<SignInScreen> {
               TextButton(
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => const SignUpScreen()));
+                      MaterialPageRoute(builder: (_) => const ForgotPass()));
                 },
                 child: const Text(
                   'Forgot Password',
-                  style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
+                  style: TextStyle(
+                      color: kPrimaryGoldColor,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w400,
+                      decoration: TextDecoration.underline),
                 ),
               ),
             ],

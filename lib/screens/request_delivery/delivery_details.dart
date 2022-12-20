@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gold_line/utility/helpers/controllers.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
+import 'package:gold_line/utility/providers/map_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utility/helpers/constants.dart';
@@ -42,6 +44,7 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final MapProvider mapProvider = Provider.of<MapProvider>(context);
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -119,6 +122,22 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                   height: 12,
                 ),
                 CustomDeliveryTextField(
+                  hint: "City",
+                  icon: const Icon(Icons.house_sharp),
+                  controller: city,
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                CustomDeliveryTextField(
+                  hint: "State",
+                  icon: const Icon(Icons.home_filled),
+                  controller: state,
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                CustomDeliveryTextField(
                   hint: "Package Description",
                   icon: const Icon(Icons.description),
                   controller: description,
@@ -176,6 +195,14 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                   ],
                 ),
                 SizedBox(height: size.width / 15),
+                // buildTimeSelector(
+                //     mapProvider.selectDate(context),
+                //     mapProvider.selectTime(context),
+                //     mapProvider.dateController,
+                //     mapProvider.timeController,
+                //     mapProvider.selectedDate.toString(),
+                //     mapProvider.selectedDate.toString()),
+                // SizedBox(height: size.width / 15),
                 Center(
                   child: InkWell(
                     onTap: () {
@@ -410,48 +437,6 @@ class _BuildItemSizeState extends State<BuildItemSize> {
   }
 }
 
-// class BuildContinueButton extends StatelessWidget {
-//   const BuildContinueButton({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: InkWell(
-//         onTap: () async {
-//           saveData();
-//           Navigator.push(
-//               context, MaterialPageRoute(builder: (_) => CheckoutDelivery()));
-//         },
-//         child: Container(
-//           width: MediaQuery.of(context).size.width / 2,
-//           height: MediaQuery.of(context).size.height / 20,
-//           decoration: BoxDecoration(
-//             color: kPrimaryGoldColor,
-//             border: Border.all(),
-//             borderRadius: BorderRadius.circular(15),
-//           ),
-//           child: Row(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: const [
-//               Text(
-//                 "Set Delivery Location",
-//                 style: TextStyle(color: Colors.white, fontSize: 20),
-//               ),
-//               SizedBox(
-//                 width: 10,
-//               ),
-//               Icon(
-//                 Icons.arrow_forward_rounded,
-//                 color: Colors.white,
-//               )
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 class PayerRadioButton extends StatefulWidget {
   const PayerRadioButton({Key? key}) : super(key: key);
 
@@ -524,3 +509,67 @@ class _PayerRadioButtonState extends State<PayerRadioButton> {
     );
   }
 }
+//
+// Widget buildTimeSelector(
+//     Function selectDate,
+//     Function selectTime,
+//     TextEditingController dateController,
+//     TextEditingController timeController,
+//     String setDate,
+//     String setTime) {
+//   return Row(
+//     children: [
+//       Column(
+//         children: [
+//           Text("Selcet Date"),
+//           InkWell(
+//             onTap: () async {
+//               await selectDate;
+//             },
+//             child: TextFormField(
+//               style: TextStyle(fontSize: 40),
+//               textAlign: TextAlign.center,
+//               enabled: false,
+//               keyboardType: TextInputType.text,
+//               controller: dateController,
+//               onSaved: (String? val) {
+//                 setDate = val!;
+//               },
+//               decoration: InputDecoration(
+//                   disabledBorder:
+//                       UnderlineInputBorder(borderSide: BorderSide.none),
+//                   // labelText: 'Time',
+//                   contentPadding: EdgeInsets.only(top: 0.0)),
+//             ),
+//           )
+//         ],
+//       ),
+//       Spacer(),
+//       Column(
+//         children: [
+//           Text("Select Time"),
+//           InkWell(
+//             onTap: () async {
+//               await selectTime;
+//             },
+//             child: TextFormField(
+//               style: TextStyle(fontSize: 40),
+//               textAlign: TextAlign.center,
+//               enabled: false,
+//               keyboardType: TextInputType.text,
+//               controller: timeController,
+//               onSaved: (String? val) {
+//                 setTime = val!;
+//               },
+//               decoration: InputDecoration(
+//                   disabledBorder:
+//                       UnderlineInputBorder(borderSide: BorderSide.none),
+//                   // labelText: 'Time',
+//                   contentPadding: EdgeInsets.only(top: 0.0)),
+//             ),
+//           )
+//         ],
+//       )
+//     ],
+//   );
+// }

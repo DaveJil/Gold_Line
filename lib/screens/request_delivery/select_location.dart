@@ -3,8 +3,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:gold_line/screens/request_delivery/delivery_summary.dart';
+import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
+import 'package:gold_line/utility/helpers/dimensions.dart';
+import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:gold_line/utility/providers/map_provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -174,12 +176,37 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                           details.result != null &&
                           mounted) {
                         if (mapProvider.startFocusNode.hasFocus) {
+                          mapProvider.setPickCoordinates();
+
+                          double lat = details.result!.geometry!.location!.lat!;
+                          double lng = details.result!.geometry!.location!.lng!;
+                          mapProvider.changeRequestedDestination(
+                              reqDestination: details.result!.formattedAddress,
+                              lat: lat,
+                              lng: lng);
+                          mapProvider.updateDestination(
+                              destination: details.result!.adrAddress);
+                          LatLng coordinates = LatLng(lat, lng);
+                          mapProvider.setPickCoordinates(
+                              coordinates: coordinates);
+                          mapProvider.changePickupLocationAddress(
+                              address: details.result!.name);
                           setState(() {
                             mapProvider.pickupLocation = details.result;
                             pickUpLocation.text = details.result!.name!;
                             mapProvider.predictions = [];
                           });
                         } else {
+                          double lat = details.result!.geometry!.location!.lat!;
+                          double lng = details.result!.geometry!.location!.lng!;
+                          mapProvider.changeRequestedDestination(
+                              reqDestination: details.result!.name,
+                              lat: lat,
+                              lng: lng);
+                          mapProvider.updateDestination(
+                              destination: details.result!.name);
+                          LatLng coordinates = LatLng(lat, lng);
+                          mapProvider.setDestination(coordinates: coordinates);
                           setState(() {
                             mapProvider.dropoffLocation = details.result;
                             dropOffLocation.text = details.result!.name!;
@@ -200,26 +227,9 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
 
                         if (mapProvider.pickupLocation != null &&
                             mapProvider.dropoffLocation != null) {
-                          print('navigate');
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CheckoutDelivery(
-                                  pickupLatLng: mapProvider.pickUpLatLng,
-                                  dropoffLatLng: mapProvider.dropOffLatLng),
-                            ),
-                          );
                         } else if (_useCurrentLocationPickUp == true &&
                             mapProvider.dropoffLocation != null) {
                           print('navigate');
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CheckoutDelivery(
-                                  pickupLatLng: mapProvider.pickUpLatLng,
-                                  dropoffLatLng: mapProvider.dropOffLatLng),
-                            ),
-                          );
                         }
                       }
                     },
@@ -246,6 +256,40 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                       });
                     })
               ],
+            ),
+            SizedBox(
+              height: getHeight(30, context),
+            ),
+            Container(
+              height: getHeight(58, context),
+              width: getWidth(200, context),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 4,
+                    offset: Offset(2, 4),
+                  ),
+                ],
+              ),
+              child: TextButton(
+                onPressed: () async {
+                  await mapProvider.createDeliveryRequest();
+                  await mapProvider.createRoute();
+                  await mapProvider.tryProcessDelivery();
+                  print('navigate');
+                  mapProvider.changeWidgetShowed(
+                      showWidget: Show.CHECKOUT_DELIVERY);
+
+                  changeScreenReplacement(context, MapWidget());
+                },
+                child: const Text(
+                  'Continue',
+                  style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
+                ),
+              ),
             ),
           ],
         ),

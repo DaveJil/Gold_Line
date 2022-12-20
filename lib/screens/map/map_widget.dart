@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:gold_line/screens/bottom_sheets/order_status.dart';
+import 'package:gold_line/screens/bottom_sheets/searching%20for%20driver.dart';
 import 'package:gold_line/screens/map/widgets/driver_found.dart';
-import 'package:gold_line/screens/map/widgets/payment_method.dart';
 import 'package:gold_line/screens/my_deliveries/my_deliveries.dart';
+import 'package:gold_line/screens/payment_screen/cash_payment%20screen.dart';
+import 'package:gold_line/screens/payment_screen/flutterwave_ui_payment.dart';
 import 'package:gold_line/screens/profile/main_menu.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -12,6 +15,7 @@ import '../../utility/providers/map_provider.dart';
 import '../../utility/providers/user_provider.dart';
 import '../bottom_sheets/trip_bottom_sheet.dart';
 import '../request_delivery/delivery_details.dart';
+import 'widgets/checkout_bottom.dart';
 
 class MapWidget extends StatefulWidget {
   final LatLng? pickupLatLng;
@@ -219,12 +223,18 @@ class _MapWidgetState extends State<MapWidget> {
                       ))),
               // ANCHOR PICK UP WIDGET
               //  ANCHOR Draggable PAYMENT METHOD
+
               Visibility(
-                  visible: mapProvider.show == Show.PAYMENT_METHOD_SELECTION,
-                  child: PaymentMethodSelectionWidget(
+                  visible: mapProvider.show == Show.FLUTTERWAVE_PAYMENT,
+                  child: FlutterwavePaymentScreen(
                     scaffoldState: scaffoldState,
                   )),
               //  ANCHOR Draggable DRIVER
+
+              Visibility(
+                  visible: mapProvider.show == Show.CASH_PAYMENT,
+                  child: CashPaymentWidget()),
+
               Visibility(
                   visible: mapProvider.show == Show.DRIVER_FOUND,
                   child: DriverFoundWidget()),
@@ -233,6 +243,18 @@ class _MapWidgetState extends State<MapWidget> {
               Visibility(
                   visible: mapProvider.show == Show.TRIP,
                   child: TripBottomSheet()),
+
+              Visibility(
+                  visible: mapProvider.show == Show.CHECKOUT_DELIVERY,
+                  child: SummaryWidget()),
+
+              Visibility(
+                  visible: mapProvider.show == Show.SEARCHING_FOR_DRIVER,
+                  child: SearchingForDriverSheet()),
+
+              Visibility(
+                  visible: mapProvider.show == Show.ORDER_STATUS,
+                  child: OrderStatusWidget()),
             ],
           ),
         ),
@@ -270,7 +292,9 @@ class _MapScreenState extends State<MapScreen> {
     UserProvider userProvider = Provider.of<UserProvider>(context);
 
     return mapProvider.center == null
-        ? SpinKitCircle()
+        ? SpinKitCircle(
+            color: kPrimaryGoldColor,
+          )
         : Stack(
             children: <Widget>[
               GoogleMap(

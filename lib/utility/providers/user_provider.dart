@@ -1,16 +1,18 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:gold_line/screens/authentication/user_navigation.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../models/user_profile/user_profile.dart';
+import '../../screens/map/map_widget.dart';
 import '../api.dart';
 import '../services/user_services.dart';
 
-enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
+enum Status { Uninitialized, Authenticated, Unauthenticated }
 
 class UserProvider with ChangeNotifier {
   static const LOGGED_IN = "loggedIn";
@@ -19,7 +21,7 @@ class UserProvider with ChangeNotifier {
   static const FIRSTNAME = "first_name";
 
   final UserServices _services = UserServices();
-  Status _status = Status.Uninitialized;
+  Status status = Status.Uninitialized;
   UserServices _userServices = UserServices();
   UserProfile? _userModel;
   UserProfile? _userProfile;
@@ -33,7 +35,7 @@ class UserProvider with ChangeNotifier {
 
 //  getter
   UserProfile get userModel => _userModel!;
-  Status get status => _status;
+  // Status get status => _status;
   UserProfile get userProfile => _userProfile!;
 
   // public variables
@@ -58,26 +60,57 @@ class UserProvider with ChangeNotifier {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  Future signIn() async {
+  Future signIn(BuildContext context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     Map<String, dynamic> request = {
-      'email': email.text,
+      'login': email.text,
       'password': password.text,
     };
 
     try {
-      final response = await CallApi().postData(request, 'login');
-      if (response['success'] == "success") {
-        final body = response;
-        print('working');
+      var response = await CallApi().postData(request, 'login');
+      print(response);
+      String code = response['code'];
 
-        print(body);
-        if ((body as Map<String, dynamic>).containsKey('token')) {
-          pref.setString('token', body["token"]);
-          print(body["token"]);
-        } else {
-          print('no token added');
-        }
+      if (code == 'success') {
+        String token = response['token'];
+        print(token);
+        pref.setString('token', response['token']);
+        pref.setBool(LOGGED_IN, true);
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: "Welcome Back",
+            message: "Login Successful",
+            contentType: ContentType.success,
+          ),
+        );
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+
+        changeScreenReplacement(context, const MapWidget());
+      } else {
+        String message = response['message'];
+
+        print(message);
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: message,
+            message: message,
+            contentType: ContentType.failure,
+          ),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+        return message;
       }
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -86,7 +119,7 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future signUp() async {
+  Future signUp(BuildContext context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     Map<String, dynamic> request = {
       'first_name': firstName.text,
@@ -97,17 +130,106 @@ class UserProvider with ChangeNotifier {
 
     try {
       final response = await CallApi().postData(request, 'signup');
-      if (response['success'] == "success") {
-        final body = response;
-        print('working');
+      print(response);
+      String code = response['code'];
 
-        print(body);
-        if ((body as Map<String, dynamic>).containsKey('token')) {
-          pref.setString('token', body["token"]);
-          print(body["token"]);
-        } else {
-          print('no token added');
-        }
+      if (code == 'success') {
+        String token = response['token'];
+        print(token);
+        pref.setString('token', response['token']);
+        pref.setBool(LOGGED_IN, true);
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: "Hey there",
+            message: "Welcome to GoldLine. Account Created Successfully",
+            contentType: ContentType.success,
+          ),
+        );
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+
+        changeScreenReplacement(context, const MapWidget());
+      } else {
+        String message = response['message'];
+
+        print(message);
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: message,
+            message: message,
+            contentType: ContentType.failure,
+          ),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+        return message;
+      }
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future forgotPassword(BuildContext context) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    Map<String, dynamic> request = {
+      'email': email.text,
+    };
+
+    try {
+      final response = await CallApi().postData(request, 'forgot-password');
+      print(response);
+      String code = response['code'];
+
+      if (code == 'success') {
+        String token = response['token'];
+        print(token);
+        pref.setString('token', response['token']);
+        pref.setBool(LOGGED_IN, true);
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: "Relax",
+            message: "Check your email for the password rest link",
+            contentType: ContentType.success,
+          ),
+        );
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+
+        changeScreenReplacement(context, const MapWidget());
+      } else {
+        String message = response['message'];
+
+        print(message);
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: message,
+            message: message,
+            contentType: ContentType.failure,
+          ),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+        return message;
       }
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -120,7 +242,7 @@ class UserProvider with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     await CallApi().getData('logout');
-    _status = Status.Unauthenticated;
+    status = Status.Unauthenticated;
     await prefs.setString(ID, "");
     await prefs.setString(TOKEN, "");
     await prefs.setBool(LOGGED_IN, false);
@@ -130,38 +252,18 @@ class UserProvider with ChangeNotifier {
     return Future.delayed(Duration.zero);
   }
 
-  // void clearController() {
-  //   password.text = "";
-  //   email.text = "";
-  //   fullName.text = "";
-  // }
-
-  Future<void> reloadUserModel() async {
-    ///TODO FIX THIS
-    _userModel = await _userServices.getUserById();
-    notifyListeners();
-  }
-
   updateUserData(Map<String, dynamic> values) async {
     _userServices.updateUserData(values);
   }
-  //
-  // saveDeviceToken() async {
-  //   String? deviceToken = await firebaseMessaging.getToken();
-  //   if (deviceToken != null) {
-  //     _userServices.addDeviceToken(userId: user.uid, token: deviceToken);
-  //   }
-  // }
 
   _initialize() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool loggedIn = prefs.getBool(LOGGED_IN) ?? false;
+
     if (!loggedIn) {
-      _status = Status.Unauthenticated;
+      status = Status.Unauthenticated;
     } else {
-      ///TODO FIX ERROR
-      _status = Status.Authenticated;
-      _userModel = await _userServices.getUserById();
+      status = Status.Authenticated;
     }
     notifyListeners();
   }
