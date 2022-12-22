@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:date_format/date_format.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -13,15 +13,13 @@ import 'package:gold_line/utility/helpers/controllers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_place/google_place.dart' as compon;
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../models/api_responses/base_api_response.dart';
 import '../../models/api_responses/failure.dart';
 import '../../models/api_responses/success.dart';
 import '../../models/delivery_model/delivery.dart';
-import '../../models/driver_model/driver_model.dart';
+import '../../models/driver_profile/driver_profile.dart';
 import '../../models/route_model.dart';
 import '../../models/user_profile/user_profile.dart';
 import '../api.dart';
@@ -80,7 +78,8 @@ class MapProvider with ChangeNotifier {
 
   LatLng? pickupCoordinates;
   LatLng? destinationCoordinates;
-  int? deliveryPrice = 0;
+
+  String? deliveryPrice = "0";
   String? notificationType = "";
   late bool _isPickupSet = false;
   late bool _isDropOffSet = false;
@@ -104,7 +103,7 @@ class MapProvider with ChangeNotifier {
   DriverService _driverService = DriverService();
   Show show = Show.HOME;
 
-  DriverModel? driverModel;
+  DriverProfile? driverProfile;
   RouteModel? routeModel;
 
   TextEditingController pickupLocationController = TextEditingController();
@@ -131,7 +130,7 @@ class MapProvider with ChangeNotifier {
   // this variable will keep track of the drivers position before and during the ride
   StreamSubscription<AsyncSnapshot>? driverStream;
 //  this stream is for all the driver on the app
-  StreamSubscription<List<DriverModel>>? allDriversStream;
+  StreamSubscription<List<DriverProfile>>? allDriversStream;
 
   GoogleMapsPlaces places = GoogleMapsPlaces(apiKey: GOOGLE_MAPS_API_KEY);
 
@@ -139,7 +138,7 @@ class MapProvider with ChangeNotifier {
   double? requestedDestinationLat;
 
   double? requestedDestinationLng;
-  DeliveryRequestModel? rideRequestModel;
+  DeliveryModel? rideRequestModel;
   BuildContext? mainContext;
 
   String? setTime, setDate;
@@ -155,11 +154,9 @@ class MapProvider with ChangeNotifier {
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
 
-  // FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
   MapProvider() {
-    _saveDeviceToken();
-
     _setCustomMapPin();
     _getUserLocation();
     _listenToDrivers();
@@ -272,8 +269,7 @@ class MapProvider with ChangeNotifier {
     routeModel = route;
 
     if (origin == null) {
-      deliveryPrice =
-          int.parse((routeModel!.distance.value! / 500).toStringAsFixed(2));
+      deliveryPrice = ((routeModel!.distance.value! / 500).toStringAsFixed(2));
     }
     List<Marker> mks = _markers
         .where((element) => element.markerId.value == "location")
@@ -384,7 +380,7 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  _updateMarkers(List<DriverModel> drivers) {
+  _updateMarkers(List<DriverProfile> drivers) {
 //    this code will ensure that when the driver markers are updated the location marker wont be deleted
     List<Marker> locationMarkers = _markers
         .where((element) => element.markerId.value == 'location')
@@ -395,25 +391,26 @@ class MapProvider with ChangeNotifier {
     }
 
 //    here we are updating the drivers markers
-    drivers.forEach((DriverModel driver) {
+    drivers.forEach((DriverProfile driver) {
       _addDriverMarker(
           driverId: driver.id,
-          position: LatLng(driver.lat!, driver.lng!),
-          rotation: driver.heading);
+          position:
+              LatLng(driver.profile?.latitude!, driver.profile?.longitude));
+      // rotation: driver.heading);
     });
     notifyListeners();
   }
 
-  _updateDriverMarker(Marker marker) {
-    _markers.remove(marker);
-    sendRequest(
-        origin: pickupCoordinates, destination: driverModel!.getPosition());
-    notifyListeners();
-    _addDriverMarker(
-        position: driverModel!.getPosition(),
-        rotation: driverModel!.heading,
-        driverId: driverModel!.id);
-  }
+  // _updateDriverMarker(Marker marker) {
+  //   _markers.remove(marker);
+  //   sendRequest(
+  //       origin: pickupCoordinates, destination: driverProfile?.getPosition());
+  //   notifyListeners();
+  //   _addDriverMarker(
+  //       position: driverProfile!.getPosition(),
+  //       rotation: driverProfile!.heading,
+  //       driverId: driverProfile!.id);
+  // }
 
   _setCustomMapPin() async {
     driverPin = await BitmapDescriptor.fromAssetImage(
@@ -431,7 +428,7 @@ class MapProvider with ChangeNotifier {
   _clearDriverMarkers() {
     _markers.forEach((element) {
       String _markerId = element.markerId.value;
-      if (_markerId != driverModel!.id ||
+      if (_markerId != driverProfile?.id ||
           _markerId != LOCATION_MARKER_ID ||
           _markerId != PICKUP_MARKER_ID) {
         _markers.remove(element);
@@ -443,15 +440,6 @@ class MapProvider with ChangeNotifier {
   clearPoly() {
     _poly.clear();
     notifyListeners();
-  }
-
-  _saveDeviceToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('fcm_token') == null) {
-      // firebaseMessaging.requestPermission();
-      // String? deviceToken = await firebaseMessaging.getToken();
-      // await prefs!.setString('fcm_token', deviceToken!);
-    }
   }
 
   changeRequestedDestination(
@@ -476,7 +464,7 @@ class MapProvider with ChangeNotifier {
     //         case ACCEPTED:
     //           if (lookingForDriver) Navigator.pop(context!);
     //           lookingForDriver = false;
-    //           driverModel = await _driverService
+    //           DriverProfile = await _driverService
     //               .getDriverById(document.doc.data()!['driverId']);
     //           periodicTimer!.cancel();
     //           clearPoly();
@@ -551,7 +539,7 @@ class MapProvider with ChangeNotifier {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Visibility(
-                        visible: driverModel?.photo == null,
+                        visible: driverProfile?.avatar == null,
                         child: Container(
                           decoration: BoxDecoration(
                               color: Colors.grey.withOpacity(0.5),
@@ -568,14 +556,15 @@ class MapProvider with ChangeNotifier {
                         ),
                       ),
                       Visibility(
-                        visible: driverModel?.photo != null,
+                        visible: driverProfile!.avatar != null,
                         child: Container(
                           decoration: BoxDecoration(
                               color: Colors.deepOrange,
                               borderRadius: BorderRadius.circular(40)),
                           child: CircleAvatar(
                             radius: 45,
-                            backgroundImage: NetworkImage(driverModel!.photo!),
+                            backgroundImage:
+                                NetworkImage(driverProfile?.avatar),
                           ),
                         ),
                       )
@@ -585,11 +574,13 @@ class MapProvider with ChangeNotifier {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(driverModel?.first_name ?? "Driver"),
+                      Text(driverProfile?.profile?.firstName ?? "Driver"),
                     ],
                   ),
                   const SizedBox(height: 10),
-                  stars(rating: driverModel!.rating, votes: driverModel!.votes),
+                  stars(
+                      rating: driverProfile?.rating ?? 5.0,
+                      votes: driverProfile?.rating?.toInt() ?? 5),
                   const Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -597,8 +588,8 @@ class MapProvider with ChangeNotifier {
                       TextButton.icon(
                           onPressed: null,
                           icon: const Icon(Icons.directions_car),
-                          label: Text(driverModel!.car!)),
-                      Text(driverModel!.plate!,
+                          label: Text(driverProfile!.profile!.rideType!)),
+                      Text(driverProfile!.profile!.plateNumber!,
                           style: const TextStyle(color: Colors.deepOrange))
                     ],
                   ),
@@ -608,7 +599,8 @@ class MapProvider with ChangeNotifier {
                     children: [
                       CustomButton(
                         onPressed: () {
-                          CallsAndMessagesService().call(driverModel!.phone!);
+                          CallsAndMessagesService()
+                              .call(driverProfile!.phone ?? "07014261561");
                         },
                         text: "Call",
                         color: Colors.green,
@@ -716,30 +708,15 @@ class MapProvider with ChangeNotifier {
     }
   }
 
-  Future updateDeliveryStatus() async {
-    Map<String, dynamic> values = {
-      "delivery_id": deliveryId,
-      "status": "pending"
-    };
+  Future submitCardDelivery() async {
+    Map<String, dynamic> values = {"payment_status": "paid"};
     SharedPreferences pref = await SharedPreferences.getInstance();
 
     try {
-      final response = await CallApi().postData(values, 'user/delivery/update');
-      if (response['success'] == "success") {
-        final body = response;
-        print('delivery sent');
-        String deliveryId = response['id'];
-        print(deliveryId);
-        pref.setString('deliveryId', response['id']);
-
-        print(body);
-        if ((body as Map<String, dynamic>).containsKey('id')) {
-          pref.setString('deliveryId', body["id"]);
-          print(body["id"]);
-        } else {
-          print('no token added');
-        }
-      }
+      final response =
+          await CallApi().postData(values, 'user/delivery/submit/$deliveryId');
+      String message = response["message"];
+      print(message);
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {
@@ -747,32 +724,21 @@ class MapProvider with ChangeNotifier {
     }
   }
 
-  Future selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        initialDatePickerMode: DatePickerMode.day,
-        firstDate: DateTime(2015),
-        lastDate: DateTime(2101));
-    if (picked != null) selectedDate = picked;
-    dateController.text = DateFormat.yMd().format(selectedDate);
-    notifyListeners();
-  }
+  Future submitCashDelivery() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    Map<String, dynamic> values = {"payment_method": "cash"};
 
-  Future selectTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: selectedTime,
-    );
-    if (picked != null) selectedTime = picked;
-    hour = selectedTime.hour.toString();
-    minute = selectedTime.minute.toString();
-    time = hour! + ' : ' + minute!;
-    timeController.text = time!;
-    timeController.text = formatDate(
-        DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
-        [hh, ':', nn, " ", am]).toString();
-    notifyListeners();
+    try {
+      final response =
+          await CallApi().postData(values, 'user/delivery/submit/$deliveryId');
+      String message = response["message"];
+      print(message);
+      changeWidgetShowed(showWidget: Show.CASH_PAYMENT);
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
   }
 
 // cancel trip endpoint
@@ -805,43 +771,9 @@ class MapProvider with ChangeNotifier {
       final body = response;
       print(body);
       print('delivery processing');
-      // deliveryPrice = response['data']['price'];
-      print(deliveryPrice);
-      preferences.setInt('price', deliveryPrice!);
-      if (response['success'] == "success") {
-        print(body);
-        if ((body as Map<String, dynamic>).containsKey('id')) {
-          preferences.setString('deliveryId', body["id"]);
-          print(body["id"]);
-        } else {
-          print('no token added');
-        }
-        return deliveryPrice;
-      }
-    } on SocketException {
-      throw const SocketException('No internet connection');
-    } catch (err) {
-      throw Exception(err.toString());
-    }
-  }
-
-  Future tryProcessDelivery() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-
-    Map<String, dynamic> values = {
-      "sender_address": pickUpLocation.text + "," + state.text,
-      "receiver_address": dropOffLocation.text + "," + state.text,
-      "size": "small"
-    };
-
-    try {
-      final response = await CallApi().postTryData(values, "price");
-      final body = response;
-      print(body);
-      print('delivery processing');
       deliveryPrice = response['data']['price'];
       print(deliveryPrice);
-      preferences.setInt('price', deliveryPrice!);
+      preferences.setString('price', deliveryPrice!);
       if (response['success'] == "success") {
         print(body);
         if ((body as Map<String, dynamic>).containsKey('id')) {
@@ -858,30 +790,64 @@ class MapProvider with ChangeNotifier {
       throw Exception(err.toString());
     }
   }
+
+  // Future tryProcessDelivery() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //
+  //   Map<String, dynamic> values = {
+  //     "sender_address": pickUpLocation.text + "," + state.text,
+  //     "receiver_address": dropOffLocation.text + "," + state.text,
+  //     "size": "small"
+  //   };
+  //
+  //   try {
+  //     final response = await CallApi().postTryData(values, "price");
+  //     final body = response;
+  //     print(body);
+  //     print('delivery processing');
+  //     deliveryPrice = response['data']['price'];
+  //     print(deliveryPrice);
+  //     preferences.setString('price', deliveryPrice!);
+  //     if (response['success'] == "success") {
+  //       print(body);
+  //       if ((body as Map<String, dynamic>).containsKey('id')) {
+  //         preferences.setString('deliveryId', body["id"]);
+  //         print(body["id"]);
+  //       } else {
+  //         print('no token added');
+  //       }
+  //       return deliveryPrice;
+  //     }
+  //   } on SocketException {
+  //     throw const SocketException('No internet connection');
+  //   } catch (err) {
+  //     throw Exception(err.toString());
+  //   }
+  // }
 
   _listenToDriver(Map<String, dynamic> json) {
     ///Listen to driver
 //     driverStream = _driverService.driverStream().listen((event) {
 //       event.docChanges.forEach((change) async {
-//         if (change.doc.data()!['id'] == driverModel!.id) {
-//           driverModel = DriverModel.fromJson(json);
+//         if (change.doc.data()!['id'] == DriverProfile!.id) {
+//           DriverProfile = DriverProfile.fromJson(json);
 //           // code to update marker
 // //          List<Marker> _m = _markers
-// //              .where((element) => element.markerId.value == driverModel.id).toList();
+// //              .where((element) => element.markerId.value == DriverProfile.id).toList();
 // //          _markers.remove(_m[0]);
 //           clearMarkers();
 //           sendRequest(
 //               origin: pickupCoordinates,
-//               destination: driverModel!.getPosition());
+//               destination: DriverProfile!.getPosition());
 //           if (routeModel!.distance.value! <= 200) {
 //             driverArrived = true;
 //           }
 //           notifyListeners();
 //
 //           _addDriverMarker(
-//               position: driverModel!.getPosition(),
-//               rotation: driverModel!.heading,
-//               driverId: driverModel!.id);
+//               position: DriverProfile!.getPosition(),
+//               rotation: DriverProfile!.heading,
+//               driverId: DriverProfile!.id);
 //           addPickupMarker(pickupCoordinates!);
 //           // _updateDriverMarker(_m[0]);
 //         }
@@ -961,7 +927,8 @@ class MapProvider with ChangeNotifier {
     if (notificationType == DRIVER_AT_LOCATION_NOTIFICATION) {
     } else if (notificationType == TRIP_STARTED_NOTIFICATION) {
     } else if (notificationType == REQUEST_ACCEPTED_NOTIFICATION) {}
-    driverModel = await _driverService.getDriverById(data['data']['driverId']);
+    driverProfile =
+        await _driverService.getDriverById(data['data']['driverId']);
     _stopListeningToDriversStream();
 
     _listenToDriver(json);
@@ -978,7 +945,8 @@ class MapProvider with ChangeNotifier {
 
     if (lookingForDriver) Navigator.pop(mainContext!);
     lookingForDriver = false;
-    driverModel = await _driverService.getDriverById(data['data']['driverId']);
+    driverProfile =
+        await _driverService.getDriverById(data['data']['driverId']);
     periodicTimer!.cancel();
     notifyListeners();
   }
@@ -1068,67 +1036,6 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // sumbit trip
-  Future submitTrip() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    final trip_id = pref.getString("trip_id");
-
-    final response = await CallApi().getData("user/trip/submit/$trip_id");
-
-    if (response["code"] == "success") {
-      print(response["data"]);
-      return Success(data: response["data"], message: "${response["message"]}");
-    } else {
-      print(response["data"]);
-      return Failure(
-          errorData: response["data"], message: "${response["message"]}");
-    }
-  }
-
-  // sumbit trip
-  Future calculatePrice() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    final trip_id = pref.getString("trip_id");
-
-    final response =
-        await CallApi().postData(null, "user/trip/process/$trip_id");
-    if (response["code"] == "success") {
-      String price = response["price"];
-      print(response["data"]);
-      return Success(data: response["data"], message: "${response["message"]}");
-    } else {
-      print(response["data"]);
-      return Failure(
-          errorData: response["data"], message: "${response["message"]}");
-    }
-  }
-
-  // sumbit trip
-  // Future initPayment(String price) async {
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   final trip_id = pref.getString("trip_id");
-  //
-  //   final response =
-  //       await CallApi().postData(null, "user/trip/initialize-payment/$trip_id");
-  //   if (response["code"] == "success") {
-  //     String ref_id = response["ref_id"];
-  //     changeScreen(
-  //         mainContext!,
-  //         FlutterwavePaymentScreen(
-  //           price: price,
-  //           email: user!.email!,
-  //           phone: user!.phone!,
-  //         ));
-  //
-  //     print(response["data"]);
-  //     return Success(data: response["data"], message: "${response["message"]}");
-  //   } else {
-  //     print(response["data"]);
-  //     return Failure(
-  //         errorData: response["data"], message: "${response["message"]}");
-  //   }
-  // }
-
   // cancel trip
   Future cancelTrip(String? reason) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -1162,24 +1069,6 @@ class MapProvider with ChangeNotifier {
       print(response["data"]);
       changeScreenReplacement(mainContext!, const MapWidget());
 
-      return Success(data: response["data"], message: "${response["message"]}");
-    } else {
-      print(response["data"]);
-      return Failure(
-          errorData: response["data"], message: "${response["message"]}");
-    }
-  }
-
-// get verify payment
-  Future<BaseApiResponse> getVerifyPayment() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    final trip_id = pref.getString("trip_id");
-
-    final response =
-        await CallApi().getData("user/trip/verify-payment/$trip_id");
-
-    if (response["code"] == "success") {
-      print(response["data"]);
       return Success(data: response["data"], message: "${response["message"]}");
     } else {
       print(response["data"]);

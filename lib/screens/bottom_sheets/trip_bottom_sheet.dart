@@ -52,7 +52,7 @@ class TripBottomSheet extends StatelessWidget {
                 const Divider(),
                 ListTile(
                   leading: Container(
-                    child: mapProvider.driverModel?.phone == null
+                    child: mapProvider.driverProfile?.phone == null
                         ? const CircleAvatar(
                             radius: 30,
                             child: Icon(
@@ -62,8 +62,8 @@ class TripBottomSheet extends StatelessWidget {
                           )
                         : CircleAvatar(
                             radius: 30,
-                            backgroundImage:
-                                NetworkImage(mapProvider.driverModel!.photo!),
+                            backgroundImage: NetworkImage(
+                                mapProvider.driverProfile!.avatar!),
                           ),
                   ),
                   title: Row(
@@ -72,11 +72,13 @@ class TripBottomSheet extends StatelessWidget {
                       RichText(
                           text: TextSpan(children: [
                         TextSpan(
-                            text: mapProvider.driverModel!.first_name! + "\n",
+                            text:
+                                mapProvider.driverProfile!.profile!.firstName! +
+                                    "\n",
                             style: const TextStyle(
                                 fontSize: 17, fontWeight: FontWeight.bold)),
                         TextSpan(
-                            text: mapProvider.driverModel!.car,
+                            text: mapProvider.driverProfile!.profile!.rideType,
                             style: const TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w300)),
                       ], style: const TextStyle(color: Colors.black))),

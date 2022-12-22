@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gold_line/utility/helpers/dimensions.dart';
 
 import 'constants.dart';
 
@@ -7,6 +8,7 @@ class CustomDeliveryTextField extends StatefulWidget {
   final Widget icon;
   final TextEditingController controller;
   final Function? onChanged;
+  final String? Function(String?)? validator;
   final FocusNode? focusNode;
 
   const CustomDeliveryTextField(
@@ -14,6 +16,7 @@ class CustomDeliveryTextField extends StatefulWidget {
       required this.hint,
       required this.icon,
       required this.controller,
+      this.validator,
       this.focusNode,
       this.onChanged})
       : super(key: key);
@@ -34,7 +37,8 @@ class _CustomDeliveryTextFieldState extends State<CustomDeliveryTextField> {
           color: kTextGrey,
         ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+          padding: EdgeInsets.symmetric(
+              horizontal: 10.appWidth(context), vertical: 5.appHeight(context)),
           child: Row(
             children: [
               widget.icon,
@@ -50,8 +54,10 @@ class _CustomDeliveryTextFieldState extends State<CustomDeliveryTextField> {
                   onChanged: (value) {
                     setState(() {});
                   },
+                  validator: widget.validator,
                   decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(left: 5, right: 5),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 5.appWidth(context)),
                     border: InputBorder.none,
                     fillColor: kTextGrey,
                     focusColor: kTextGrey,

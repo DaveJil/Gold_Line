@@ -22,6 +22,7 @@ Future<void> main() async {
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.instance.subscribeToTopic("general");
+  FirebaseMessaging.instance.subscribeToTopic("user");
   await FlutterLocalNotificationsPlugin()
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
@@ -32,6 +33,8 @@ Future<void> main() async {
     badge: true,
     sound: true,
   );
+  // await pushNotification.getNotificationToken();
+
   runApp(const MyApp());
 }
 
@@ -40,8 +43,8 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'High Importance Notifications', // title
   importance: Importance.high,
 );
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

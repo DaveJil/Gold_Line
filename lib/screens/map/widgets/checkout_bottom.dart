@@ -1,8 +1,11 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utility/helpers/controllers.dart';
 import '../../../utility/helpers/custom_button.dart';
+import '../../../utility/helpers/dimensions.dart';
 import '../../../utility/providers/map_provider.dart';
 import '../../../utility/providers/user_provider.dart';
 import '../../../utility/services/calls_and_sms.dart';
@@ -43,51 +46,118 @@ class SummaryWidget extends StatelessWidget {
                     const SizedBox(
                       height: 12,
                     ),
-                    const Text(
-                      "Summary",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: Icon(
+                              Icons.arrow_back,
+                              color: kPrimaryGoldColor,
+                              size: getHeight(24, context),
+                            ),
+                          ),
+                          AutoSizeText(
+                            "Summary",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 28,
+                              color: kPrimaryGoldColor,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(
-                      height: 10,
+                    SizedBox(
+                      height: 20,
                     ),
-                    const Text(
-                      "Sender Details",
-                      style: TextStyle(fontSize: 22),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Icon(
+                          Icons.send_and_archive,
+                          color: Colors.grey,
+                          size: getHeight(24, context),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        AutoSizeText(
+                          "Sender Details",
+                          style: TextStyle(fontSize: 22),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       height: 7,
                     ),
-                    Text('''
+                    AutoSizeText('''
                 ${senderName.text}
                 ${senderPhone.text}            
-                           ''', style: TextStyle(fontSize: 20)),
+                           ''',
+                        style: TextStyle(
+                          fontSize: 20,
+                        )),
                     SizedBox(
                       height: 10,
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    const Text(
-                      "Receiver",
-                      style: TextStyle(fontSize: 22),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Icon(
+                          Icons.call_received,
+                          color: Colors.grey,
+                          size: getHeight(24, context),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        const AutoSizeText(
+                          "Receiver Details",
+                          style: TextStyle(fontSize: 22),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       height: 7,
                     ),
-                    Text('''
+                    AutoSizeText('''
                 ${receiverName.text}
                 ${receiverPhone.text}            
                  ''', style: TextStyle(fontSize: 20)),
                     SizedBox(
                       height: 10,
                     ),
-                    const Text("Parcel Details:",
-                        style: TextStyle(fontSize: 22)),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Icon(
+                          Icons.gif_box_rounded,
+                          color: Colors.grey,
+                          size: getHeight(24, context),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        AutoSizeText("Parcel Details:",
+                            style: TextStyle(fontSize: 22)),
+                      ],
+                    ),
                     const SizedBox(
                       height: 7,
                     ),
-                    Text('''
+                    AutoSizeText('''
              Delivery Status: Pending
              PickUp Address: ${pickUpLocation.text}  
              Delivery Address: ${dropOffLocation.text}  
@@ -96,6 +166,56 @@ class SummaryWidget extends StatelessWidget {
                     const SizedBox(
                       height: 7,
                     ),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: kPrimaryGoldColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Material(
+                        child: CheckboxListTile(
+                          tileColor: Colors.white,
+                          title: const Text('Same Day Delivery'),
+                          value: true,
+                          onChanged: (bool? value) {},
+                          secondary: const Icon(Icons.bike_scooter),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 7,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        border: Border.all(
+                          color: Colors.white30,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Material(
+                        child: CheckboxListTile(
+                          tileColor: Colors.white70,
+                          title: Text('Express Delivery',
+                              style: TextStyle(
+                                color: Colors.black,
+                              )),
+                          value: false,
+                          onChanged: (bool? value) {},
+                          secondary: const Icon(Icons.bike_scooter),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 7,
+                    ),
+                    AutoSizeText(
+                        "Note that Express Delivery isn't available at the moment."),
                     const SizedBox(
                       height: 7,
                     ),
@@ -113,7 +233,7 @@ class SummaryWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Text(
+                    AutoSizeText(
                         'Note that this price is an estimated price. Price may differ after delivery.'),
                   ],
                 ),

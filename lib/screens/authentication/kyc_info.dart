@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
+import 'package:provider/provider.dart';
 
 import '../../utility/helpers/dimensions.dart';
+import '../../utility/providers/user_provider.dart';
 
 class KycInfo extends StatefulWidget {
   const KycInfo({super.key});
@@ -14,6 +16,8 @@ class KycInfo extends StatefulWidget {
 class KycInfoState extends State<KycInfo> {
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -106,7 +110,8 @@ class KycInfoState extends State<KycInfo> {
                 Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: const TextField(
+                  child: TextField(
+                    controller: userProvider.otherName,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Other Name',
@@ -119,7 +124,8 @@ class KycInfoState extends State<KycInfo> {
                 Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: const TextField(
+                  child: TextField(
+                    controller: userProvider.gender,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Gender',
@@ -132,7 +138,8 @@ class KycInfoState extends State<KycInfo> {
                 Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: const TextField(
+                  child: TextField(
+                    controller: userProvider.userAddress,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Enter Address',
@@ -146,7 +153,8 @@ class KycInfoState extends State<KycInfo> {
                 Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: const TextField(
+                  child: TextField(
+                    controller: userProvider.userLGA,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Enter your LGA',
@@ -159,7 +167,8 @@ class KycInfoState extends State<KycInfo> {
                 Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: const TextField(
+                  child: TextField(
+                    controller: userProvider.userState,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Enter your State',
@@ -180,7 +189,7 @@ class KycInfoState extends State<KycInfo> {
                       borderRadius: BorderRadius.circular(20)),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(context,
+                      Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (_) => const MapWidget()));
                     },
                     child: const Text(

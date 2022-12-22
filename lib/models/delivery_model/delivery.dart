@@ -1,4 +1,4 @@
-class DeliveryRequestModel {
+class DeliveryModel {
   String? id;
   String? userId;
   String? driverId;
@@ -17,7 +17,7 @@ class DeliveryRequestModel {
   double? pickupLongitude;
   double? dropOffLatitude;
   double? dropOffLongitude;
-  double? price;
+  String? price;
   double? tip;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -26,7 +26,7 @@ class DeliveryRequestModel {
   dynamic distance;
   dynamic duration;
 
-  DeliveryRequestModel(
+  DeliveryModel(
       {this.id,
       this.status,
       this.senderPhone,
@@ -54,7 +54,7 @@ class DeliveryRequestModel {
       this.type,
       this.userId});
 
-  DeliveryRequestModel.fromJson(Map<String, dynamic> json)
+  DeliveryModel.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         status = json['status'],
         userId = json['user_id'],

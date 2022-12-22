@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwave_standard/flutterwave.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utility/api.dart';
 import '../../utility/helpers/custom_button.dart';
+import '../map/map_widget.dart';
 
 class FlutterwavePaymentScreen extends StatefulWidget {
   static const String iD = '/paymentScreen';
@@ -139,13 +141,14 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
                     ),
                   ),
                   CustomButton(
-                    onPressed: () {
+                    onPressed: () async {
                       optionIsCash
-                          ? mapProvider.changeWidgetShowed(
-                              showWidget: Show.CASH_PAYMENT)
-                          : makeCardPayment(
+                          ? await mapProvider.submitCashDelivery()
+                          : await makeCardPayment(
                               mapProvider.deliveryPrice.toString(),
                               mapProvider.deliveryId);
+                      mapProvider.changeWidgetShowed(
+                          showWidget: Show.SEARCHING_FOR_DRIVER);
                     },
                     text: "Pay",
                     fontSize: 20,
@@ -161,40 +164,73 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
         });
   }
 
-  void makeCardPayment(String? price, int? deliveryId) async {
+  Future makeCardPayment(String? price, int? deliveryId) async {
     final Customer customer = Customer(
         name: "user", phoneNumber: "0000000000", email: "user@gmail.com");
+
+    var response = await CallApi()
+        .postData(null, "user/delivery/initialize-payment/$deliveryId");
+    String ref_id = response['ref_id'];
+    await CallApi().getData("user/delivery/verify-payment/$deliveryId");
     final flutterwave = Flutterwave(
         context: context,
         publicKey: "FLWPUBK-fdc22eaae2024e22b7a5e34ca810bf9a-X",
         currency: "NGN",
-        amount: "100",
-        txRef: "GoldLine#$deliveryId",
+        amount: price!,
+        txRef: ref_id,
         customer: customer,
         paymentOptions: "card, account, transfer",
         customization: Customization(),
         redirectUrl: 'www.google.com',
         isTestMode: false);
 
-    final ChargeResponse response = await flutterwave.charge();
-    if (response == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Transaction Failed Try Again"),
-        backgroundColor: Colors.redAccent,
-      ));
-    } else {
+    final ChargeResponse flutterwaveResponse = await flutterwave.charge();
+    bool success = flutterwaveResponse.success!;
+
+    if (success == true) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String deliveryId = prefs.getString("deliveryId")!;
-      if (response.status == "success") {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Transaction Successful"),
-          backgroundColor: Colors.green,
-        ));
-        await CallApi().postData(null, "user/trip/verify-payment/$deliveryId");
+      String message = flutterwaveResponse.status!;
+      print(message);
+      if (message == "success") {
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: "Transaction successful",
+            message: "Your rider would be at pickup location in a moment",
+            contentType: ContentType.success,
+          ),
+        );
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+        await CallApi()
+            .postData(null, "user/delivery/verify-payment/$deliveryId");
 
-        // Navigator.of(context).pushAndRemoveUntil(
-        //     MaterialPageRoute(builder: (context) => const MapWidget()),
-        //     (Route<dynamic> route) => false);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const MapWidget()),
+            (Route<dynamic> route) => false);
+      } else {
+        String message = flutterwaveResponse.status!;
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: "Transaction unsuccessful",
+            message: "Your rider would be at pickup location in a moment",
+            contentType: ContentType.success,
+          ),
+        );
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Transaction Failed Try Again"),
+          backgroundColor: Colors.redAccent,
+        ));
       }
     }
   }

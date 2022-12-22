@@ -218,6 +218,8 @@ class DriverFoundWidget extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             mapProvider.cancelRequest();
+                            mapProvider.changeWidgetShowed(
+                                showWidget: Show.HOME);
                           },
                           style: ElevatedButton.styleFrom(primary: Colors.red),
                           child: const Text(

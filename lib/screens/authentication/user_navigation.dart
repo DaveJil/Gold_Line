@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gold_line/screens/authentication/sign_in.dart';
@@ -63,71 +64,75 @@ class LoginChoiceState extends State<LoginChoice> {
                   height: getHeight(40, context),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(40.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        height: getHeight(50, context),
-                        width: getWidth(250, context),
-                        decoration: BoxDecoration(
-                            color: kPrimaryGoldColor,
-                            borderRadius: BorderRadius.circular(20)),
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const SignUpScreen()));
-                          },
-                          child: const Text(
-                            'Sign Up as an Agent',
-                            style: TextStyle(color: Colors.white, fontSize: 20),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: kPrimaryGoldColor,
+                              borderRadius: BorderRadius.circular(20)),
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const SignUpScreen()));
+                            },
+                            child: const Text(
+                              'Sign Up as an Agent',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                            ),
                           ),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.appWidth(context)),
                         ),
                       ),
                       SizedBox(
-                        width: getWidth(20, context),
+                        width: 50.appWidth(context),
                       ),
-                      Container(
-                        height: getHeight(50, context),
-                        width: getWidth(250, context),
-                        decoration: BoxDecoration(
-                            color: kPrimaryGoldColor,
-                            borderRadius: BorderRadius.circular(20)),
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const SignUpScreen()));
-                          },
-                          child: const Text(
-                            'Sign Up as a User',
-                            style: TextStyle(color: Colors.white, fontSize: 20),
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.appWidth(context)),
+                          decoration: BoxDecoration(
+                              color: kPrimaryGoldColor,
+                              borderRadius: BorderRadius.circular(20)),
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const SignUpScreen()));
+                            },
+                            child: const Text(
+                              'Sign Up as a User',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                            ),
                           ),
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
                 SizedBox(
-                  height: getHeight(50, context),
+                  height: getHeight(10, context),
                 ),
                 TextButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => SignInScreen()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => SignInScreen()));
                   },
                   child: Text(
                     'or Proceed to Login',
                     style: TextStyle(
                       decoration: TextDecoration.underline,
-                        color: kPrimaryGoldColor,
-                        fontWeight: FontWeight.w300,
-                        fontSize: getHeight(18, context),
+                      color: kPrimaryGoldColor,
+                      fontWeight: FontWeight.w300,
+                      fontSize: getHeight(22, context),
                     ),
                   ),
                 ),
@@ -157,7 +162,7 @@ class _BuildCheckBoxState extends State<BuildCheckBox> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Checkbox(
             value: _isAgree,
@@ -168,14 +173,17 @@ class _BuildCheckBoxState extends State<BuildCheckBox> {
               });
             }),
         SizedBox(
-          width: 15,
+          width: 10.appWidth(context),
         ),
-        const Text(
-          "I agree with the terms and conditions that come with \n using this application.",
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.black54,
-            // fontWeight: FontWeight.w400,
+        Expanded(
+          child: const AutoSizeText(
+            "I agree with the terms and conditions that come with using this application.",
+            maxLines: 3,
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.black54,
+              // fontWeight: FontWeight.w400,
+            ),
           ),
         ),
       ],

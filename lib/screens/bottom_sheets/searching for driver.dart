@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
@@ -39,11 +40,17 @@ class SearchingForDriverSheet extends StatelessWidget {
               child: ListView(
                 controller: myScrollController,
                 children: [
+                  SizedBox(
+                    height: getHeight(10, context),
+                  ),
                   const Center(
-                    child: Text(
+                    child: AutoSizeText(
                       "Delivery Successfully Created",
-                      style:
-                          TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w700,
+                        color: kPrimaryGoldColor,
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -51,16 +58,16 @@ class SearchingForDriverSheet extends StatelessWidget {
                   ),
                   const SpinKitDoubleBounce(
                     color: kPrimaryGoldColor,
-                    size: 400,
+                    size: 380,
                   ),
                   SizedBox(
                     height: 10.appHeight(context),
                   ),
                   Center(
-                    child: const Text(
+                    child: AutoSizeText(
                       "Searching for delivery rider",
                       style:
-                          TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                     ),
                   ),
                   SizedBox(
@@ -72,8 +79,8 @@ class SearchingForDriverSheet extends StatelessWidget {
                       height: 50.appHeight(context),
                       child: ElevatedButton(
                         onPressed: () {
-                          mapProvider.changeWidgetShowed(
-                              showWidget: Show.DRIVER_FOUND);
+                          mapProvider.cancelRequest();
+                          mapProvider.changeWidgetShowed(showWidget: Show.HOME);
                         },
                         style: ElevatedButton.styleFrom(
                           elevation: 20,
@@ -81,12 +88,19 @@ class SearchingForDriverSheet extends StatelessWidget {
                         ),
                         child: const Text(
                           "Cancel Delivery",
-                          style:
-                              TextStyle(color: Colors.redAccent, fontSize: 28),
+                          style: TextStyle(
+                              color: Colors.redAccent,
+                              fontSize: 28,
+                              fontWeight: FontWeight.w700),
                         ),
                       ),
                     ),
-                  )
+                  ),
+                  SizedBox(
+                    height: 10.appHeight(context),
+                  ),
+                  AutoSizeText(
+                      'Note that Cancellation Prices may apply depending on the circumstances.'),
                 ],
               ),
             ),

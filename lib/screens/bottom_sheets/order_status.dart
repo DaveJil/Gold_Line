@@ -159,7 +159,7 @@ class OrderStatusWidget extends StatelessWidget {
                           padding: const EdgeInsets.all(12),
                           child: ElevatedButton(
                             onPressed: () {
-                              mapProvider.updateDeliveryStatus();
+                              // mapProvider.updateDeliveryStatus();
                             },
                             style: ElevatedButton.styleFrom(
                                 primary: kPrimaryGoldColor),

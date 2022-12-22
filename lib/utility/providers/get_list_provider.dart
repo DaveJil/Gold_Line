@@ -9,17 +9,17 @@ import '../../models/transaction/transaction.dart';
 import '../api.dart';
 
 class GetListProvider extends ChangeNotifier {
-  List<DeliveryRequestModel> _deliveryList = [];
-  List<DeliveryRequestModel> get deliveryList => _deliveryList;
-  DeliveryRequestModel? deliveryModel;
+  List<DeliveryModel> _deliveryList = [];
+  List<DeliveryModel> get deliveryList => _deliveryList;
+  DeliveryModel? deliveryModel;
 
-  Future<List<DeliveryRequestModel>?> getdeliveryList() async {
+  Future<List<DeliveryModel>?> getDeliveryList() async {
     try {
       var response = await CallApi().getData('delivery');
       if (response.statusCode == 200) {
         var res = json.decode(response.body);
         res.forEach((delivery) {
-          DeliveryRequestModel model = DeliveryRequestModel.fromJson(delivery);
+          DeliveryModel model = DeliveryModel.fromJson(delivery);
           _deliveryList.add(model);
         });
         return _deliveryList;
@@ -29,6 +29,7 @@ class GetListProvider extends ChangeNotifier {
       print(e);
     }
     notifyListeners();
+    return null;
   }
 
   List<TransactionModel> _transactionList = [];

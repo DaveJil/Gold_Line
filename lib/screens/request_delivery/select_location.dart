@@ -48,250 +48,261 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            TextField(
-              controller: pickUpLocation,
-              autofocus: false,
-              focusNode: mapProvider.startFocusNode,
-              style: TextStyle(fontSize: 24),
-              decoration: InputDecoration(
-                  hintText: 'Pickup Location',
-                  hintStyle: const TextStyle(
-                      fontWeight: FontWeight.w500, fontSize: 24),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                  border: InputBorder.none,
-                  suffixIcon: pickUpLocation.text.isNotEmpty
-                      ? IconButton(
-                          onPressed: () {
-                            setState(() {
-                              mapProvider.predictions = [];
-                              pickUpLocation.clear();
-                            });
-                          },
-                          icon: Icon(Icons.clear_outlined),
-                        )
-                      : null),
-              onChanged: (value) {
-                if (_debounce?.isActive ?? false) _debounce!.cancel();
-                _debounce = Timer(const Duration(milliseconds: 1000), () {
-                  if (value.isNotEmpty) {
-                    //places api
-                    mapProvider.autoCompleteSearch(value);
-                  } else {
-                    //clear out the results
-                    setState(() {
-                      mapProvider.predictions = [];
-                      mapProvider.pickupLocation = null;
-                      mapProvider.pickUpLatLng = LatLng(
-                          mapProvider.pickupLocation!.geometry!.location!.lat!,
-                          mapProvider.pickupLocation!.geometry!.location!.lng!);
-                    });
-                  }
-                });
-              },
-            ),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Tick to use current location",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black54,
-                    // fontWeight: FontWeight.w400,
-                  ),
-                ),
-                Checkbox(
-                    value: _useCurrentLocationPickUp,
-                    activeColor: kPrimaryGoldColor,
-                    onChanged: (bool? value) {
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextField(
+                controller: pickUpLocation,
+                autofocus: false,
+                focusNode: mapProvider.startFocusNode,
+                style: TextStyle(fontSize: 24),
+                decoration: InputDecoration(
+                    hintText: 'Pickup Location',
+                    hintStyle: const TextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 24),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: InputBorder.none,
+                    suffixIcon: pickUpLocation.text.isNotEmpty
+                        ? IconButton(
+                            onPressed: () {
+                              setState(() {
+                                mapProvider.predictions = [];
+                                pickUpLocation.clear();
+                              });
+                            },
+                            icon: Icon(Icons.clear_outlined),
+                          )
+                        : null),
+                onChanged: (value) {
+                  if (_debounce?.isActive ?? false) _debounce!.cancel();
+                  _debounce = Timer(const Duration(milliseconds: 1000), () {
+                    if (value.isNotEmpty) {
+                      //places api
+                      mapProvider.autoCompleteSearch(value);
+                    } else {
+                      //clear out the results
                       setState(() {
-                        _useCurrentLocationPickUp = !_useCurrentLocationPickUp;
+                        mapProvider.predictions = [];
+                        mapProvider.pickupLocation = null;
+                        mapProvider.pickUpLatLng = LatLng(
+                            mapProvider
+                                .pickupLocation!.geometry!.location!.lat!,
+                            mapProvider
+                                .pickupLocation!.geometry!.location!.lng!);
                       });
-                    })
-              ],
-            ),
-            SizedBox(height: 30),
-            TextField(
-              controller: dropOffLocation,
-              autofocus: false,
-              focusNode: mapProvider.endFocusNode,
-              enabled: pickUpLocation.text.isNotEmpty &&
-                  mapProvider.pickupLocation != null,
-              style: TextStyle(fontSize: 24),
-              decoration: InputDecoration(
-                  hintText: 'DropOff Location',
-                  hintStyle: const TextStyle(
-                      fontWeight: FontWeight.w500, fontSize: 24),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                  border: InputBorder.none,
-                  suffixIcon: dropOffLocation.text.isNotEmpty
-                      ? IconButton(
-                          onPressed: () {
-                            setState(() {
-                              mapProvider.predictions = [];
-                              dropOffLocation.clear();
-                            });
-                          },
-                          icon: Icon(Icons.clear_outlined),
-                        )
-                      : null),
-              onChanged: (value) {
-                if (_debounce?.isActive ?? false) _debounce!.cancel();
-                _debounce = Timer(const Duration(milliseconds: 1000), () {
-                  if (value.isNotEmpty) {
-                    //places api
-                    mapProvider.autoCompleteSearch(value);
-                  } else {
-                    //clear out the results
-                    mapProvider.predictions = [];
-                    mapProvider.dropoffLocation = null;
-                  }
-                });
-              },
-            ),
-            ListView.builder(
-                shrinkWrap: true,
-                itemCount: mapProvider.predictions.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: CircleAvatar(
-                      child: Icon(
-                        Icons.pin_drop,
-                        color: Colors.white,
-                      ),
+                    }
+                  });
+                },
+              ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Tick to use current location",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black54,
+                      // fontWeight: FontWeight.w400,
                     ),
-                    title: Text(
-                      mapProvider.predictions[index].description.toString(),
-                    ),
-                    onTap: () async {
-                      final placeId = mapProvider.predictions[index].placeId!;
-                      final details =
-                          await mapProvider.googlePlace.details.get(placeId);
-                      if (details != null &&
-                          details.result != null &&
-                          mounted) {
-                        if (mapProvider.startFocusNode.hasFocus) {
-                          mapProvider.setPickCoordinates();
-
-                          double lat = details.result!.geometry!.location!.lat!;
-                          double lng = details.result!.geometry!.location!.lng!;
-                          mapProvider.changeRequestedDestination(
-                              reqDestination: details.result!.formattedAddress,
-                              lat: lat,
-                              lng: lng);
-                          mapProvider.updateDestination(
-                              destination: details.result!.adrAddress);
-                          LatLng coordinates = LatLng(lat, lng);
-                          mapProvider.setPickCoordinates(
-                              coordinates: coordinates);
-                          mapProvider.changePickupLocationAddress(
-                              address: details.result!.name);
-                          setState(() {
-                            mapProvider.pickupLocation = details.result;
-                            pickUpLocation.text = details.result!.name!;
-                            mapProvider.predictions = [];
-                          });
-                        } else {
-                          double lat = details.result!.geometry!.location!.lat!;
-                          double lng = details.result!.geometry!.location!.lng!;
-                          mapProvider.changeRequestedDestination(
-                              reqDestination: details.result!.name,
-                              lat: lat,
-                              lng: lng);
-                          mapProvider.updateDestination(
-                              destination: details.result!.name);
-                          LatLng coordinates = LatLng(lat, lng);
-                          mapProvider.setDestination(coordinates: coordinates);
-                          setState(() {
-                            mapProvider.dropoffLocation = details.result;
-                            dropOffLocation.text = details.result!.name!;
-                            mapProvider.predictions = [];
-                            mapProvider.pickUpLatLng = LatLng(
-                                mapProvider
-                                    .pickupLocation!.geometry!.location!.lat!,
-                                mapProvider
-                                    .pickupLocation!.geometry!.location!.lng!);
-
-                            mapProvider.dropOffLatLng = LatLng(
-                                mapProvider
-                                    .dropoffLocation!.geometry!.location!.lat!,
-                                mapProvider
-                                    .dropoffLocation!.geometry!.location!.lng!);
-                          });
-                        }
-
-                        if (mapProvider.pickupLocation != null &&
-                            mapProvider.dropoffLocation != null) {
-                        } else if (_useCurrentLocationPickUp == true &&
-                            mapProvider.dropoffLocation != null) {
-                          print('navigate');
-                        }
-                      }
-                    },
-                  );
-                }),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Tick to use current location",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black54,
-                    // fontWeight: FontWeight.w400,
                   ),
-                ),
-                Checkbox(
-                    value: _useCurrentLocationDropOff,
-                    activeColor: kPrimaryGoldColor,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        _useCurrentLocationDropOff =
-                            !_useCurrentLocationDropOff;
-                      });
-                    })
-              ],
-            ),
-            SizedBox(
-              height: getHeight(30, context),
-            ),
-            Container(
-              height: getHeight(58, context),
-              width: getWidth(200, context),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 4,
-                    offset: Offset(2, 4),
-                  ),
+                  Checkbox(
+                      value: _useCurrentLocationPickUp,
+                      activeColor: kPrimaryGoldColor,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _useCurrentLocationPickUp =
+                              !_useCurrentLocationPickUp;
+                        });
+                      })
                 ],
               ),
-              child: TextButton(
-                onPressed: () async {
-                  await mapProvider.createDeliveryRequest();
-                  await mapProvider.createRoute();
-                  await mapProvider.tryProcessDelivery();
-                  print('navigate');
-                  mapProvider.changeWidgetShowed(
-                      showWidget: Show.CHECKOUT_DELIVERY);
-
-                  changeScreenReplacement(context, MapWidget());
+              SizedBox(height: 30),
+              TextField(
+                controller: dropOffLocation,
+                autofocus: false,
+                focusNode: mapProvider.endFocusNode,
+                enabled: pickUpLocation.text.isNotEmpty &&
+                    mapProvider.pickupLocation != null,
+                style: TextStyle(fontSize: 24),
+                decoration: InputDecoration(
+                    hintText: 'DropOff Location',
+                    hintStyle: const TextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 24),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: InputBorder.none,
+                    suffixIcon: dropOffLocation.text.isNotEmpty
+                        ? IconButton(
+                            onPressed: () {
+                              setState(() {
+                                mapProvider.predictions = [];
+                                dropOffLocation.clear();
+                              });
+                            },
+                            icon: Icon(Icons.clear_outlined),
+                          )
+                        : null),
+                onChanged: (value) {
+                  if (_debounce?.isActive ?? false) _debounce!.cancel();
+                  _debounce = Timer(const Duration(milliseconds: 1000), () {
+                    if (value.isNotEmpty) {
+                      //places api
+                      mapProvider.autoCompleteSearch(value);
+                    } else {
+                      //clear out the results
+                      mapProvider.predictions = [];
+                      mapProvider.dropoffLocation = null;
+                    }
+                  });
                 },
-                child: const Text(
-                  'Continue',
-                  style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
+              ),
+              ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: mapProvider.predictions.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      leading: CircleAvatar(
+                        child: Icon(
+                          Icons.pin_drop,
+                          color: Colors.white,
+                        ),
+                      ),
+                      title: Text(
+                        mapProvider.predictions[index].description.toString(),
+                      ),
+                      onTap: () async {
+                        final placeId = mapProvider.predictions[index].placeId!;
+                        final details =
+                            await mapProvider.googlePlace.details.get(placeId);
+                        if (details != null &&
+                            details.result != null &&
+                            mounted) {
+                          if (mapProvider.startFocusNode.hasFocus) {
+                            mapProvider.setPickCoordinates();
+
+                            double lat =
+                                details.result!.geometry!.location!.lat!;
+                            double lng =
+                                details.result!.geometry!.location!.lng!;
+                            mapProvider.changeRequestedDestination(
+                                reqDestination:
+                                    details.result!.formattedAddress,
+                                lat: lat,
+                                lng: lng);
+                            mapProvider.updateDestination(
+                                destination: details.result!.adrAddress);
+                            LatLng coordinates = LatLng(lat, lng);
+                            mapProvider.setPickCoordinates(
+                                coordinates: coordinates);
+                            mapProvider.changePickupLocationAddress(
+                                address: details.result!.name);
+                            setState(() {
+                              mapProvider.pickupLocation = details.result;
+                              pickUpLocation.text = details.result!.name!;
+                              mapProvider.predictions = [];
+                            });
+                          } else {
+                            double lat =
+                                details.result!.geometry!.location!.lat!;
+                            double lng =
+                                details.result!.geometry!.location!.lng!;
+                            mapProvider.changeRequestedDestination(
+                                reqDestination: details.result!.name,
+                                lat: lat,
+                                lng: lng);
+                            mapProvider.updateDestination(
+                                destination: details.result!.name);
+                            LatLng coordinates = LatLng(lat, lng);
+                            mapProvider.setDestination(
+                                coordinates: coordinates);
+                            setState(() {
+                              mapProvider.dropoffLocation = details.result;
+                              dropOffLocation.text = details.result!.name!;
+                              mapProvider.predictions = [];
+                              mapProvider.pickUpLatLng = LatLng(
+                                  mapProvider
+                                      .pickupLocation!.geometry!.location!.lat!,
+                                  mapProvider.pickupLocation!.geometry!
+                                      .location!.lng!);
+
+                              mapProvider.dropOffLatLng = LatLng(
+                                  mapProvider.dropoffLocation!.geometry!
+                                      .location!.lat!,
+                                  mapProvider.dropoffLocation!.geometry!
+                                      .location!.lng!);
+                            });
+                          }
+
+                          if (mapProvider.pickupLocation != null &&
+                              mapProvider.dropoffLocation != null) {
+                          } else if (_useCurrentLocationPickUp == true &&
+                              mapProvider.dropoffLocation != null) {
+                            print('navigate');
+                          }
+                        }
+                      },
+                    );
+                  }),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Tick to use current location",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black54,
+                      // fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  Checkbox(
+                      value: _useCurrentLocationDropOff,
+                      activeColor: kPrimaryGoldColor,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _useCurrentLocationDropOff =
+                              !_useCurrentLocationDropOff;
+                        });
+                      })
+                ],
+              ),
+              SizedBox(
+                height: getHeight(30, context),
+              ),
+              Container(
+                height: getHeight(58, context),
+                width: getWidth(200, context),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 4,
+                      offset: Offset(2, 4),
+                    ),
+                  ],
+                ),
+                child: TextButton(
+                  onPressed: () async {
+                    await mapProvider.createDeliveryRequest();
+                    await mapProvider.createRoute();
+                    await mapProvider.processDelivery();
+                    print('navigate');
+                    mapProvider.changeWidgetShowed(
+                        showWidget: Show.CHECKOUT_DELIVERY);
+
+                    changeScreenReplacement(context, MapWidget());
+                  },
+                  child: const Text(
+                    'Continue',
+                    style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

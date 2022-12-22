@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
+import 'package:gold_line/utility/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -32,7 +35,7 @@ class _UserProfileState extends State<UserProfileScreen> {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        icon:  Icon(
+                        icon: Icon(
                           Icons.arrow_back,
                           color: Colors.black,
                           size: getHeight(24, context),
@@ -42,23 +45,13 @@ class _UserProfileState extends State<UserProfileScreen> {
                         width: getWidth(150, context),
                       ),
                       const Text(
-                        'Fill in your details',
+                        'Your account',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 28),
                       ),
                     ],
-                  ),
-                  SizedBox(
-                    height: getHeight(20, context),
-                  ),
-                  const Text(
-                    'Kindly fill in your Information below.',
-                    style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
-                  ),
-                  SizedBox(
-                    height: getHeight(40, context),
                   ),
                   Stack(children: [
                     Container(
@@ -92,7 +85,7 @@ class _UserProfileState extends State<UserProfileScreen> {
                     height: getHeight(15, context),
                   ),
                   Text(
-                    'Click to Upload Profile Image',
+                    'Click to Update Profile Image',
                     style: TextStyle(
                       decoration: TextDecoration.underline,
                       color: Colors.black,
@@ -102,74 +95,75 @@ class _UserProfileState extends State<UserProfileScreen> {
                   SizedBox(
                     height: getHeight(20, context),
                   ),
-                  Padding(
-                    padding:
-                    EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                    child: const TextField(
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Other Name',
-                          hintText: 'Enter your Other/Middle Name'),
-                    ),
-                  ),
-                  SizedBox(
-                    height: getHeight(20, context),
-                  ),
-                  Padding(
-                    padding:
-                    EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                    child: const TextField(
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Gender',
-                          hintText: 'Are you Male or Female?'),
-                    ),
-                  ),
-                  SizedBox(
-                    height: getHeight(20, context),
-                  ),
-                  Padding(
-                    padding:
-                    EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                    child: const TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Enter Address',
-                        hintText: 'Enter valid Address',
+                  Row(
+                    children: [
+                      Text(
+                        "Name",
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
                       ),
-                    ),
+                      Spacer(),
+                      Text(
+                        "${userProvider.firstName.text} ${userProvider.lastName.text}",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.normal),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: getHeight(20, context),
                   ),
-                  Padding(
-                    padding:
-                    EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                    child: const TextField(
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Enter your LGA',
-                          hintText: 'Enter your Residental LGA'),
-                    ),
+                  Text(
+                    "Gender",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  Spacer(),
+                  Text(
+                    userProvider.gender.text,
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                   SizedBox(
                     height: getHeight(20, context),
                   ),
-                  Padding(
-                    padding:
-                    EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                    child: const TextField(
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Enter your State',
-                          hintText: 'Enter your Residental State'),
-                    ),
+                  Text(
+                    "House Address",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  Spacer(),
+                  Text(
+                    userProvider.userAddress.text,
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                   SizedBox(
                     height: getHeight(20, context),
                   ),
+                  Text(
+                    "LGA",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  Spacer(),
+                  Text(
+                    userProvider.userLGA.text,
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                  ),
                   SizedBox(
-                    height: getHeight(30, context),
+                    height: getHeight(20, context),
+                  ),
+                  Text(
+                    "State",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  Spacer(),
+                  Text(
+                    userProvider.userState.text,
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                  ),
+                  SizedBox(
+                    height: getHeight(50, context),
                   ),
                   Container(
                     height: getHeight(50, context),

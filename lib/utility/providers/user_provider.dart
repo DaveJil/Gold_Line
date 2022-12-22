@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:gold_line/screens/authentication/user_navigation.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
@@ -25,6 +26,8 @@ class UserProvider with ChangeNotifier {
   UserServices _userServices = UserServices();
   UserProfile? _userModel;
   UserProfile? _userProfile;
+  String? deviceToken;
+  FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
   TextEditingController email = TextEditingController();
   TextEditingController firstName = TextEditingController();
@@ -32,6 +35,18 @@ class UserProvider with ChangeNotifier {
 
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
+
+
+  TextEditingController otherName = TextEditingController();
+  TextEditingController gender = TextEditingController();
+  TextEditingController userAddress = TextEditingController();
+  TextEditingController userLGA = TextEditingController();
+  TextEditingController userState = TextEditingController();
+
+
+
+
+
 
 //  getter
   UserProfile get userModel => _userModel!;
@@ -43,6 +58,7 @@ class UserProvider with ChangeNotifier {
 
   UserProvider.initialize() {
     _initialize();
+    saveDeviceToken();
   }
 
   _showMsg(msg, BuildContext context) {
@@ -62,6 +78,7 @@ class UserProvider with ChangeNotifier {
 
   Future signIn(BuildContext context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
+
     Map<String, dynamic> request = {
       'login': email.text,
       'password': password.text,
@@ -71,7 +88,6 @@ class UserProvider with ChangeNotifier {
       var response = await CallApi().postData(request, 'login');
       print(response);
       String code = response['code'];
-
       if (code == 'success') {
         String token = response['token'];
         print(token);
@@ -90,6 +106,8 @@ class UserProvider with ChangeNotifier {
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(snackBar);
+
+        await saveDeviceToken();
 
         changeScreenReplacement(context, const MapWidget());
       } else {
@@ -121,6 +139,7 @@ class UserProvider with ChangeNotifier {
 
   Future signUp(BuildContext context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
+
     Map<String, dynamic> request = {
       'first_name': firstName.text,
       'last_name': lastName.text,
@@ -132,7 +151,6 @@ class UserProvider with ChangeNotifier {
       final response = await CallApi().postData(request, 'signup');
       print(response);
       String code = response['code'];
-
       if (code == 'success') {
         String token = response['token'];
         print(token);
@@ -151,6 +169,7 @@ class UserProvider with ChangeNotifier {
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(snackBar);
+        await saveDeviceToken();
 
         changeScreenReplacement(context, const MapWidget());
       } else {
@@ -238,6 +257,67 @@ class UserProvider with ChangeNotifier {
     }
   }
 
+  Future updateProfile(BuildContext context) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    Map<String, dynamic> request = {
+      'login': email.text,
+      'password': password.text,
+    };
+
+    try {
+      var response = await CallApi().postData(request, 'api/profile');
+      print(response);
+      String code = response['code'];
+      if (code == 'success') {
+        String token = response['token'];
+        print(token);
+        pref.setString('token', response['token']);
+        pref.setBool(LOGGED_IN, true);
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: "Welcome Back",
+            message: "Login Successful",
+            contentType: ContentType.success,
+          ),
+        );
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+
+        await saveDeviceToken();
+
+        changeScreenReplacement(context, const MapWidget());
+      } else {
+        String message = response['message'];
+
+        print(message);
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: message,
+            message: message,
+            contentType: ContentType.failure,
+          ),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+        return message;
+      }
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
   Future signOut(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -254,6 +334,18 @@ class UserProvider with ChangeNotifier {
 
   updateUserData(Map<String, dynamic> values) async {
     _userServices.updateUserData(values);
+  }
+
+  saveDeviceToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('fcm_token') == null) {
+      firebaseMessaging.requestPermission();
+      deviceToken = await firebaseMessaging.getToken();
+      await prefs.setString('fcm_token', deviceToken!);
+      var response =
+          await CallApi().postData({"fcm_token": deviceToken}, "profile/");
+      print(response);
+    }
   }
 
   _initialize() async {

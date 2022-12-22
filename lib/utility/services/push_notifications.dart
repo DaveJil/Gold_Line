@@ -3,13 +3,16 @@ import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../api.dart';
 
 class PushNotification {
   late AndroidNotificationChannel channel;
 
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-  void initNotifacion() async {
+  void initNotification() async {
     channel = const AndroidNotificationChannel(
         'high_importance_channel', 'High Importance Notifications',
         importance: Importance.high);
@@ -31,7 +34,7 @@ class PushNotification {
         .getInitialMessage()
         .then((RemoteMessage? message) {
       if (message != null) {
-        print('NUEVA NOTIFICACION : $message');
+        print('NEW NOTIFICATIONS : $message');
       }
     });
 
@@ -52,12 +55,34 @@ class PushNotification {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('NUEVA NOTIFICACION : $message');
+      print('NEW NOTIFICATION : $message');
     });
   }
 
-  Future<String?> getNotificationToken() async {
-    return await FirebaseMessaging.instance.getToken();
+  Future getNotificationToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? fcm_token = prefs.getString("fcm_token");
+    print("testing");
+    print(fcm_token);
+    var request = {"fcm_token": fcm_token};
+    var response = await CallApi().postData(request, "profile");
+    String message = response["code"];
+    print(message);
+    print(response);
+    print("response is " + response);
+    if (fcm_token == null) {
+      await FirebaseMessaging.instance.requestPermission();
+      String? deviceToken = await FirebaseMessaging.instance.getToken();
+      await prefs.setString('fcm_token', deviceToken!);
+      Map<String, dynamic> token = {
+        'fcm_token': deviceToken,
+      };
+      var response = await CallApi().postData(token, "profile");
+      String message = response["code"];
+      print(message);
+    } else {
+      return;
+    }
   }
 
   //  Authorization - YOUR Server key of Cloud Messaging
@@ -98,4 +123,4 @@ class PushNotification {
   }
 }
 
-final pushNotification = PushNotification();
+final PushNotification pushNotification = PushNotification();

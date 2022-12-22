@@ -17,7 +17,7 @@ class GoldLine extends StatelessWidget {
       case Status.Unauthenticated:
         return SplashScreen();
       case Status.Authenticated:
-        return const MapWidget();
+        return MapWidget();
       default:
         return SplashScreen();
     }

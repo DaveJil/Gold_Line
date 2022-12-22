@@ -4,6 +4,7 @@ import 'package:gold_line/screens/authentication/forgot_password.dart';
 import 'package:gold_line/screens/authentication/sign_up.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
+import 'package:gold_line/utility/helpers/validators.dart';
 import 'package:gold_line/utility/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -48,6 +49,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     EdgeInsets.symmetric(horizontal: getWidth(50, context)),
                 child: TextFormField(
                   controller: userProvider.email,
+                  validator: (String? val) {
+                    if (!val!.isValidEmail) return 'Enter valid email';
+                  },
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Email',
@@ -64,6 +68,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 child: TextFormField(
                   controller: userProvider.password,
                   obscureText: true,
+                  validator: (String? val) {
+                    if (!val!.isValidPassword) return 'Enter valid password';
+                  },
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Password',
@@ -97,7 +104,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     borderRadius: BorderRadius.circular(20)),
                 child: TextButton(
                   onPressed: () async {
-                    var message = await userProvider.signIn(context);
+                    await userProvider.signIn(context);
                   },
                   child: const Text(
                     'Login',
