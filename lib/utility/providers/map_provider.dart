@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:async';
 import 'dart:io';
 
@@ -50,9 +52,19 @@ class MapProvider with ChangeNotifier {
   static const EXPIRED = 'expired';
   static const PICKUP_MARKER_ID = 'pickup';
   static const LOCATION_MARKER_ID = 'location';
-  static const DRIVER_AT_LOCATION_NOTIFICATION = 'DRIVER_AT_LOCATION';
-  static const REQUEST_ACCEPTED_NOTIFICATION = 'REQUEST_ACCEPTED';
-  static const TRIP_STARTED_NOTIFICATION = 'TRIP_STARTED';
+
+  //general notification
+  static const NAVIGATE_TO_DELIVERY_NOTIFICATION = 'delivery';
+  static const NAVIGATE_TO_WALLET_NOTIFICATION = 'wallet';
+  static const NAVIGATE_TO_NOTIFICATION = 'notifications';
+
+  //delivery stages(status)
+  static const DRIVER_ASSIGNED_NOTIFICATION = 'driver_assigned';
+  // static const DELIVERY_PICKED_NOTIFICATION = 'delivery_picked'; //riders don't have app
+  static const DELIVERY_CANCELED_NOTIFICATION = 'delivery_canceled';
+  static const DELIVERY_ACCEPTED_NOTIFICATION = 'delivery_accepted';
+  static const DELIVERY_REJECTED_NOTIFICATION = 'delivery_rejected';
+  static const DELIVERY_COMPLETED_NOTIFICATION = 'delivery_completed';
 
   compon.DetailsResult? pickupLocation;
   compon.DetailsResult? dropoffLocation;
@@ -140,6 +152,9 @@ class MapProvider with ChangeNotifier {
   double? requestedDestinationLng;
   DeliveryModel? rideRequestModel;
   BuildContext? mainContext;
+  String? driverName;
+  String? driverPhone;
+  String? driverPlate;
 
   String? setTime, setDate;
 
@@ -791,73 +806,6 @@ class MapProvider with ChangeNotifier {
     }
   }
 
-  // Future tryProcessDelivery() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //
-  //   Map<String, dynamic> values = {
-  //     "sender_address": pickUpLocation.text + "," + state.text,
-  //     "receiver_address": dropOffLocation.text + "," + state.text,
-  //     "size": "small"
-  //   };
-  //
-  //   try {
-  //     final response = await CallApi().postTryData(values, "price");
-  //     final body = response;
-  //     print(body);
-  //     print('delivery processing');
-  //     deliveryPrice = response['data']['price'];
-  //     print(deliveryPrice);
-  //     preferences.setString('price', deliveryPrice!);
-  //     if (response['success'] == "success") {
-  //       print(body);
-  //       if ((body as Map<String, dynamic>).containsKey('id')) {
-  //         preferences.setString('deliveryId', body["id"]);
-  //         print(body["id"]);
-  //       } else {
-  //         print('no token added');
-  //       }
-  //       return deliveryPrice;
-  //     }
-  //   } on SocketException {
-  //     throw const SocketException('No internet connection');
-  //   } catch (err) {
-  //     throw Exception(err.toString());
-  //   }
-  // }
-
-  _listenToDriver(Map<String, dynamic> json) {
-    ///Listen to driver
-//     driverStream = _driverService.driverStream().listen((event) {
-//       event.docChanges.forEach((change) async {
-//         if (change.doc.data()!['id'] == DriverProfile!.id) {
-//           DriverProfile = DriverProfile.fromJson(json);
-//           // code to update marker
-// //          List<Marker> _m = _markers
-// //              .where((element) => element.markerId.value == DriverProfile.id).toList();
-// //          _markers.remove(_m[0]);
-//           clearMarkers();
-//           sendRequest(
-//               origin: pickupCoordinates,
-//               destination: DriverProfile!.getPosition());
-//           if (routeModel!.distance.value! <= 200) {
-//             driverArrived = true;
-//           }
-//           notifyListeners();
-//
-//           _addDriverMarker(
-//               position: DriverProfile!.getPosition(),
-//               rotation: DriverProfile!.heading,
-//               driverId: DriverProfile!.id);
-//           addPickupMarker(pickupCoordinates!);
-//           // _updateDriverMarker(_m[0]);
-//         }
-//       });
-//     });
-
-    show = Show.DRIVER_FOUND;
-    notifyListeners();
-  }
-
   _stopListeningToDriversStream() {
     _clearDriverMarkers();
     allDriversStream!.cancel();
@@ -906,50 +854,50 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // ANCHOR PUSH NOTIFICATION METHODS
-  Future handleOnMessage(Map<String, dynamic> data) async {
-    print("=== data = ${data.toString()}");
-    notificationType = data['data']['type'];
+  checkDeliveryStatus() async {
+    try {
+      final response = await CallApi().getData('user/delivery/$deliveryId');
 
-    if (notificationType == DRIVER_AT_LOCATION_NOTIFICATION) {
-    } else if (notificationType == TRIP_STARTED_NOTIFICATION) {
-      show = Show.TRIP;
-      sendRequest(
-          origin: pickupCoordinates, destination: destinationCoordinates);
+      final body = response;
+      String deliveryStatus = body['data']['status'];
+      print(deliveryStatus);
+
       notifyListeners();
-    } else if (notificationType == REQUEST_ACCEPTED_NOTIFICATION) {}
-    notifyListeners();
+      print(deliveryId);
+      if (deliveryStatus == "accepted") {
+        changeWidgetShowed(showWidget: Show.DRIVER_FOUND);
+      } else {
+        return Future.delayed(Duration(seconds: 3), checkDeliveryStatus);
+      }
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
   }
 
-  Future handleOnLaunch(
-      Map<String, dynamic> data, Map<String, dynamic> json) async {
-    notificationType = data['data']['type'];
-    if (notificationType == DRIVER_AT_LOCATION_NOTIFICATION) {
-    } else if (notificationType == TRIP_STARTED_NOTIFICATION) {
-    } else if (notificationType == REQUEST_ACCEPTED_NOTIFICATION) {}
-    driverProfile =
-        await _driverService.getDriverById(data['data']['driverId']);
-    _stopListeningToDriversStream();
+  getRiderDetails() async {
+    try {
+      final response = await CallApi().getData('user/delivery/$deliveryId');
 
-    _listenToDriver(json);
-    notifyListeners();
+      final body = response;
+      driverName = body['data']['profile']['first_name'];
+      driverPhone = body['data']['profile']['phone'];
+      driverPlate = body['data']['profile']['plate_number'];
+
+      print(driverName);
+      print(driverPhone);
+      print(driverPlate);
+
+      notifyListeners();
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
   }
 
-  Future handleOnResume(Map<String, dynamic> data) async {
-    notificationType = data['data']['type'];
-
-    _stopListeningToDriversStream();
-    if (notificationType == DRIVER_AT_LOCATION_NOTIFICATION) {
-    } else if (notificationType == TRIP_STARTED_NOTIFICATION) {
-    } else if (notificationType == REQUEST_ACCEPTED_NOTIFICATION) {}
-
-    if (lookingForDriver) Navigator.pop(mainContext!);
-    lookingForDriver = false;
-    driverProfile =
-        await _driverService.getDriverById(data['data']['driverId']);
-    periodicTimer!.cancel();
-    notifyListeners();
-  }
+  Timer checkStatusTimer = Timer.periodic(Duration(seconds: 10), (timer) {});
 
   ///TOFIX
   // void _moveMarkerAndChangeAddress(

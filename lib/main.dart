@@ -33,7 +33,16 @@ Future<void> main() async {
     badge: true,
     sound: true,
   );
-  // await pushNotification.getNotificationToken();
+  NotificationSettings settings =
+      await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
 
   runApp(const MyApp());
 }

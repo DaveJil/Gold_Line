@@ -30,9 +30,6 @@ class KycInfoState extends State<KycInfo> {
                 ),
                 Row(
                   children: [
-                    SizedBox(
-                      width: getWidth(20, context),
-                    ),
                     IconButton(
                       onPressed: () {
                         Navigator.pop(context);
@@ -43,15 +40,12 @@ class KycInfoState extends State<KycInfo> {
                         size: getHeight(24, context),
                       ),
                     ),
-                    SizedBox(
-                      width: getWidth(150, context),
-                    ),
                     const Text(
                       'Fill in your details',
                       style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
-                          fontSize: 28),
+                          fontSize: 24),
                     ),
                   ],
                 ),
@@ -60,7 +54,7 @@ class KycInfoState extends State<KycInfo> {
                 ),
                 const Text(
                   'Kindly fill in your Information below.',
-                  style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
+                  style: TextStyle(color: kPrimaryGoldColor, fontSize: 18),
                 ),
                 SizedBox(
                   height: getHeight(40, context),
@@ -189,12 +183,13 @@ class KycInfoState extends State<KycInfo> {
                       borderRadius: BorderRadius.circular(20)),
                   child: TextButton(
                     onPressed: () {
+                      userProvider.updateProfile(context);
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (_) => const MapWidget()));
                     },
                     child: const Text(
                       'Continue',
-                      style: TextStyle(color: Colors.white, fontSize: 25),
+                      style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
                 ),

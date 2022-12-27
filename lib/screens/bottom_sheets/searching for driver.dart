@@ -8,10 +8,28 @@ import '../../utility/helpers/constants.dart';
 import '../../utility/providers/map_provider.dart';
 import '../../utility/services/calls_and_sms.dart';
 
-class SearchingForDriverSheet extends StatelessWidget {
+class SearchingForDriverSheet extends StatefulWidget {
   SearchingForDriverSheet({Key? key}) : super(key: key);
 
+  @override
+  State<SearchingForDriverSheet> createState() =>
+      _SearchingForDriverSheetState();
+}
+
+class _SearchingForDriverSheetState extends State<SearchingForDriverSheet> {
   final CallsAndMessagesService _service = CallsAndMessagesService();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      MapProvider mapProvider =
+          Provider.of<MapProvider>(context, listen: false);
+      mapProvider.checkDeliveryStatus();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +41,11 @@ class SearchingForDriverSheet extends StatelessWidget {
         maxChildSize: 0.8,
         builder: (BuildContext context, myScrollController) {
           return Container(
-            decoration: const BoxDecoration(color: Colors.white,
-//                        borderRadius: BorderRadius.only(
-//                            topLeft: Radius.circular(20),
-//                            topRight: Radius.circular(20)),
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20)),
                 boxShadow: [
                   BoxShadow(
                       color: kPrimaryGoldColor,
@@ -35,7 +54,7 @@ class SearchingForDriverSheet extends StatelessWidget {
                 ]),
             child: Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: 10.appWidth(context),
+                  horizontal: 20.appWidth(context),
                   vertical: 10.appHeight(context)),
               child: ListView(
                 controller: myScrollController,
@@ -46,8 +65,10 @@ class SearchingForDriverSheet extends StatelessWidget {
                   const Center(
                     child: AutoSizeText(
                       "Delivery Successfully Created",
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 28,
+                        fontSize: 24,
                         fontWeight: FontWeight.w700,
                         color: kPrimaryGoldColor,
                       ),
@@ -56,9 +77,14 @@ class SearchingForDriverSheet extends StatelessWidget {
                   SizedBox(
                     height: 10.appHeight(context),
                   ),
-                  const SpinKitDoubleBounce(
-                    color: kPrimaryGoldColor,
-                    size: 380,
+                  InkWell(
+                    onTap: () {
+                      mapProvider.checkDeliveryStatus();
+                    },
+                    child: const SpinKitDoubleBounce(
+                      color: kPrimaryGoldColor,
+                      size: 300,
+                    ),
                   ),
                   SizedBox(
                     height: 10.appHeight(context),
@@ -89,8 +115,8 @@ class SearchingForDriverSheet extends StatelessWidget {
                         child: const Text(
                           "Cancel Delivery",
                           style: TextStyle(
-                              color: Colors.redAccent,
-                              fontSize: 28,
+                              color: Colors.red,
+                              fontSize: 20,
                               fontWeight: FontWeight.w700),
                         ),
                       ),

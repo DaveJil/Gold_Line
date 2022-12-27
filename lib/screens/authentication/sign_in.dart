@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gold_line/screens/authentication/forgot_password.dart';
@@ -26,12 +27,13 @@ class _SignInScreenState extends State<SignInScreen> {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(top: getHeight(150, context)),
-                child: const Text(
+                child: AutoSizeText(
                   "Welcome, Enter your Login Details",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 28),
+                      fontSize: 24),
                 ),
               ),
               SizedBox(
@@ -85,11 +87,11 @@ class _SignInScreenState extends State<SignInScreen> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (_) => const SignUpScreen()));
                 },
-                child: const Text(
+                child: AutoSizeText(
                   'New User? Create an account',
                   style: TextStyle(
                       color: kPrimaryGoldColor,
-                      fontSize: 22,
+                      fontSize: 20,
                       fontWeight: FontWeight.w500),
                 ),
               ),
@@ -106,7 +108,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   onPressed: () async {
                     await userProvider.signIn(context);
                   },
-                  child: const Text(
+                  child: AutoSizeText(
                     'Login',
                     style: TextStyle(color: Colors.white, fontSize: 25),
                   ),
@@ -124,7 +126,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   'Forgot Password',
                   style: TextStyle(
                       color: kPrimaryGoldColor,
-                      fontSize: 22,
+                      fontSize: 14,
                       fontWeight: FontWeight.w400,
                       decoration: TextDecoration.underline),
                 ),

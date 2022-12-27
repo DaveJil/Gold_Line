@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:gold_line/screens/authentication/user_navigation.dart';
+import 'package:gold_line/utility/helpers/custom_display_widget.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,17 +36,11 @@ class UserProvider with ChangeNotifier {
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
 
-
   TextEditingController otherName = TextEditingController();
   TextEditingController gender = TextEditingController();
   TextEditingController userAddress = TextEditingController();
   TextEditingController userLGA = TextEditingController();
   TextEditingController userState = TextEditingController();
-
-
-
-
-
 
 //  getter
   UserProfile get userModel => _userModel!;
@@ -93,41 +87,27 @@ class UserProvider with ChangeNotifier {
         print(token);
         pref.setString('token', response['token']);
         pref.setBool(LOGGED_IN, true);
-        final snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: "Welcome Back",
-            message: "Login Successful",
-            contentType: ContentType.success,
-          ),
-        );
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
 
-        await saveDeviceToken();
+        CustomDisplayWidget.displayAwesomeSuccessSnackBar(
+            context, "Login Successful", "Welcome Back");
+        await FirebaseMessaging.instance.requestPermission();
+        String? deviceToken = await FirebaseMessaging.instance.getToken();
+        print(deviceToken);
 
+        var fcmToken = {
+          'fcm_token': deviceToken,
+        };
+        var fcmResponse = await CallApi().postData(fcmToken, "profile/");
         changeScreenReplacement(context, const MapWidget());
+
+        String message = fcmResponse["code"];
+        print(message);
       } else {
         String message = response['message'];
 
         print(message);
-        final snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: message,
-            message: message,
-            contentType: ContentType.failure,
-          ),
-        );
-
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
+        CustomDisplayWidget.displayAwesomeFailureSnackBar(
+            context, message, message);
         return message;
       }
     } on SocketException {
@@ -156,40 +136,25 @@ class UserProvider with ChangeNotifier {
         print(token);
         pref.setString('token', response['token']);
         pref.setBool(LOGGED_IN, true);
-        final snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: "Hey there",
-            message: "Welcome to GoldLine. Account Created Successfully",
-            contentType: ContentType.success,
-          ),
-        );
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
-        await saveDeviceToken();
 
+        CustomDisplayWidget.displayAwesomeSuccessSnackBar(context, "Hey there!",
+            "Welcome to GoldLine. Account Created Successfully");
+
+        await FirebaseMessaging.instance.requestPermission();
+        String? deviceToken = await FirebaseMessaging.instance.getToken();
+        var fcmToken = {
+          'fcm_token': deviceToken,
+        };
+        var fcmResponse = await CallApi().postData(fcmToken, "profile/");
         changeScreenReplacement(context, const MapWidget());
+
+        String message = fcmResponse["code"];
+        print(message);
       } else {
         String message = response['message'];
-
         print(message);
-        final snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: message,
-            message: message,
-            contentType: ContentType.failure,
-          ),
-        );
-
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
+        CustomDisplayWidget.displayAwesomeFailureSnackBar(
+            context, message, message);
         return message;
       }
     } on SocketException {
@@ -215,39 +180,14 @@ class UserProvider with ChangeNotifier {
         print(token);
         pref.setString('token', response['token']);
         pref.setBool(LOGGED_IN, true);
-        final snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: "Relax",
-            message: "Check your email for the password rest link",
-            contentType: ContentType.success,
-          ),
-        );
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
-
-        changeScreenReplacement(context, const MapWidget());
+        CustomDisplayWidget.displayAwesomeSuccessSnackBar(
+            context, "Relax", "Check Email for password reset link");
       } else {
         String message = response['message'];
 
         print(message);
-        final snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: message,
-            message: message,
-            contentType: ContentType.failure,
-          ),
-        );
-
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
+        CustomDisplayWidget.displayAwesomeFailureSnackBar(
+            context, message, message);
         return message;
       }
     } on SocketException {
@@ -266,49 +206,20 @@ class UserProvider with ChangeNotifier {
     };
 
     try {
-      var response = await CallApi().postData(request, 'api/profile');
+      var response = await CallApi().postData(request, 'profile');
       print(response);
       String code = response['code'];
       if (code == 'success') {
-        String token = response['token'];
-        print(token);
-        pref.setString('token', response['token']);
-        pref.setBool(LOGGED_IN, true);
-        final snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: "Welcome Back",
-            message: "Login Successful",
-            contentType: ContentType.success,
-          ),
-        );
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
-
+        CustomDisplayWidget.displayAwesomeSuccessSnackBar(
+            context, "Congrats", "Profile updated successfully");
         await saveDeviceToken();
-
         changeScreenReplacement(context, const MapWidget());
       } else {
         String message = response['message'];
 
         print(message);
-        final snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: message,
-            message: message,
-            contentType: ContentType.failure,
-          ),
-        );
-
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
+        CustomDisplayWidget.displayAwesomeFailureSnackBar(
+            context, message, message);
         return message;
       }
     } on SocketException {
@@ -337,15 +248,11 @@ class UserProvider with ChangeNotifier {
   }
 
   saveDeviceToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('fcm_token') == null) {
-      firebaseMessaging.requestPermission();
-      deviceToken = await firebaseMessaging.getToken();
-      await prefs.setString('fcm_token', deviceToken!);
-      var response =
-          await CallApi().postData({"fcm_token": deviceToken}, "profile/");
-      print(response);
-    }
+    firebaseMessaging.requestPermission();
+    deviceToken = await firebaseMessaging.getToken();
+    var response =
+        await CallApi().postData({"fcm_token": deviceToken}, "profile");
+    print(response);
   }
 
   _initialize() async {

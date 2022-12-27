@@ -1,3 +1,5 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gold_line/screens/bottom_sheets/order_status.dart';
@@ -8,6 +10,7 @@ import 'package:gold_line/screens/payment_screen/cash_payment%20screen.dart';
 import 'package:gold_line/screens/payment_screen/flutterwave_ui_payment.dart';
 import 'package:gold_line/screens/profile/main_menu.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
+import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +35,17 @@ class _MapWidgetState extends State<MapWidget> {
   var scaffoldState = GlobalKey<ScaffoldState>();
 
   @override
-  void initState() {
+  void initState() async {
+    NotificationSettings settings =
+        await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
     // TODO: implement initState
     super.initState();
   }
@@ -126,11 +139,11 @@ class _MapWidgetState extends State<MapWidget> {
                   child: Align(
                       alignment: Alignment.bottomCenter,
                       child: Container(
-                        height: 80,
+                        height: 80.appHeight(context),
                         width: double.infinity,
                         color: kVistaWhite,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
                               child: Center(
@@ -154,11 +167,14 @@ class _MapWidgetState extends State<MapWidget> {
                                     ),
                                     const Text(
                                       "Main Menu",
-                                      style: TextStyle(fontSize: 20),
+                                      style: TextStyle(fontSize: 12),
                                     )
                                   ],
                                 ),
                               ),
+                            ),
+                            SizedBox(
+                              width: 10.appWidth(context),
                             ),
                             Expanded(
                               child: Center(
@@ -183,11 +199,14 @@ class _MapWidgetState extends State<MapWidget> {
                                     ),
                                     const Text(
                                       "New Delivery",
-                                      style: TextStyle(fontSize: 20),
+                                      style: TextStyle(fontSize: 12),
                                     )
                                   ],
                                 ),
                               ),
+                            ),
+                            SizedBox(
+                              width: 10.appWidth(context),
                             ),
                             Expanded(
                               child: Center(
@@ -210,9 +229,9 @@ class _MapWidgetState extends State<MapWidget> {
                                         alignment: Alignment.center,
                                       ),
                                     ),
-                                    const Text(
+                                    const AutoSizeText(
                                       "My Deliveries",
-                                      style: TextStyle(fontSize: 20),
+                                      style: TextStyle(fontSize: 12),
                                     )
                                   ],
                                 ),

@@ -67,8 +67,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '311325913216',
     projectId: 'goldline-79ccc',
     storageBucket: 'goldline-79ccc.appspot.com',
-    iosClientId: '311325913216-nvtlanjpnk5l3sejbh5fbg01li9c7a95.apps.googleusercontent.com',
-    iosBundleId: 'com.example.goldLine',
+    iosClientId:
+        '311325913216-nvtlanjpnk5l3sejbh5fbg01li9c7a95.apps.googleusercontent.com',
+    iosBundleId: 'com.imotionnigeria.goldline',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -77,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '311325913216',
     projectId: 'goldline-79ccc',
     storageBucket: 'goldline-79ccc.appspot.com',
-    iosClientId: '311325913216-nvtlanjpnk5l3sejbh5fbg01li9c7a95.apps.googleusercontent.com',
-    iosBundleId: 'com.example.goldLine',
+    iosClientId:
+        '311325913216-nvtlanjpnk5l3sejbh5fbg01li9c7a95.apps.googleusercontent.com',
+    iosBundleId: 'com.imotionnigeria.goldline',
   );
 }

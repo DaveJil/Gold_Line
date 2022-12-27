@@ -1,14 +1,17 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gold_line/screens/request_delivery/select_location.dart';
 import 'package:gold_line/utility/helpers/controllers.dart';
+import 'package:gold_line/utility/helpers/custom_button.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
+import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:gold_line/utility/providers/map_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utility/helpers/constants.dart';
 import '../../utility/helpers/delivery_input.dart';
-import 'select_location.dart';
 
 enum ProductSize { small, medium, large, multiple }
 
@@ -180,21 +183,17 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                 const SizedBox(
                   height: 7,
                 ),
-                Row(
-                  children: const [
-                    Text(
-                      "Delivery Options.",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(width: 20),
-                    PayerRadioButton()
-                  ],
-                ),
+                const PayerRadioButton(),
                 SizedBox(height: size.width / 15),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 50.appWidth(context)),
+                  child: CustomButton(
+                      onPressed: () {
+                        changeScreen(context, SelectLocationScreen());
+                      },
+                      text: "Set Delivery Location"),
+                )
                 // buildTimeSelector(
                 //     mapProvider.selectDate(context),
                 //     mapProvider.selectTime(context),
@@ -203,41 +202,41 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                 //     mapProvider.selectedDate.toString(),
                 //     mapProvider.selectedDate.toString()),
                 // SizedBox(height: size.width / 15),
-                Center(
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => SelectLocationScreen()));
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width / 2,
-                      height: MediaQuery.of(context).size.height / 20,
-                      decoration: BoxDecoration(
-                        color: kPrimaryGoldColor,
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
-                            "Set Delivery Location",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Icon(
-                            Icons.arrow_forward_rounded,
-                            color: Colors.white,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                )
+                // Center(
+                //   child: InkWell(
+                //     onTap: () {
+                //       Navigator.push(
+                //           context,
+                //           MaterialPageRoute(
+                //               builder: (_) => SelectLocationScreen()));
+                //     },
+                //     child: Container(
+                //       width: MediaQuery.of(context).size.width / 2,
+                //       height: MediaQuery.of(context).size.height / 20,
+                //       decoration: BoxDecoration(
+                //         color: kPrimaryGoldColor,
+                //         border: Border.all(),
+                //         borderRadius: BorderRadius.circular(15),
+                //       ),
+                //       child: Row(
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         children: const [
+                //           Text(
+                //             "Set Delivery Location",
+                //             style: TextStyle(color: Colors.white, fontSize: 20),
+                //           ),
+                //           SizedBox(
+                //             width: 10,
+                //           ),
+                //           Icon(
+                //             Icons.arrow_forward_rounded,
+                //             color: Colors.white,
+                //           )
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // )
               ],
             ),
           ),
@@ -262,12 +261,15 @@ class _BuildCheckBoxState extends State<BuildCheckBox> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text(
-          "Please tick if this parcel is considered as fragile",
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.black54,
-            // fontWeight: FontWeight.w400,
+        const Expanded(
+          child: AutoSizeText(
+            "Please tick if this parcel is considered as fragile",
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.black54,
+              // fontWeight: FontWeight.w400,
+            ),
+            maxLines: 1,
           ),
         ),
         Checkbox(
@@ -291,6 +293,9 @@ class BuildItemSize extends StatefulWidget {
 }
 
 class _BuildItemSizeState extends State<BuildItemSize> {
+  List size = ["small", "medium", "large", "multiple"];
+
+  String? select;
   bool isSmall = true;
   bool isMedium = true;
   bool isLarge = true;
@@ -299,135 +304,155 @@ class _BuildItemSizeState extends State<BuildItemSize> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: getHeight(150, context),
+      height: getHeight(100, context),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                isSmall = !isSmall;
-              });
-            },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: isSmall ? kVistaWhite : kPrimaryGoldColor,
-                elevation: 10),
-            child: SizedBox(
-              height: getHeight(100, context),
-              width: getWidth(80, context),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
-                  Icon(
-                    FontAwesomeIcons.boxOpen,
-                    size: 20,
-                    color: Colors.black,
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "Small",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  isSmall = !isSmall;
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: isSmall ? kVistaWhite : kPrimaryGoldColor,
+                  elevation: 10),
+              child: SizedBox(
+                height: getHeight(70, context),
+                width: getWidth(60, context),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      FontAwesomeIcons.boxOpen,
+                      size: 15,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    AutoSizeText(
+                      "Small",
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                isMedium = !isMedium;
-              });
-            },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: isMedium ? kVistaWhite : kPrimaryGoldColor,
-                elevation: 10),
-            child: SizedBox(
-              height: getHeight(100, context),
-              width: getWidth(80, context),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
-                  Icon(
-                    FontAwesomeIcons.boxOpen,
-                    size: 30,
-                    color: Colors.black,
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "Medium",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
+          SizedBox(
+            width: 15.appWidth(context),
+          ),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  isMedium = !isMedium;
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: isMedium ? kVistaWhite : kPrimaryGoldColor,
+                  elevation: 10),
+              child: SizedBox(
+                height: getHeight(70, context),
+                width: getWidth(80, context),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      FontAwesomeIcons.boxOpen,
+                      size: 15,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    AutoSizeText(
+                      "Medium",
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                isLarge = !isLarge;
-              });
-            },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: isLarge ? kVistaWhite : kPrimaryGoldColor,
-                elevation: 10),
-            child: SizedBox(
-              height: getHeight(100, context),
-              width: getWidth(80, context),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
-                  Icon(
-                    FontAwesomeIcons.boxOpen,
-                    size: 40,
-                    color: Colors.black,
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "Large",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
+          SizedBox(
+            width: 15.appWidth(context),
+          ),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  isLarge = !isLarge;
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: isLarge ? kVistaWhite : kPrimaryGoldColor,
+                  elevation: 10),
+              child: SizedBox(
+                height: getHeight(70, context),
+                width: getWidth(70, context),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      FontAwesomeIcons.boxOpen,
+                      size: 15,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    AutoSizeText(
+                      "Large",
+                      maxLines: 1,
+                      style: TextStyle(fontSize: 6, color: Colors.black),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                isMultiple = !isMultiple;
-              });
-            },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: isMultiple ? kVistaWhite : kPrimaryGoldColor,
-                elevation: 10),
-            child: SizedBox(
-              height: getHeight(100, context),
-              width: getWidth(80, context),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
-                  Icon(
-                    FontAwesomeIcons.boxesStacked,
-                    size: 30,
-                    color: Colors.black,
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "Multiple",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
+          SizedBox(
+            width: 15.appWidth(context),
+          ),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  isMultiple = !isMultiple;
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: isMultiple ? kVistaWhite : kPrimaryGoldColor,
+                  elevation: 10),
+              child: SizedBox(
+                height: getHeight(70, context),
+                width: getWidth(80, context),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      FontAwesomeIcons.boxesStacked,
+                      size: 15,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    AutoSizeText(
+                      "Multiple",
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -458,11 +483,25 @@ class _PayerRadioButtonState extends State<PayerRadioButton> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        buildPayerOption(0, "Sender Pays"),
-        const SizedBox(
-          width: 20,
+        const Expanded(
+          child: AutoSizeText(
+            "Delivery Options.",
+            maxLines: 1,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
-        buildPayerOption(1, "Receiver Pays")
+        SizedBox(
+          width: 10.appWidth(context),
+        ),
+        Expanded(child: buildPayerOption(0, "Sender Pays")),
+        SizedBox(
+          width: 10.appWidth(context),
+        ),
+        Expanded(child: buildPayerOption(1, "Receiver Pays"))
       ],
     );
   }
@@ -472,8 +511,8 @@ class _PayerRadioButtonState extends State<PayerRadioButton> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Container(
-          width: MediaQuery.of(context).size.width / 18,
-          height: MediaQuery.of(context).size.width / 18,
+          width: 20,
+          height: 20,
           decoration: BoxDecoration(
               color:
                   select == payer[btnValue] ? kPrimaryGoldColor : Colors.white,
@@ -498,13 +537,16 @@ class _PayerRadioButtonState extends State<PayerRadioButton> {
           ),
         ),
         const SizedBox(
-          width: 10,
+          width: 5,
         ),
-        Text(title,
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Colors.black,
-            ))
+        Expanded(
+          child: AutoSizeText(title,
+              maxLines: 1,
+              style: const TextStyle(
+                fontWeight: FontWeight.w300,
+                color: Colors.black,
+              )),
+        )
       ],
     );
   }

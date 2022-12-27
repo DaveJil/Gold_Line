@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gold_line/screens/authentication/sign_in.dart';
@@ -155,9 +156,14 @@ class SignUpScreenState extends State<SignUpScreen> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (_) => SignInScreen()));
                   },
-                  child: const Text(
+                  child: AutoSizeText(
                     'Already have an account? Login',
-                    style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
+                    style: TextStyle(
+                      color: kPrimaryGoldColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w300,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -174,7 +180,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                       await userProvider.signUp(context);
                       changeScreenReplacement(context, MapWidget());
                     },
-                    child: const Text(
+                    child: AutoSizeText(
                       'Sign Up',
                       style: TextStyle(color: Colors.white, fontSize: 25),
                     ),

@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/screens/splashscreen.dart';
+import 'package:gold_line/utility/services/push_notifications.dart';
 import 'package:provider/provider.dart';
 
 import 'utility/providers/user_provider.dart';
 
-class GoldLine extends StatelessWidget {
+class GoldLine extends StatefulWidget {
   const GoldLine({super.key});
+
+  @override
+  State<GoldLine> createState() => _GoldLineState();
+}
+
+class _GoldLineState extends State<GoldLine> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    pushNotification.initNotification();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -6,10 +6,26 @@ import '../../../utility/helpers/constants.dart';
 import '../../../utility/providers/map_provider.dart';
 import '../../../utility/services/calls_and_sms.dart';
 
-class DriverFoundWidget extends StatelessWidget {
+class DriverFoundWidget extends StatefulWidget {
+  DriverFoundWidget({Key? key}) : super(key: key);
+
+  @override
+  State<DriverFoundWidget> createState() => _DriverFoundWidgetState();
+}
+
+class _DriverFoundWidgetState extends State<DriverFoundWidget> {
   final CallsAndMessagesService? _service = CallsAndMessagesService();
 
-  DriverFoundWidget({Key? key}) : super(key: key);
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      MapProvider mapProvider =
+          Provider.of<MapProvider>(context, listen: false);
+      mapProvider.getRiderDetails();
+    });
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,31 +90,40 @@ class DriverFoundWidget extends StatelessWidget {
                       RichText(
                           text: TextSpan(children: [
                         TextSpan(
-                            // text: mapProvider.driverModel!.first_name! + "\n",
-                            text: "Rider Name" + "\n",
+                            text: mapProvider.driverName! + "\n",
                             style: const TextStyle(
                                 fontSize: 22, fontWeight: FontWeight.bold)),
                       ], style: const TextStyle(color: Colors.black))),
                     ],
                   ),
                   subtitle: ElevatedButton(
-                      style: TextButton.styleFrom(
-                        primary: Colors.grey.withOpacity(0.5),
-                      ),
-                      onPressed: null,
-                      child: Text(
-                        // mapProvider.driverModel!.plate!,
-                        "Rider No: 1234",
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 22),
-                      )),
+                    style: TextButton.styleFrom(
+                      primary: Colors.grey.withOpacity(0.5),
+                    ),
+                    onPressed: null,
+                    child: RichText(
+                      text: TextSpan(
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 16),
+                          children: [
+                            TextSpan(text: "Rider Plate No:"),
+                            TextSpan(text: mapProvider.driverPlate ?? "N?A")
+                          ]),
+                    ),
+                  ),
+
+                  // mapProvider.driverModel!.plate!,
+                  //  + {mapProvider.driverPlate ?? "dr"} ,
+                  // style:
+                  //     const TextStyle(color: Colors.white, fontSize: 22),
                   trailing: Container(
                       decoration: BoxDecoration(
                           color: Colors.green.withOpacity(0.3),
                           borderRadius: BorderRadius.circular(20)),
                       child: IconButton(
                         onPressed: () {
-                          _service!.call("07014261561");
+                          _service!
+                              .call(mapProvider.driverPhone ?? "08138969994");
                         },
                         icon: const Icon(
                           Icons.call,

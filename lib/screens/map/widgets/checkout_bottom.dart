@@ -28,10 +28,11 @@ class SummaryWidget extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(1.0),
             child: Container(
-              decoration: BoxDecoration(color: Colors.white,
-//                        borderRadius: BorderRadius.only(
-//                            topLeft: Radius.circular(20),
-//                            topRight: Radius.circular(20)),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
                   boxShadow: [
                     BoxShadow(
                         color: Colors.grey.withOpacity(.8),
@@ -46,49 +47,44 @@ class SummaryWidget extends StatelessWidget {
                     const SizedBox(
                       height: 12,
                     ),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: Icon(
-                              Icons.arrow_back,
-                              color: kPrimaryGoldColor,
-                              size: getHeight(24, context),
-                            ),
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(
+                            Icons.arrow_back,
+                            color: kPrimaryGoldColor,
+                            size: getHeight(24, context),
                           ),
-                          AutoSizeText(
-                            "Summary",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 28,
-                              color: kPrimaryGoldColor,
-                            ),
+                        ),
+                        Text(
+                          "Summary",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 26,
+                            color: kPrimaryGoldColor,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: 20,
                     ),
                     Row(
                       children: [
-                        SizedBox(
-                          width: 20,
-                        ),
                         Icon(
                           Icons.send_and_archive,
                           color: Colors.grey,
                           size: getHeight(24, context),
                         ),
                         SizedBox(
-                          width: 20,
+                          width: 10,
                         ),
                         AutoSizeText(
                           "Sender Details",
-                          style: TextStyle(fontSize: 22),
+                          style: TextStyle(fontSize: 20),
                         ),
                       ],
                     ),
@@ -100,26 +96,20 @@ class SummaryWidget extends StatelessWidget {
                 ${senderPhone.text}            
                            ''',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 16,
                         )),
                     SizedBox(
-                      height: 10,
-                    ),
-                    const SizedBox(
-                      height: 10,
+                      height: 15,
                     ),
                     Row(
                       children: [
-                        SizedBox(
-                          width: 20,
-                        ),
                         Icon(
                           Icons.call_received,
                           color: Colors.grey,
                           size: getHeight(24, context),
                         ),
                         SizedBox(
-                          width: 20,
+                          width: 10,
                         ),
                         const AutoSizeText(
                           "Receiver Details",
@@ -133,15 +123,12 @@ class SummaryWidget extends StatelessWidget {
                     AutoSizeText('''
                 ${receiverName.text}
                 ${receiverPhone.text}            
-                 ''', style: TextStyle(fontSize: 20)),
+                 ''', style: TextStyle(fontSize: 16)),
                     SizedBox(
                       height: 10,
                     ),
                     Row(
                       children: [
-                        SizedBox(
-                          width: 20,
-                        ),
                         Icon(
                           Icons.gif_box_rounded,
                           color: Colors.grey,
@@ -157,12 +144,15 @@ class SummaryWidget extends StatelessWidget {
                     const SizedBox(
                       height: 7,
                     ),
-                    AutoSizeText('''
+                    AutoSizeText(
+                      '''
              Delivery Status: Pending
              PickUp Address: ${pickUpLocation.text}  
              Delivery Address: ${dropOffLocation.text}  
              Sender Pays
-             ''', style: TextStyle(fontSize: 20)),
+             ''',
+                      style: TextStyle(fontSize: 16),
+                    ),
                     const SizedBox(
                       height: 7,
                     ),
@@ -224,7 +214,7 @@ class SummaryWidget extends StatelessWidget {
                         padding: const EdgeInsets.all(20.0),
                         child: CustomButton(
                           height: 60,
-                          fontSize: 22,
+                          fontSize: 18,
                           onPressed: () async {
                             mapProvider.changeWidgetShowed(
                                 showWidget: Show.FLUTTERWAVE_PAYMENT);

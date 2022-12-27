@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gold_line/screens/authentication/proceed_login.dart';
@@ -129,7 +130,7 @@ class ForgotPassState extends State<ForgotPass> {
                       await userProvider.forgotPassword(context);
                       changeScreenReplacement(context, ProceedLogin());
                     },
-                    child: const Text(
+                    child: const AutoSizeText(
                       'Forgot Password',
                       style: TextStyle(color: Colors.white, fontSize: 22),
                     ),

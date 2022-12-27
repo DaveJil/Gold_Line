@@ -195,7 +195,6 @@ class MainMenu extends StatelessWidget {
               height: getHeight(12, context),
             ),
             CustomButton(
-              width: getWidth(170, context),
               onPressed: () {
                 userProvider.signOut(context);
               },
