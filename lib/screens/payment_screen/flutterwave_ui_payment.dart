@@ -220,8 +220,8 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
           backgroundColor: Colors.transparent,
           content: AwesomeSnackbarContent(
             title: "Transaction unsuccessful",
-            message: "Your rider would be at pickup location in a moment",
-            contentType: ContentType.success,
+            message: "Your transaction failed",
+            contentType: ContentType.failure,
           ),
         );
         ScaffoldMessenger.of(context)
@@ -231,6 +231,9 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
           content: Text("Transaction Failed Try Again"),
           backgroundColor: Colors.redAccent,
         ));
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const MapWidget()),
+            (Route<dynamic> route) => false);
       }
     }
   }

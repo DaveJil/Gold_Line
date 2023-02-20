@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,25 +12,48 @@ import '../api.dart';
 class GetListProvider extends ChangeNotifier {
   List<DeliveryModel> _deliveryList = [];
   List<DeliveryModel> get deliveryList => _deliveryList;
-  DeliveryModel? deliveryModel;
 
-  Future<List<DeliveryModel>?> getDeliveryList() async {
+  Future getDeliveryList() async {
+    var response = await CallApi().getData('user/deliveries');
+    print(response);
+    final result = response["data"];
+    final data = result.map((e) => DeliveryModel.fromJson(e)).toList();
+    print("dat = $data");
+    return data;
+  }
+
+  Future checkPendingDelivery() async {
     try {
-      var response = await CallApi().getData('delivery');
-      if (response.statusCode == 200) {
-        var res = json.decode(response.body);
-        res.forEach((delivery) {
-          DeliveryModel model = DeliveryModel.fromJson(delivery);
-          _deliveryList.add(model);
-        });
-        return _deliveryList;
-      }
-    } catch (e) {
-      const SnackBar(content: AlertDialog());
-      print(e);
+      final response =
+          await CallApi().getData('user/deliveries?status=accepted');
+      print(response);
+      final data = response['data'];
+      print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
     }
-    notifyListeners();
-    return null;
+  }
+
+  Future checkCompletedDelivery() async {
+    try {
+      final response =
+          await CallApi().getData('users/deliveries?status=completed');
+      print(response);
+      final data = response['data'];
+      print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
   }
 
   List<TransactionModel> _transactionList = [];

@@ -9,6 +9,7 @@ import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../models/user_profile/user_profile.dart';
+import '../../models/user_profile/get_data_model.dart';
 import '../../screens/map/map_widget.dart';
 import '../api.dart';
 import '../services/user_services.dart';
@@ -24,9 +25,10 @@ class UserProvider with ChangeNotifier {
   final UserServices _services = UserServices();
   Status status = Status.Uninitialized;
   UserServices _userServices = UserServices();
-  UserProfile? _userModel;
-  UserProfile? _userProfile;
+  UserProfile? userProfile;
+  GetData? userData;
   String? deviceToken;
+  String? referralId;
   FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
   TextEditingController email = TextEditingController();
@@ -42,10 +44,9 @@ class UserProvider with ChangeNotifier {
   TextEditingController userLGA = TextEditingController();
   TextEditingController userState = TextEditingController();
 
-//  getter
-  UserProfile get userModel => _userModel!;
-  // Status get status => _status;
-  UserProfile get userProfile => _userProfile!;
+  String? firstNamePref;
+  String? lastNamePref;
+  String? emailPref;
 
   // public variables
   final formkey = GlobalKey<FormState>();
@@ -85,7 +86,13 @@ class UserProvider with ChangeNotifier {
       if (code == 'success') {
         String token = response['token'];
         print(token);
-        pref.setString('token', response['token']);
+        firstNamePref = response['data']['profile']['first_name'];
+        lastNamePref = response['data']['profile']['last_name'];
+        emailPref = response['data']['email'];
+        referralId = response['data']['uuid'];
+
+        pref.setString('token', token);
+
         pref.setBool(LOGGED_IN, true);
 
         CustomDisplayWidget.displayAwesomeSuccessSnackBar(
@@ -94,20 +101,14 @@ class UserProvider with ChangeNotifier {
         String? deviceToken = await FirebaseMessaging.instance.getToken();
         print(deviceToken);
 
-        var fcmToken = {
-          'fcm_token': deviceToken,
-        };
-        var fcmResponse = await CallApi().postData(fcmToken, "profile/");
         changeScreenReplacement(context, const MapWidget());
-
-        String message = fcmResponse["code"];
-        print(message);
       } else {
         String message = response['message'];
 
         print(message);
         CustomDisplayWidget.displayAwesomeFailureSnackBar(
             context, message, message);
+        notifyListeners();
         return message;
       }
     } on SocketException {
@@ -135,26 +136,25 @@ class UserProvider with ChangeNotifier {
         String token = response['token'];
         print(token);
         pref.setString('token', response['token']);
+        firstNamePref = response['data']['profile']['first_name'];
+        lastNamePref = response['data']['profile']['last_name'];
+        emailPref = response['data']['email'];
+        referralId = response['data']['uuid'];
+
+        pref.setString('token', token);
         pref.setBool(LOGGED_IN, true);
 
         CustomDisplayWidget.displayAwesomeSuccessSnackBar(context, "Hey there!",
             "Welcome to GoldLine. Account Created Successfully");
 
-        await FirebaseMessaging.instance.requestPermission();
-        String? deviceToken = await FirebaseMessaging.instance.getToken();
-        var fcmToken = {
-          'fcm_token': deviceToken,
-        };
-        var fcmResponse = await CallApi().postData(fcmToken, "profile/");
         changeScreenReplacement(context, const MapWidget());
-
-        String message = fcmResponse["code"];
-        print(message);
       } else {
         String message = response['message'];
         print(message);
         CustomDisplayWidget.displayAwesomeFailureSnackBar(
             context, message, message);
+        notifyListeners();
+
         return message;
       }
     } on SocketException {
@@ -229,6 +229,35 @@ class UserProvider with ChangeNotifier {
     }
   }
 
+  Future<GetData?> getUserData(BuildContext context) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    try {
+      var response = await CallApi().getData('profile');
+      print(response);
+      userData = GetData.fromJson(response['data']);
+      print(response['data']['email']);
+      print(userData);
+      String code = response['code'];
+      if (code == 'success') {
+        CustomDisplayWidget.displayAwesomeSuccessSnackBar(
+            context, "Congrats", "Profile retrieved successfully");
+        return userData;
+      } else {
+        String message = response['message'];
+
+        print(message);
+        CustomDisplayWidget.displayAwesomeFailureSnackBar(
+            context, message, message);
+      }
+      notifyListeners();
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
   Future signOut(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -243,15 +272,12 @@ class UserProvider with ChangeNotifier {
     return Future.delayed(Duration.zero);
   }
 
-  updateUserData(Map<String, dynamic> values) async {
-    _userServices.updateUserData(values);
-  }
-
   saveDeviceToken() async {
     firebaseMessaging.requestPermission();
     deviceToken = await firebaseMessaging.getToken();
     var response =
         await CallApi().postData({"fcm_token": deviceToken}, "profile");
+    notifyListeners();
     print(response);
   }
 
@@ -265,13 +291,5 @@ class UserProvider with ChangeNotifier {
       status = Status.Authenticated;
     }
     notifyListeners();
-  }
-
-  // load userprofile
-  Future<UserProfile> getProfile(BuildContext context) async {
-    final profile = await _services.getUserProfile(context);
-    _userProfile = profile;
-    notifyListeners();
-    return profile;
   }
 }

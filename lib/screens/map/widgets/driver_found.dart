@@ -177,7 +177,7 @@ class _DriverFoundWidgetState extends State<DriverFoundWidget> {
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
                       TextSpan(
-                          text: "${pickUpLocation.text} \n\n\n",
+                          text: "${pickUpLocationController.text} \n\n\n",
                           style: const TextStyle(
                               fontWeight: FontWeight.w300, fontSize: 16)),
                       const TextSpan(
@@ -185,7 +185,7 @@ class _DriverFoundWidgetState extends State<DriverFoundWidget> {
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
                       TextSpan(
-                          text: "${dropOffLocation.text} \n",
+                          text: "${dropOffLocationController.text} \n",
                           style: const TextStyle(
                               fontWeight: FontWeight.w300, fontSize: 16)),
                     ], style: const TextStyle(color: Colors.black))),

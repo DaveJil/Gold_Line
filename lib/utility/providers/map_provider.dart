@@ -31,7 +31,6 @@ import '../helpers/routing.dart';
 import '../helpers/stars.dart';
 import '../services/calls_and_sms.dart';
 import '../services/delivery_services.dart';
-import '../services/driver_service.dart';
 import '../services/map_request.dart';
 
 enum Show {
@@ -72,19 +71,17 @@ class MapProvider with ChangeNotifier {
   String? pickUpLocationAddress;
   String? dropOffLocationAddress;
 
-  late LatLng? pickUpLatLng;
-  late LatLng? dropOffLatLng;
+  LatLng? pickUpLatLng;
+  LatLng? dropOffLatLng;
 
   FocusNode startFocusNode = FocusNode();
   FocusNode endFocusNode = FocusNode();
-  bool _useCurrentLocationPickUp = false;
-  bool _useCurrentLocationDropOff = false;
 
   compon.GooglePlace googlePlace = compon.GooglePlace(GOOGLE_MAPS_API_KEY);
   List<compon.AutocompletePrediction> predictions = [];
 
   Position? position;
-  late bool isLoading = false;
+  bool isLoading = false;
   LatLng? center;
   late LatLng? lastPosition = center;
 
@@ -108,18 +105,15 @@ class MapProvider with ChangeNotifier {
   GoogleMapController? get mapController => _mapController;
   GoogleMapsServices _googleMapsServices = GoogleMapsServices();
 
-  BitmapDescriptor locationPin = BitmapDescriptor.defaultMarker;
-  BitmapDescriptor driverPin = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor? locationPin;
+  BitmapDescriptor? driverPin;
   UserProfile? user;
 
-  DriverService _driverService = DriverService();
   Show show = Show.HOME;
 
   DriverProfile? driverProfile;
   RouteModel? routeModel;
 
-  TextEditingController pickupLocationController = TextEditingController();
-  TextEditingController dropOffLocationController = TextEditingController();
   final Completer<GoogleMapController> _controller = Completer();
 
   //  Driver request related variables
@@ -136,6 +130,9 @@ class MapProvider with ChangeNotifier {
 
   String? requestedDestination;
   int? deliveryId;
+  String? userAddressText;
+  String? whoFuckingPays;
+  String? rideCancelReason;
 
   //  this variable will listen to the status of the ride request
   StreamSubscription<AsyncSnapshot>? requestStream;
@@ -168,6 +165,7 @@ class MapProvider with ChangeNotifier {
 
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
+  TextEditingController cancelDescription = TextEditingController();
 
   FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
@@ -213,22 +211,29 @@ class MapProvider with ChangeNotifier {
 
     List<Placemark> placemark =
         await placemarkFromCoordinates(position.latitude, position.longitude);
+    print(placemark);
+    Placemark place = placemark[0];
+    userAddressText =
+        '${place.street}, ${place.subLocality}, ${place.locality}';
 
     if (prefs.getString(COUNTRY) == null) {
       String country = placemark[0].isoCountryCode!.toLowerCase();
       await prefs.setString(COUNTRY, "ng");
     }
+    _addLocationMarker(center!, "100km");
+    print("marker = $markers");
 
     notifyListeners();
 
     return center;
   }
 
-  Future<String> _getAddressFromCoordinates({required LatLng point}) async {
+  Future<String> getAddressFromCoordinates({required LatLng point}) async {
     List<Placemark> addresses =
         await placemarkFromCoordinates(point.latitude, point.longitude);
+
     String address =
-        "${addresses.first.administrativeArea}, ${addresses.first.street}";
+        "${addresses.first.administrativeArea}, ${addresses.first.street}, ${addresses.first.locality}";
     return address;
   }
 
@@ -252,9 +257,9 @@ class MapProvider with ChangeNotifier {
           _markers.remove(element);
           pickupCoordinates = position.target;
           addPickupMarker(position.target);
-          // List<Placemark> placemark = await placemarkFromCoordinates(
-          //     position.target.latitude, position.target.longitude);
-          // pickupLocationController.text = placemark[0].name!;
+          List<Placemark> placemark = await placemarkFromCoordinates(
+              position.target.latitude, position.target.longitude);
+          pickUpLocationController.text = placemark[0].name!;
           notifyListeners();
         }
       });
@@ -265,6 +270,14 @@ class MapProvider with ChangeNotifier {
   _animateCamera({required LatLng point}) async {
     await _mapController!.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: point, tilt: 15, zoom: 19)));
+  }
+
+  _setCustomMapPin() async {
+    driverPin = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(), 'assets/markers/bike.png');
+
+    locationPin = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(), 'assets/markers/user.png');
   }
 
   Future sendRequest({LatLng? origin, LatLng? destination}) async {
@@ -310,6 +323,8 @@ class MapProvider with ChangeNotifier {
   }
 
   createRoute({Color? color}) async {
+    print(pickUpLatLng!);
+    print(dropOffLatLng!);
     clearPoly();
     var uuid = const Uuid();
     String polyId = uuid.v1();
@@ -329,16 +344,18 @@ class MapProvider with ChangeNotifier {
       notifyListeners();
     }
     addPolyLine(polylineCoordinates);
+    _poly = Set<Polyline>.of(polylines.values);
+
     notifyListeners();
   }
 
   Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
 
   addPolyLine(List<LatLng> polylineCoordinates) {
-    PolylineId id = PolylineId("poly");
+    PolylineId id = const PolylineId("poly");
     Polyline polyline = Polyline(
       polylineId: id,
-      color: Colors.redAccent,
+      color: Colors.green,
       points: polylineCoordinates,
       width: 8,
     );
@@ -363,7 +380,7 @@ class MapProvider with ChangeNotifier {
         anchor: const Offset(0, 0.85),
         infoWindow: InfoWindow(
             title: dropOffLocationController.text, snippet: distance),
-        icon: locationPin));
+        icon: locationPin!));
     notifyListeners();
   }
 
@@ -375,7 +392,7 @@ class MapProvider with ChangeNotifier {
         anchor: const Offset(0, 0.85),
         zIndex: 3,
         infoWindow: const InfoWindow(title: "Pickup", snippet: "location"),
-        icon: locationPin));
+        icon: locationPin!));
     notifyListeners();
   }
 
@@ -391,7 +408,7 @@ class MapProvider with ChangeNotifier {
         zIndex: 2,
         flat: true,
         anchor: const Offset(1, 1),
-        icon: driverPin));
+        icon: driverPin!));
     notifyListeners();
   }
 
@@ -427,14 +444,6 @@ class MapProvider with ChangeNotifier {
   //       driverId: driverProfile!.id);
   // }
 
-  _setCustomMapPin() async {
-    driverPin = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(devicePixelRatio: 2.5), 'assets/pins/taxi.png');
-
-    locationPin = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(devicePixelRatio: 2.5), 'assets/pins/pin.png');
-  }
-
   clearMarkers() {
     _markers.clear();
     notifyListeners();
@@ -452,9 +461,36 @@ class MapProvider with ChangeNotifier {
     });
   }
 
+  Future cancelDelivery(BuildContext context, String deliveryIde) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    Map<String, dynamic> request = {
+      'delivery_id': deliveryIde,
+      'reason_option': rideCancelReason ?? "other",
+      'reason_description': rideCancelReason ?? cancelDescription.text
+    };
+
+    try {
+      var response = await CallApi().postData(request, 'user/delivery/cancel');
+      print(response);
+      String code = response['code'];
+      if (code == "success") {
+        changeScreenReplacement(context, MapWidget());
+      }
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
   clearPoly() {
     _poly.clear();
     notifyListeners();
+  }
+
+  navigateToHomeWidget() {
+    changeWidgetShowed(showWidget: Show.HOME);
   }
 
   changeRequestedDestination(
@@ -463,69 +499,6 @@ class MapProvider with ChangeNotifier {
     requestedDestinationLat = lat;
     requestedDestinationLng = lng;
     notifyListeners();
-  }
-
-  listenToRequest(
-      {String? id, BuildContext? context, Map<String, dynamic>? json}) async {
-    // requestStream = _requestServices!.requestStream().listen((querySnapshot) {
-    //   querySnapshot.docChanges.forEach((document) async {
-    //     if (document.doc.data()!['id'] == id) {
-    //       ///TOFIX
-    //       rideRequestModel = RideRequestModel.fromJson(json!);
-    //       notifyListeners();
-    //       switch (document.doc.data()!['status']) {
-    //         case CANCELLED:
-    //           break;
-    //         case ACCEPTED:
-    //           if (lookingForDriver) Navigator.pop(context!);
-    //           lookingForDriver = false;
-    //           DriverProfile = await _driverService
-    //               .getDriverById(document.doc.data()!['driverId']);
-    //           periodicTimer!.cancel();
-    //           clearPoly();
-    //           _stopListeningToDriversStream();
-    //           _listenToDriver(json);
-    //           show = Show.DRIVER_FOUND;
-    //           notifyListeners();
-    //
-    //           // showDriverBottomSheet(context!);
-    //           break;
-    //         case EXPIRED:
-    //           showRequestExpiredAlert(context!);
-    //           break;
-    //         default:
-    //           break;
-    //       }
-    //     }
-    //   });
-    // });
-  }
-
-  showRequestCancelledSnackBar(BuildContext context) {}
-
-  showRequestExpiredAlert(BuildContext context) {
-    if (alertsOnUi) Navigator.pop(context);
-
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)), //this right here
-            child: SizedBox(
-              height: 200,
-              child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text("DRIVERS NOT FOUND! \n TRY REQUESTING AGAIN")
-                    ],
-                  )),
-            ),
-          );
-        });
   }
 
   showDriverBottomSheet(BuildContext context) {
@@ -651,14 +624,17 @@ class MapProvider with ChangeNotifier {
       "status": 'pending',
       "city": city.text,
       "state": state.text,
+      "payment_by": whoFuckingPays.toString(),
       "pickup_time": selectedDate.toString() + selectedTime.toString(),
       // "distance": routeModel!.distance,
       // "duration": routeModel!.timeNeeded,
-      "pickup_address": pickUpLocation.text,
-      "dropoff_address": dropOffLocation.text,
-      "payment_method": "card"
+      "pickup_address": pickUpLocationController.text,
+      "dropoff_address": dropOffLocationController.text,
+      "payment_method": "card",
+      "description": description.text
     };
     SharedPreferences pref = await SharedPreferences.getInstance();
+    isLoading = true;
 
     try {
       final response = await CallApi().postData(values, 'user/delivery/new');
@@ -666,7 +642,6 @@ class MapProvider with ChangeNotifier {
       final body = response;
       print('delivery sent');
       deliveryId = body['data']['id'];
-      notifyListeners();
       print(deliveryId);
       pref.setInt('deliveryId', deliveryId!);
       if (response['success'] == "success") {
@@ -675,6 +650,7 @@ class MapProvider with ChangeNotifier {
         String deliveryId = response['id'];
         print(deliveryId);
         pref.setString('deliveryId', response['id']);
+        createRoute();
 
         print(body);
         if ((body as Map<String, dynamic>).containsKey('id')) {
@@ -684,11 +660,15 @@ class MapProvider with ChangeNotifier {
           print('no token added');
         }
       }
+      notifyListeners();
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {
       throw Exception(err.toString());
     }
+    isLoading = false;
+
+    notifyListeners();
   }
 
   Future updatePaymentMethod() async {
@@ -697,7 +677,7 @@ class MapProvider with ChangeNotifier {
       "payment_method": "cash"
     };
     SharedPreferences pref = await SharedPreferences.getInstance();
-
+    isLoading = true;
     try {
       final response = await CallApi().postData(values, 'user/delivery/update');
       print(response);
@@ -707,6 +687,8 @@ class MapProvider with ChangeNotifier {
         String deliveryId = response['id'];
         print(deliveryId);
         pref.setString('deliveryId', response['id']);
+        isLoading = false;
+        notifyListeners();
 
         print(body);
         if ((body as Map<String, dynamic>).containsKey('id')) {
@@ -726,7 +708,6 @@ class MapProvider with ChangeNotifier {
   Future submitCardDelivery() async {
     Map<String, dynamic> values = {"payment_status": "paid"};
     SharedPreferences pref = await SharedPreferences.getInstance();
-
     try {
       final response =
           await CallApi().postData(values, 'user/delivery/submit/$deliveryId');
@@ -806,11 +787,6 @@ class MapProvider with ChangeNotifier {
     }
   }
 
-  _stopListeningToDriversStream() {
-    _clearDriverMarkers();
-    allDriversStream!.cancel();
-  }
-
 //  Timer counter for driver request
   percentageCounter({String? requestId, BuildContext? context}) {
     lookingForDriver = true;
@@ -847,7 +823,7 @@ class MapProvider with ChangeNotifier {
   }
 
   changePickupLocationAddress({String? address}) {
-    pickupLocationController.text = address!;
+    pickUpLocationController.text = address!;
     if (pickupCoordinates != null) {
       center = pickupCoordinates;
     }
@@ -956,13 +932,13 @@ class MapProvider with ChangeNotifier {
         position: markerPosition,
         zIndex: 10,
         infoWindow: InfoWindow(title: title),
-        icon: locationPin));
+        icon: locationPin!));
     notifyListeners();
   }
 
   _changeAddress({required String address}) async {
     if (_isPickupSet == false) {
-      pickupLocationController.text = address;
+      pickUpLocationController.text = address;
     } else {
       dropOffLocationController.text = address;
     }

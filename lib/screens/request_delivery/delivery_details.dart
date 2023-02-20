@@ -8,7 +8,6 @@ import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:gold_line/utility/providers/map_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utility/helpers/constants.dart';
 import '../../utility/helpers/delivery_input.dart';
@@ -194,49 +193,6 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                       },
                       text: "Set Delivery Location"),
                 )
-                // buildTimeSelector(
-                //     mapProvider.selectDate(context),
-                //     mapProvider.selectTime(context),
-                //     mapProvider.dateController,
-                //     mapProvider.timeController,
-                //     mapProvider.selectedDate.toString(),
-                //     mapProvider.selectedDate.toString()),
-                // SizedBox(height: size.width / 15),
-                // Center(
-                //   child: InkWell(
-                //     onTap: () {
-                //       Navigator.push(
-                //           context,
-                //           MaterialPageRoute(
-                //               builder: (_) => SelectLocationScreen()));
-                //     },
-                //     child: Container(
-                //       width: MediaQuery.of(context).size.width / 2,
-                //       height: MediaQuery.of(context).size.height / 20,
-                //       decoration: BoxDecoration(
-                //         color: kPrimaryGoldColor,
-                //         border: Border.all(),
-                //         borderRadius: BorderRadius.circular(15),
-                //       ),
-                //       child: Row(
-                //         mainAxisAlignment: MainAxisAlignment.center,
-                //         children: const [
-                //           Text(
-                //             "Set Delivery Location",
-                //             style: TextStyle(color: Colors.white, fontSize: 20),
-                //           ),
-                //           SizedBox(
-                //             width: 10,
-                //           ),
-                //           Icon(
-                //             Icons.arrow_forward_rounded,
-                //             color: Colors.white,
-                //           )
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // )
               ],
             ),
           ),
@@ -475,7 +431,7 @@ class _PayerRadioButtonState extends State<PayerRadioButton> {
     "receiver",
   ];
 
-  String? select;
+  // String? select;
   // int btnValue;
   // String title;
   @override
@@ -507,6 +463,8 @@ class _PayerRadioButtonState extends State<PayerRadioButton> {
   }
 
   Widget buildPayerOption(int btnValue, String title) {
+    final mapProvider = Provider.of<MapProvider>(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -514,24 +472,27 @@ class _PayerRadioButtonState extends State<PayerRadioButton> {
           width: 20,
           height: 20,
           decoration: BoxDecoration(
-              color:
-                  select == payer[btnValue] ? kPrimaryGoldColor : Colors.white,
+              color: mapProvider.whoFuckingPays == payer[btnValue]
+                  ? kPrimaryGoldColor
+                  : Colors.white,
               border: Border.all(
                 color: kPrimaryGoldColor,
               ),
               borderRadius: const BorderRadius.all(Radius.circular(3))),
           child: Radio<String>(
             fillColor: MaterialStateColor.resolveWith((states) =>
-                select == payer[btnValue] ? kPrimaryGoldColor : Colors.white),
+                mapProvider.whoFuckingPays == payer[btnValue]
+                    ? kPrimaryGoldColor
+                    : Colors.white),
             activeColor: Theme.of(context).primaryColor,
             value: payer[btnValue],
-            groupValue: select,
+            groupValue: mapProvider.whoFuckingPays,
             onChanged: (value) async {
-              SharedPreferences pref = await SharedPreferences.getInstance();
+              mapProvider.whoFuckingPays = value;
+
               setState(() {
                 print(value);
-                select = value;
-                pref.setString('PAYER', select!);
+                mapProvider.whoFuckingPays = value;
               });
             },
           ),
@@ -551,67 +512,3 @@ class _PayerRadioButtonState extends State<PayerRadioButton> {
     );
   }
 }
-//
-// Widget buildTimeSelector(
-//     Function selectDate,
-//     Function selectTime,
-//     TextEditingController dateController,
-//     TextEditingController timeController,
-//     String setDate,
-//     String setTime) {
-//   return Row(
-//     children: [
-//       Column(
-//         children: [
-//           Text("Selcet Date"),
-//           InkWell(
-//             onTap: () async {
-//               await selectDate;
-//             },
-//             child: TextFormField(
-//               style: TextStyle(fontSize: 40),
-//               textAlign: TextAlign.center,
-//               enabled: false,
-//               keyboardType: TextInputType.text,
-//               controller: dateController,
-//               onSaved: (String? val) {
-//                 setDate = val!;
-//               },
-//               decoration: InputDecoration(
-//                   disabledBorder:
-//                       UnderlineInputBorder(borderSide: BorderSide.none),
-//                   // labelText: 'Time',
-//                   contentPadding: EdgeInsets.only(top: 0.0)),
-//             ),
-//           )
-//         ],
-//       ),
-//       Spacer(),
-//       Column(
-//         children: [
-//           Text("Select Time"),
-//           InkWell(
-//             onTap: () async {
-//               await selectTime;
-//             },
-//             child: TextFormField(
-//               style: TextStyle(fontSize: 40),
-//               textAlign: TextAlign.center,
-//               enabled: false,
-//               keyboardType: TextInputType.text,
-//               controller: timeController,
-//               onSaved: (String? val) {
-//                 setTime = val!;
-//               },
-//               decoration: InputDecoration(
-//                   disabledBorder:
-//                       UnderlineInputBorder(borderSide: BorderSide.none),
-//                   // labelText: 'Time',
-//                   contentPadding: EdgeInsets.only(top: 0.0)),
-//             ),
-//           )
-//         ],
-//       )
-//     ],
-//   );
-// }

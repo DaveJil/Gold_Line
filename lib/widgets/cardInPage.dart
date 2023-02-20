@@ -43,7 +43,7 @@ class _CardInPageState extends State<CardInPage> {
                         child: Text(
                           widget.letter,
                           style: TextStyle(
-                            fontSize: 30.0,
+                            fontSize: 15.0,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
                           ),

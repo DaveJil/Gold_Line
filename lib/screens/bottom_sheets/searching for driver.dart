@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:provider/provider.dart';
 
@@ -17,18 +18,31 @@ class SearchingForDriverSheet extends StatefulWidget {
 }
 
 class _SearchingForDriverSheetState extends State<SearchingForDriverSheet> {
+  Timer? _timer;
+
   final CallsAndMessagesService _service = CallsAndMessagesService();
 
   @override
   void initState() {
     // TODO: implement initState
+    //
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   MapProvider mapProvider =
+    //       Provider.of<MapProvider>(context, listen: false);
+    //   mapProvider.checkDeliveryStatus();
+    // });
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      MapProvider mapProvider =
-          Provider.of<MapProvider>(context, listen: false);
-      mapProvider.checkDeliveryStatus();
-    });
+    loadScreen();
     super.initState();
+  }
+
+  void loadScreen() {
+    _timer = Timer(const Duration(seconds: 5), goNext);
+  }
+
+  goNext() {
+    MapProvider mapProvider = Provider.of<MapProvider>(context, listen: false);
+    mapProvider.navigateToHomeWidget();
   }
 
   @override
@@ -36,9 +50,9 @@ class _SearchingForDriverSheetState extends State<SearchingForDriverSheet> {
     MapProvider mapProvider = Provider.of<MapProvider>(context);
 
     return DraggableScrollableSheet(
-        initialChildSize: 0.6,
+        initialChildSize: 0.4,
         minChildSize: 0.4,
-        maxChildSize: 0.8,
+        maxChildSize: 0.5,
         builder: (BuildContext context, myScrollController) {
           return Container(
             decoration: const BoxDecoration(
@@ -77,21 +91,17 @@ class _SearchingForDriverSheetState extends State<SearchingForDriverSheet> {
                   SizedBox(
                     height: 10.appHeight(context),
                   ),
-                  InkWell(
-                    onTap: () {
-                      mapProvider.checkDeliveryStatus();
-                    },
-                    child: const SpinKitDoubleBounce(
-                      color: kPrimaryGoldColor,
-                      size: 300,
-                    ),
+                  SizedBox(
+                    height: 100.appHeight(context),
+                    width: 80.appWidth(context),
+                    child: Image.asset("assets/tick.png"),
                   ),
                   SizedBox(
                     height: 10.appHeight(context),
                   ),
                   Center(
                     child: AutoSizeText(
-                      "Searching for delivery rider",
+                      "A rider would be sent to your pick up Location in an hour",
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                     ),
@@ -127,6 +137,8 @@ class _SearchingForDriverSheetState extends State<SearchingForDriverSheet> {
                   ),
                   AutoSizeText(
                       'Note that Cancellation Prices may apply depending on the circumstances.'),
+                  AutoSizeText(
+                      'Check for delivery status updates on "My Deliveries" option.')
                 ],
               ),
             ),

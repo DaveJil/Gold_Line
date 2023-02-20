@@ -73,7 +73,7 @@ class _UserProfileState extends State<UserProfileScreen> {
                         backgroundColor: Colors.amber,
                         child: IconButton(
                             onPressed: () {},
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.camera_enhance_rounded,
                               color: Colors.white,
                               size: 16,
@@ -97,15 +97,15 @@ class _UserProfileState extends State<UserProfileScreen> {
                   ),
                   Row(
                     children: [
-                      Text(
+                      const Text(
                         "Name",
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text(
                         "${userProvider.firstName.text} ${userProvider.lastName.text}",
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.normal),
                       ),
                     ],
@@ -113,54 +113,54 @@ class _UserProfileState extends State<UserProfileScreen> {
                   SizedBox(
                     height: getHeight(20, context),
                   ),
-                  Text(
+                  const Text(
                     "Gender",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     userProvider.gender.text,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                   SizedBox(
                     height: getHeight(20, context),
                   ),
-                  Text(
+                  const Text(
                     "House Address",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     userProvider.userAddress.text,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                   SizedBox(
                     height: getHeight(20, context),
                   ),
-                  Text(
+                  const Text(
                     "LGA",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     userProvider.userLGA.text,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                   SizedBox(
                     height: getHeight(20, context),
                   ),
-                  Text(
+                  const Text(
                     "State",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     userProvider.userState.text,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                   SizedBox(
                     height: getHeight(50, context),

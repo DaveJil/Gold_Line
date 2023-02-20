@@ -16,6 +16,7 @@ class UserProfile {
   UserProfile({
     this.id,
     this.email,
+    this.uuid,
     this.emailVerifiedAt,
     this.phone,
     this.phoneVerifiedAt,
@@ -29,9 +30,10 @@ class UserProfile {
     this.wallet,
   });
 
-  String? id;
+  int? id;
   String? email;
-  dynamic? emailVerifiedAt;
+  String? uuid;
+  dynamic emailVerifiedAt;
   String? phone;
   DateTime? phoneVerifiedAt;
   dynamic avatar;
@@ -46,6 +48,7 @@ class UserProfile {
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
         id: json["id"],
         email: json["email"],
+        uuid: json["uuid"],
         emailVerifiedAt: json["email_verified_at"],
         phone: json["phone"],
         phoneVerifiedAt: DateTime.parse(json["phone_verified_at"]),

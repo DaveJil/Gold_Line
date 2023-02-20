@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gold_line/screens/bottom_sheets/order_status.dart';
@@ -35,24 +34,14 @@ class _MapWidgetState extends State<MapWidget> {
   var scaffoldState = GlobalKey<ScaffoldState>();
 
   @override
-  void initState() async {
-    NotificationSettings settings =
-        await FirebaseMessaging.instance.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-    // TODO: implement initState
+  void initState() {
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     MapProvider mapProvider = Provider.of<MapProvider>(context);
+    UserProvider userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
       body: SafeArea(
@@ -151,11 +140,12 @@ class _MapWidgetState extends State<MapWidget> {
                                   children: [
                                     Expanded(
                                       child: IconButton(
-                                        onPressed: () {
+                                        onPressed: () async {
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (_) => MainMenu()));
+                                                  builder: (_) =>
+                                                      const MainMenu()));
                                         },
                                         icon: const Icon(
                                           Icons.home_outlined,
@@ -317,17 +307,17 @@ class _MapScreenState extends State<MapScreen> {
         : Stack(
             children: <Widget>[
               GoogleMap(
-                initialCameraPosition:
-                    CameraPosition(target: mapProvider.center!, zoom: 15),
-                onMapCreated: mapProvider.onCreate,
-                myLocationEnabled: true,
-                mapType: MapType.normal,
-                compassEnabled: true,
-                rotateGesturesEnabled: true,
-                markers: mapProvider.markers,
-                onCameraMove: mapProvider.onCameraMove,
-                polylines: mapProvider.poly,
-              ),
+                  initialCameraPosition:
+                      CameraPosition(target: mapProvider.center!, zoom: 15),
+                  onMapCreated: mapProvider.onCreate,
+                  myLocationEnabled: true,
+                  mapType: MapType.normal,
+                  compassEnabled: true,
+                  rotateGesturesEnabled: true,
+                  // markers: mapProvider.markers,
+                  onCameraMove: mapProvider.onCameraMove,
+                  polylines: mapProvider.poly,
+                  markers: mapProvider.markers),
             ],
           );
   }

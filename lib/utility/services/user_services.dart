@@ -86,7 +86,7 @@ class UserServices {
   Future<UserProfile> getUserProfile(BuildContext context) async {
     UserProfile _userProfile = UserProfile();
     try {
-      final response = await CallApi().getData('/profile');
+      final response = await CallApi().getData('profile');
       final data = response['data'];
       UserProfile profile = UserProfile.fromJson(data);
       _userProfile = profile;

@@ -51,7 +51,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.symmetric(horizontal: getWidth(30, context)),
+                      EdgeInsets.symmetric(horizontal: getWidth(20, context)),
                   child: TextFormField(
                     controller: userProvider.firstName,
                     decoration: const InputDecoration(
@@ -71,7 +71,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.symmetric(horizontal: getWidth(30, context)),
+                      EdgeInsets.symmetric(horizontal: getWidth(20, context)),
                   child: TextFormField(
                     controller: userProvider.lastName,
                     decoration: const InputDecoration(
@@ -91,7 +91,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.symmetric(horizontal: getWidth(30, context)),
+                      EdgeInsets.symmetric(horizontal: getWidth(20, context)),
                   child: TextFormField(
                     controller: userProvider.email,
                     validator: (value) {
@@ -112,7 +112,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.symmetric(horizontal: getWidth(30, context)),
+                      EdgeInsets.symmetric(horizontal: getWidth(20, context)),
                   child: TextFormField(
                     controller: userProvider.password,
                     validator: (value) {
@@ -133,7 +133,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.symmetric(horizontal: getWidth(30, context)),
+                      EdgeInsets.symmetric(horizontal: getWidth(20, context)),
                   child: TextFormField(
                     obscureText: true,
                     decoration: const InputDecoration(
@@ -146,6 +146,20 @@ class SignUpScreenState extends State<SignUpScreen> {
                       }
                       return null;
                     },
+                  ),
+                ),
+                SizedBox(
+                  height: getHeight(20, context),
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: getWidth(20, context)),
+                  child: TextFormField(
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Referral Code(Optional)',
+                        hintText: 'Enter referral Code'),
                   ),
                 ),
                 SizedBox(

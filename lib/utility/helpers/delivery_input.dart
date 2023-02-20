@@ -32,10 +32,6 @@ class _CustomDeliveryTextFieldState extends State<CustomDeliveryTextField> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(),
-          color: kTextGrey,
-        ),
         child: Padding(
           padding: EdgeInsets.symmetric(
               horizontal: 10.appWidth(context), vertical: 5.appHeight(context)),
@@ -56,6 +52,12 @@ class _CustomDeliveryTextFieldState extends State<CustomDeliveryTextField> {
                   },
                   validator: widget.validator,
                   decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 3,
+                        color: Colors.black12,
+                      ),
+                    ),
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 5.appWidth(context)),
                     border: InputBorder.none,

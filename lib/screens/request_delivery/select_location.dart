@@ -52,7 +52,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
           child: Column(
             children: [
               TextField(
-                controller: pickUpLocation,
+                controller: pickUpLocationController,
                 autofocus: false,
                 focusNode: mapProvider.startFocusNode,
                 style: TextStyle(fontSize: 24),
@@ -63,23 +63,24 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                     filled: true,
                     fillColor: Colors.grey[200],
                     border: InputBorder.none,
-                    suffixIcon: pickUpLocation.text.isNotEmpty
+                    suffixIcon: pickUpLocationController.text.isNotEmpty
                         ? IconButton(
                             onPressed: () {
                               setState(() {
                                 mapProvider.predictions = [];
-                                pickUpLocation.clear();
+                                pickUpLocationController.clear();
+                                _useCurrentLocationPickUp = false;
                               });
                             },
                             icon: Icon(Icons.clear_outlined),
                           )
                         : null),
-                onChanged: (value) {
+                onChanged: (pickupValue) {
                   if (_debounce?.isActive ?? false) _debounce!.cancel();
                   _debounce = Timer(const Duration(milliseconds: 1000), () {
-                    if (value.isNotEmpty) {
+                    if (pickupValue.isNotEmpty) {
                       //places api
-                      mapProvider.autoCompleteSearch(value);
+                      mapProvider.autoCompleteSearch(pickupValue);
                     } else {
                       //clear out the results
                       setState(() {
@@ -112,6 +113,12 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                       activeColor: kPrimaryGoldColor,
                       onChanged: (bool? value) {
                         setState(() {
+                          mapProvider.predictions = [];
+                          pickUpLocationController.text =
+                              mapProvider.userAddressText!;
+                          mapProvider.pickUpLatLng = LatLng(
+                              mapProvider.center!.latitude,
+                              mapProvider.center!.longitude);
                           _useCurrentLocationPickUp =
                               !_useCurrentLocationPickUp;
                         });
@@ -120,11 +127,9 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
               ),
               SizedBox(height: 30),
               TextField(
-                controller: dropOffLocation,
+                controller: dropOffLocationController,
                 autofocus: false,
                 focusNode: mapProvider.endFocusNode,
-                enabled: pickUpLocation.text.isNotEmpty &&
-                    mapProvider.pickupLocation != null,
                 style: TextStyle(fontSize: 24),
                 decoration: InputDecoration(
                     hintText: 'DropOff Location',
@@ -133,12 +138,13 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                     filled: true,
                     fillColor: Colors.grey[200],
                     border: InputBorder.none,
-                    suffixIcon: dropOffLocation.text.isNotEmpty
+                    suffixIcon: dropOffLocationController.text.isNotEmpty
                         ? IconButton(
                             onPressed: () {
                               setState(() {
                                 mapProvider.predictions = [];
-                                dropOffLocation.clear();
+                                _useCurrentLocationDropOff = false;
+                                dropOffLocationController.clear();
                               });
                             },
                             icon: Icon(Icons.clear_outlined),
@@ -180,58 +186,29 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                             details.result != null &&
                             mounted) {
                           if (mapProvider.startFocusNode.hasFocus) {
-                            mapProvider.setPickCoordinates();
-
-                            double lat =
-                                details.result!.geometry!.location!.lat!;
-                            double lng =
-                                details.result!.geometry!.location!.lng!;
-                            mapProvider.changeRequestedDestination(
-                                reqDestination:
-                                    details.result!.formattedAddress,
-                                lat: lat,
-                                lng: lng);
-                            mapProvider.updateDestination(
-                                destination: details.result!.adrAddress);
-                            LatLng coordinates = LatLng(lat, lng);
-                            mapProvider.setPickCoordinates(
-                                coordinates: coordinates);
-                            mapProvider.changePickupLocationAddress(
-                                address: details.result!.name);
+                            mapProvider.pickupLocation = details.result;
+                            mapProvider.pickUpLatLng = LatLng(
+                                mapProvider
+                                    .pickupLocation!.geometry!.location!.lat!,
+                                mapProvider
+                                    .pickupLocation!.geometry!.location!.lng!);
                             setState(() {
-                              mapProvider.pickupLocation = details.result;
-                              pickUpLocation.text = details.result!.name!;
+                              pickUpLocationController.text =
+                                  details.result!.name!;
                               mapProvider.predictions = [];
                             });
-                          } else {
-                            double lat =
-                                details.result!.geometry!.location!.lat!;
-                            double lng =
-                                details.result!.geometry!.location!.lng!;
-                            mapProvider.changeRequestedDestination(
-                                reqDestination: details.result!.name,
-                                lat: lat,
-                                lng: lng);
-                            mapProvider.updateDestination(
-                                destination: details.result!.name);
-                            LatLng coordinates = LatLng(lat, lng);
-                            mapProvider.setDestination(
-                                coordinates: coordinates);
-                            setState(() {
-                              mapProvider.dropoffLocation = details.result;
-                              dropOffLocation.text = details.result!.name!;
-                              mapProvider.predictions = [];
-                              mapProvider.pickUpLatLng = LatLng(
-                                  mapProvider
-                                      .pickupLocation!.geometry!.location!.lat!,
-                                  mapProvider.pickupLocation!.geometry!
-                                      .location!.lng!);
+                          } else if (mapProvider.endFocusNode.hasFocus) {
+                            mapProvider.dropoffLocation = details.result;
+                            mapProvider.dropOffLatLng = LatLng(
+                                mapProvider
+                                    .dropoffLocation!.geometry!.location!.lat!,
+                                mapProvider
+                                    .dropoffLocation!.geometry!.location!.lng!);
 
-                              mapProvider.dropOffLatLng = LatLng(
-                                  mapProvider.dropoffLocation!.geometry!
-                                      .location!.lat!,
-                                  mapProvider.dropoffLocation!.geometry!
-                                      .location!.lng!);
+                            setState(() {
+                              dropOffLocationController.text =
+                                  details.result!.name!;
+                              mapProvider.predictions = [];
                             });
                           }
 
@@ -260,7 +237,16 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                       value: _useCurrentLocationDropOff,
                       activeColor: kPrimaryGoldColor,
                       onChanged: (bool? value) {
+                        mapProvider.dropOffLatLng = LatLng(
+                            mapProvider.center!.latitude,
+                            mapProvider.center!.longitude);
                         setState(() {
+                          mapProvider.predictions = [];
+                          dropOffLocationController.text =
+                              mapProvider.userAddressText!;
+                          mapProvider.dropOffLatLng = LatLng(
+                              mapProvider.center!.latitude,
+                              mapProvider.center!.longitude);
                           _useCurrentLocationDropOff =
                               !_useCurrentLocationDropOff;
                         });
@@ -285,21 +271,25 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                   ],
                 ),
                 child: TextButton(
-                  onPressed: () async {
-                    await mapProvider.createDeliveryRequest();
-                    await mapProvider.createRoute();
-                    await mapProvider.processDelivery();
-                    print('navigate');
-                    mapProvider.changeWidgetShowed(
-                        showWidget: Show.CHECKOUT_DELIVERY);
+                    onPressed: () async {
+                      await mapProvider.createDeliveryRequest();
+                      await mapProvider.createRoute();
+                      await mapProvider.processDelivery();
+                      print('navigate');
+                      mapProvider.changeWidgetShowed(
+                          showWidget: Show.CHECKOUT_DELIVERY);
 
-                    changeScreenReplacement(context, MapWidget());
-                  },
-                  child: const Text(
-                    'Continue',
-                    style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
-                  ),
-                ),
+                      changeScreenReplacement(context, MapWidget());
+                    },
+                    child: mapProvider.isLoading
+                        ? CircularProgressIndicator(
+                            color: kPrimaryGoldColor,
+                          )
+                        : const Text(
+                            'Continue',
+                            style: TextStyle(
+                                color: kPrimaryGoldColor, fontSize: 22),
+                          )),
               ),
             ],
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../utility/helpers/constants.dart';
+import '../../utility/helpers/controllers.dart';
 import '../../utility/providers/map_provider.dart';
 import '../../utility/services/calls_and_sms.dart';
 
@@ -150,8 +151,7 @@ class TripBottomSheet extends StatelessWidget {
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
                       TextSpan(
-                          text:
-                              "${mapProvider.pickupLocationController.text} \n\n\n",
+                          text: "${pickUpLocationController.text} \n\n\n",
                           style: const TextStyle(
                               fontWeight: FontWeight.w300, fontSize: 16)),
                       const TextSpan(
@@ -159,8 +159,7 @@ class TripBottomSheet extends StatelessWidget {
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
                       TextSpan(
-                          text:
-                              "${mapProvider.dropOffLocationController.text} \n",
+                          text: "${dropOffLocationController.text} \n",
                           style: const TextStyle(
                               fontWeight: FontWeight.w300, fontSize: 16)),
                     ], style: const TextStyle(color: Colors.black))),

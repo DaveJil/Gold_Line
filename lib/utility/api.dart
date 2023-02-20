@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -76,28 +75,27 @@ class CallApi {
   //   );
   // }
 
-  dynamic _processResponse(dynamic response) {
+  Map<String, dynamic> _processResponse(http.Response response) {
+    var data = json.decode(response.body);
     switch (response.statusCode) {
       case 200:
-        var resJson = jsonDecode(response.body);
-        // print(resJson);
-        return resJson;
-      case 400:
-        throw SocketException(
-            // utf8.decode(response.bodyBytes),
-            response.request!.url.toString());
-      case 401:
-      case 402:
-      case 403:
-      case 404:
-        throw Exception(
-            // utf8.decode(response.bodyBytes),
-            response.request!.url.toString());
-      case 500:
+        return data;
+      case 409:
+        throw AppException(message: '${data['message']}');
+      case 412:
+        throw AppException(message: '${data['message']}');
       default:
-        throw Exception(
-            // utf8.decode(response.bodyBytes),
-            response.request!.url.toString());
+        return data;
     }
+  }
+}
+
+class AppException implements Exception {
+  final String message;
+  AppException({required this.message});
+
+  @override
+  String toString() {
+    return message;
   }
 }

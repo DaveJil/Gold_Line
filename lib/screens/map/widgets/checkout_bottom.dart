@@ -146,10 +146,10 @@ class SummaryWidget extends StatelessWidget {
                     ),
                     AutoSizeText(
                       '''
-             Delivery Status: Pending
-             PickUp Address: ${pickUpLocation.text}  
-             Delivery Address: ${dropOffLocation.text}  
-             Sender Pays
+             Delivery Status: Pending 
+             PickUp Address: ${pickUpLocationController.text}  
+             Delivery Address: ${dropOffLocationController.text}  
+             Payment Method: ${mapProvider.whoFuckingPays} Pays
              ''',
                       style: TextStyle(fontSize: 16),
                     ),

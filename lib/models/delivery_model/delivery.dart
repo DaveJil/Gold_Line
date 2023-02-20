@@ -1,6 +1,6 @@
 class DeliveryModel {
-  String? id;
-  String? userId;
+  int? id;
+  int? userId;
   String? driverId;
   String? receiverName;
   String? receiverPhone;
@@ -13,12 +13,14 @@ class DeliveryModel {
   String? state;
   String? pickupTime;
   String? type;
-  double? pickupLatitude;
-  double? pickupLongitude;
-  double? dropOffLatitude;
-  double? dropOffLongitude;
+  String? pickupLatitude;
+  String? pickupLongitude;
+  String? dropOffLatitude;
+  String? dropOffLongitude;
   String? price;
   double? tip;
+  String? description;
+
   DateTime? createdAt;
   DateTime? updatedAt;
   String? paymentStatus;
@@ -38,6 +40,7 @@ class DeliveryModel {
       this.dropOffLongitude,
       this.dropOffLatitude,
       this.distance,
+      this.description,
       this.duration,
       this.driverId,
       this.updatedAt,
@@ -58,15 +61,13 @@ class DeliveryModel {
       : id = json['id'],
         status = json['status'],
         userId = json['user_id'],
-        pickupLatitude = json['pickup_latitude'],
-        pickupLongitude = json['pickup_longitude'],
-        dropOffLatitude = json['dropoff_latitude'],
-        dropOffLongitude = json['dropoff_longitude'],
+        pickupAddress = json['pickup_address'],
+        dropOffAddress = json['dropoff_address'],
         type = json['type'],
-        distance = json['distance'],
-        duration = json['duration'],
         price = json['price'],
+        description = json['description'],
         paymentMethod = json['payment_method'],
+        pickupTime = json['pickup_time'],
         paymentStatus = json['payment_status'];
 
   Map<String, dynamic> toJson() {

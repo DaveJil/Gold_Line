@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 
 TextEditingController senderName = TextEditingController();
-TextEditingController pickUpLocation = TextEditingController();
+TextEditingController pickUpLocationController = TextEditingController();
 TextEditingController senderPhone = TextEditingController();
 TextEditingController description = TextEditingController();
 TextEditingController instruction = TextEditingController();
 
 TextEditingController receiverName = TextEditingController();
 TextEditingController receiverPhone = TextEditingController();
-TextEditingController dropOffLocation = TextEditingController();
+TextEditingController dropOffLocationController = TextEditingController();
 TextEditingController city = TextEditingController();
 TextEditingController state = TextEditingController();
 

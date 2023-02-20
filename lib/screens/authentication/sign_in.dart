@@ -26,8 +26,10 @@ class _SignInScreenState extends State<SignInScreen> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: getHeight(150, context)),
-                child: AutoSizeText(
+                padding: EdgeInsets.only(
+                  top: getHeight(150, context),
+                ),
+                child: const AutoSizeText(
                   "Welcome, Enter your Login Details",
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -87,7 +89,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (_) => const SignUpScreen()));
                 },
-                child: AutoSizeText(
+                child: const AutoSizeText(
                   'New User? Create an account',
                   style: TextStyle(
                       color: kPrimaryGoldColor,
@@ -108,7 +110,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   onPressed: () async {
                     await userProvider.signIn(context);
                   },
-                  child: AutoSizeText(
+                  child: const AutoSizeText(
                     'Login',
                     style: TextStyle(color: Colors.white, fontSize: 25),
                   ),
