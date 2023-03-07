@@ -1,10 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
+import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utility/helpers/constants.dart';
 import '../../../utility/helpers/custom_button.dart';
+import '../../../utility/providers/get_list_provider.dart';
 import '../../../utility/providers/map_provider.dart';
+import '../delivery_details.dart';
 
 class NewDeliveryCard extends StatelessWidget {
   final String? title;
@@ -25,7 +29,7 @@ class NewDeliveryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deliveryListProvider =
-        Provider.of<MapProvider>(context, listen: false);
+        Provider.of<GetListProvider>(context, listen: false);
 
     return Card(
       elevation: 20,
@@ -72,22 +76,33 @@ class NewDeliveryCard extends StatelessWidget {
 
 class DeliveryCard extends StatefulWidget {
   final String? title;
-  final int? id;
-  final String? price;
-  final String? status;
   final String? pickUpLocation;
   final String? dropOffLocation;
   final String? description;
-
+  final String? id;
+  final String? date;
+  final String? price;
+  final String? riderFirstName;
+  final String? riderLastName;
+  final String? riderPhoneNumber;
+  final String? riderPlateNumber;
+  final String? paymentMethod;
+  final String? status;
   const DeliveryCard(
       {Key? key,
       this.title,
-      this.status,
-      this.price,
-      this.id,
       this.description,
       this.dropOffLocation,
-      this.pickUpLocation})
+      this.price,
+      this.riderFirstName,
+      this.riderLastName,
+      this.riderPhoneNumber,
+      this.riderPlateNumber,
+      this.date,
+      this.paymentMethod,
+      this.id,
+      this.pickUpLocation,
+      this.status})
       : super(key: key);
 
   @override
@@ -98,9 +113,26 @@ class _DeliveryCardState extends State<DeliveryCard> {
   @override
   Widget build(BuildContext context) {
     final deliveryListProvider =
-        Provider.of<MapProvider>(context, listen: false);
+        Provider.of<GetListProvider>(context, listen: false);
 
-    return Container(
+    return InkWell(
+      onTap: () {
+        changeScreen(
+            context,
+            DeliveryDetailsScreen(
+              title: widget.title,
+              description: widget.description,
+              dropOffLocation: widget.dropOffLocation,
+              pickUpLocation: widget.pickUpLocation,
+              price: widget.price,
+              riderFirstName: widget.riderFirstName,
+              riderLastName: widget.riderLastName,
+              riderPhoneNumber: widget.riderPhoneNumber,
+              riderPlateNumber: widget.riderPlateNumber,
+              date: widget.date,
+              paymentMethod: widget.paymentMethod,
+            ));
+      },
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
@@ -143,15 +175,47 @@ class _DeliveryCardState extends State<DeliveryCard> {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
+                        showCupertinoDialog(
+                            context: context,
+                            builder: (_) {
+                              return CupertinoAlertDialog(
+                                title: Text("Confirm Pick Up"),
+                                content: Text(
+                                    "Click Confirm to confirm that rider has picked up your package"),
+                                actions: [
+                                  CupertinoDialogAction(
+                                    child: Text("CONFIRM"),
+                                    onPressed: () {
+                                      deliveryListProvider.confirmPickUp(
+                                          context, widget.title);
+                                    },
+                                  ),
+                                  CupertinoDialogAction(
+                                    child: Text("CANCEL"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
+                      },
+                      child: Text("Confirm Pick Up"),
+                      style: ElevatedButton.styleFrom(
+                          shape: StadiumBorder(),
+                          backgroundColor: kPrimaryGoldColor),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
                         showModalBottomSheet(
                             context: context,
                             builder: (context) {
                               return Container(
                                 decoration: const BoxDecoration(
                                     color: Colors.white,
-//                        borderRadius: BorderRadius.only(
-//                            topLeft: Radius.circular(20),
-//                            topRight: Radius.circular(20)),
                                     boxShadow: [
                                       BoxShadow(
                                           color: kPrimaryGoldColor,
@@ -226,8 +290,10 @@ class _DeliveryCardState extends State<DeliveryCard> {
                                       CustomButton(
                                           color: Colors.redAccent,
                                           onPressed: () {
+                                            print(widget.title);
                                             deliveryListProvider.cancelDelivery(
-                                                context, widget.id.toString());
+                                                context,
+                                                widget.title.toString());
                                           },
                                           text: "Cancel")
                                     ],
@@ -260,7 +326,7 @@ class _DeliveryCardState extends State<DeliveryCard> {
   ];
 
   Row addRadioButton(int btnValue, String title) {
-    MapProvider reasonProvider = Provider.of<MapProvider>(context);
+    GetListProvider reasonProvider = Provider.of<GetListProvider>(context);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,

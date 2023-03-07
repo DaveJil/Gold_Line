@@ -7,9 +7,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/delivery_model/delivery.dart';
 import '../../models/notifications/notifications.dart';
 import '../../models/transaction/transaction.dart';
+import '../../screens/map/map_widget.dart';
 import '../api.dart';
+import '../helpers/custom_display_widget.dart';
+import '../helpers/routing.dart';
 
 class GetListProvider extends ChangeNotifier {
+  TextEditingController cancelDescription = TextEditingController();
+  String? rideCancelReason;
+
   List<DeliveryModel> _deliveryList = [];
   List<DeliveryModel> get deliveryList => _deliveryList;
 
@@ -42,13 +48,55 @@ class GetListProvider extends ChangeNotifier {
   Future checkCompletedDelivery() async {
     try {
       final response =
-          await CallApi().getData('users/deliveries?status=completed');
+          await CallApi().getData('user/deliveries?status=completed');
       print(response);
       final data = response['data'];
       print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
       print(result);
       return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future cancelDelivery(BuildContext context, String deliveryIde) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    Map<String, dynamic> request = {
+      'delivery_id': deliveryIde,
+      'reason_option': rideCancelReason ?? "other",
+      'reason_description': rideCancelReason ?? cancelDescription.text
+    };
+
+    try {
+      var response = await CallApi().postData(request, 'user/delivery/cancel');
+      print(response);
+      String code = response['code'];
+      if (code == "success") {
+        changeScreenReplacement(context, MapWidget());
+      }
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future confirmPickUp(BuildContext context, String? deliveryIde) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    try {
+      final response =
+          await CallApi().postData("", 'user/delivery/start/$deliveryIde');
+      String message = response["message"];
+      print(message);
+      Navigator.pop(context);
+      checkPendingDelivery();
+
+      CustomDisplayWidget.displayAwesomeSuccessSnackBar(
+          context, message, message);
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {

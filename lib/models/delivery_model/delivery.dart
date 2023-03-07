@@ -9,24 +9,21 @@ class DeliveryModel {
   String? status;
   String? pickupAddress;
   String? dropOffAddress;
-  String? city;
-  String? state;
   String? pickupTime;
-  String? type;
   String? pickupLatitude;
   String? pickupLongitude;
   String? dropOffLatitude;
   String? dropOffLongitude;
   String? price;
-  double? tip;
+  String? tip;
   String? description;
-
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  String? type;
+  String? riderFirstName;
+  String? riderLastName;
+  String? riderPhone;
+  String? riderPlateNumber;
   String? paymentStatus;
   String? paymentMethod;
-  dynamic distance;
-  dynamic duration;
 
   DeliveryModel(
       {this.id,
@@ -39,25 +36,23 @@ class DeliveryModel {
       this.pickupLongitude,
       this.dropOffLongitude,
       this.dropOffLatitude,
-      this.distance,
       this.description,
-      this.duration,
       this.driverId,
-      this.updatedAt,
-      this.createdAt,
       this.pickupAddress,
-      this.city,
       this.dropOffAddress,
       this.paymentMethod,
       this.paymentStatus,
       this.pickupTime,
+      this.riderPlateNumber,
+      this.riderFirstName,
+      this.riderLastName,
+      this.riderPhone,
       this.price,
-      this.state,
       this.tip,
       this.type,
       this.userId});
 
-  DeliveryModel.fromJson(Map<String, dynamic> json)
+  DeliveryModel.fromJson(Map<dynamic, dynamic> json)
       : id = json['id'],
         status = json['status'],
         userId = json['user_id'],
@@ -68,6 +63,26 @@ class DeliveryModel {
         description = json['description'],
         paymentMethod = json['payment_method'],
         pickupTime = json['pickup_time'],
+        riderLastName = (json['rider'] == null)
+            ? ''
+            : (json['rider']['profile'] == null)
+                ? ''
+                : json['delivery_manager']['profile']['last_name'],
+        riderFirstName = (json['rider'] == null)
+            ? 'Rider Not assigned Yet'
+            : (json['rider']['profile'] == null)
+                ? 'RiderNotAssigned Yet'
+                : json['rider']['profile']['first_name'],
+        riderPhone = (json['rider'] == null)
+            ? 'Rider Not assigned Yet'
+            : (json['rider']['profile'] == null)
+                ? 'RiderNotAssigned Yet'
+                : json['rider']['phone'],
+        riderPlateNumber = (json['rider'] == null)
+            ? 'Rider Not assigned Yet'
+            : (json['rider']['profile'] == null)
+                ? 'Rider Not assigned Yet'
+                : json['rider']['profile']['plate_number'],
         paymentStatus = json['payment_status'];
 
   Map<String, dynamic> toJson() {
@@ -80,14 +95,40 @@ class DeliveryModel {
       'pickup_longitude': pickupLongitude,
       'dropoff_longitude': dropOffLongitude,
       'dropoff_latitude': dropOffLatitude,
-      'city': city,
-      'distance': distance,
-      'duration': duration,
-      'state': state,
       'payment_status': paymentStatus,
       'payment_method': paymentMethod,
       'pickup_address': pickupAddress,
       'dropoff_address': dropOffAddress,
     };
   }
+}
+
+class DeliveryManagerModel {
+  int? managerId;
+
+  String? managerPhone, managerFirstName, managerLastName;
+  DeliveryManagerModel(
+      {this.managerId,
+      this.managerFirstName,
+      this.managerLastName,
+      this.managerPhone});
+
+  DeliveryManagerModel.fromJson(dynamic json)
+      : managerId = json['id'] ?? "",
+        managerPhone = json['phone'] ?? "",
+        managerFirstName = json['profile']['first_name'] ?? "",
+        managerLastName = json['profile']['last_name'] ?? "";
+}
+
+class RiderModel {
+  int? riderId;
+  String? riderPhone, riderFirstName, riderLastName;
+  RiderModel(
+      {this.riderId, this.riderFirstName, this.riderLastName, this.riderPhone});
+
+  RiderModel.fromJson(dynamic json)
+      : riderId = json['id'] ?? "",
+        riderPhone = json['phone'] ?? "",
+        riderFirstName = json['profile']['first_name'] ?? "",
+        riderLastName = json['profile']['last_name'] ?? "";
 }

@@ -33,6 +33,7 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
 
   @override
   Widget build(BuildContext context) {
+    ScrollController scrollController = ScrollController();
     final deliveryListProvider =
         Provider.of<GetListProvider>(context, listen: false);
     return Scaffold(
@@ -48,59 +49,73 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
               SizedBox(
                 height: 10.appHeight(context),
               ),
-              FutureBuilder(
-                  future: deliveryListProvider.checkPendingDelivery(),
-                  builder: (context, snapshot) {
-                    // Checking if future is resolved
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      // If we got an error
-                      if (snapshot.hasError) {
-                        return Center(
-                          child: Text(
-                            '${snapshot.error} occurred',
-                            style: TextStyle(
-                                fontSize: 18, color: kPrimaryGoldColor),
-                          ),
-                        );
+              SingleChildScrollView(
+                child: FutureBuilder(
+                    future: deliveryListProvider.checkPendingDelivery(),
+                    builder: (context, snapshot) {
+                      // Checking if future is resolved
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        // If we got an error
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              '${snapshot.error} occurred',
+                              style: TextStyle(
+                                  fontSize: 18, color: kPrimaryGoldColor),
+                            ),
+                          );
 
-                        // if we got our data
-                      } else if (snapshot.hasData) {
-                        // Extracting data from snapshot object
-                        final data = snapshot.data;
-                        if (data!.isNotEmpty) {
-                          return ListView.builder(
-                            itemCount: data!.length,
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              return DeliveryCard(
+                          // if we got our data
+                        } else if (snapshot.hasData) {
+                          // Extracting data from snapshot object
+                          final data = snapshot.data;
+                          if (data!.isNotEmpty) {
+                            return ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              controller: scrollController,
+                              itemCount: data!.length,
+                              shrinkWrap: true,
+                              itemBuilder: (
+                                BuildContext context,
+                                int index,
+                              ) {
+                                return DeliveryCard(
                                   description: data[index].description,
-                                  id: data[index].id,
                                   title: data[index].id!.toString(),
                                   dropOffLocation: data[index].dropOffAddress!,
                                   price: data[index].price.toString(),
                                   status: data[index].status,
-                                  pickUpLocation: data[index].pickupAddress!);
-                            },
-                          );
-                        } else {
-                          return Align(
-                              alignment: Alignment.center,
-                              child: Center(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  child: const Text(
-                                    'You have no Deliveries Yet',
+                                  pickUpLocation: data[index].pickupAddress!,
+                                  date: data[index].pickupTime!,
+                                  paymentMethod: data[index].paymentMethod!,
+                                  riderFirstName: data[index].riderFirstName,
+                                  riderLastName: data[index].riderLastName,
+                                  riderPhoneNumber: data[index].riderPhone,
+                                  riderPlateNumber:
+                                      data[index].riderPlateNumber,
+                                );
+                              },
+                            );
+                          } else {
+                            return Align(
+                                alignment: Alignment.center,
+                                child: Center(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: const Text(
+                                      'You have no Deliveries Yet',
+                                    ),
                                   ),
-                                ),
-                              ));
+                                ));
+                          }
                         }
                       }
-                    }
 
-                    return CircularProgressIndicator(
-                      color: kPrimaryGoldColor,
-                    );
-                  }),
+                      return CircularProgressIndicator(
+                        color: kPrimaryGoldColor,
+                      );
+                    }),
+              ),
             ],
           ),
         ),

@@ -242,7 +242,7 @@ class _DriverFoundWidgetState extends State<DriverFoundWidget> {
                         padding: const EdgeInsets.all(12),
                         child: ElevatedButton(
                           onPressed: () {
-                            mapProvider.cancelRequest();
+                            // mapProvider.cancelDelivery(context, deliveryIde);
                             mapProvider.changeWidgetShowed(
                                 showWidget: Show.HOME);
                           },

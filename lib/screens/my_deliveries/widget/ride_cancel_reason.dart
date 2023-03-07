@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gold_line/utility/providers/map_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utility/helpers/constants.dart';
 import '../../../utility/helpers/custom_button.dart';
+import '../../../utility/providers/get_list_provider.dart';
 
 class RideCancelReason extends StatefulWidget {
   const RideCancelReason({Key? key}) : super(key: key);
@@ -104,7 +104,7 @@ class _RideCancelReasonState extends State<RideCancelReason> {
   ];
 
   Row addRadioButton(int btnValue, String title) {
-    MapProvider reasonProvider = Provider.of<MapProvider>(context);
+    GetListProvider reasonProvider = Provider.of<GetListProvider>(context);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,

@@ -172,12 +172,12 @@ class OrderStatusWidget extends StatelessWidget {
                         ),
                       ),
                       Expanded(
+                        // mapProvider.cancelRequest();
+
                         child: Padding(
                           padding: const EdgeInsets.all(12),
                           child: ElevatedButton(
-                            onPressed: () {
-                              mapProvider.cancelRequest();
-                            },
+                            onPressed: () {},
                             style:
                                 ElevatedButton.styleFrom(primary: Colors.red),
                             child: const Text(

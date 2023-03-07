@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/utility/helpers/controllers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
@@ -18,8 +17,6 @@ import 'package:google_place/google_place.dart' as compon;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../models/api_responses/failure.dart';
-import '../../models/api_responses/success.dart';
 import '../../models/delivery_model/delivery.dart';
 import '../../models/driver_profile/driver_profile.dart';
 import '../../models/route_model.dart';
@@ -27,7 +24,6 @@ import '../../models/user_profile/user_profile.dart';
 import '../api.dart';
 import '../helpers/constants.dart';
 import '../helpers/custom_button.dart';
-import '../helpers/routing.dart';
 import '../helpers/stars.dart';
 import '../services/calls_and_sms.dart';
 import '../services/delivery_services.dart';
@@ -132,7 +128,6 @@ class MapProvider with ChangeNotifier {
   int? deliveryId;
   String? userAddressText;
   String? whoFuckingPays;
-  String? rideCancelReason;
 
   //  this variable will listen to the status of the ride request
   StreamSubscription<AsyncSnapshot>? requestStream;
@@ -165,7 +160,6 @@ class MapProvider with ChangeNotifier {
 
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
-  TextEditingController cancelDescription = TextEditingController();
 
   FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
@@ -461,29 +455,6 @@ class MapProvider with ChangeNotifier {
     });
   }
 
-  Future cancelDelivery(BuildContext context, String deliveryIde) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-
-    Map<String, dynamic> request = {
-      'delivery_id': deliveryIde,
-      'reason_option': rideCancelReason ?? "other",
-      'reason_description': rideCancelReason ?? cancelDescription.text
-    };
-
-    try {
-      var response = await CallApi().postData(request, 'user/delivery/cancel');
-      print(response);
-      String code = response['code'];
-      if (code == "success") {
-        changeScreenReplacement(context, MapWidget());
-      }
-    } on SocketException {
-      throw const SocketException('No internet connection');
-    } catch (err) {
-      throw Exception(err.toString());
-    }
-  }
-
   clearPoly() {
     _poly.clear();
     notifyListeners();
@@ -612,13 +583,14 @@ class MapProvider with ChangeNotifier {
   }
 
   Future createDeliveryRequest() async {
+    clearPoly();
     Map<String, dynamic> values = {
       "receiver_name": receiverName.text,
       "receiver_phone": receiverPhone.text,
       "sender_name": senderName.text,
       "sender_phone": senderPhone.text,
       "pickup_longitude": pickUpLatLng!.longitude,
-      "pickup_latitude": pickUpLatLng!.longitude,
+      "pickup_latitude": pickUpLatLng!.latitude,
       "dropoff_latitude": dropOffLatLng!.latitude,
       "dropoff_longitude": dropOffLatLng!.longitude,
       "status": 'pending',
@@ -645,6 +617,7 @@ class MapProvider with ChangeNotifier {
       print(deliveryId);
       pref.setInt('deliveryId', deliveryId!);
       if (response['success'] == "success") {
+        createRoute();
         final body = response;
         print('delivery sent');
         String deliveryId = response['id'];
@@ -735,21 +708,6 @@ class MapProvider with ChangeNotifier {
     } catch (err) {
       throw Exception(err.toString());
     }
-  }
-
-// cancel trip endpoint
-  cancelRequest() async {
-    lookingForDriver = false;
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    String deliveryId = preferences.getString("deliveryId")!;
-
-    await CallApi().postData({
-      "delivery_id": deliveryId,
-      "reason": "",
-    }, "user/delivery/cancel");
-
-    periodicTimer!.cancel();
-    notifyListeners();
   }
 
 // ANCHOR LISTEN TO DRIVER
@@ -918,11 +876,6 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // _setCountryCode() {
-  //   countryCode = address!.country;
-  //   notifyListeners();
-  // }
-
   _addMarker(
       {required LatLng markerPosition,
       required String id,
@@ -958,63 +911,5 @@ class MapProvider with ChangeNotifier {
   changeWidgetShowed({Show? showWidget}) {
     show = showWidget!;
     notifyListeners();
-  }
-
-  // cancel trip
-  Future cancelTrip(String? reason) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    final trip_id = pref.getString("trip_id");
-
-    final response = await CallApi().postData(
-        {"trip_id": trip_id, "reason": reason}, "api/user/trip/cancel");
-
-    if (response["code"] == "success") {
-      print(response["data"]);
-      changeScreenReplacement(mainContext!, const MapWidget());
-
-      return Success(data: response["data"], message: "${response["message"]}");
-    } else {
-      print(response["data"]);
-      return Failure(
-          errorData: response["data"], message: "${response["message"]}");
-    }
-  }
-
-  // cancel trip
-  Future rateTrip(String? comment, int? votes) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    final trip_id = pref.getString("trip_id");
-
-    final response = await CallApi().postData(
-        {"trip_id": trip_id, "comment": comment, "rating": votes},
-        "user/trip/cancel");
-
-    if (response["code"] == "success") {
-      print(response["data"]);
-      changeScreenReplacement(mainContext!, const MapWidget());
-
-      return Success(data: response["data"], message: "${response["message"]}");
-    } else {
-      print(response["data"]);
-      return Failure(
-          errorData: response["data"], message: "${response["message"]}");
-    }
-  }
-
-// get view trip
-  Future<Object> viewTrip() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    final trip_id = pref.getString("trip_id");
-
-    final response = await CallApi().getData("user/trip/$trip_id");
-
-    if (response["code"] == "success") {
-      print(response["data"]);
-      return Success(data: response["data"], message: "${response["message"]}");
-    } else {
-      print(response["data"]);
-      return Failure(
-          errorData: response["data"], message: "${response["message"]}");
-    }
   }
 }

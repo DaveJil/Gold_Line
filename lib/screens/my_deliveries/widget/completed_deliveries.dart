@@ -20,7 +20,7 @@ class _CompletedDeliveriesState extends State<CompletedDeliveries> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final deliveryListProvider =
           Provider.of<GetListProvider>(context, listen: false);
-      deliveries = deliveryListProvider.checkPendingDelivery();
+      deliveries = deliveryListProvider.checkCompletedDelivery();
     });
     super.initState();
   }
@@ -33,6 +33,8 @@ class _CompletedDeliveriesState extends State<CompletedDeliveries> {
 
   @override
   Widget build(BuildContext context) {
+    ScrollController scrollController = ScrollController();
+
     final deliveryListProvider =
         Provider.of<GetListProvider>(context, listen: false);
     return Scaffold(
@@ -49,7 +51,7 @@ class _CompletedDeliveriesState extends State<CompletedDeliveries> {
                 height: 10.appHeight(context),
               ),
               FutureBuilder(
-                  future: deliveryListProvider.checkPendingDelivery(),
+                  future: deliveryListProvider.checkCompletedDelivery(),
                   builder: (context, snapshot) {
                     // Checking if future is resolved
                     if (snapshot.connectionState == ConnectionState.done) {
@@ -69,6 +71,7 @@ class _CompletedDeliveriesState extends State<CompletedDeliveries> {
                         final data = snapshot.data;
                         if (data!.isNotEmpty) {
                           return ListView.builder(
+                            controller: scrollController,
                             itemCount: data!.length,
                             shrinkWrap: true,
                             itemBuilder: (BuildContext context, int index) {

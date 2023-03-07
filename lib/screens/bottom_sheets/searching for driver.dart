@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:gold_line/screens/my_deliveries/my_deliveries.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
+import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:provider/provider.dart';
 
 import '../../utility/helpers/constants.dart';
@@ -24,25 +26,7 @@ class _SearchingForDriverSheetState extends State<SearchingForDriverSheet> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    //
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   MapProvider mapProvider =
-    //       Provider.of<MapProvider>(context, listen: false);
-    //   mapProvider.checkDeliveryStatus();
-    // });
-
-    loadScreen();
     super.initState();
-  }
-
-  void loadScreen() {
-    _timer = Timer(const Duration(seconds: 5), goNext);
-  }
-
-  goNext() {
-    MapProvider mapProvider = Provider.of<MapProvider>(context, listen: false);
-    mapProvider.navigateToHomeWidget();
   }
 
   @override
@@ -50,9 +34,9 @@ class _SearchingForDriverSheetState extends State<SearchingForDriverSheet> {
     MapProvider mapProvider = Provider.of<MapProvider>(context);
 
     return DraggableScrollableSheet(
-        initialChildSize: 0.4,
-        minChildSize: 0.4,
-        maxChildSize: 0.5,
+        initialChildSize: 0.5,
+        minChildSize: 0.1,
+        maxChildSize: 0.55,
         builder: (BuildContext context, myScrollController) {
           return Container(
             decoration: const BoxDecoration(
@@ -68,78 +52,117 @@ class _SearchingForDriverSheetState extends State<SearchingForDriverSheet> {
                 ]),
             child: Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: 20.appWidth(context),
+                  horizontal: 40.appWidth(context),
                   vertical: 10.appHeight(context)),
-              child: ListView(
-                controller: myScrollController,
-                children: [
-                  SizedBox(
-                    height: getHeight(10, context),
-                  ),
-                  const Center(
-                    child: AutoSizeText(
-                      "Delivery Successfully Created",
-                      maxLines: 1,
-                      textAlign: TextAlign.center,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: getHeight(10, context),
+                    ),
+                    Text(
+                      "Delivery Created",
+                      textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
                         color: kPrimaryGoldColor,
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 10.appHeight(context),
-                  ),
-                  SizedBox(
-                    height: 100.appHeight(context),
-                    width: 80.appWidth(context),
-                    child: Image.asset("assets/tick.png"),
-                  ),
-                  SizedBox(
-                    height: 10.appHeight(context),
-                  ),
-                  Center(
-                    child: AutoSizeText(
-                      "A rider would be sent to your pick up Location in an hour",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                    SizedBox(
+                      height: getHeight(4, context),
                     ),
-                  ),
-                  SizedBox(
-                    height: 10.appHeight(context),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: SizedBox(
-                      height: 50.appHeight(context),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          mapProvider.cancelRequest();
-                          mapProvider.changeWidgetShowed(showWidget: Show.HOME);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          elevation: 20,
-                          backgroundColor: Colors.white70,
-                        ),
-                        child: const Text(
-                          "Cancel Delivery",
-                          style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700),
+                    Text(
+                      "Successfully...",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: kPrimaryGoldColor,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.appHeight(context),
+                    ),
+                    Center(
+                      child: SizedBox(
+                        height: 100.appHeight(context),
+                        child: Image.asset("assets/tick.png"),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.appHeight(context),
+                    ),
+                    const Center(
+                      child: AutoSizeText(
+                        "You can check your delivery status as well as see the\ndetails of the rider by going to My Deliveries",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.appHeight(context),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: SizedBox(
+                        height: 50.appHeight(context),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                mapProvider.changeWidgetShowed(
+                                    showWidget: Show.HOME);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                elevation: 20,
+                                backgroundColor: kPrimaryGoldColor,
+                              ),
+                              child: const Text(
+                                "Go Back To Home",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 50.appWidth(context),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                changeScreenReplacement(
+                                    context, MyDeliveriesScreen());
+                              },
+                              style: ElevatedButton.styleFrom(
+                                elevation: 20,
+                                backgroundColor: Colors.white70,
+                              ),
+                              child: const Text(
+                                "Go To My Deliveries",
+                                style: TextStyle(
+                                    color: kPrimaryGoldColor,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 10.appHeight(context),
-                  ),
-                  AutoSizeText(
-                      'Note that Cancellation Prices may apply depending on the circumstances.'),
-                  AutoSizeText(
-                      'Check for delivery status updates on "My Deliveries" option.')
-                ],
+                    SizedBox(
+                      height: 10.appHeight(context),
+                    ),
+                    const AutoSizeText(
+                        'Note that Cancellation Prices may apply depending on the circumstances.'),
+                    const AutoSizeText(
+                        'Check for delivery status updates on "My Deliveries" option.')
+                  ],
+                ),
               ),
             ),
           );
