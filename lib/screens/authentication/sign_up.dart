@@ -6,9 +6,7 @@ import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:provider/provider.dart';
 
-import '../../utility/helpers/routing.dart';
 import '../../utility/providers/user_provider.dart';
-import '../map/map_widget.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -192,7 +190,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                   child: TextButton(
                     onPressed: () async {
                       await userProvider.signUp(context);
-                      changeScreenReplacement(context, MapWidget());
                     },
                     child: AutoSizeText(
                       'Sign Up',
