@@ -47,6 +47,33 @@ class CallApi {
     return _processResponse(res);
   }
 
+  Future addImage(data, apiUrl, dynamic filepath, dynamic image) async {
+    var fullUrl = _url + apiUrl;
+
+    var request = http.MultipartRequest('POST', Uri.parse(fullUrl))
+      // ..fields.addAll(data)
+      ..headers.addAll(await _setPictureHeaders())
+      ..files.add(
+          http.MultipartFile.fromBytes('avatar', image, filename: filepath));
+    print("filepath = $filepath");
+    var streamedResponse = await request.send();
+    print("streamedresponse =  $streamedResponse");
+    var response = await http.Response.fromStream(streamedResponse);
+    print("response = $response");
+    var result = jsonDecode(response.body);
+    print("result = $result");
+
+    if (response.statusCode == 201) {
+      return result;
+    } else {}
+  }
+
+  Future<Map<String, String>> _setPictureHeaders() async => {
+        'Content-type': 'multipart/form-data',
+        'Accept': 'multipart/form-data',
+        'Authorization': 'Bearer ${await _getToken()} '
+      };
+
   // _setHeaders() => {
   //   'Content-type': 'application/json',
   //   'Accept': 'application/json',

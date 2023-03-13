@@ -85,32 +85,80 @@ class _MainMenuState extends State<MainMenu> {
                       SizedBox(
                         height: getHeight(30, context),
                       ),
-                      Stack(children: [
-                        Container(
-                          height: getHeight(150, context),
-                          width: getHeight(136, context),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey,
-                            border: Border.all(
-                              width: 1.appWidth(context),
-                              style: BorderStyle.solid,
+                      InkWell(
+                        onTap: () {
+                          userProvider.updateProfilePic(context);
+                        },
+                        child: Center(
+                          child: Stack(children: [
+                            FutureBuilder(
+                                future: userProvider.getUserData(context),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    // If we got an error
+                                    if (snapshot.hasError) {
+                                      return Center(
+                                        child: Text(
+                                          '${snapshot.error} occurred',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      );
+
+                                      // if we got our data
+                                    } else if (snapshot.hasData) {
+                                      // Extracting data from snapshot object
+                                      final datum = snapshot.data;
+                                      print(datum);
+                                      return Container(
+                                        padding: EdgeInsets.all(16),
+                                        height: getHeight(150, context),
+                                        width: getHeight(136, context),
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.grey,
+                                            image: DecorationImage(
+                                                fit: BoxFit.contain,
+                                                image: NetworkImage(
+                                                  datum!.avatar ??
+                                                      "https://png.pngtree.com/png-clipart/20210310/original/pngtree-default-male-avatar-png-image_5939655.jpg",
+                                                )),
+                                            border: Border.all(
+                                              width: 1.appWidth(context),
+                                              style: BorderStyle.solid,
+                                            )),
+                                      );
+                                    }
+                                  }
+
+                                  return Container(
+                                      height: getHeight(150, context),
+                                      width: getHeight(136, context),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.grey,
+                                          border: Border.all(
+                                            width: 1.appWidth(context),
+                                            style: BorderStyle.solid,
+                                          )));
+                                }),
+                            const Positioned(
+                              right: 7.23,
+                              bottom: 0,
+                              child: CircleAvatar(
+                                backgroundColor: Colors.green,
+                                child: Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ),
                             ),
-                          ),
+                          ]),
                         ),
-                        const Positioned(
-                          right: 7.23,
-                          bottom: 0,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.amber,
-                            child: Icon(
-                              Icons.verified_user,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                      ]),
+                      ),
                       SizedBox(
                         height: getHeight(15, context),
                       ),
@@ -287,7 +335,7 @@ class _MainMenuState extends State<MainMenu> {
                         height: getHeight(20, context),
                       ),
                       CustomButton(
-                        width: getWidth(150, context),
+                        width: MediaQuery.of(context).size.width / 3,
                         onPressed: () {
                           userProvider.signOut(context);
                         },

@@ -257,8 +257,6 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                 height: getHeight(30, context),
               ),
               Container(
-                height: getHeight(58, context),
-                width: getWidth(200, context),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -281,7 +279,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
 
                       changeScreenReplacement(context, MapWidget());
                     },
-                    child: mapProvider.isLoading
+                    child: (mapProvider.isLoading = true)
                         ? CircularProgressIndicator(
                             color: kPrimaryGoldColor,
                           )

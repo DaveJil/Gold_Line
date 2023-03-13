@@ -7,7 +7,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gold_line/screens/authentication/sign_in.dart';
 import 'package:gold_line/screens/authentication/sign_up.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
+import 'package:gold_line/utility/helpers/custom_button.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
+import 'package:gold_line/utility/helpers/routing.dart';
 
 class LoginChoice extends StatefulWidget {
   const LoginChoice({super.key});
@@ -87,50 +89,22 @@ class LoginChoiceState extends State<LoginChoice> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: kPrimaryGoldColor,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => const SignUpScreen()));
-                            },
-                            child: const AutoSizeText(
-                              'Sign Up as an Agent',
-                              maxLines: 1,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                          ),
+                        child: CustomButton(
+                          onPressed: () {
+                            changeScreen(context, SignUpScreen());
+                          },
+                          text: 'Sign Up As Agent',
                         ),
                       ),
                       SizedBox(
-                        width: 50.appWidth(context),
+                        width: 10,
                       ),
                       Expanded(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.appWidth(context)),
-                          decoration: BoxDecoration(
-                              color: kPrimaryGoldColor,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => const SignUpScreen()));
-                            },
-                            child: const AutoSizeText(
-                              'Sign Up as a User',
-                              maxLines: 1,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                          ),
+                        child: CustomButton(
+                          onPressed: () {
+                            changeScreen(context, SignUpScreen());
+                          },
+                          text: 'SignUp As Driver',
                         ),
                       )
                     ],

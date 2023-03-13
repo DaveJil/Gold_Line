@@ -12,6 +12,7 @@ import '../../../models/user_profile/user_profile.dart';
 import '../../models/user_profile/get_data_model.dart';
 import '../../screens/map/map_widget.dart';
 import '../api.dart';
+import '../helpers/upload_image.dart';
 import '../services/user_services.dart';
 
 enum Status { Uninitialized, Authenticated, Unauthenticated }
@@ -222,6 +223,26 @@ class UserProvider with ChangeNotifier {
             context, message, message);
         return message;
       }
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future updateProfilePic(BuildContext context) async {
+    final file = await UploadFiles().getImage();
+    // String profilePhoto = base64Encode(file.readAsBytesSync());
+    print(file);
+    dynamic image = File(file).readAsBytesSync();
+    // print(profilePhoto);
+
+    dynamic request = {};
+
+    try {
+      var response =
+          await CallApi().addImage(request, 'api/profile', file, image);
+      print(response);
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {
