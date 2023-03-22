@@ -25,6 +25,7 @@ import '../../models/user_profile/user_profile.dart';
 import '../api.dart';
 import '../helpers/constants.dart';
 import '../helpers/custom_button.dart';
+import '../helpers/custom_display_widget.dart';
 import '../helpers/stars.dart';
 import '../services/calls_and_sms.dart';
 import '../services/delivery_services.dart';
@@ -318,7 +319,7 @@ class MapProvider with ChangeNotifier {
     //   route.points,
     // );
     _routeToDestinationPolys = _poly;
-    createDeliveryRequest();
+    // createDeliveryRequest();
     notifyListeners();
   }
 
@@ -594,7 +595,7 @@ class MapProvider with ChangeNotifier {
         });
   }
 
-  Future createDeliveryRequest() async {
+  Future createDeliveryRequest(BuildContext context) async {
     await clearPoly();
 
     polylineCoordinates.add(pickUpLatLng!);
@@ -642,15 +643,18 @@ class MapProvider with ChangeNotifier {
         print(deliveryId);
         pref.setString('deliveryId', response['id']);
         createRoute();
-
+        distanceBetweenPickandDropOff = 0;
+        notifyListeners();
         print(body);
-        if ((body as Map<String, dynamic>).containsKey('id')) {
-          pref.setString('deliveryId', body["id"]);
-          print(body["id"]);
-        } else {
-          print('no token added');
-        }
+        String message = response['message'];
+      } else {
+        distanceBetweenPickandDropOff = 0;
+        String message = response['message'];
+
+        CustomDisplayWidget.displayAwesomeSuccessSnackBar(
+            context, message, "Check entered city, state");
       }
+
       notifyListeners();
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -673,20 +677,11 @@ class MapProvider with ChangeNotifier {
       print(response);
       if (response['success'] == "success") {
         final body = response;
-        print('delivery sent');
-        String deliveryId = response['id'];
-        print(deliveryId);
-        pref.setString('deliveryId', response['id']);
+
         isLoading = false;
         notifyListeners();
 
         print(body);
-        if ((body as Map<String, dynamic>).containsKey('id')) {
-          pref.setString('deliveryId', body["id"]);
-          print(body["id"]);
-        } else {
-          print('no token added');
-        }
       }
     } on SocketException {
       throw const SocketException('No internet connection');

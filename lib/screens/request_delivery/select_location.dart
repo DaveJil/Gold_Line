@@ -271,7 +271,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                 ),
                 child: TextButton(
                     onPressed: () async {
-                      await mapProvider.createDeliveryRequest();
+                      await mapProvider.createDeliveryRequest(context);
                       await mapProvider.processDelivery();
                       print('navigate');
                       mapProvider.changeWidgetShowed(
