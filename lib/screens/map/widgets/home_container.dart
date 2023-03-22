@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
+import 'package:gold_line/utility/helpers/routing.dart';
 
 import '../../../utility/helpers/constants.dart';
 import '../../my_deliveries/my_deliveries.dart';
@@ -21,13 +22,17 @@ class _HomeContainerState extends State<HomeContainer> {
     final width = MediaQuery.of(context).size.width;
 
     return Container(
-      height: height / 8,
+      height: height / 10,
       width: double.infinity,
       color: kVistaWhite,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
+          InkWell(
+            onTap: () {
+              changeScreen(context, MainMenu());
+            },
             child: Center(
               child: Column(
                 children: [
@@ -42,13 +47,13 @@ class _HomeContainerState extends State<HomeContainer> {
                       icon: const Icon(
                         Icons.home_outlined,
                         color: kPrimaryGoldColor,
-                        size: 30,
+                        size: 35,
                       ),
                       alignment: Alignment.center,
                     ),
                   ),
                   SizedBox(
-                    height: height / 25,
+                    height: height / 60,
                   ),
                   const Text(
                     "Main Menu",
@@ -61,7 +66,10 @@ class _HomeContainerState extends State<HomeContainer> {
           SizedBox(
             width: 10.appWidth(context),
           ),
-          Expanded(
+          InkWell(
+            onTap: () {
+              changeScreen(context, DeliveryDetails());
+            },
             child: Center(
               child: Column(
                 children: [
@@ -76,13 +84,13 @@ class _HomeContainerState extends State<HomeContainer> {
                       icon: const Icon(
                         Icons.add_circle,
                         color: kPrimaryGoldColor,
-                        size: 30,
+                        size: 35,
                       ),
                       alignment: Alignment.center,
                     ),
                   ),
                   SizedBox(
-                    height: height / 25,
+                    height: height / 60,
                   ),
                   const Text(
                     "New Delivery",
@@ -95,7 +103,10 @@ class _HomeContainerState extends State<HomeContainer> {
           SizedBox(
             width: 10.appWidth(context),
           ),
-          Expanded(
+          InkWell(
+            onTap: () {
+              changeScreen(context, MyDeliveriesScreen());
+            },
             child: Center(
               child: Column(
                 children: [
@@ -110,7 +121,7 @@ class _HomeContainerState extends State<HomeContainer> {
                       icon: const Icon(
                         Icons.history,
                         color: kPrimaryGoldColor,
-                        size: 30,
+                        size: 35,
                       ),
                       alignment: Alignment.center,
                     ),

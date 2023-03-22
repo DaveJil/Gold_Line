@@ -56,7 +56,7 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
         leading: IconButton(
             icon: const Icon(
               Icons.arrow_back_ios,
-              size: 30,
+              size: 24,
               color: Colors.white,
             ),
             onPressed: () {
@@ -65,14 +65,13 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
         title: const Text(
           "Delivery Details",
           style: TextStyle(
-              color: kVistaWhite, fontSize: 24, fontWeight: FontWeight.w600),
+              color: kVistaWhite, fontSize: 16, fontWeight: FontWeight.w500),
         ),
         centerTitle: false,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding:
-              EdgeInsets.symmetric(horizontal: size.width / 20, vertical: 20),
+          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 20),
           child: Form(
             key: _formKey,
             child: Column(
@@ -84,7 +83,7 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                   "Specify Delivery Details",
                   textAlign: TextAlign.left,
                   style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: kPrimaryGoldColor),
                 ),
@@ -176,11 +175,36 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                   ],
                 ),
                 const SizedBox(
-                  height: 7,
+                  height: 12,
                 ),
                 const BuildItemSize(),
                 const SizedBox(
-                  height: 7,
+                  height: 12,
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      "Delivery Option.",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Expanded(
+                      child: Divider(
+                        color: Colors.grey[600],
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                DeliveryOption(),
+                const SizedBox(
+                  height: 12,
                 ),
                 const PayerRadioButton(),
                 SizedBox(height: size.width / 15),
@@ -260,7 +284,7 @@ class _BuildItemSizeState extends State<BuildItemSize> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: getHeight(100, context),
+      // height: height(context)/10,
       child: Row(
         children: [
           Expanded(
@@ -374,44 +398,6 @@ class _BuildItemSizeState extends State<BuildItemSize> {
               ),
             ),
           ),
-          SizedBox(
-            width: 15.appWidth(context),
-          ),
-          Expanded(
-            child: ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  isMultiple = !isMultiple;
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: isMultiple ? kVistaWhite : kPrimaryGoldColor,
-                  elevation: 10),
-              child: SizedBox(
-                height: getHeight(70, context),
-                width: getWidth(80, context),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      FontAwesomeIcons.boxesStacked,
-                      size: 15,
-                      color: Colors.black,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    AutoSizeText(
-                      "Multiple",
-                      maxLines: 1,
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -441,7 +427,7 @@ class _PayerRadioButtonState extends State<PayerRadioButton> {
       children: [
         const Expanded(
           child: AutoSizeText(
-            "Delivery Options.",
+            "Payment Options.",
             maxLines: 1,
             textAlign: TextAlign.left,
             style: TextStyle(
@@ -509,6 +495,55 @@ class _PayerRadioButtonState extends State<PayerRadioButton> {
               )),
         )
       ],
+    );
+  }
+}
+
+class DeliveryOption extends StatefulWidget {
+  const DeliveryOption({Key? key}) : super(key: key);
+
+  @override
+  State<DeliveryOption> createState() => _DeliveryOptionState();
+}
+
+class _DeliveryOptionState extends State<DeliveryOption> {
+  String dropDownValue = 'Select Delivery Type';
+
+  @override
+  Widget build(BuildContext context) {
+    // Initial Selected Value
+
+    // List of items in our dropdown menu
+    var items = [
+      'Select Delivery Type',
+      'Dispatch Bike(Intra-State)',
+      'Interstate Courier - Not Available',
+      'International Courier- Not Available',
+      'Vans And Trucks(Intra city)- Not Available',
+      'Vans And Trucks(Intra state)- Not Available',
+    ];
+
+    return DropdownButton<String>(
+      // Initial Value
+      value: dropDownValue,
+
+      // Down Arrow Icon
+      icon: const Icon(Icons.keyboard_arrow_down),
+
+      // Array list of items
+      items: items.map((String items) {
+        return DropdownMenuItem(
+          value: items,
+          child: Text(items),
+        );
+      }).toList(),
+      // After selecting the desired option,it will
+      // change button value to selected value
+      onChanged: (String? newValue) {
+        setState(() {
+          dropDownValue = newValue!;
+        });
+      },
     );
   }
 }

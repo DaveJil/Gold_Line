@@ -62,7 +62,7 @@ class CashPaymentWidget extends StatelessWidget {
                         padding: const EdgeInsets.all(20.0),
                         child: CustomButton(
                           height: 60,
-                          fontSize: 22,
+                          fontSize: 18,
                           onPressed: () async {
                             await mapProvider.updatePaymentMethod();
                             mapProvider.changeWidgetShowed(

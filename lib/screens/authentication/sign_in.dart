@@ -9,6 +9,8 @@ import 'package:gold_line/utility/helpers/validators.dart';
 import 'package:gold_line/utility/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../utility/helpers/custom_button.dart';
+
 class SignInScreen extends StatefulWidget {
   @override
   _SignInScreenState createState() => _SignInScreenState();
@@ -35,7 +37,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 24),
+                      fontSize: 22),
                 ),
               ),
               SizedBox(
@@ -93,28 +95,18 @@ class _SignInScreenState extends State<SignInScreen> {
                   'New User? Create an account',
                   style: TextStyle(
                       color: kPrimaryGoldColor,
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.w500),
                 ),
               ),
               SizedBox(
                 height: getHeight(30, context),
               ),
-              Container(
-                height: getHeight(45, context),
-                width: getWidth(200, context),
-                decoration: BoxDecoration(
-                    color: kPrimaryGoldColor,
-                    borderRadius: BorderRadius.circular(20)),
-                child: TextButton(
-                  onPressed: () async {
-                    await userProvider.signIn(context);
-                  },
-                  child: const AutoSizeText(
-                    'Login',
-                    style: TextStyle(color: Colors.white, fontSize: 25),
-                  ),
-                ),
+              CustomButton(
+                onPressed: () async {
+                  await userProvider.signIn(context);
+                },
+                text: 'Login',
               ),
               SizedBox(
                 height: getHeight(30, context),

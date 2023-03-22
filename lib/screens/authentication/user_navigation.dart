@@ -55,7 +55,7 @@ class LoginChoiceState extends State<LoginChoice> {
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 28),
+                      fontSize: 22),
                 ),
                 SizedBox(
                   height: getHeight(10, context),
@@ -85,27 +85,27 @@ class LoginChoiceState extends State<LoginChoice> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(40.0),
-                  child: Row(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: CustomButton(
-                          onPressed: () {
-                            changeScreen(context, SignUpScreen());
-                          },
-                          text: 'Sign Up As Agent',
-                        ),
+                      CustomButton(
+                        onPressed: () {
+                          changeScreen(context, SignUpScreen());
+                        },
+                        text: 'Sign Up As Agent',
                       ),
                       SizedBox(
                         width: 10,
                       ),
-                      Expanded(
-                        child: CustomButton(
-                          onPressed: () {
-                            changeScreen(context, SignUpScreen());
-                          },
-                          text: 'SignUp As Driver',
-                        ),
+                      Text(
+                        "Or",
+                        style: TextStyle(),
+                      ),
+                      CustomButton(
+                        onPressed: () {
+                          changeScreen(context, SignUpScreen());
+                        },
+                        text: 'SignUp As User',
                       )
                     ],
                   ),

@@ -257,6 +257,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                 height: getHeight(30, context),
               ),
               Container(
+                padding: EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -271,7 +272,6 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                 child: TextButton(
                     onPressed: () async {
                       await mapProvider.createDeliveryRequest();
-                      await mapProvider.createRoute();
                       await mapProvider.processDelivery();
                       print('navigate');
                       mapProvider.changeWidgetShowed(
@@ -279,15 +279,10 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
 
                       changeScreenReplacement(context, MapWidget());
                     },
-                    child: (mapProvider.isLoading = true)
-                        ? CircularProgressIndicator(
-                            color: kPrimaryGoldColor,
-                          )
-                        : const Text(
-                            'Continue',
-                            style: TextStyle(
-                                color: kPrimaryGoldColor, fontSize: 22),
-                          )),
+                    child: const Text(
+                      'Continue',
+                      style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
+                    )),
               ),
             ],
           ),

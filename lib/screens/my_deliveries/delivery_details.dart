@@ -19,6 +19,16 @@ class DeliveryDetailsScreen extends StatefulWidget {
   final String? riderPlateNumber;
   final String? paymentMethod;
   final String? status;
+  final String? paymentBy;
+  final String? paymentStatus;
+  final String? pickUpLatitude,
+      pickUpLongitude,
+      dropOffLatitude,
+      dropOffLongitude;
+  final String? receiverName;
+  final String? receiverPhone;
+  final String? senderName;
+  final String? senderPhone;
   const DeliveryDetailsScreen(
       {Key? key,
       this.title,
@@ -30,8 +40,18 @@ class DeliveryDetailsScreen extends StatefulWidget {
       this.riderPhoneNumber,
       this.riderPlateNumber,
       this.date,
+      this.senderPhone,
+      this.senderName,
+      this.receiverPhone,
+      this.receiverName,
       this.paymentMethod,
+      this.paymentStatus,
       this.status,
+      this.paymentBy,
+      this.dropOffLatitude,
+      this.dropOffLongitude,
+      this.pickUpLatitude,
+      this.pickUpLongitude,
       this.pickUpLocation})
       : super(key: key);
 

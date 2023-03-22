@@ -6,21 +6,21 @@ import '../../../utility/helpers/constants.dart';
 import '../../../utility/providers/get_list_provider.dart';
 import 'delivery_card.dart';
 
-class CompletedDeliveries extends StatefulWidget {
-  const CompletedDeliveries({Key? key}) : super(key: key);
+class CancelledDeliveries extends StatefulWidget {
+  const CancelledDeliveries({Key? key}) : super(key: key);
 
   @override
-  State<CompletedDeliveries> createState() => _CompletedDeliveriesState();
+  State<CancelledDeliveries> createState() => _CancelledDeliveriesState();
 }
 
-class _CompletedDeliveriesState extends State<CompletedDeliveries> {
+class _CancelledDeliveriesState extends State<CancelledDeliveries> {
   late Future deliveries;
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final deliveryListProvider =
           Provider.of<GetListProvider>(context, listen: false);
-      deliveries = deliveryListProvider.checkCompletedDelivery();
+      deliveries = deliveryListProvider.checkCancelledDelivery();
     });
     super.initState();
   }
@@ -44,14 +44,14 @@ class _CompletedDeliveriesState extends State<CompletedDeliveries> {
           child: Column(
             children: [
               Text(
-                "Completed Deliveries",
+                "Cancelled Deliveries",
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
               ),
               SizedBox(
                 height: 10.appHeight(context),
               ),
               FutureBuilder(
-                  future: deliveryListProvider.checkCompletedDelivery(),
+                  future: deliveryListProvider.checkCancelledDelivery(),
                   builder: (context, snapshot) {
                     // Checking if future is resolved
                     if (snapshot.connectionState == ConnectionState.done) {

@@ -39,24 +39,6 @@ class _MainMenuState extends State<MainMenu> {
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          iconSize: getHeight(20, context),
-          color: kPrimaryGoldColor,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-          'Account',
-          style: TextStyle(
-              color: Colors.black,
-              fontSize: getHeight(28, context),
-              fontWeight: FontWeight.w600),
-        ),
-        backgroundColor: Colors.white,
-      ),
       body: FutureBuilder(
           future: userProvider.getUserData(context),
           builder: (context, snapshot) {
@@ -250,7 +232,7 @@ class _MainMenuState extends State<MainMenu> {
                           color: kPrimaryGoldColor,
                         ),
                         onTap: () {
-                          changeScreen(context, Wallet());
+                          changeScreen(context, WalletScreen());
                         },
                       ),
                       SizedBox(

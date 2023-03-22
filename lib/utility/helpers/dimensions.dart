@@ -37,3 +37,13 @@ extension getAppHeight on num {
     return screenWidth / newScreenWidth;
   }
 }
+
+double height(BuildContext context) {
+  final height = MediaQuery.of(context).size.height;
+  return height;
+}
+
+double width(BuildContext context) {
+  final width = MediaQuery.of(context).size.height;
+  return width;
+}

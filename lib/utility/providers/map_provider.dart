@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -55,6 +56,7 @@ class MapProvider with ChangeNotifier {
 
   //delivery stages(status)
   static const DRIVER_ASSIGNED_NOTIFICATION = 'driver_assigned';
+
   // static const DELIVERY_PICKED_NOTIFICATION = 'delivery_picked'; //riders don't have app
   static const DELIVERY_CANCELED_NOTIFICATION = 'delivery_canceled';
   static const DELIVERY_ACCEPTED_NOTIFICATION = 'delivery_accepted';
@@ -92,12 +94,15 @@ class MapProvider with ChangeNotifier {
   String? countryCode;
   Set<Marker> _markers = {};
   Set<Polyline> _poly = {};
+
   Set<Polyline> get poly => _poly;
   Set<Polyline> _routeToDestinationPolys = {};
   Set<Polyline> _routeToDriverpoly = {};
+
   Set<Marker> get markers => _markers;
 
   GoogleMapController? _mapController;
+
   GoogleMapController? get mapController => _mapController;
   GoogleMapsServices _googleMapsServices = GoogleMapsServices();
 
@@ -106,7 +111,11 @@ class MapProvider with ChangeNotifier {
   UserProfile? user;
 
   Show show = Show.HOME;
-
+  double? distanceStartLongitude;
+  double? distanceEndLongitude;
+  double? distanceStartLatitude;
+  double? distanceEndLatitude;
+  double? distanceBetweenPickandDropOff;
   DriverProfile? driverProfile;
   RouteModel? routeModel;
 
@@ -131,8 +140,10 @@ class MapProvider with ChangeNotifier {
 
   //  this variable will listen to the status of the ride request
   StreamSubscription<AsyncSnapshot>? requestStream;
+
   // this variable will keep track of the drivers position before and during the ride
   StreamSubscription<AsyncSnapshot>? driverStream;
+
 //  this stream is for all the driver on the app
   StreamSubscription<List<DriverProfile>>? allDriversStream;
 
@@ -166,7 +177,7 @@ class MapProvider with ChangeNotifier {
   MapProvider() {
     _setCustomMapPin();
     _getUserLocation();
-    _listenToDrivers();
+    // _listenToDrivers();
     Geolocator.getPositionStream().listen(_updatePosition);
   }
 
@@ -244,7 +255,7 @@ class MapProvider with ChangeNotifier {
   onCameraMove(CameraPosition position) {
     //  MOVE the pickup marker only when selecting the pickup location
     lastPosition = position.target;
-    changePickupLocationAddress(address: "loading...");
+    // changePickupLocationAddress(address: "loading...");
     if (_markers.isNotEmpty) {
       _markers.forEach((element) async {
         if (element.markerId.value == PICKUP_MARKER_ID) {
@@ -329,14 +340,15 @@ class MapProvider with ChangeNotifier {
       PointLatLng(pickUpLatLng!.latitude, pickUpLatLng!.longitude),
       PointLatLng(dropOffLatLng!.latitude, dropOffLatLng!.longitude),
     );
-    if (result.points.isNotEmpty) {
-      result.points.forEach(
-        (PointLatLng point) => polylineCoordinates.add(
-          LatLng(point.latitude, point.longitude),
-        ),
-      );
-      notifyListeners();
-    }
+    // if (result.points.isNotEmpty) {
+    //   result.points.forEach(
+    //     (PointLatLng point) => polylineCoordinates.add(
+    //       LatLng(point.latitude, point.longitude),
+    //     ),
+    //   );
+    //   notifyListeners();
+    // }
+    notifyListeners();
     addPolyLine(polylineCoordinates);
     _poly = Set<Polyline>.of(polylines.values);
 
@@ -583,7 +595,14 @@ class MapProvider with ChangeNotifier {
   }
 
   Future createDeliveryRequest() async {
-    clearPoly();
+    await clearPoly();
+
+    polylineCoordinates.add(pickUpLatLng!);
+    polylineCoordinates.add(dropOffLatLng!);
+    await calculateDistance();
+    await createRoute();
+    print(polylineCoordinates);
+    print(distanceBetweenPickandDropOff);
     Map<String, dynamic> values = {
       "receiver_name": receiverName.text,
       "receiver_phone": receiverPhone.text,
@@ -597,8 +616,8 @@ class MapProvider with ChangeNotifier {
       "city": city.text,
       "state": state.text,
       "payment_by": whoFuckingPays.toString(),
-      "pickup_time": selectedDate.toString() + selectedTime.toString(),
-      // "distance": routeModel!.distance,
+      // "pickup_time": selectedDate.toString() + selectedTime.toString(),
+      "distance": distanceBetweenPickandDropOff,
       // "duration": routeModel!.timeNeeded,
       "pickup_address": pickUpLocationController.text,
       "dropoff_address": dropOffLocationController.text,
@@ -606,7 +625,6 @@ class MapProvider with ChangeNotifier {
       "description": description.text
     };
     SharedPreferences pref = await SharedPreferences.getInstance();
-    isLoading = true;
 
     try {
       final response = await CallApi().postData(values, 'user/delivery/new');
@@ -639,7 +657,6 @@ class MapProvider with ChangeNotifier {
     } catch (err) {
       throw Exception(err.toString());
     }
-    isLoading = false;
 
     notifyListeners();
   }
@@ -714,6 +731,7 @@ class MapProvider with ChangeNotifier {
   _listenToDrivers() {
     // allDriversStream = _driverService.getDrivers().listen(_updateMarkers);
   }
+
 // trip process endpoint
 
   Future processDelivery() async {
@@ -910,6 +928,65 @@ class MapProvider with ChangeNotifier {
 
   changeWidgetShowed({Show? showWidget}) {
     show = showWidget!;
+    notifyListeners();
+  }
+
+  Future<bool> calculateDistance() async {
+    try {
+      // Use the retrieved coordinates of the current position,
+      // instead of the address if the start position is user's
+      // current position, as it results in better accuracy.
+      distanceStartLatitude = pickUpLatLng!.latitude;
+
+      distanceStartLongitude = pickUpLatLng!.longitude;
+      distanceEndLatitude = dropOffLatLng!.latitude;
+      distanceEndLongitude = dropOffLatLng!.longitude;
+
+      double totalDistance = 0.0;
+
+      // Calculating the total distance by adding the distance
+      // between small segments
+      for (int i = 0; i < polylineCoordinates.length - 1; i++) {
+        totalDistance += _coordinateDistance(
+          polylineCoordinates[i].latitude,
+          polylineCoordinates[i].longitude,
+          polylineCoordinates[i + 1].latitude,
+          polylineCoordinates[i + 1].longitude,
+        );
+      }
+
+      distanceBetweenPickandDropOff = totalDistance;
+      print('DISTANCE: $distanceBetweenPickandDropOff km');
+      notifyListeners();
+
+      return true;
+    } catch (e) {
+      print(e);
+    }
+    return false;
+  }
+
+  // Method for calculating the distance between two places
+
+// Formula for calculating distance between two coordinates
+// https://stackoverflow.com/a/54138876/11910277
+  double _coordinateDistance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a));
+  }
+
+  altCalculateDistance() async {
+    double distanceInMeters = Geolocator.bearingBetween(
+      pickUpLatLng!.latitude,
+      pickUpLatLng!.longitude,
+      dropOffLatLng!.latitude,
+      dropOffLatLng!.longitude,
+    );
+    distanceBetweenPickandDropOff = distanceInMeters / 1000;
     notifyListeners();
   }
 }

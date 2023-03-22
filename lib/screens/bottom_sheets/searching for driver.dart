@@ -105,53 +105,50 @@ class _SearchingForDriverSheetState extends State<SearchingForDriverSheet> {
                     SizedBox(
                       height: 10.appHeight(context),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: SizedBox(
-                        height: 50.appHeight(context),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                mapProvider.changeWidgetShowed(
-                                    showWidget: Show.HOME);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                elevation: 20,
-                                backgroundColor: kPrimaryGoldColor,
-                              ),
-                              child: const Text(
-                                "Go Back To Home",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700),
-                              ),
+                    SizedBox(
+                      height: 50.appHeight(context),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              mapProvider.changeWidgetShowed(
+                                  showWidget: Show.HOME);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              elevation: 20,
+                              backgroundColor: kPrimaryGoldColor,
                             ),
-                            SizedBox(
-                              width: 50.appWidth(context),
+                            child: const Text(
+                              "Home",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700),
                             ),
-                            ElevatedButton(
-                              onPressed: () {
-                                changeScreenReplacement(
-                                    context, MyDeliveriesScreen());
-                              },
-                              style: ElevatedButton.styleFrom(
-                                elevation: 20,
-                                backgroundColor: Colors.white70,
-                              ),
-                              child: const Text(
-                                "Go To My Deliveries",
-                                style: TextStyle(
-                                    color: kPrimaryGoldColor,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700),
-                              ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              changeScreenReplacement(
+                                  context, MyDeliveriesScreen());
+                            },
+                            style: ElevatedButton.styleFrom(
+                              elevation: 20,
+                              backgroundColor: Colors.white70,
                             ),
-                          ],
-                        ),
+                            child: const Text(
+                              "My Deliveries",
+                              style: TextStyle(
+                                  color: kPrimaryGoldColor,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(

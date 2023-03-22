@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:gold_line/screens/authentication/proceed_login.dart';
 import 'package:gold_line/screens/authentication/user_navigation.dart';
 import 'package:gold_line/utility/helpers/custom_display_widget.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
@@ -137,11 +138,6 @@ class UserProvider with ChangeNotifier {
         String token = response['token'];
         print(token);
         pref.setString('token', response['token']);
-        firstNamePref = response['data']['profile']['first_name'];
-        lastNamePref = response['data']['profile']['last_name'];
-        emailPref = response['data']['email'];
-        referralId = response['data']['uuid'];
-
         pref.setString('token', token);
         pref.setBool(LOGGED_IN, true);
 
@@ -177,10 +173,7 @@ class UserProvider with ChangeNotifier {
       String code = response['code'];
 
       if (code == 'success') {
-        String token = response['token'];
-        print(token);
-        pref.setString('token', response['token']);
-        pref.setBool(LOGGED_IN, true);
+        changeScreen(context, ProceedLogin());
         CustomDisplayWidget.displayAwesomeSuccessSnackBar(
             context, "Relax", "Check Email for password reset link");
       } else {
@@ -240,8 +233,7 @@ class UserProvider with ChangeNotifier {
     dynamic request = {};
 
     try {
-      var response =
-          await CallApi().addImage(request, 'api/profile', file, image);
+      var response = await CallApi().addImage(request, 'profile/', file, image);
       print(response);
     } on SocketException {
       throw const SocketException('No internet connection');
