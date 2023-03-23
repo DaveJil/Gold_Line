@@ -630,22 +630,13 @@ class MapProvider with ChangeNotifier {
     try {
       final response = await CallApi().postData(values, 'user/delivery/new');
 
-      final body = response;
       print('delivery sent');
-      deliveryId = body['data']['id'];
-      print(deliveryId);
-      pref.setInt('deliveryId', deliveryId!);
-      if (response['success'] == "success") {
-        createRoute();
-        final body = response;
-        print('delivery sent');
-        String deliveryId = response['id'];
-        print(deliveryId);
-        pref.setString('deliveryId', response['id']);
-        createRoute();
+      print(response);
+      String code = response['code'];
+      print(code);
+      if (code == "success") {
         distanceBetweenPickandDropOff = 0;
         notifyListeners();
-        print(body);
         String message = response['message'];
       } else {
         distanceBetweenPickandDropOff = 0;

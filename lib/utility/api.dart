@@ -82,11 +82,14 @@ class CallApi {
     print("streamedresponse =  $streamedResponse");
     var response = await http.Response.fromStream(streamedResponse);
     print("response = $response");
-    var result = jsonDecode(response.body);
-    print("result = $result");
+    print(response.statusCode);
+    //
+    // var result = jsonDecode(response.body);
+    // print("result = $result");
 
     if (response.statusCode == 201) {
-      return result;
+      print(response.statusCode);
+      // return result;
     } else {}
   }
 
