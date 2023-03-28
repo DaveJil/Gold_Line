@@ -200,7 +200,7 @@ class UserProvider with ChangeNotifier {
     };
 
     try {
-      var response = await CallApi().postData(request, 'profile/');
+      var response = await CallApi().postData(request, 'profile');
       print(response);
       String code = response['code'];
       if (code == 'success') {
@@ -233,7 +233,7 @@ class UserProvider with ChangeNotifier {
     dynamic request = {};
 
     try {
-      var response = await CallApi().addImage(request, 'profile/', file, image);
+      var response = await CallApi().addImage(request, 'profile', file, image);
       print(response);
     } on SocketException {
       throw const SocketException('No internet connection');

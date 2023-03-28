@@ -93,6 +93,7 @@ class _MainMenuState extends State<MainMenu> {
                                     } else if (snapshot.hasData) {
                                       // Extracting data from snapshot object
                                       final datum = snapshot.data;
+                                      print(datum!.avatar);
                                       print(datum);
                                       return Container(
                                         padding: EdgeInsets.all(16),

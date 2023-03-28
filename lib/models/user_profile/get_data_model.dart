@@ -11,5 +11,6 @@ class GetData {
       : email = json['email'],
         lastName = json["profile"]['last_name'],
         firstName = json['profile']['first_name'],
+        avatar = json['avatar'],
         uuid = json["uuid"];
 }

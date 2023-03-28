@@ -116,7 +116,7 @@ class MapProvider with ChangeNotifier {
   double? distanceEndLongitude;
   double? distanceStartLatitude;
   double? distanceEndLatitude;
-  double? distanceBetweenPickandDropOff;
+  double? distanceBetweenPickAndDropOff;
   DriverProfile? driverProfile;
   RouteModel? routeModel;
 
@@ -597,13 +597,15 @@ class MapProvider with ChangeNotifier {
 
   Future createDeliveryRequest(BuildContext context) async {
     await clearPoly();
+    distanceBetweenPickAndDropOff = 0;
+    polylineCoordinates = [];
 
     polylineCoordinates.add(pickUpLatLng!);
     polylineCoordinates.add(dropOffLatLng!);
     await calculateDistance();
     await createRoute();
     print(polylineCoordinates);
-    print(distanceBetweenPickandDropOff);
+    print(distanceBetweenPickAndDropOff);
     Map<String, dynamic> values = {
       "receiver_name": receiverName.text,
       "receiver_phone": receiverPhone.text,
@@ -618,7 +620,7 @@ class MapProvider with ChangeNotifier {
       "state": state.text,
       "payment_by": whoFuckingPays.toString(),
       // "pickup_time": selectedDate.toString() + selectedTime.toString(),
-      "distance": distanceBetweenPickandDropOff,
+      "distance": distanceBetweenPickAndDropOff,
       // "duration": routeModel!.timeNeeded,
       "pickup_address": pickUpLocationController.text,
       "dropoff_address": dropOffLocationController.text,
@@ -635,11 +637,15 @@ class MapProvider with ChangeNotifier {
       String code = response['code'];
       print(code);
       if (code == "success") {
-        distanceBetweenPickandDropOff = 0;
+        print("success");
+        distanceBetweenPickAndDropOff = 0;
+        final data = response['data'];
+        print(data);
+        deliveryId = response['data']['id'];
+        print(deliveryId);
         notifyListeners();
-        String message = response['message'];
       } else {
-        distanceBetweenPickandDropOff = 0;
+        distanceBetweenPickAndDropOff = 0;
         String message = response['message'];
 
         CustomDisplayWidget.displayAwesomeSuccessSnackBar(
@@ -729,8 +735,11 @@ class MapProvider with ChangeNotifier {
       final body = response;
       print(body);
       print('delivery processing');
-      deliveryPrice = response['data']['price'];
-      print(deliveryPrice);
+
+      var val = response['data']['price'];
+      print("val = $val");
+      deliveryPrice = (((val + 50) ~/ 100) * 100).toInt().toString();
+      notifyListeners();
       preferences.setString('price', deliveryPrice!);
       if (response['success'] == "success") {
         print(body);
@@ -917,11 +926,13 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // Method for calculating the distance between two places
   Future<bool> calculateDistance() async {
     try {
       // Use the retrieved coordinates of the current position,
       // instead of the address if the start position is user's
       // current position, as it results in better accuracy.
+
       distanceStartLatitude = pickUpLatLng!.latitude;
 
       distanceStartLongitude = pickUpLatLng!.longitude;
@@ -929,6 +940,7 @@ class MapProvider with ChangeNotifier {
       distanceEndLongitude = dropOffLatLng!.longitude;
 
       double totalDistance = 0.0;
+      distanceBetweenPickAndDropOff = 0;
 
       // Calculating the total distance by adding the distance
       // between small segments
@@ -941,8 +953,8 @@ class MapProvider with ChangeNotifier {
         );
       }
 
-      distanceBetweenPickandDropOff = totalDistance;
-      print('DISTANCE: $distanceBetweenPickandDropOff km');
+      distanceBetweenPickAndDropOff = totalDistance;
+      print('DISTANCE: $distanceBetweenPickAndDropOff km');
       notifyListeners();
 
       return true;
@@ -952,10 +964,7 @@ class MapProvider with ChangeNotifier {
     return false;
   }
 
-  // Method for calculating the distance between two places
-
 // Formula for calculating distance between two coordinates
-// https://stackoverflow.com/a/54138876/11910277
   double _coordinateDistance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
     var c = cos;
@@ -963,16 +972,5 @@ class MapProvider with ChangeNotifier {
         c((lat2 - lat1) * p) / 2 +
         c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
     return 12742 * asin(sqrt(a));
-  }
-
-  altCalculateDistance() async {
-    double distanceInMeters = Geolocator.bearingBetween(
-      pickUpLatLng!.latitude,
-      pickUpLatLng!.longitude,
-      dropOffLatLng!.latitude,
-      dropOffLatLng!.longitude,
-    );
-    distanceBetweenPickandDropOff = distanceInMeters / 1000;
-    notifyListeners();
   }
 }
