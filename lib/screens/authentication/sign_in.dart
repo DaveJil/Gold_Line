@@ -102,11 +102,14 @@ class _SignInScreenState extends State<SignInScreen> {
               SizedBox(
                 height: getHeight(30, context),
               ),
-              CustomButton(
-                onPressed: () async {
-                  await userProvider.signIn(context);
-                },
-                text: 'Login',
+              Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: CustomButton(
+                  onPressed: () async {
+                    await userProvider.signIn(context);
+                  },
+                  text: 'Login',
+                ),
               ),
               SizedBox(
                 height: getHeight(30, context),

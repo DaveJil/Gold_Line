@@ -55,7 +55,7 @@ class LoginChoiceState extends State<LoginChoice> {
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 22),
+                      fontSize: 28),
                 ),
                 SizedBox(
                   height: getHeight(10, context),
@@ -85,27 +85,28 @@ class LoginChoiceState extends State<LoginChoice> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(40.0),
-                  child: Column(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CustomButton(
-                        onPressed: () {
-                          changeScreen(context, SignUpScreen());
-                        },
-                        text: 'Sign Up As Agent',
+                      Expanded(
+                        child: CustomButton(
+                          onPressed: () {
+                            changeScreen(context, SignUpScreen());
+                          },
+                          text: 'Sign Up As Agent',
+                        ),
                       ),
                       SizedBox(
                         width: 10,
                       ),
-                      Text(
-                        "Or",
-                        style: TextStyle(),
-                      ),
-                      CustomButton(
-                        onPressed: () {
-                          changeScreen(context, SignUpScreen());
-                        },
-                        text: 'SignUp As User',
+                      Expanded(
+                        child: CustomButton(
+                          width: getWidth(250, context),
+                          onPressed: () {
+                            changeScreen(context, SignUpScreen());
+                          },
+                          text: 'Sign Up As User',
+                        ),
                       )
                     ],
                   ),
