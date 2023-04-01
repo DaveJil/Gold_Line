@@ -111,7 +111,11 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                   Checkbox(
                       value: _useCurrentLocationPickUp,
                       activeColor: kPrimaryGoldColor,
-                      onChanged: (bool? value) {
+                      onChanged: (bool? value) async {
+                        mapProvider.pickUpState =
+                            await mapProvider.getStateFromCoordinates(
+                                point: mapProvider.center!);
+
                         setState(() {
                           mapProvider.predictions = [];
                           pickUpLocationController.text =
@@ -186,15 +190,25 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                             details.result != null &&
                             mounted) {
                           if (mapProvider.startFocusNode.hasFocus) {
+                            String pickUpAddress =
+                                await mapProvider.getAddressFromCoordinates(
+                                    point: mapProvider.pickUpLatLng!);
                             mapProvider.pickupLocation = details.result;
                             mapProvider.pickUpLatLng = LatLng(
                                 mapProvider
                                     .pickupLocation!.geometry!.location!.lat!,
                                 mapProvider
                                     .pickupLocation!.geometry!.location!.lng!);
+                            pickUpLocationController.text =
+                                details.result!.formattedAddress!;
+                            mapProvider.pickUpState =
+                                await mapProvider.getStateFromCoordinates(
+                                    point: mapProvider.pickUpLatLng!);
+                            print(mapProvider.pickUpState);
+
                             setState(() {
                               pickUpLocationController.text =
-                                  details.result!.name!;
+                                  details.result!.formattedAddress!;
                               mapProvider.predictions = [];
                             });
                           } else if (mapProvider.endFocusNode.hasFocus) {
@@ -204,11 +218,22 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                                     .dropoffLocation!.geometry!.location!.lat!,
                                 mapProvider
                                     .dropoffLocation!.geometry!.location!.lng!);
+                            String dropOffAddress =
+                                await mapProvider.getAddressFromCoordinates(
+                                    point: mapProvider.dropOffLatLng!);
+                            print(dropOffAddress);
+                            dropOffLocationController.text =
+                                details.result!.formattedAddress!;
+                            mapProvider.dropOffState =
+                                await mapProvider.getStateFromCoordinates(
+                                    point: mapProvider.dropOffLatLng!);
+                            print(mapProvider.dropOffState);
 
                             setState(() {
                               dropOffLocationController.text =
-                                  details.result!.name!;
+                                  details.result!.formattedAddress!;
                               mapProvider.predictions = [];
+                              print(dropOffLocationController.text);
                             });
                           }
 
@@ -236,10 +261,13 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                   Checkbox(
                       value: _useCurrentLocationDropOff,
                       activeColor: kPrimaryGoldColor,
-                      onChanged: (bool? value) {
+                      onChanged: (bool? value) async {
                         mapProvider.dropOffLatLng = LatLng(
                             mapProvider.center!.latitude,
                             mapProvider.center!.longitude);
+                        mapProvider.dropOffState =
+                            await mapProvider.getStateFromCoordinates(
+                                point: mapProvider.center!);
                         setState(() {
                           mapProvider.predictions = [];
                           dropOffLocationController.text =

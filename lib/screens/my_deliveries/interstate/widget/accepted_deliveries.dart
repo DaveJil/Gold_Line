@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:provider/provider.dart';
 
-import '../../../utility/helpers/constants.dart';
-import '../../../utility/providers/get_list_provider.dart';
+import '../../../../utility/helpers/constants.dart';
+import '../../../../utility/providers/get_list_provider.dart';
 import 'delivery_card.dart';
 
 class AcceptedDeliveries extends StatefulWidget {
@@ -20,7 +20,7 @@ class _AcceptedDeliveriesState extends State<AcceptedDeliveries> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final deliveryListProvider =
           Provider.of<GetListProvider>(context, listen: false);
-      deliveries = deliveryListProvider.checkAcceptedDelivery();
+      deliveries = deliveryListProvider.checkAcceptedInterStateDelivery();
     });
     super.initState();
   }
@@ -51,7 +51,8 @@ class _AcceptedDeliveriesState extends State<AcceptedDeliveries> {
               ),
               SingleChildScrollView(
                 child: FutureBuilder(
-                    future: deliveryListProvider.checkAcceptedDelivery(),
+                    future:
+                        deliveryListProvider.checkAcceptedInterStateDelivery(),
                     builder: (context, snapshot) {
                       // Checking if future is resolved
                       if (snapshot.connectionState == ConnectionState.done) {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gold_line/screens/my_deliveries/widget/accepted_deliveries.dart';
-import 'package:gold_line/screens/my_deliveries/widget/cancelled_deliveries.dart';
-import 'package:gold_line/screens/my_deliveries/widget/completed_deliveries.dart';
-import 'package:gold_line/screens/my_deliveries/widget/pending_deliveries.dart';
 
-import '../../utility/helpers/constants.dart';
+import '../../../utility/helpers/constants.dart';
+import 'widget/accepted_deliveries.dart';
+import 'widget/cancelled_deliveries.dart';
+import 'widget/completed_deliveries.dart';
+import 'widget/pending_deliveries.dart';
 
 class MyDeliveriesScreen extends StatefulWidget {
   const MyDeliveriesScreen({Key? key}) : super(key: key);

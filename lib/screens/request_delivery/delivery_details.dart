@@ -71,7 +71,7 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 20),
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
           child: Form(
             key: _formKey,
             child: Column(
@@ -119,22 +119,22 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                   icon: const Icon(Icons.phone),
                   controller: receiverPhone,
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
-                CustomDeliveryTextField(
-                  hint: "City",
-                  icon: const Icon(Icons.house_sharp),
-                  controller: city,
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                CustomDeliveryTextField(
-                  hint: "State",
-                  icon: const Icon(Icons.home_filled),
-                  controller: state,
-                ),
+                // const SizedBox(
+                //   height: 12,
+                // ),
+                // CustomDeliveryTextField(
+                //   hint: "City",
+                //   icon: const Icon(Icons.house_sharp),
+                //   controller: city,
+                // ),
+                // const SizedBox(
+                //   height: 12,
+                // ),
+                // CustomDeliveryTextField(
+                //   hint: "State",
+                //   icon: const Icon(Icons.home_filled),
+                //   controller: state,
+                // ),
                 const SizedBox(
                   height: 12,
                 ),
@@ -151,10 +151,13 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                   icon: const Icon(Icons.question_mark),
                   controller: instruction,
                 ),
-                const SizedBox(height: 7),
+                const SizedBox(
+                  height: 12,
+                ),
+
                 const BuildCheckBox(),
                 const SizedBox(
-                  height: 7,
+                  height: 12,
                 ),
                 Row(
                   children: [
@@ -184,7 +187,7 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                 Row(
                   children: [
                     const Text(
-                      "Delivery Option.",
+                      "Delivery Options",
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 17,
@@ -202,11 +205,17 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                 SizedBox(
                   height: 4,
                 ),
-                DeliveryOption(),
+                Row(
+                  children: [
+                    DeliveryOption(),
+                    SelectCity(),
+                  ],
+                ),
                 const SizedBox(
                   height: 12,
                 ),
                 const PayerRadioButton(),
+
                 SizedBox(height: size.width / 15),
                 Padding(
                   padding:
@@ -226,39 +235,37 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
   }
 }
 
-class BuildCheckBox extends StatefulWidget {
+class BuildCheckBox extends StatelessWidget {
   const BuildCheckBox({Key? key}) : super(key: key);
 
   @override
-  State<BuildCheckBox> createState() => _BuildCheckBoxState();
-}
-
-class _BuildCheckBoxState extends State<BuildCheckBox> {
-  bool _isFragile = false;
-
-  @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<MapProvider>(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Expanded(
-          child: AutoSizeText(
-            "Please tick if this parcel is considered as fragile",
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.black54,
-              // fontWeight: FontWeight.w400,
-            ),
-            maxLines: 1,
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              AutoSizeText(
+                "Please tick if you require express(instant) delivery\nNote: Additional charges would be applied",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black54,
+                  // fontWeight: FontWeight.w400,
+                ),
+                maxLines: 2,
+              ),
+            ],
           ),
         ),
         Checkbox(
-            value: _isFragile,
+            value: provider.isExpress,
             activeColor: kPrimaryGoldColor,
             onChanged: (bool? value) {
-              setState(() {
-                _isFragile = !_isFragile;
-              });
+              provider.isExpress = !provider.isExpress;
             })
       ],
     );
@@ -379,7 +386,7 @@ class _BuildItemSizeState extends State<BuildItemSize> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
+                  children: const [
                     Icon(
                       FontAwesomeIcons.boxOpen,
                       size: 15,
@@ -507,17 +514,16 @@ class DeliveryOption extends StatefulWidget {
 }
 
 class _DeliveryOptionState extends State<DeliveryOption> {
-  String dropDownValue = 'Select Delivery Type';
-
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<MapProvider>(context);
     // Initial Selected Value
 
     // List of items in our dropdown menu
     var items = [
       'Select Delivery Type',
       'Dispatch Bike(Intra-State)',
-      'Interstate Courier - Not Available',
+      'Interstate Courier',
       'International Courier- Not Available',
       'Vans And Trucks(Intra city)- Not Available',
       'Vans And Trucks(Intra state)- Not Available',
@@ -525,7 +531,7 @@ class _DeliveryOptionState extends State<DeliveryOption> {
 
     return DropdownButton<String>(
       // Initial Value
-      value: dropDownValue,
+      value: provider.deliveryDropDownValue,
 
       // Down Arrow Icon
       icon: const Icon(Icons.keyboard_arrow_down),
@@ -540,8 +546,58 @@ class _DeliveryOptionState extends State<DeliveryOption> {
       // After selecting the desired option,it will
       // change button value to selected value
       onChanged: (String? newValue) {
+        provider.deliveryDropDownValue = newValue!;
+
         setState(() {
-          dropDownValue = newValue!;
+          provider.deliveryDropDownValue = newValue;
+        });
+      },
+    );
+  }
+}
+
+class SelectCity extends StatefulWidget {
+  const SelectCity({Key? key}) : super(key: key);
+
+  @override
+  State<SelectCity> createState() => _SelectCityState();
+}
+
+class _SelectCityState extends State<SelectCity> {
+  @override
+  Widget build(BuildContext context) {
+    final provider = Provider.of<MapProvider>(context);
+    // Initial Selected Value
+
+    // List of items in our dropdown menu
+    var items = [
+      'Select City',
+      'Lagos',
+      'Abuja',
+      'Port-Harcourt',
+    ];
+
+    return DropdownButton<String>(
+      // Initial Value
+      value: provider.cityDropDownValue,
+
+      // Down Arrow Icon
+      icon: const Icon(Icons.keyboard_arrow_down),
+
+      // Array list of items
+      items: items.map((String items) {
+        return DropdownMenuItem(
+          value: items,
+          child: Text(items),
+        );
+      }).toList(),
+      // After selecting the desired option,it will
+      // change button value to selected value
+      onChanged: (String? newValue) {
+        provider.cityDropDownValue = newValue!;
+
+        setState(() {
+          provider.cityDropDownValue = newValue;
         });
       },
     );

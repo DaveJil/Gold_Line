@@ -138,6 +138,9 @@ class MapProvider with ChangeNotifier {
   int? deliveryId;
   String? userAddressText;
   String? whoFuckingPays;
+  String deliveryType = "";
+  String? pickUpState;
+  String? dropOffState;
 
   //  this variable will listen to the status of the ride request
   StreamSubscription<AsyncSnapshot>? requestStream;
@@ -169,6 +172,10 @@ class MapProvider with ChangeNotifier {
   DateTime selectedDate = DateTime.now();
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
+  String deliveryDropDownValue = 'Select Delivery Type';
+  String cityDropDownValue = 'Select City';
+
+  bool isExpress = false;
 
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
@@ -219,6 +226,7 @@ class MapProvider with ChangeNotifier {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemark);
     Placemark place = placemark[0];
+    print(place);
     userAddressText =
         '${place.street}, ${place.subLocality}, ${place.locality}';
 
@@ -239,8 +247,16 @@ class MapProvider with ChangeNotifier {
         await placemarkFromCoordinates(point.latitude, point.longitude);
 
     String address =
-        "${addresses.first.administrativeArea}, ${addresses.first.street}, ${addresses.first.locality}";
+        " ${addresses.first.street}, ${addresses.first.administrativeArea},";
     return address;
+  }
+
+  Future<String> getStateFromCoordinates({required LatLng point}) async {
+    List<Placemark> addresses =
+        await placemarkFromCoordinates(point.latitude, point.longitude);
+
+    String state = "${addresses.first.administrativeArea},";
+    return state;
   }
 
   onCreate(mapController) {
@@ -329,8 +345,6 @@ class MapProvider with ChangeNotifier {
   }
 
   createRoute({Color? color}) async {
-    print(pickUpLatLng!);
-    print(dropOffLatLng!);
     clearPoly();
     var uuid = const Uuid();
     String polyId = uuid.v1();
@@ -341,14 +355,14 @@ class MapProvider with ChangeNotifier {
       PointLatLng(pickUpLatLng!.latitude, pickUpLatLng!.longitude),
       PointLatLng(dropOffLatLng!.latitude, dropOffLatLng!.longitude),
     );
-    // if (result.points.isNotEmpty) {
-    //   result.points.forEach(
-    //     (PointLatLng point) => polylineCoordinates.add(
-    //       LatLng(point.latitude, point.longitude),
-    //     ),
-    //   );
-    //   notifyListeners();
-    // }
+    if (result.points.isNotEmpty) {
+      result.points.forEach(
+        (PointLatLng point) => polylineCoordinates.add(
+          LatLng(point.latitude, point.longitude),
+        ),
+      );
+      notifyListeners();
+    }
     notifyListeners();
     addPolyLine(polylineCoordinates);
     _poly = Set<Polyline>.of(polylines.values);
@@ -616,8 +630,8 @@ class MapProvider with ChangeNotifier {
       "dropoff_latitude": dropOffLatLng!.latitude,
       "dropoff_longitude": dropOffLatLng!.longitude,
       "status": 'pending',
-      "city": city.text,
-      "state": state.text,
+      "city": cityDropDownValue,
+      "state": pickUpState,
       "payment_by": whoFuckingPays.toString(),
       // "pickup_time": selectedDate.toString() + selectedTime.toString(),
       "distance": distanceBetweenPickAndDropOff,
@@ -625,31 +639,61 @@ class MapProvider with ChangeNotifier {
       "pickup_address": pickUpLocationController.text,
       "dropoff_address": dropOffLocationController.text,
       "payment_method": "card",
-      "description": description.text
+      "description": description.text,
     };
     SharedPreferences pref = await SharedPreferences.getInstance();
 
     try {
-      final response = await CallApi().postData(values, 'user/delivery/new');
+      if (pickUpState != dropOffState) {
+        values["pickup_state"] = pickUpState;
+        values["dropoff_state"] = dropOffState;
+        final response =
+            await CallApi().postData(values, 'user/interstate/delivery/new');
 
-      print('delivery sent');
-      print(response);
-      String code = response['code'];
-      print(code);
-      if (code == "success") {
-        print("success");
-        distanceBetweenPickAndDropOff = 0;
-        final data = response['data'];
-        print(data);
-        deliveryId = response['data']['id'];
-        print(deliveryId);
-        notifyListeners();
+        print('delivery sent');
+        print(response);
+        String code = response['code'];
+        print(code);
+        if (code == "success") {
+          print("success");
+          distanceBetweenPickAndDropOff = 0;
+          final data = response['data'];
+          print(data);
+          deliveryId = response['data']['id'];
+          print(deliveryId);
+          notifyListeners();
+        } else {
+          distanceBetweenPickAndDropOff = 0;
+          String message = (response['message']).toString();
+
+          CustomDisplayWidget.displayAwesomeSuccessSnackBar(
+              context, message, "Check entered city, state");
+        }
       } else {
-        distanceBetweenPickAndDropOff = 0;
-        String message = response['message'];
+        if (isExpress = true) {
+          values['type'] = 'express';
+        }
+        final response = await CallApi().postData(values, 'user/delivery/new');
 
-        CustomDisplayWidget.displayAwesomeSuccessSnackBar(
-            context, message, "Check entered city, state");
+        print('delivery sent');
+        print(response);
+        String code = response['code'];
+        print(code);
+        if (code == "success") {
+          print("success");
+          distanceBetweenPickAndDropOff = 0;
+          final data = response['data'];
+          print(data);
+          deliveryId = response['data']['id'];
+          print(deliveryId);
+          notifyListeners();
+        } else {
+          distanceBetweenPickAndDropOff = 0;
+          String message = (response['message']).toString();
+
+          CustomDisplayWidget.displayAwesomeSuccessSnackBar(
+              context, message, "Check entered city, state");
+        }
       }
 
       notifyListeners();

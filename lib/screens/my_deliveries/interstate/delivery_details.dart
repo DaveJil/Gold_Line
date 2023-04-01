@@ -3,7 +3,7 @@ import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:provider/provider.dart';
 
-import '../../utility/providers/map_provider.dart';
+import '../../../utility/providers/map_provider.dart';
 
 class DeliveryDetailsScreen extends StatefulWidget {
   final String? title;

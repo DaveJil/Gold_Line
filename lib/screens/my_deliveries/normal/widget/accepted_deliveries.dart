@@ -2,25 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:provider/provider.dart';
 
-import '../../../utility/helpers/constants.dart';
-import '../../../utility/providers/get_list_provider.dart';
+import '../../../../utility/helpers/constants.dart';
+import '../../../../utility/providers/get_list_provider.dart';
 import 'delivery_card.dart';
 
-class PendingDeliveries extends StatefulWidget {
-  const PendingDeliveries({Key? key}) : super(key: key);
+class AcceptedDeliveries extends StatefulWidget {
+  const AcceptedDeliveries({Key? key}) : super(key: key);
 
   @override
-  State<PendingDeliveries> createState() => _PendingDeliveriesState();
+  State<AcceptedDeliveries> createState() => _AcceptedDeliveriesState();
 }
 
-class _PendingDeliveriesState extends State<PendingDeliveries> {
+class _AcceptedDeliveriesState extends State<AcceptedDeliveries> {
   late Future deliveries;
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final deliveryListProvider =
           Provider.of<GetListProvider>(context, listen: false);
-      deliveries = deliveryListProvider.checkPendingDelivery();
+      deliveries = deliveryListProvider.checkAcceptedDelivery();
     });
     super.initState();
   }
@@ -43,7 +43,7 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
           child: Column(
             children: [
               Text(
-                "Pending Deliveries",
+                "Accepted Deliveries",
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
               ),
               SizedBox(
@@ -51,7 +51,7 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
               ),
               SingleChildScrollView(
                 child: FutureBuilder(
-                    future: deliveryListProvider.checkPendingDelivery(),
+                    future: deliveryListProvider.checkAcceptedDelivery(),
                     builder: (context, snapshot) {
                       // Checking if future is resolved
                       if (snapshot.connectionState == ConnectionState.done) {

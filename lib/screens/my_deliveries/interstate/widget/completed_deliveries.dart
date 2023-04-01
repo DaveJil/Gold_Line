@@ -2,25 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:provider/provider.dart';
 
-import '../../../utility/helpers/constants.dart';
-import '../../../utility/providers/get_list_provider.dart';
+import '../../../../utility/helpers/constants.dart';
+import '../../../../utility/providers/get_list_provider.dart';
 import 'delivery_card.dart';
 
-class CancelledDeliveries extends StatefulWidget {
-  const CancelledDeliveries({Key? key}) : super(key: key);
+class CompletedDeliveries extends StatefulWidget {
+  const CompletedDeliveries({Key? key}) : super(key: key);
 
   @override
-  State<CancelledDeliveries> createState() => _CancelledDeliveriesState();
+  State<CompletedDeliveries> createState() => _CompletedDeliveriesState();
 }
 
-class _CancelledDeliveriesState extends State<CancelledDeliveries> {
+class _CompletedDeliveriesState extends State<CompletedDeliveries> {
   late Future deliveries;
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final deliveryListProvider =
           Provider.of<GetListProvider>(context, listen: false);
-      deliveries = deliveryListProvider.checkCancelledDelivery();
+      deliveries = deliveryListProvider.checkCompletedInterStateDelivery();
     });
     super.initState();
   }
@@ -44,14 +44,15 @@ class _CancelledDeliveriesState extends State<CancelledDeliveries> {
           child: Column(
             children: [
               Text(
-                "Cancelled Deliveries",
+                "Completed Deliveries",
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
               ),
               SizedBox(
                 height: 10.appHeight(context),
               ),
               FutureBuilder(
-                  future: deliveryListProvider.checkCancelledDelivery(),
+                  future:
+                      deliveryListProvider.checkCompletedInterStateDelivery(),
                   builder: (context, snapshot) {
                     // Checking if future is resolved
                     if (snapshot.connectionState == ConnectionState.done) {

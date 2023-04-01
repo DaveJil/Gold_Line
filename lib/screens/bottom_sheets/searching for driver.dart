@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:gold_line/screens/my_deliveries/my_deliveries.dart';
+import 'package:gold_line/screens/my_deliveries/interstate/my_deliveries.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:provider/provider.dart';

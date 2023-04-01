@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gold_line/screens/my_deliveries/widget/pending_deliveries.dart';
+import 'package:gold_line/screens/my_deliveries/normal/delivery_details.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:provider/provider.dart';
 
-import '../../../utility/helpers/constants.dart';
-import '../../../utility/helpers/custom_button.dart';
-import '../../../utility/providers/get_list_provider.dart';
-import '../../../utility/providers/map_provider.dart';
-import '../delivery_details.dart';
+import '../../../../utility/helpers/constants.dart';
+import '../../../../utility/helpers/custom_button.dart';
+import '../../../../utility/providers/get_list_provider.dart';
+import '../../../../utility/providers/map_provider.dart';
+import 'pending_deliveries.dart';
 
 class NewDeliveryCard extends StatelessWidget {
   final String? title;

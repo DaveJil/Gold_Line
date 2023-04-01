@@ -1,14 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gold_line/screens/my_deliveries/widget/accepted_deliveries.dart';
-import 'package:gold_line/screens/my_deliveries/widget/cancelled_deliveries.dart';
-import 'package:gold_line/screens/my_deliveries/widget/completed_deliveries.dart';
-import 'package:gold_line/screens/my_deliveries/widget/pending_deliveries.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
-import 'package:http/http.dart';
 
-import '../../utility/helpers/constants.dart';
+import '../../../utility/helpers/constants.dart';
 
 class MyDeliveriesOptionScreen extends StatefulWidget {
   const MyDeliveriesOptionScreen({Key? key}) : super(key: key);
@@ -47,9 +41,10 @@ class _MyDeliveriesOptionScreen extends State<MyDeliveriesOptionScreen> {
           AutoSizeText(
             'You will see the delivery history for \n the selected delivery type',
             style: TextStyle(
-                color: Colors.black26,
-                fontWeight: FontWeight.w400,
-                fontSize: getHeight(16, context),),
+              color: Colors.black26,
+              fontWeight: FontWeight.w400,
+              fontSize: getHeight(16, context),
+            ),
             textAlign: TextAlign.center,
           ),
           SizedBox(

@@ -12,8 +12,7 @@ import 'package:gold_line/widgets/otherDetailsDivider.dart';
 import 'package:provider/provider.dart';
 
 import '../../utility/providers/user_provider.dart';
-import '../my_deliveries/delivery_options.dart';
-import '../my_deliveries/my_deliveries.dart';
+import '../my_deliveries/interstate/my_deliveries.dart';
 import 'referral.dart';
 
 class MainMenu extends StatefulWidget {

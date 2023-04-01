@@ -156,59 +156,6 @@ class SummaryWidget extends StatelessWidget {
                     const SizedBox(
                       height: 7,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: kPrimaryGoldColor,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Material(
-                        child: CheckboxListTile(
-                          tileColor: Colors.white,
-                          title: const Text('Same Day Delivery'),
-                          value: true,
-                          onChanged: (bool? value) {},
-                          secondary: const Icon(Icons.bike_scooter),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 7,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        border: Border.all(
-                          color: Colors.white30,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Material(
-                        child: CheckboxListTile(
-                          tileColor: Colors.white70,
-                          title: Text('Express Delivery',
-                              style: TextStyle(
-                                color: Colors.black,
-                              )),
-                          value: false,
-                          onChanged: (bool? value) {},
-                          secondary: const Icon(Icons.bike_scooter),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 7,
-                    ),
-                    AutoSizeText(
-                        "Note that Express Delivery isn't available at the moment."),
-                    const SizedBox(
-                      height: 7,
-                    ),
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.all(20.0),
