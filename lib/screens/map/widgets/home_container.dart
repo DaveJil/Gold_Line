@@ -4,8 +4,7 @@ import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 
 import '../../../utility/helpers/constants.dart';
-import '../../my_deliveries/interstate/delivery_options.dart';
-import '../../my_deliveries/interstate/my_deliveries.dart';
+import '../../my_deliveries/select_type.dart';
 import '../../profile/main_menu.dart';
 import '../../request_delivery/delivery_details.dart';
 
@@ -117,7 +116,8 @@ class _HomeContainerState extends State<HomeContainer> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => const MyDeliveriesOptionScreen()));
+                                builder: (_) =>
+                                    const MyDeliveriesOptionScreen()));
                       },
                       icon: const Icon(
                         Icons.history,

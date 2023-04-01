@@ -7,14 +7,16 @@ import 'package:gold_line/screens/my_deliveries/interstate/widget/pending_delive
 
 import '../../../utility/helpers/constants.dart';
 
-class MyDeliveriesScreen extends StatefulWidget {
-  const MyDeliveriesScreen({Key? key}) : super(key: key);
+class MyInterStateDeliveriesScreen extends StatefulWidget {
+  const MyInterStateDeliveriesScreen({Key? key}) : super(key: key);
 
   @override
-  State<MyDeliveriesScreen> createState() => _MyDeliveriesScreenState();
+  State<MyInterStateDeliveriesScreen> createState() =>
+      _MyInterStateDeliveriesScreenState();
 }
 
-class _MyDeliveriesScreenState extends State<MyDeliveriesScreen> {
+class _MyInterStateDeliveriesScreenState
+    extends State<MyInterStateDeliveriesScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

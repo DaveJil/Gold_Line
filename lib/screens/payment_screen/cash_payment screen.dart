@@ -53,7 +53,7 @@ class CashPaymentWidget extends StatelessWidget {
                       height: 15,
                     ),
                     Text(
-                        "You will pay ₦${mapProvider.deliveryPrice} to the driver on arrival"),
+                        "You will pay ₦${mapProvider.deliveryPrice} to the Rider on arrival"),
                     const SizedBox(
                       height: 15,
                     ),

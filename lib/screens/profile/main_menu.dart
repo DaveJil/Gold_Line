@@ -1,6 +1,7 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gold_line/screens/my_deliveries/select_type.dart';
 import 'package:gold_line/screens/profile/profile.dart';
 import 'package:gold_line/screens/profile/settings_page.dart';
 import 'package:gold_line/screens/profile/wallet.dart';
@@ -12,7 +13,6 @@ import 'package:gold_line/widgets/otherDetailsDivider.dart';
 import 'package:provider/provider.dart';
 
 import '../../utility/providers/user_provider.dart';
-import '../my_deliveries/interstate/my_deliveries.dart';
 import 'referral.dart';
 
 class MainMenu extends StatefulWidget {
@@ -217,7 +217,8 @@ class _MainMenuState extends State<MainMenu> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => const MyDeliveriesScreen()));
+                                  builder: (_) =>
+                                      const MyDeliveriesOptionScreen()));
                         },
                       ),
                       SizedBox(
