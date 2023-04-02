@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -39,6 +40,24 @@ class _MainMenuState extends State<MainMenu> {
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: kPrimaryGoldColor,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          iconSize: getHeight(20, context),
+          color: Colors.white,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: AutoSizeText(
+          ' Profile',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
       body: FutureBuilder(
           future: userProvider.getUserData(context),
           builder: (context, snapshot) {
@@ -143,7 +162,7 @@ class _MainMenuState extends State<MainMenu> {
                         ),
                       ),
                       SizedBox(
-                        height: getHeight(15, context),
+                        height: getHeight(10, context),
                       ),
                       TextButton(
                         onPressed: () {
@@ -163,7 +182,7 @@ class _MainMenuState extends State<MainMenu> {
                         ),
                       ),
                       SizedBox(
-                        height: getHeight(8, context),
+                        height: getHeight(5, context),
                       ),
                       Text(
                         // widget.firstName,
@@ -194,7 +213,7 @@ class _MainMenuState extends State<MainMenu> {
                             style: TextStyle(
                               decoration: TextDecoration.none,
                               color: Colors.grey,
-                              fontSize: getHeight(20, context),
+                              fontSize: getHeight(15, context),
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -205,13 +224,27 @@ class _MainMenuState extends State<MainMenu> {
                         height: getHeight(20, context),
                       ),
                       ListTile(
-                        leading: SvgPicture.asset("assets/my history.svg"),
-                        title: const Text("My History"),
-                        subtitle:
-                            const Text("View all your previous transactions"),
-                        trailing: const Icon(
+                        leading: SizedBox(
+                          height: getHeight(60, context),
+                          width: getWidth(60, context),
+                          child: SvgPicture.asset("assets/my history.svg"),
+                        ),
+                        title: Text(
+                          "My History",
+                          style: TextStyle(
+                              fontSize: getHeight(20, context),
+                              fontWeight: FontWeight.w700),
+                        ),
+                        subtitle: Text(
+                          "View all your previous transactions",
+                          style: TextStyle(
+                              fontSize: getHeight(16, context),
+                              fontWeight: FontWeight.w400),
+                        ),
+                        trailing: Icon(
                           Icons.arrow_circle_right_sharp,
                           color: kPrimaryGoldColor,
+                          size: getHeight(20, context),
                         ),
                         onTap: () {
                           Navigator.push(
@@ -222,31 +255,60 @@ class _MainMenuState extends State<MainMenu> {
                         },
                       ),
                       SizedBox(
-                        height: getHeight(35, context),
+                        height: getHeight(20, context),
                       ),
                       ListTile(
-                        leading: SvgPicture.asset("assets/wallet balance.svg"),
-                        title: const Text("Wallet Balance"),
-                        subtitle: const Text(
-                            "Check all your Commissions from  your Referrals"),
-                        trailing: const Icon(
+                        leading: SizedBox(
+                          height: getHeight(60, context),
+                          width: getWidth(60, context),
+                          child: SvgPicture.asset("assets/wallet balance.svg"),
+                        ),
+                        title: Text(
+                          "Wallet Balance",
+                          style: TextStyle(
+                              fontSize: getHeight(20, context),
+                              fontWeight: FontWeight.w700),
+                        ),
+                        subtitle: Text(
+                          "Check all your Commissions.",
+                          style: TextStyle(
+                              fontSize: getHeight(16, context),
+                              fontWeight: FontWeight.w400),
+                        ),
+                        trailing: Icon(
                           Icons.arrow_circle_right_sharp,
                           color: kPrimaryGoldColor,
+                          size: getHeight(20, context),
                         ),
                         onTap: () {
                           changeScreen(context, WalletScreen());
                         },
                       ),
                       SizedBox(
-                        height: getHeight(35, context),
+                        height: getHeight(20, context),
                       ),
                       ListTile(
-                        leading: SvgPicture.asset("assets/refferals.svg"),
-                        title: const Text("Referrals"),
-                        subtitle: const Text("Refer Agents to AreaConnect"),
-                        trailing: const Icon(
+                        leading: SizedBox(
+                          height: getHeight(60, context),
+                          width: getWidth(60, context),
+                          child: SvgPicture.asset("assets/refferals.svg"),
+                        ),
+                        title: Text(
+                          "Referrals",
+                          style: TextStyle(
+                              fontSize: getHeight(20, context),
+                              fontWeight: FontWeight.w700),
+                        ),
+                        subtitle: Text(
+                          "Refer Agents to AreaConnect",
+                          style: TextStyle(
+                              fontSize: getHeight(16, context),
+                              fontWeight: FontWeight.w400),
+                        ),
+                        trailing: Icon(
                           Icons.arrow_circle_right_sharp,
                           color: kPrimaryGoldColor,
+                          size: getHeight(20, context),
                         ),
                         onTap: () {
                           // final snackBar = SnackBar(
@@ -273,15 +335,30 @@ class _MainMenuState extends State<MainMenu> {
                         },
                       ),
                       SizedBox(
-                        height: getHeight(35, context),
+                        height: getHeight(20, context),
                       ),
                       ListTile(
-                        leading: SvgPicture.asset("assets/my coupons.svg"),
-                        title: const Text("My Coupons"),
-                        subtitle: const Text("View all your discounted offers"),
-                        trailing: const Icon(
+                        leading: SizedBox(
+                          height: getHeight(60, context),
+                          width: getWidth(60, context),
+                          child: SvgPicture.asset("assets/my coupons.svg"),
+                        ),
+                        title: Text(
+                          "My Coupons",
+                          style: TextStyle(
+                              fontSize: getHeight(20, context),
+                              fontWeight: FontWeight.w700),
+                        ),
+                        subtitle: Text(
+                          "View all your discounted offers",
+                          style: TextStyle(
+                              fontSize: getHeight(16, context),
+                              fontWeight: FontWeight.w400),
+                        ),
+                        trailing: Icon(
                           Icons.arrow_circle_right_sharp,
                           color: kPrimaryGoldColor,
+                          size: getHeight(20, context),
                         ),
                         onTap: () {
                           final snackBar = SnackBar(
@@ -301,15 +378,30 @@ class _MainMenuState extends State<MainMenu> {
                         },
                       ),
                       SizedBox(
-                        height: getHeight(35, context),
+                        height: getHeight(20, context),
                       ),
                       ListTile(
-                        leading: SvgPicture.asset("assets/settings.svg"),
-                        title: const Text("Settings"),
-                        subtitle: const Text("Edit your preferences"),
-                        trailing: const Icon(
+                        leading: SizedBox(
+                          height: getHeight(60, context),
+                          width: getWidth(60, context),
+                          child: SvgPicture.asset("assets/settings.svg"),
+                        ),
+                        title: Text(
+                          "Settings",
+                          style: TextStyle(
+                              fontSize: getHeight(20, context),
+                              fontWeight: FontWeight.w700),
+                        ),
+                        subtitle: Text(
+                          "Edit your preferences",
+                          style: TextStyle(
+                              fontSize: getHeight(16, context),
+                              fontWeight: FontWeight.w400),
+                        ),
+                        trailing: Icon(
                           Icons.arrow_circle_right_sharp,
                           color: kPrimaryGoldColor,
+                          size: getHeight(20, context),
                         ),
                         onTap: () {
                           changeScreen(context, const Settings());

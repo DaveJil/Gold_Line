@@ -34,33 +34,44 @@ class SignUpScreenState extends State<SignUpScreen> {
               child: Column(
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.only(top: getHeight(100, context)),
-                    child: const Text(
-                      'Lets get you Started',
+                    padding: EdgeInsets.only(top: getHeight(50, context)),
+                    child: Text(
+                      "Let's get you Started",
                       style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 28),
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: getHeight(26, context),
+                      ),
                     ),
                   ),
                   SizedBox(
                     height: getHeight(40, context),
                   ),
                   SizedBox(
-                      width: getHeight(300, context),
-                      height: getHeight(300, context),
+                      width: getHeight(250, context),
+                      height: getHeight(250, context),
                       child: SvgPicture.asset("assets/signup.svg")),
                   SizedBox(
-                    height: getHeight(20, context),
+                    height: getHeight(60, context),
                   ),
                   Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: getWidth(20, context)),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: getWidth(30, context),
+                    ),
                     child: TextFormField(
                       controller: userProvider.firstName,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: kPrimaryGoldColor,
+                            ),
+                          ),
                           border: OutlineInputBorder(),
                           labelText: 'First Name',
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.w700,
+                          ),
                           hintText: 'Enter your First Name'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -79,8 +90,17 @@ class SignUpScreenState extends State<SignUpScreen> {
                     child: TextFormField(
                       controller: userProvider.lastName,
                       decoration: const InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: kPrimaryGoldColor,
+                            ),
+                          ),
                           border: OutlineInputBorder(),
-                          labelText: 'Last Name',
+                          labelText: ' Last Name',
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.w700,
+                          ),
                           hintText: 'Enter your Last Name'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -104,9 +124,18 @@ class SignUpScreenState extends State<SignUpScreen> {
                         }
                         return null;
                       },
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 1,
+                            color: kPrimaryGoldColor,
+                          ),
+                        ),
                         border: OutlineInputBorder(),
-                        labelText: 'Email',
+                        labelText: ' Email',
+                        labelStyle: TextStyle(
+                          fontWeight: FontWeight.w700,
+                        ),
                         hintText: 'Enter valid email',
                       ),
                     ),
@@ -128,9 +157,18 @@ class SignUpScreenState extends State<SignUpScreen> {
                         return null;
                       },
                       obscureText: true,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: kPrimaryGoldColor,
+                            ),
+                          ),
                           border: OutlineInputBorder(),
-                          labelText: 'Password',
+                          labelText: ' Password',
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.w700,
+                          ),
                           hintText: 'Enter secure password'),
                     ),
                   ),
@@ -142,9 +180,18 @@ class SignUpScreenState extends State<SignUpScreen> {
                         EdgeInsets.symmetric(horizontal: getWidth(20, context)),
                     child: TextFormField(
                       obscureText: true,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: kPrimaryGoldColor,
+                            ),
+                          ),
                           border: OutlineInputBorder(),
-                          labelText: 'Confirm Password',
+                          labelText: ' Confirm Password',
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.w700,
+                          ),
                           hintText: 'Enter password again'),
                       validator: (value) {
                         if (value != userProvider.password.text ||
@@ -163,9 +210,18 @@ class SignUpScreenState extends State<SignUpScreen> {
                         EdgeInsets.symmetric(horizontal: getWidth(20, context)),
                     child: TextFormField(
                       obscureText: true,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: kPrimaryGoldColor,
+                            ),
+                          ),
                           border: OutlineInputBorder(),
-                          labelText: 'Referral Code(Optional)',
+                          labelText: ' Referral Code(Optional)',
+                          labelStyle: TextStyle(
+                            fontWeight: FontWeight.w700,
+                          ),
                           hintText: 'Enter referral Code'),
                     ),
                   ),

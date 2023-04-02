@@ -29,6 +29,9 @@ class _HomeContainerState extends State<HomeContainer> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          SizedBox(
+            width: getWidth(10, context),
+          ),
           InkWell(
             onTap: () {
               changeScreen(context, MainMenu());
@@ -44,27 +47,27 @@ class _HomeContainerState extends State<HomeContainer> {
                             MaterialPageRoute(
                                 builder: (_) => const MainMenu()));
                       },
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.home_outlined,
                         color: kPrimaryGoldColor,
-                        size: 35,
+                        size: getHeight(40, context),
                       ),
                       alignment: Alignment.center,
                     ),
                   ),
                   SizedBox(
-                    height: height / 60,
+                    height: getHeight(5, context),
                   ),
-                  const Text(
+                  AutoSizeText(
                     "Main Menu",
-                    style: TextStyle(fontSize: 12),
+                    style: TextStyle(fontSize: getHeight(12, context)),
                   )
                 ],
               ),
             ),
           ),
           SizedBox(
-            width: 10.appWidth(context),
+            width: getWidth(2, context),
           ),
           InkWell(
             onTap: () {
@@ -81,27 +84,27 @@ class _HomeContainerState extends State<HomeContainer> {
                             MaterialPageRoute(
                                 builder: (_) => const DeliveryDetails()));
                       },
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.add_circle,
                         color: kPrimaryGoldColor,
-                        size: 35,
+                        size: getHeight(40, context),
                       ),
                       alignment: Alignment.center,
                     ),
                   ),
                   SizedBox(
-                    height: height / 60,
+                    height: getHeight(5, context),
                   ),
-                  const Text(
+                  AutoSizeText(
                     "New Delivery",
-                    style: TextStyle(fontSize: 12),
+                    style: TextStyle(fontSize: getHeight(12, context)),
                   )
                 ],
               ),
             ),
           ),
           SizedBox(
-            width: 10.appWidth(context),
+            width: getWidth(2, context),
           ),
           InkWell(
             onTap: () {
@@ -119,24 +122,27 @@ class _HomeContainerState extends State<HomeContainer> {
                                 builder: (_) =>
                                     const MyDeliveriesOptionScreen()));
                       },
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.history,
                         color: kPrimaryGoldColor,
-                        size: 35,
+                        size: getHeight(40, context),
                       ),
                       alignment: Alignment.center,
                     ),
                   ),
                   SizedBox(
-                    height: height / 25,
+                    height: getHeight(10, context),
                   ),
-                  const AutoSizeText(
+                  AutoSizeText(
                     "My Deliveries",
-                    style: TextStyle(fontSize: 12),
+                    style: TextStyle(fontSize: getHeight(12, context)),
                   )
                 ],
               ),
             ),
+          ),
+          SizedBox(
+            width: getWidth(10, context),
           ),
         ],
       ),

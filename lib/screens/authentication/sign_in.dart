@@ -31,13 +31,13 @@ class _SignInScreenState extends State<SignInScreen> {
                 padding: EdgeInsets.only(
                   top: getHeight(150, context),
                 ),
-                child: const AutoSizeText(
+                child: AutoSizeText(
                   "Welcome, Enter your Login Details",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 22),
+                      fontSize: getHeight(24, context)),
                 ),
               ),
               SizedBox(
@@ -59,8 +59,17 @@ class _SignInScreenState extends State<SignInScreen> {
                     if (!val!.isValidEmail) return 'Enter valid email';
                   },
                   decoration: const InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: kPrimaryGoldColor,
+                      ),
+                    ),
                     border: OutlineInputBorder(),
                     labelText: 'Email',
+                    labelStyle: TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
                     hintText: 'Enter your email',
                   ),
                 ),
@@ -78,13 +87,22 @@ class _SignInScreenState extends State<SignInScreen> {
                     if (!val!.isValidPassword) return 'Enter valid password';
                   },
                   decoration: const InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: kPrimaryGoldColor,
+                        ),
+                      ),
                       border: OutlineInputBorder(),
                       labelText: 'Password',
+                      labelStyle: TextStyle(
+                        fontWeight: FontWeight.w600,
+                      ),
                       hintText: 'Enter your password'),
                 ),
               ),
               SizedBox(
-                height: getHeight(50, context),
+                height: getHeight(30, context),
               ),
               TextButton(
                 onPressed: () {
@@ -100,11 +118,12 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
               ),
               SizedBox(
-                height: getHeight(30, context),
+                height: getHeight(2, context),
               ),
               Padding(
-                padding: const EdgeInsets.all(30.0),
+                padding: const EdgeInsets.all(20.0),
                 child: CustomButton(
+                  width: getWidth(200, context),
                   onPressed: () async {
                     await userProvider.signIn(context);
                   },
@@ -112,7 +131,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
               ),
               SizedBox(
-                height: getHeight(30, context),
+                height: getHeight(2, context),
               ),
               TextButton(
                 onPressed: () {

@@ -36,18 +36,20 @@ class CustomButton extends StatelessWidget {
             elevation: elevation),
         onPressed: onPressed,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                text,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: fontSize),
-              ),
-            ],
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: InkWell(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  text,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: fontSize),
+                ),
+              ],
+            ),
           ),
         ),
       ),
