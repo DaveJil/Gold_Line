@@ -119,22 +119,6 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                   icon: const Icon(Icons.phone),
                   controller: receiverPhone,
                 ),
-                // const SizedBox(
-                //   height: 12,
-                // ),
-                // CustomDeliveryTextField(
-                //   hint: "City",
-                //   icon: const Icon(Icons.house_sharp),
-                //   controller: city,
-                // ),
-                // const SizedBox(
-                //   height: 12,
-                // ),
-                // CustomDeliveryTextField(
-                //   hint: "State",
-                //   icon: const Icon(Icons.home_filled),
-                //   controller: state,
-                // ),
                 const SizedBox(
                   height: 12,
                 ),
@@ -154,7 +138,6 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                 const SizedBox(
                   height: 12,
                 ),
-
                 const BuildCheckBox(),
                 const SizedBox(
                   height: 12,
@@ -207,15 +190,14 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                 ),
                 Row(
                   children: [
-                    DeliveryOption(),
-                    SelectCity(),
+                    Expanded(child: DeliveryOption()),
+                    Expanded(child: SelectCity())
                   ],
                 ),
                 const SizedBox(
                   height: 12,
                 ),
                 const PayerRadioButton(),
-
                 SizedBox(height: size.width / 15),
                 Padding(
                   padding:
@@ -235,9 +217,14 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
   }
 }
 
-class BuildCheckBox extends StatelessWidget {
+class BuildCheckBox extends StatefulWidget {
   const BuildCheckBox({Key? key}) : super(key: key);
 
+  @override
+  State<BuildCheckBox> createState() => _BuildCheckBoxState();
+}
+
+class _BuildCheckBoxState extends State<BuildCheckBox> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<MapProvider>(context);
@@ -265,7 +252,10 @@ class BuildCheckBox extends StatelessWidget {
             value: provider.isExpress,
             activeColor: kPrimaryGoldColor,
             onChanged: (bool? value) {
-              provider.isExpress = !provider.isExpress;
+              setState(() {
+                provider.isExpress = value!;
+              });
+              provider.isExpress = value!;
             })
       ],
     );
@@ -522,11 +512,8 @@ class _DeliveryOptionState extends State<DeliveryOption> {
     // List of items in our dropdown menu
     var items = [
       'Select Delivery Type',
-      'Dispatch Bike(Intra-State)',
+      'Dispatch Bike',
       'Interstate Courier',
-      'International Courier- Not Available',
-      'Vans And Trucks(Intra city)- Not Available',
-      'Vans And Trucks(Intra state)- Not Available',
     ];
 
     return DropdownButton<String>(
