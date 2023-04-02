@@ -139,20 +139,20 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                   height: 12,
                 ),
                 const BuildCheckBox(),
-                const SizedBox(
-                  height: 12,
+                SizedBox(
+                  height: getHeight(20, context),
                 ),
                 Row(
                   children: [
-                    const Text(
-                      "Size Of Item.",
+                    Text(
+                      "Size Of Item:",
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                        fontSize: 17,
+                        fontSize: getHeight(20, context),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(width: 5),
+                    SizedBox(width: getWidth(5, context)),
                     Expanded(
                       child: Divider(
                         color: Colors.grey[600],
@@ -160,20 +160,20 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                     )
                   ],
                 ),
-                const SizedBox(
-                  height: 12,
+                SizedBox(
+                  height: getHeight(20, context),
                 ),
                 const BuildItemSize(),
-                const SizedBox(
-                  height: 12,
+                SizedBox(
+                  height: getHeight(20, context),
                 ),
                 Row(
                   children: [
-                    const Text(
-                      "Delivery Options",
+                    Text(
+                      "Delivery Options:",
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                        fontSize: 17,
+                        fontSize: getHeight(20, context),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -186,18 +186,42 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                   ],
                 ),
                 SizedBox(
-                  height: 4,
+                  height: getHeight(20, context),
                 ),
                 Row(
                   children: [
                     Expanded(child: DeliveryOption()),
+                    SizedBox(
+                      width: getWidth(20, context),
+                    ),
                     Expanded(child: SelectCity())
                   ],
                 ),
-                const SizedBox(
-                  height: 12,
+                SizedBox(
+                  height: getHeight(20, context),
                 ),
-                const PayerRadioButton(),
+                Row(
+                  children: [
+                    Text(
+                      "Payment Options:",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: getHeight(20, context),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(width: getWidth(5, context)),
+                    Expanded(
+                      child: Divider(
+                        color: Colors.grey[600],
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: getHeight(14, context),
+                ),
+                PayerRadioButton(),
                 SizedBox(height: size.width / 15),
                 Padding(
                   padding:
@@ -422,17 +446,6 @@ class _PayerRadioButtonState extends State<PayerRadioButton> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Expanded(
-          child: AutoSizeText(
-            "Payment Options.",
-            maxLines: 1,
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
         SizedBox(
           width: 10.appWidth(context),
         ),
