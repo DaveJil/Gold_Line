@@ -67,7 +67,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                               color: kPrimaryGoldColor,
                             ),
                           ),
-                          border: OutlineInputBorder(),
                           labelText: 'First Name',
                           labelStyle: TextStyle(
                             fontWeight: FontWeight.w700,
@@ -96,7 +95,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                               color: kPrimaryGoldColor,
                             ),
                           ),
-                          border: OutlineInputBorder(),
                           labelText: ' Last Name',
                           labelStyle: TextStyle(
                             fontWeight: FontWeight.w700,
@@ -131,7 +129,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                             color: kPrimaryGoldColor,
                           ),
                         ),
-                        border: OutlineInputBorder(),
                         labelText: ' Email',
                         labelStyle: TextStyle(
                           fontWeight: FontWeight.w700,
@@ -164,7 +161,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                               color: kPrimaryGoldColor,
                             ),
                           ),
-                          border: OutlineInputBorder(),
+                          //border: OutlineInputBorder(),
                           labelText: ' Password',
                           labelStyle: TextStyle(
                             fontWeight: FontWeight.w700,
@@ -187,7 +184,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                               color: kPrimaryGoldColor,
                             ),
                           ),
-                          border: OutlineInputBorder(),
+                          //border: OutlineInputBorder(),
                           labelText: ' Confirm Password',
                           labelStyle: TextStyle(
                             fontWeight: FontWeight.w700,
@@ -217,7 +214,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                               color: kPrimaryGoldColor,
                             ),
                           ),
-                          border: OutlineInputBorder(),
+                          //border: OutlineInputBorder(),
                           labelText: ' Referral Code(Optional)',
                           labelStyle: TextStyle(
                             fontWeight: FontWeight.w700,
