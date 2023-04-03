@@ -645,7 +645,10 @@ class MapProvider with ChangeNotifier {
 
     try {
       if (pickUpState != dropOffState) {
-        values["pickup_state"] = pickUpState;
+        values["state"] = pickUpState;
+        values["city"] = pickUpState;
+        values["dropoff_city"] = dropOffState;
+
         values["dropoff_state"] = dropOffState;
         final response =
             await CallApi().postData(values, 'user/interstate/delivery/new');
@@ -672,29 +675,58 @@ class MapProvider with ChangeNotifier {
       } else {
         if (isExpress = true) {
           values['type'] = 'express';
+          final response = await CallApi().postData(values, 'user/delivery/new');
+
+          print('delivery sent');
+          print(response);
+          String code = response['code'];
+          print(code);
+          if (code == "success") {
+            print(isExpress);
+
+            print("success");
+            distanceBetweenPickAndDropOff = 0;
+            final data = response['data'];
+            print(data);
+            deliveryId = response['data']['id'];
+            print(deliveryId);
+            notifyListeners();
+          } else {
+            distanceBetweenPickAndDropOff = 0;
+            String message = (response['message']).toString();
+
+            CustomDisplayWidget.displayAwesomeSuccessSnackBar(
+                context, message, "Check entered city, state");
+          }
+
         }
-        final response = await CallApi().postData(values, 'user/delivery/new');
+        else {
+          final response = await CallApi().postData(
+              values, 'user/delivery/new');
 
-        print('delivery sent');
-        print(response);
-        String code = response['code'];
-        print(code);
-        if (code == "success") {
-          print("success");
-          distanceBetweenPickAndDropOff = 0;
-          final data = response['data'];
-          print(data);
-          deliveryId = response['data']['id'];
-          print(deliveryId);
-          notifyListeners();
-        } else {
-          distanceBetweenPickAndDropOff = 0;
-          String message = (response['message']).toString();
+          print('delivery sent');
+          print(response);
+          String code = response['code'];
+          print(code);
+          if (code == "success") {
+            print(isExpress);
+            print("success");
+            distanceBetweenPickAndDropOff = 0;
+            final data = response['data'];
+            print(data);
+            deliveryId = response['data']['id'];
+            print(deliveryId);
+            notifyListeners();
+          } else {
+            distanceBetweenPickAndDropOff = 0;
+            String message = (response['message']).toString();
 
-          CustomDisplayWidget.displayAwesomeSuccessSnackBar(
-              context, message, "Check entered city, state");
+            CustomDisplayWidget.displayAwesomeSuccessSnackBar(
+                context, message, "Check entered city, state");
+          }
         }
       }
+      isExpress = false;
 
       notifyListeners();
     } on SocketException {
@@ -702,7 +734,6 @@ class MapProvider with ChangeNotifier {
     } catch (err) {
       throw Exception(err.toString());
     }
-
     notifyListeners();
   }
 
@@ -770,31 +801,29 @@ class MapProvider with ChangeNotifier {
 
 // trip process endpoint
 
-  Future processDelivery() async {
+  Future processDelivery(BuildContext context) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     try {
       final response =
           await CallApi().postData(null, "user/delivery/process/$deliveryId");
       final body = response;
-      print(body);
-      print('delivery processing');
-
-      var val = response['data']['price'];
-      print("val = $val");
-      deliveryPrice = (((val + 50) ~/ 100) * 100).toInt().toString();
-      notifyListeners();
-      preferences.setString('price', deliveryPrice!);
-      if (response['success'] == "success") {
+      if (response['code'] == "success") {
         print(body);
-        if ((body as Map<String, dynamic>).containsKey('id')) {
-          preferences.setString('deliveryId', body["id"]);
-          print(body["id"]);
-        } else {
-          print('no token added');
-        }
-        return deliveryPrice;
+
+        var val = response['data']['price'];
+        print("val = $val");
+        deliveryPrice = (((val + 50) ~/ 100) * 100).toInt().toString();
+        preferences.setString('price', deliveryPrice!);
+      } else {
+        String code = response['code'];
+
+        String message = response['message'];
+        CustomDisplayWidget.displayAwesomeFailureSnackBar(
+            context, message, code);
       }
+
+      return deliveryPrice;
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {

@@ -573,8 +573,8 @@ class _SelectCityState extends State<SelectCity> {
     var items = [
       'Select City',
       'Lagos',
-      'Abuja',
-      'Port-Harcourt',
+      'Federal Capital Territory',
+      'Rivers',
     ];
 
     return DropdownButton<String>(

@@ -190,9 +190,9 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                             details.result != null &&
                             mounted) {
                           if (mapProvider.startFocusNode.hasFocus) {
-                            String pickUpAddress =
-                                await mapProvider.getAddressFromCoordinates(
-                                    point: mapProvider.pickUpLatLng!);
+                            // String pickUpAddress =
+                            //     await mapProvider.getAddressFromCoordinates(
+                            //         point: mapProvider.pickUpLatLng!);
                             mapProvider.pickupLocation = details.result;
                             mapProvider.pickUpLatLng = LatLng(
                                 mapProvider
@@ -207,6 +207,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                             print(mapProvider.pickUpState);
 
                             setState(() {
+                              print(details.result!.formattedAddress!);
                               pickUpLocationController.text =
                                   details.result!.formattedAddress!;
                               mapProvider.predictions = [];
@@ -300,7 +301,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                 child: TextButton(
                     onPressed: () async {
                       await mapProvider.createDeliveryRequest(context);
-                      await mapProvider.processDelivery();
+                      await mapProvider.processDelivery(context);
                       print('navigate');
                       mapProvider.changeWidgetShowed(
                           showWidget: Show.CHECKOUT_DELIVERY);

@@ -98,8 +98,8 @@ class GetListProvider extends ChangeNotifier {
 
   Future checkPendingInterStateDelivery() async {
     try {
-      final response =
-          await CallApi().getData('user/deliveries?status=processing');
+      final response = await CallApi()
+          .getData('user/interstate/deliveries?status=processing');
       print(response);
       final data = response['data'];
       print(data);
@@ -116,7 +116,7 @@ class GetListProvider extends ChangeNotifier {
   Future checkAcceptedInterStateDelivery() async {
     try {
       final response =
-          await CallApi().getData('user/deliveries?status=accepted');
+          await CallApi().getData('user/interstate/deliveries?status=accepted');
       print(response);
       final data = response['data'];
       print(data);
@@ -132,8 +132,8 @@ class GetListProvider extends ChangeNotifier {
 
   Future checkCompletedInterStateDelivery() async {
     try {
-      final response =
-          await CallApi().getData('user/deliveries?status=completed');
+      final response = await CallApi()
+          .getData('user/interstate/deliveries?status=completed');
       print(response);
       final data = response['data'];
       print(data);
@@ -150,7 +150,7 @@ class GetListProvider extends ChangeNotifier {
   Future checkCancelledInterStateDelivery() async {
     try {
       final response =
-          await CallApi().getData('user/deliveries?status=cancelled');
+          await CallApi().getData('user/interstate/deliveries?status=canceled');
       print(response);
       final data = response['data'];
       print(data);
