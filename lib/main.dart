@@ -97,7 +97,8 @@ class _MyAppState extends State<MyApp> {
           return GetListProvider();
         }),
       ],
-      child: const MaterialApp(home: GoldLine()),
+      child: const MaterialApp(
+          debugShowCheckedModeBanner: false, home: GoldLine()),
     );
   }
 }
