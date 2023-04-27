@@ -17,8 +17,8 @@ class _GoldLineState extends State<GoldLine> {
   @override
   void initState() {
     // TODO: implement initState
-    pushNotification.initNotification();
-
+    print("init");
+pushNotification.initNotification();
     super.initState();
   }
 
