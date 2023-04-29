@@ -1,9 +1,13 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gold_line/screens/authentication/forgot_password.dart';
 import 'package:gold_line/screens/authentication/sign_up.dart';
-import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
+import 'package:gold_line/utility/helpers/validators.dart';
+import 'package:gold_line/utility/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -13,20 +17,25 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.only(top: 150),
-                child: Text(
+              Padding(
+                padding: EdgeInsets.only(
+                  top: getHeight(150, context),
+                ),
+                child: const AutoSizeText(
                   "Welcome, Enter your Login Details",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 28),
+                      fontSize: 24),
                 ),
               ),
               SizedBox(
@@ -42,11 +51,15 @@ class _SignInScreenState extends State<SignInScreen> {
               Padding(
                 padding:
                     EdgeInsets.symmetric(horizontal: getWidth(50, context)),
-                child: const TextField(
-                  decoration: InputDecoration(
+                child: TextFormField(
+                  controller: userProvider.email,
+                  validator: (String? val) {
+                    if (!val!.isValidEmail) return 'Enter valid email';
+                  },
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Email',
-                    hintText: 'Enter valid email',
+                    hintText: 'Enter your email',
                   ),
                 ),
               ),
@@ -56,12 +69,16 @@ class _SignInScreenState extends State<SignInScreen> {
               Padding(
                 padding:
                     EdgeInsets.symmetric(horizontal: getWidth(50, context)),
-                child: const TextField(
+                child: TextFormField(
+                  controller: userProvider.password,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  validator: (String? val) {
+                    if (!val!.isValidPassword) return 'Enter valid password';
+                  },
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Password',
-                      hintText: 'Enter secure password'),
+                      hintText: 'Enter your password'),
                 ),
               ),
               SizedBox(
@@ -72,26 +89,28 @@ class _SignInScreenState extends State<SignInScreen> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (_) => const SignUpScreen()));
                 },
-                child: const Text(
+                child: const AutoSizeText(
                   'New User? Create an account',
-                  style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
+                  style: TextStyle(
+                      color: kPrimaryGoldColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500),
                 ),
               ),
               SizedBox(
                 height: getHeight(30, context),
               ),
               Container(
-                height: getHeight(90, context),
-                width: getWidth(400, context),
+                height: getHeight(45, context),
+                width: getWidth(200, context),
                 decoration: BoxDecoration(
                     color: kPrimaryGoldColor,
                     borderRadius: BorderRadius.circular(20)),
                 child: TextButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => const MapWidget()));
+                  onPressed: () async {
+                    await userProvider.signIn(context);
                   },
-                  child: const Text(
+                  child: const AutoSizeText(
                     'Login',
                     style: TextStyle(color: Colors.white, fontSize: 25),
                   ),
@@ -103,11 +122,15 @@ class _SignInScreenState extends State<SignInScreen> {
               TextButton(
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => const SignUpScreen()));
+                      MaterialPageRoute(builder: (_) => const ForgotPass()));
                 },
                 child: const Text(
                   'Forgot Password',
-                  style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
+                  style: TextStyle(
+                      color: kPrimaryGoldColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      decoration: TextDecoration.underline),
                 ),
               ),
             ],

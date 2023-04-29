@@ -1,19 +1,29 @@
-import 'dart:async';
-
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:gold_line/screens/bottom_sheets/order_status.dart';
+import 'package:gold_line/screens/bottom_sheets/searching%20for%20driver.dart';
+import 'package:gold_line/screens/map/widgets/driver_found.dart';
 import 'package:gold_line/screens/my_deliveries/my_deliveries.dart';
-import 'package:gold_line/screens/request_delivery/sender_details.dart';
+import 'package:gold_line/screens/payment_screen/cash_payment%20screen.dart';
+import 'package:gold_line/screens/payment_screen/flutterwave_ui_payment.dart';
+import 'package:gold_line/screens/profile/main_menu.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
+import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_place/google_place.dart';
+import 'package:provider/provider.dart';
+
+import '../../utility/providers/map_provider.dart';
+import '../../utility/providers/user_provider.dart';
+import '../bottom_sheets/trip_bottom_sheet.dart';
+import '../request_delivery/delivery_details.dart';
+import 'widgets/checkout_bottom.dart';
 
 class MapWidget extends StatefulWidget {
-  final DetailsResult? pickupLocation;
-  final DetailsResult? dropoffLocation;
+  final LatLng? pickupLatLng;
+  final LatLng? dropoffLatLng;
 
-  const MapWidget({Key? key, this.pickupLocation, this.dropoffLocation})
+  const MapWidget({Key? key, this.pickupLatLng, this.dropoffLatLng})
       : super(key: key);
 
   @override
@@ -21,211 +31,294 @@ class MapWidget extends StatefulWidget {
 }
 
 class _MapWidgetState extends State<MapWidget> {
+  var scaffoldState = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
-    // TODO: implement initState
-    getPolyPoints();
     super.initState();
-  }
-
-  // late CameraPosition _initialPosition;
-  final Completer<GoogleMapController> _controller = Completer();
-  Map<PolylineId, Polyline> polylines = {};
-  List<LatLng> polylineCoordinates = [];
-  PolylinePoints polylinePoints = PolylinePoints();
-
-  _addPolyLine() {
-    PolylineId id = PolylineId("poly");
-    Polyline polyline = Polyline(
-        polylineId: id,
-        color: Colors.black,
-        points: polylineCoordinates,
-        width: 1);
-    polylines[id] = polyline;
-    setState(() {});
-  }
-
-  void getPolyPoints() async {
-    PolylinePoints polylinePoints = PolylinePoints();
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        GOOGLE_MAPS_API_KEY,
-        // Your Google Map Key
-
-        PointLatLng(widget.pickupLocation!.geometry!.location!.lat!,
-            widget.dropoffLocation!.geometry!.location!.lng!),
-        PointLatLng(widget.pickupLocation!.geometry!.location!.lat!,
-            widget.dropoffLocation!.geometry!.location!.lng!),
-        travelMode: TravelMode.driving);
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
-    }
-    _addPolyLine();
-  }
-
-
-
-  BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
-  BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
-  BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
-  void setCustomMarkerIcon() {
-    BitmapDescriptor.fromAssetImage(
-            ImageConfiguration.empty, "assets/Pin_source.png")
-        .then(
-      (icon) {
-        sourceIcon = icon;
-      },
-    );
-    BitmapDescriptor.fromAssetImage(
-            ImageConfiguration.empty, "assets/Pin_destination.png")
-        .then(
-      (icon) {
-        destinationIcon = icon;
-      },
-    );
-    BitmapDescriptor.fromAssetImage(
-            ImageConfiguration.empty, "assets/Badge.png")
-        .then(
-      (icon) {
-        currentLocationIcon = icon;
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    Set<Marker> _markers = {
-      Marker(
-        markerId: const MarkerId("currentLocation"),
-        position: LatLng(currentLocation!.latitude, currentLocation!.longitude),
-      ),
-      Marker(
-          markerId: MarkerId('start'),
-          position: LatLng(widget.pickupLocation!.geometry!.location!.lat!,
-              widget.pickupLocation!.geometry!.location!.lng!)),
-      Marker(
-          markerId: MarkerId('end'),
-          position: LatLng(widget.dropoffLocation!.geometry!.location!.lat!,
-              widget.dropoffLocation!.geometry!.location!.lng!))
-    };
-    return Scaffold(
-      body: currentLocation == null
-          ? const Center(child: Text("Loading"))
-          : SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Stack(
-                  children: [
-                    GoogleMap(
-                      initialCameraPosition: CameraPosition(
-                        target: currentLocation!,
-                        zoom: 13.5,
-                      ),
-                      markers: _markers,
-                      onMapCreated: (mapController) {
-                        _controller.complete(mapController);
-                      },
-                      polylines: Set<Polyline>.of(polylines.values),
+    MapProvider mapProvider = Provider.of<MapProvider>(context);
+    UserProvider userProvider = Provider.of<UserProvider>(context);
 
-                    ),
-                    Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          height: 80,
-                          width: double.infinity,
-                          color: kVistaWhite,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Expanded(
-                                child: Center(
-                                  child: Column(
-                                    children: [
-                                      Expanded(
-                                        child: IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(
-                                            Icons.home_outlined,
-                                            color: kPrimaryGoldColor,
-                                            size: 40,
-                                          ),
-                                          alignment: Alignment.center,
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Stack(
+            children: [
+              MapScreen(scaffoldState),
+              Visibility(
+                visible: mapProvider.show == Show.DRIVER_FOUND,
+                child: Positioned(
+                    top: 60,
+                    left: 15,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: mapProvider.driverArrived
+                                ? Container(
+                                    color: Colors.green,
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(16),
+                                      child: Text(
+                                        "Meet driver at the pick up location",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    color: kPrimaryGoldColor,
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(16),
+                                      child: Text(
+                                        "Meet driver at the pick up location",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.white,
                                         ),
                                       ),
-                                      const Text(
-                                        "Main Menu",
-                                        style: TextStyle(fontSize: 20),
-                                      )
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Center(
-                                  child: Column(
-                                    children: [
-                                      Expanded(
-                                        child: IconButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (_) =>
-                                                        const SenderDeliveryDetails()));
-                                          },
-                                          icon: const Icon(
-                                            Icons.add_circle,
-                                            color: kPrimaryGoldColor,
-                                            size: 40,
-                                          ),
-                                          alignment: Alignment.center,
-                                        ),
-                                      ),
-                                      const Text(
-                                        "New Delivery",
-                                        style: TextStyle(fontSize: 20),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Center(
-                                  child: Column(
-                                    children: [
-                                      Expanded(
-                                        child: IconButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (_) =>
-                                                        const MyDeliveriesScreen()));
-                                          },
-                                          icon: const Icon(
-                                            Icons.history,
-                                            color: kPrimaryGoldColor,
-                                            size: 40,
-                                          ),
-                                          alignment: Alignment.center,
-                                        ),
-                                      ),
-                                      const Text(
-                                        "My Deliveries",
-                                        style: TextStyle(fontSize: 20),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
                           ),
-                        )),
-                  ],
-                ),
+                        ],
+                      ),
+                    )),
               ),
-            ),
+              Visibility(
+                visible: mapProvider.show == Show.TRIP,
+                child: Positioned(
+                    top: 60,
+                    left: MediaQuery.of(context).size.width / 7,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            color: kPrimaryGoldColor,
+                            child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: RichText(
+                                    text: TextSpan(children: [
+                                  const TextSpan(
+                                      text:
+                                          "You will reach your destination in \n",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w300)),
+                                  TextSpan(
+                                      text: mapProvider.routeModel?.timeNeeded
+                                              .toString() ??
+                                          "",
+                                      style: const TextStyle(fontSize: 22)),
+                                ]))),
+                          ),
+                        ],
+                      ),
+                    )),
+              ),
+              // ANCHOR Draggable
+              Visibility(
+                  visible: mapProvider.show == Show.HOME,
+                  child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        height: 80.appHeight(context),
+                        width: double.infinity,
+                        color: kVistaWhite,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: IconButton(
+                                        onPressed: () async {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      const MainMenu()));
+                                        },
+                                        icon: const Icon(
+                                          Icons.home_outlined,
+                                          color: kPrimaryGoldColor,
+                                          size: 40,
+                                        ),
+                                        alignment: Alignment.center,
+                                      ),
+                                    ),
+                                    const Text(
+                                      "Main Menu",
+                                      style: TextStyle(fontSize: 12),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.appWidth(context),
+                            ),
+                            Expanded(
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: IconButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      const DeliveryDetails()));
+                                        },
+                                        icon: const Icon(
+                                          Icons.add_circle,
+                                          color: kPrimaryGoldColor,
+                                          size: 40,
+                                        ),
+                                        alignment: Alignment.center,
+                                      ),
+                                    ),
+                                    const Text(
+                                      "New Delivery",
+                                      style: TextStyle(fontSize: 12),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.appWidth(context),
+                            ),
+                            Expanded(
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: IconButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      const MyDeliveriesScreen()));
+                                        },
+                                        icon: const Icon(
+                                          Icons.history,
+                                          color: kPrimaryGoldColor,
+                                          size: 40,
+                                        ),
+                                        alignment: Alignment.center,
+                                      ),
+                                    ),
+                                    const AutoSizeText(
+                                      "My Deliveries",
+                                      style: TextStyle(fontSize: 12),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ))),
+              // ANCHOR PICK UP WIDGET
+              //  ANCHOR Draggable PAYMENT METHOD
+
+              Visibility(
+                  visible: mapProvider.show == Show.FLUTTERWAVE_PAYMENT,
+                  child: FlutterwavePaymentScreen(
+                    scaffoldState: scaffoldState,
+                  )),
+              //  ANCHOR Draggable DRIVER
+
+              Visibility(
+                  visible: mapProvider.show == Show.CASH_PAYMENT,
+                  child: CashPaymentWidget()),
+
+              Visibility(
+                  visible: mapProvider.show == Show.DRIVER_FOUND,
+                  child: DriverFoundWidget()),
+
+              //  ANCHOR Draggable DRIVER
+              Visibility(
+                  visible: mapProvider.show == Show.TRIP,
+                  child: TripBottomSheet()),
+
+              Visibility(
+                  visible: mapProvider.show == Show.CHECKOUT_DELIVERY,
+                  child: SummaryWidget()),
+
+              Visibility(
+                  visible: mapProvider.show == Show.SEARCHING_FOR_DRIVER,
+                  child: SearchingForDriverSheet()),
+
+              Visibility(
+                  visible: mapProvider.show == Show.ORDER_STATUS,
+                  child: OrderStatusWidget()),
+            ],
+          ),
+        ),
+      ),
     );
+  }
+}
+
+class MapScreen extends StatefulWidget {
+  final GlobalKey<ScaffoldState> scaffoldState;
+
+  const MapScreen(this.scaffoldState, {Key? key}) : super(key: key);
+
+  @override
+  _MapScreenState createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen> {
+  static const LatLng sourceLocation = LatLng(37.33500926, -122.03272188);
+
+  TextEditingController destinationController = TextEditingController();
+  Color darkBlue = Colors.black;
+  Color grey = Colors.grey;
+  GlobalKey<ScaffoldState> scaffoldSate = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    scaffoldSate = widget.scaffoldState;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    MapProvider mapProvider = Provider.of<MapProvider>(context);
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+
+    return mapProvider.center == null
+        ? SpinKitCircle(
+            color: kPrimaryGoldColor,
+          )
+        : Stack(
+            children: <Widget>[
+              GoogleMap(
+                  initialCameraPosition:
+                      CameraPosition(target: mapProvider.center!, zoom: 15),
+                  onMapCreated: mapProvider.onCreate,
+                  myLocationEnabled: true,
+                  mapType: MapType.normal,
+                  compassEnabled: true,
+                  rotateGesturesEnabled: true,
+                  // markers: mapProvider.markers,
+                  onCameraMove: mapProvider.onCameraMove,
+                  polylines: mapProvider.poly,
+                  markers: mapProvider.markers),
+            ],
+          );
   }
 }

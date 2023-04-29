@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'constants.dart';
 
 class CustomButton extends StatelessWidget {
-  final Color color;
+  final Color? color;
   final VoidCallback onPressed;
   final String text;
   final double? width;
@@ -14,7 +14,7 @@ class CustomButton extends StatelessWidget {
 
   const CustomButton(
       {Key? key,
-      this.color = kPrimaryGoldColor,
+      this.color,
       this.width,
       this.height,
       this.fontSize,
@@ -31,7 +31,7 @@ class CustomButton extends StatelessWidget {
       height: height,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            backgroundColor: kPrimaryGoldColor,
+            backgroundColor: color ?? kPrimaryGoldColor,
             shape: const StadiumBorder(),
             elevation: elevation),
         onPressed: onPressed,

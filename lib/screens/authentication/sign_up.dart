@@ -1,9 +1,14 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gold_line/screens/authentication/sign_in.dart';
-import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
+import 'package:provider/provider.dart';
+
+import '../../utility/helpers/routing.dart';
+import '../../utility/providers/user_provider.dart';
+import '../map/map_widget.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -15,6 +20,8 @@ class SignUpScreen extends StatefulWidget {
 class SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -44,13 +51,19 @@ class SignUpScreenState extends State<SignUpScreen> {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: const TextField(
-                    obscureText: true,
-                    decoration: InputDecoration(
+                      EdgeInsets.symmetric(horizontal: getWidth(20, context)),
+                  child: TextFormField(
+                    controller: userProvider.firstName,
+                    decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: 'Full Name',
-                        hintText: 'Enter your Full Name'),
+                        labelText: 'First Name',
+                        hintText: 'Enter your First Name'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter first name';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 SizedBox(
@@ -58,9 +71,36 @@ class SignUpScreenState extends State<SignUpScreen> {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: const TextField(
-                    decoration: InputDecoration(
+                      EdgeInsets.symmetric(horizontal: getWidth(20, context)),
+                  child: TextFormField(
+                    controller: userProvider.lastName,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Last Name',
+                        hintText: 'Enter your Last Name'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter last name';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: getHeight(20, context),
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: getWidth(20, context)),
+                  child: TextFormField(
+                    controller: userProvider.email,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter valid email';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Email',
                       hintText: 'Enter valid email',
@@ -72,10 +112,17 @@ class SignUpScreenState extends State<SignUpScreen> {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: const TextField(
+                      EdgeInsets.symmetric(horizontal: getWidth(20, context)),
+                  child: TextFormField(
+                    controller: userProvider.password,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter password';
+                      }
+                      return null;
+                    },
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Password',
                         hintText: 'Enter secure password'),
@@ -86,13 +133,33 @@ class SignUpScreenState extends State<SignUpScreen> {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: const TextField(
+                      EdgeInsets.symmetric(horizontal: getWidth(20, context)),
+                  child: TextFormField(
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Confirm Password',
-                        hintText: 'Enter secure password'),
+                        hintText: 'Enter password again'),
+                    validator: (value) {
+                      if (value != userProvider.password.text) {
+                        return 'Confirm password must match password';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: getHeight(20, context),
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: getWidth(20, context)),
+                  child: TextFormField(
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Referral Code(Optional)',
+                        hintText: 'Enter referral Code'),
                   ),
                 ),
                 SizedBox(
@@ -103,9 +170,14 @@ class SignUpScreenState extends State<SignUpScreen> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (_) => SignInScreen()));
                   },
-                  child: const Text(
+                  child: AutoSizeText(
                     'Already have an account? Login',
-                    style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
+                    style: TextStyle(
+                      color: kPrimaryGoldColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w300,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -118,11 +190,11 @@ class SignUpScreenState extends State<SignUpScreen> {
                       color: kPrimaryGoldColor,
                       borderRadius: BorderRadius.circular(20)),
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => const MapWidget()));
+                    onPressed: () async {
+                      await userProvider.signUp(context);
+                      changeScreenReplacement(context, MapWidget());
                     },
-                    child: const Text(
+                    child: AutoSizeText(
                       'Sign Up',
                       style: TextStyle(color: Colors.white, fontSize: 25),
                     ),

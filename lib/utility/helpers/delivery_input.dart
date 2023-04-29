@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:gold_line/utility/helpers/dimensions.dart';
 
 import 'constants.dart';
 
-class CustomDeliveryTextField extends StatelessWidget {
+class CustomDeliveryTextField extends StatefulWidget {
   final String hint;
   final Widget icon;
   final TextEditingController controller;
   final Function? onChanged;
+  final String? Function(String?)? validator;
   final FocusNode? focusNode;
 
   const CustomDeliveryTextField(
@@ -14,41 +16,54 @@ class CustomDeliveryTextField extends StatelessWidget {
       required this.hint,
       required this.icon,
       required this.controller,
+      this.validator,
       this.focusNode,
       this.onChanged})
       : super(key: key);
 
   @override
+  State<CustomDeliveryTextField> createState() =>
+      _CustomDeliveryTextFieldState();
+}
+
+class _CustomDeliveryTextFieldState extends State<CustomDeliveryTextField> {
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(),
-          color: kTextGrey,
-        ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+          padding: EdgeInsets.symmetric(
+              horizontal: 10.appWidth(context), vertical: 5.appHeight(context)),
           child: Row(
             children: [
-              icon,
+              widget.icon,
               const SizedBox(
                 width: 10,
               ),
               Expanded(
                 child: TextFormField(
+                  controller: widget.controller,
                   style: const TextStyle(fontSize: 18),
-                  focusNode: focusNode,
+                  focusNode: widget.focusNode,
                   cursorColor: Colors.black,
                   onChanged: (value) {
-                    onChanged;
+                    setState(() {});
                   },
+                  validator: widget.validator,
                   decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(left: 5, right: 5),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 3,
+                        color: Colors.black12,
+                      ),
+                    ),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 5.appWidth(context)),
                     border: InputBorder.none,
                     fillColor: kTextGrey,
                     focusColor: kTextGrey,
-                    hintText: hint,
+                    hintText: widget.hint,
                   ),
                 ),
               ),
