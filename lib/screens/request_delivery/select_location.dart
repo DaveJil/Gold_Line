@@ -190,9 +190,12 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                             details.result != null &&
                             mounted) {
                           if (mapProvider.startFocusNode.hasFocus) {
-                            // String pickUpAddress =
-                            //     await mapProvider.getAddressFromCoordinates(
-                            //         point: mapProvider.pickUpLatLng!);
+                            setState(() {
+                              print(details.result!.formattedAddress!);
+                              pickUpLocationController.text =
+                              details.result!.formattedAddress!;
+                              mapProvider.predictions = [];
+                            });
                             mapProvider.pickupLocation = details.result;
                             mapProvider.pickUpLatLng = LatLng(
                                 mapProvider
@@ -206,19 +209,24 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                                     point: mapProvider.pickUpLatLng!);
                             print(mapProvider.pickUpState);
 
-                            setState(() {
-                              print(details.result!.formattedAddress!);
-                              pickUpLocationController.text =
-                                  details.result!.formattedAddress!;
-                              mapProvider.predictions = [];
-                            });
+
                           } else if (mapProvider.endFocusNode.hasFocus) {
+                            setState(() {
+                              dropOffLocationController.text =
+                              details.result!.formattedAddress!;
+                              mapProvider.predictions = [];
+                              print(dropOffLocationController.text);
+                            });
+
                             mapProvider.dropoffLocation = details.result;
+
                             mapProvider.dropOffLatLng = LatLng(
                                 mapProvider
                                     .dropoffLocation!.geometry!.location!.lat!,
                                 mapProvider
                                     .dropoffLocation!.geometry!.location!.lng!);
+
+
                             String dropOffAddress =
                                 await mapProvider.getAddressFromCoordinates(
                                     point: mapProvider.dropOffLatLng!);
@@ -228,6 +236,8 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                             mapProvider.dropOffState =
                                 await mapProvider.getStateFromCoordinates(
                                     point: mapProvider.dropOffLatLng!);
+                            print("waiting");
+
                             print(mapProvider.dropOffState);
 
                             setState(() {

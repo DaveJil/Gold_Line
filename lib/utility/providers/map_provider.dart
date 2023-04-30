@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
 
@@ -40,6 +41,9 @@ enum Show {
   TRIP,
   CHECKOUT_DELIVERY,
   ORDER_STATUS
+}
+enum PackageSize{
+  none, small, medium, large
 }
 
 class MapProvider with ChangeNotifier {
@@ -112,6 +116,10 @@ class MapProvider with ChangeNotifier {
   UserProfile? user;
 
   Show show = Show.HOME;
+  String? selectSize;
+  String? sizeColor;
+
+  PackageSize packageSize = PackageSize.none;
   double? distanceStartLongitude;
   double? distanceEndLongitude;
   double? distanceStartLatitude;
@@ -119,6 +127,7 @@ class MapProvider with ChangeNotifier {
   double? distanceBetweenPickAndDropOff;
   DriverProfile? driverProfile;
   RouteModel? routeModel;
+  Color packageColor = Colors.white;
 
   final Completer<GoogleMapController> _controller = Completer();
 
@@ -610,7 +619,9 @@ class MapProvider with ChangeNotifier {
   }
 
   Future createDeliveryRequest(BuildContext context) async {
+    print(isExpress);
     await clearPoly();
+
     distanceBetweenPickAndDropOff = 0;
     polylineCoordinates = [];
 
@@ -618,7 +629,6 @@ class MapProvider with ChangeNotifier {
     polylineCoordinates.add(dropOffLatLng!);
     await calculateDistance();
     await createRoute();
-    print(polylineCoordinates);
     print(distanceBetweenPickAndDropOff);
     Map<String, dynamic> values = {
       "receiver_name": receiverName.text,
@@ -632,6 +642,7 @@ class MapProvider with ChangeNotifier {
       "status": 'pending',
       "city": cityDropDownValue,
       "state": pickUpState,
+      "size": sizeColor,
       "payment_by": whoFuckingPays.toString(),
       // "pickup_time": selectedDate.toString() + selectedTime.toString(),
       "distance": distanceBetweenPickAndDropOff,
@@ -642,6 +653,8 @@ class MapProvider with ChangeNotifier {
       "description": description.text,
     };
     SharedPreferences pref = await SharedPreferences.getInstance();
+    print(values);
+
 
     try {
       if (pickUpState != dropOffState) {
@@ -673,7 +686,8 @@ class MapProvider with ChangeNotifier {
               context, message, "Check entered city, state");
         }
       } else {
-        if (isExpress = true) {
+
+        if (isExpress == true) {
           values['type'] = 'express';
           final response = await CallApi().postData(values, 'user/delivery/new');
 
@@ -701,9 +715,11 @@ class MapProvider with ChangeNotifier {
 
         }
         else {
+
+
           final response = await CallApi().postData(
               values, 'user/delivery/new');
-
+          print(values);
           print('delivery sent');
           print(response);
           String code = response['code'];
@@ -999,6 +1015,13 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
+
+  changePackageSize({PackageSize? packageSize}) {
+    packageSize = packageSize!;
+    print(packageSize);
+    notifyListeners();
+  }
+
   // Method for calculating the distance between two places
   Future<bool> calculateDistance() async {
     try {
@@ -1045,5 +1068,14 @@ class MapProvider with ChangeNotifier {
         c((lat2 - lat1) * p) / 2 +
         c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
     return 12742 * asin(sqrt(a));
+  }
+
+  void changeScreen(Widget widget) {
+    Navigator.push(mainContext!, MaterialPageRoute(builder: (context) => widget));
+  }
+
+// request here
+  void changeScreenReplacement(Widget widget) {
+    Navigator.push(mainContext!, MaterialPageRoute(builder: (context) => widget));
   }
 }

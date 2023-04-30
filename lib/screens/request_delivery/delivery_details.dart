@@ -279,7 +279,8 @@ class _BuildCheckBoxState extends State<BuildCheckBox> {
               setState(() {
                 provider.isExpress = value!;
               });
-              provider.isExpress = value!;
+              // provider.isExpress = value!;
+              print(provider.isExpress);
             })
       ],
     );
@@ -294,16 +295,16 @@ class BuildItemSize extends StatefulWidget {
 }
 
 class _BuildItemSizeState extends State<BuildItemSize> {
-  List size = ["small", "medium", "large", "multiple"];
+  List size = [  "none", "small", "medium", "large"
+  ];
 
-  String? select;
-  bool isSmall = true;
-  bool isMedium = true;
-  bool isLarge = true;
-  bool isMultiple = true;
+  // String? provider.sizeColor;
 
   @override
   Widget build(BuildContext context) {
+
+    // final provider = Provider.of<MapProvider>(context);
+    final provider = context.watch<MapProvider>();
     return SizedBox(
       // height: height(context)/10,
       child: Row(
@@ -312,11 +313,16 @@ class _BuildItemSizeState extends State<BuildItemSize> {
             child: ElevatedButton(
               onPressed: () {
                 setState(() {
-                  isSmall = !isSmall;
+                  provider.sizeColor = "small";
+                  print(provider.sizeColor);
+
                 });
               },
               style: ElevatedButton.styleFrom(
-                  backgroundColor: isSmall ? kVistaWhite : kPrimaryGoldColor,
+                  backgroundColor: provider.sizeColor == "small"
+                      ? kPrimaryGoldColor
+                      :kVistaWhite,
+                  // provider.packageSize == PackageSize.medium? MaterialStateProperty.all<Color>(Colors.blue):kVistaWhite,
                   elevation: 10),
               child: SizedBox(
                 height: getHeight(70, context),
@@ -350,11 +356,16 @@ class _BuildItemSizeState extends State<BuildItemSize> {
             child: ElevatedButton(
               onPressed: () {
                 setState(() {
-                  isMedium = !isMedium;
+                  provider.sizeColor = "medium";
+                  print(provider.sizeColor);
+
                 });
               },
               style: ElevatedButton.styleFrom(
-                  backgroundColor: isMedium ? kVistaWhite : kPrimaryGoldColor,
+                  backgroundColor: provider.sizeColor == "medium"
+                      ? kPrimaryGoldColor
+                      :kVistaWhite,
+                  // provider.packageSize == PackageSize.medium? MaterialStateProperty.all<Color>(Colors.blue):kVistaWhite,
                   elevation: 10),
               child: SizedBox(
                 height: getHeight(70, context),
@@ -388,11 +399,15 @@ class _BuildItemSizeState extends State<BuildItemSize> {
             child: ElevatedButton(
               onPressed: () {
                 setState(() {
-                  isLarge = !isLarge;
+                  provider.sizeColor = "large";
+                  print(provider.sizeColor);
+
                 });
               },
               style: ElevatedButton.styleFrom(
-                  backgroundColor: isLarge ? kVistaWhite : kPrimaryGoldColor,
+                  backgroundColor: provider.sizeColor == "large"
+                      ? kPrimaryGoldColor
+                      :kVistaWhite,
                   elevation: 10),
               child: SizedBox(
                 height: getHeight(70, context),
