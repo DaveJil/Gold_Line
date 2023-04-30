@@ -30,9 +30,9 @@ class _SplashScreenState extends State<SplashScreen> {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const LoginChoice()));
     var width = MediaQuery.of(context).size.width;
-    print(width);
+    // //print(width);
     var height = MediaQuery.of(context).size.height;
-    print(height);
+    // //print(height);
   }
 
   @override

@@ -1,4 +1,3 @@
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gold_line/screens/map/map_widget.dart';
@@ -53,7 +52,7 @@ class PushNotification {
         .getInitialMessage()
         .then((RemoteMessage? message) {
       if (message != null) {
-        print('NEW NOTIFICATIONS : $message');
+        ////print('NEW NOTIFICATIONS : $message');
       }
     });
 
@@ -78,13 +77,12 @@ class PushNotification {
         return;
       }
 
-
       BuildContext context = Stoppable.currentContext!;
 
-      print("=== data = ${message.toString()}");
+      //////print("=== data = ${message.toString()}");
       String notificationType = message.data['navigate_to'];
       changeScreenReplacement(context, MapWidget());
-        mapProvider.changeWidgetShowed(showWidget: Show.HOME);
+      mapProvider.changeWidgetShowed(showWidget: Show.HOME);
 
       // if (notificationType == "delivery") {
       //   changeScreenReplacement(context, MyDeliveriesOptionScreen());
@@ -97,21 +95,19 @@ class PushNotification {
       // }
     }
 
-
     FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
-
 
     Future getNotificationToken() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? fcm_token = prefs.getString("fcm_token");
-      print("testing");
-      print(fcm_token);
+      //////print("testing");
+      //print(fcm_token);
       var request = {"fcm_token": fcm_token};
       var response = await CallApi().postData(request, "profile");
       String message = response["code"];
-      print(message);
-      print(response);
-      print("response is " + response);
+      //print(message);
+      //print(response);
+      //////print("response is " + response);
       if (fcm_token == null) {
         await FirebaseMessaging.instance.requestPermission();
         String? deviceToken = await FirebaseMessaging.instance.getToken();
@@ -121,7 +117,7 @@ class PushNotification {
         };
         var response = await CallApi().postData(token, "profile");
         String message = response["code"];
-        print(message);
+        //print(message);
       } else {
         return;
       }

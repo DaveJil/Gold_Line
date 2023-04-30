@@ -24,7 +24,7 @@ class TransactionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    print(screenHeight);
+    //print(screenHeight);
     final screenWidth = MediaQuery.of(context).size.width;
     double getHeight(double convertHeight) {
       const figmaDesignHeight = 812;

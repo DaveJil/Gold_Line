@@ -36,7 +36,8 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
         maxChildSize: 0.8,
         builder: (BuildContext context, myScrollController) {
           return Container(
-            decoration: BoxDecoration(color: Colors.white,
+            decoration: BoxDecoration(
+                color: Colors.white,
 //                        borderRadius: BorderRadius.only(
 //                            topLeft: Radius.circular(20),
 //                            topRight: Radius.circular(20)),
@@ -77,7 +78,7 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
                               setState(() {
                                 optionIsCash = true;
                               });
-                              print("optionIsCash is now $optionIsCash");
+                              //////print("optionIsCash is now $optionIsCash");
                             }),
                             child: ListTile(
                               contentPadding: const EdgeInsets.only(left: 5),
@@ -106,7 +107,7 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
                               setState(() {
                                 optionIsCash = false;
                               });
-                              print("optionIsCash is now $optionIsCash");
+                              //////print("optionIsCash is now $optionIsCash");
                             }),
                             child: ListTile(
                               contentPadding: const EdgeInsets.only(left: 5),
@@ -179,14 +180,14 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
 
     final ChargeResponse flutterwaveResponse = await flutterwave.charge();
     bool success = flutterwaveResponse.success!;
-    print(flutterwaveResponse);
+    //print(flutterwaveResponse);
     if (success == true) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String deliveryId = prefs.getString("deliveryId")!;
       String message = flutterwaveResponse.status!;
-      print(flutterwaveResponse);
+      //print(flutterwaveResponse);
 
-      print(message);
+      //print(message);
       final snackBar = SnackBar(
         elevation: 0,
         behavior: SnackBarBehavior.floating,
@@ -209,7 +210,7 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
           MaterialPageRoute(builder: (context) => const MapWidget()),
           (Route<dynamic> route) => false);
     } else {
-      print(flutterwaveResponse);
+      //print(flutterwaveResponse);
 
       String message = flutterwaveResponse.status!;
       final snackBar = SnackBar(

@@ -42,9 +42,8 @@ enum Show {
   CHECKOUT_DELIVERY,
   ORDER_STATUS
 }
-enum PackageSize{
-  none, small, medium, large
-}
+
+enum PackageSize { none, small, medium, large }
 
 class MapProvider with ChangeNotifier {
   static const ACCEPTED = 'accepted';
@@ -233,9 +232,9 @@ class MapProvider with ChangeNotifier {
 
     List<Placemark> placemark =
         await placemarkFromCoordinates(position.latitude, position.longitude);
-    print(placemark);
+    //print(placemark);
     Placemark place = placemark[0];
-    print(place);
+    //print(place);
     userAddressText =
         '${place.street}, ${place.subLocality}, ${place.locality}';
 
@@ -244,7 +243,7 @@ class MapProvider with ChangeNotifier {
       await prefs.setString(COUNTRY, "ng");
     }
     _addLocationMarker(center!, "100km");
-    print("marker = $markers");
+    //////print("marker = $markers");
 
     notifyListeners();
 
@@ -396,7 +395,7 @@ class MapProvider with ChangeNotifier {
   autoCompleteSearch(String value) async {
     var result = await googlePlace.autocomplete.get(value);
     if (result != null && result.predictions != null) {
-      print(result.predictions!.first.description);
+      //print(result.predictions!.first.description);
       predictions = result.predictions!;
       notifyListeners();
     }
@@ -619,7 +618,7 @@ class MapProvider with ChangeNotifier {
   }
 
   Future createDeliveryRequest(BuildContext context) async {
-    print(isExpress);
+    //print(isExpress);
     await clearPoly();
 
     distanceBetweenPickAndDropOff = 0;
@@ -629,7 +628,7 @@ class MapProvider with ChangeNotifier {
     polylineCoordinates.add(dropOffLatLng!);
     await calculateDistance();
     await createRoute();
-    print(distanceBetweenPickAndDropOff);
+    //print(distanceBetweenPickAndDropOff);
     Map<String, dynamic> values = {
       "receiver_name": receiverName.text,
       "receiver_phone": receiverPhone.text,
@@ -653,8 +652,7 @@ class MapProvider with ChangeNotifier {
       "description": description.text,
     };
     SharedPreferences pref = await SharedPreferences.getInstance();
-    print(values);
-
+    //print(values);
 
     try {
       if (pickUpState != dropOffState) {
@@ -666,17 +664,17 @@ class MapProvider with ChangeNotifier {
         final response =
             await CallApi().postData(values, 'user/interstate/delivery/new');
 
-        print('delivery sent');
-        print(response);
+        ////print('delivery sent');
+        //print(response);
         String code = response['code'];
-        print(code);
+        //print(code);
         if (code == "success") {
-          print("success");
+          //////print("success");
           distanceBetweenPickAndDropOff = 0;
           final data = response['data'];
-          print(data);
+          //print(data);
           deliveryId = response['data']['id'];
-          print(deliveryId);
+          //print(deliveryId);
           notifyListeners();
         } else {
           distanceBetweenPickAndDropOff = 0;
@@ -686,24 +684,24 @@ class MapProvider with ChangeNotifier {
               context, message, "Check entered city, state");
         }
       } else {
-
         if (isExpress == true) {
           values['type'] = 'express';
-          final response = await CallApi().postData(values, 'user/delivery/new');
+          final response =
+              await CallApi().postData(values, 'user/delivery/new');
 
-          print('delivery sent');
-          print(response);
+          ////print('delivery sent');
+          //print(response);
           String code = response['code'];
-          print(code);
+          //print(code);
           if (code == "success") {
-            print(isExpress);
+            //print(isExpress);
 
-            print("success");
+            //////print("success");
             distanceBetweenPickAndDropOff = 0;
             final data = response['data'];
-            print(data);
+            //print(data);
             deliveryId = response['data']['id'];
-            print(deliveryId);
+            //print(deliveryId);
             notifyListeners();
           } else {
             distanceBetweenPickAndDropOff = 0;
@@ -712,26 +710,22 @@ class MapProvider with ChangeNotifier {
             CustomDisplayWidget.displayAwesomeSuccessSnackBar(
                 context, message, "Check entered city, state");
           }
-
-        }
-        else {
-
-
-          final response = await CallApi().postData(
-              values, 'user/delivery/new');
-          print(values);
-          print('delivery sent');
-          print(response);
+        } else {
+          final response =
+              await CallApi().postData(values, 'user/delivery/new');
+          //print(values);
+          ////print('delivery sent');
+          //print(response);
           String code = response['code'];
-          print(code);
+          //print(code);
           if (code == "success") {
-            print(isExpress);
-            print("success");
+            //print(isExpress);
+            //////print("success");
             distanceBetweenPickAndDropOff = 0;
             final data = response['data'];
-            print(data);
+            //print(data);
             deliveryId = response['data']['id'];
-            print(deliveryId);
+            //print(deliveryId);
             notifyListeners();
           } else {
             distanceBetweenPickAndDropOff = 0;
@@ -762,14 +756,14 @@ class MapProvider with ChangeNotifier {
     isLoading = true;
     try {
       final response = await CallApi().postData(values, 'user/delivery/update');
-      print(response);
+      //print(response);
       if (response['success'] == "success") {
         final body = response;
 
         isLoading = false;
         notifyListeners();
 
-        print(body);
+        //print(body);
       }
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -785,7 +779,7 @@ class MapProvider with ChangeNotifier {
       final response =
           await CallApi().postData(values, 'user/delivery/submit/$deliveryId');
       String message = response["message"];
-      print(message);
+      //print(message);
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {
@@ -801,7 +795,7 @@ class MapProvider with ChangeNotifier {
       final response =
           await CallApi().postData(values, 'user/delivery/submit/$deliveryId');
       String message = response["message"];
-      print(message);
+      //print(message);
       changeWidgetShowed(showWidget: Show.CASH_PAYMENT);
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -825,10 +819,10 @@ class MapProvider with ChangeNotifier {
           await CallApi().postData(null, "user/delivery/process/$deliveryId");
       final body = response;
       if (response['code'] == "success") {
-        print(body);
+        //print(body);
 
         var val = response['data']['price'];
-        print("val = $val");
+        //////print("val = $val");
         deliveryPrice = (((val + 50) ~/ 100) * 100).toInt().toString();
         preferences.setString('price', deliveryPrice!);
       } else {
@@ -854,7 +848,7 @@ class MapProvider with ChangeNotifier {
     periodicTimer = Timer.periodic(const Duration(seconds: 1), (time) {
       timeCounter = timeCounter + 1;
       percentage = timeCounter / 100;
-      print("====== GOOOO $timeCounter");
+      //////print("====== GOOOO $timeCounter");
       if (timeCounter == 100) {
         timeCounter = 0;
         percentage = 0;
@@ -896,10 +890,10 @@ class MapProvider with ChangeNotifier {
 
       final body = response;
       String deliveryStatus = body['data']['status'];
-      print(deliveryStatus);
+      //print(deliveryStatus);
 
       notifyListeners();
-      print(deliveryId);
+      //print(deliveryId);
       if (deliveryStatus == "accepted") {
         changeWidgetShowed(showWidget: Show.DRIVER_FOUND);
       } else {
@@ -921,9 +915,9 @@ class MapProvider with ChangeNotifier {
       driverPhone = body['data']['profile']['phone'];
       driverPlate = body['data']['profile']['plate_number'];
 
-      print(driverName);
-      print(driverPhone);
-      print(driverPlate);
+      //print(driverName);
+      //print(driverPhone);
+      //print(driverPlate);
 
       notifyListeners();
     } on SocketException {
@@ -964,7 +958,7 @@ class MapProvider with ChangeNotifier {
           id: markerId,
           title: markerTitle);
     } catch (error) {
-      print(error);
+      //print(error);
     }
   }
 
@@ -1015,10 +1009,9 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
   changePackageSize({PackageSize? packageSize}) {
     packageSize = packageSize!;
-    print(packageSize);
+    //print(packageSize);
     notifyListeners();
   }
 
@@ -1050,12 +1043,12 @@ class MapProvider with ChangeNotifier {
       }
 
       distanceBetweenPickAndDropOff = totalDistance;
-      print('DISTANCE: $distanceBetweenPickAndDropOff km');
+      ////print('DISTANCE: $distanceBetweenPickAndDropOff km');
       notifyListeners();
 
       return true;
     } catch (e) {
-      print(e);
+      //print(e);
     }
     return false;
   }
@@ -1071,11 +1064,13 @@ class MapProvider with ChangeNotifier {
   }
 
   void changeScreen(Widget widget) {
-    Navigator.push(mainContext!, MaterialPageRoute(builder: (context) => widget));
+    Navigator.push(
+        mainContext!, MaterialPageRoute(builder: (context) => widget));
   }
 
 // request here
   void changeScreenReplacement(Widget widget) {
-    Navigator.push(mainContext!, MaterialPageRoute(builder: (context) => widget));
+    Navigator.push(
+        mainContext!, MaterialPageRoute(builder: (context) => widget));
   }
 }

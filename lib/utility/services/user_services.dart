@@ -66,13 +66,13 @@ class UserServices {
 
       if (response['success'] == "success") {
         final body = response;
-        print('working');
-        print(body);
+        ////print('working');
+        //print(body);
         if ((body as Map<String, dynamic>).containsKey('token')) {
           pref.setString('token', body["token"]);
-          print(body["token"]);
+          //print(body["token"]);
         } else {
-          print('no token added');
+          ////print('no token added');
         }
       }
     } on SocketException {

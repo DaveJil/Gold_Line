@@ -83,11 +83,11 @@ class UserProvider with ChangeNotifier {
 
     try {
       var response = await CallApi().postData(request, 'login');
-      print(response);
+      //print(response);
       String code = response['code'];
       if (code == 'success') {
         String token = response['token'];
-        print(token);
+        //print(token);
         firstNamePref = response['data']['profile']['first_name'];
         lastNamePref = response['data']['profile']['last_name'];
         emailPref = response['data']['email'];
@@ -101,13 +101,13 @@ class UserProvider with ChangeNotifier {
             context, "Login Successful", "Welcome Back");
         await FirebaseMessaging.instance.requestPermission();
         String? deviceToken = await FirebaseMessaging.instance.getToken();
-        print(deviceToken);
+        //print(deviceToken);
 
         changeScreenReplacement(context, const MapWidget());
       } else {
         String message = response['message'];
 
-        print(message);
+        //print(message);
         CustomDisplayWidget.displayAwesomeFailureSnackBar(
             context, message, message);
         notifyListeners();
@@ -132,11 +132,11 @@ class UserProvider with ChangeNotifier {
 
     try {
       final response = await CallApi().postData(request, 'signup');
-      print(response);
+      //print(response);
       String code = response['code'];
       if (code == 'success') {
         String token = response['token'];
-        print(token);
+        //print(token);
         pref.setString('token', response['token']);
         pref.setString('token', token);
         pref.setBool(LOGGED_IN, true);
@@ -147,7 +147,7 @@ class UserProvider with ChangeNotifier {
         changeScreenReplacement(context, const MapWidget());
       } else {
         String message = response['message'];
-        print(message);
+        //print(message);
         CustomDisplayWidget.displayAwesomeFailureSnackBar(
             context, message, message);
         notifyListeners();
@@ -169,7 +169,7 @@ class UserProvider with ChangeNotifier {
 
     try {
       final response = await CallApi().postData(request, 'forgot-password');
-      print(response);
+      //print(response);
       String code = response['code'];
 
       if (code == 'success') {
@@ -179,7 +179,7 @@ class UserProvider with ChangeNotifier {
       } else {
         String message = response['message'];
 
-        print(message);
+        //print(message);
         CustomDisplayWidget.displayAwesomeFailureSnackBar(
             context, message, message);
         return message;
@@ -201,7 +201,7 @@ class UserProvider with ChangeNotifier {
 
     try {
       var response = await CallApi().postData(request, 'profile');
-      print(response);
+      //print(response);
       String code = response['code'];
       if (code == 'success') {
         CustomDisplayWidget.displayAwesomeSuccessSnackBar(
@@ -211,7 +211,7 @@ class UserProvider with ChangeNotifier {
       } else {
         String message = response['message'];
 
-        print(message);
+        //print(message);
         CustomDisplayWidget.displayAwesomeFailureSnackBar(
             context, message, message);
         return message;
@@ -226,15 +226,15 @@ class UserProvider with ChangeNotifier {
   Future updateProfilePic(BuildContext context) async {
     final file = await UploadFiles().getImage();
     // String profilePhoto = base64Encode(file.readAsBytesSync());
-    print(file);
+    //print(file);
     dynamic image = File(file).readAsBytesSync();
-    // print(profilePhoto);
+    // //print(profilePhoto);
 
     dynamic request = {};
 
     try {
       var response = await CallApi().addImage(request, 'profile', file, image);
-      print(response);
+      //print(response);
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {
@@ -247,10 +247,10 @@ class UserProvider with ChangeNotifier {
 
     try {
       var response = await CallApi().getData('profile');
-      print(response);
+      //print(response);
       userData = GetData.fromJson(response['data']);
-      print(response['data']['email']);
-      print(userData);
+      //print(response['data']['email']);
+      //print(userData);
       String code = response['code'];
       if (code == 'success') {
         CustomDisplayWidget.displayAwesomeSuccessSnackBar(
@@ -259,7 +259,7 @@ class UserProvider with ChangeNotifier {
       } else {
         String message = response['message'];
 
-        print(message);
+        //print(message);
         CustomDisplayWidget.displayAwesomeFailureSnackBar(
             context, message, message);
       }
@@ -291,7 +291,7 @@ class UserProvider with ChangeNotifier {
     var response =
         await CallApi().postData({"fcm_token": deviceToken}, "profile");
     notifyListeners();
-    print(response);
+    //print(response);
   }
 
   _initialize() async {

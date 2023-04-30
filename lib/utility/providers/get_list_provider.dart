@@ -21,10 +21,10 @@ class GetListProvider extends ChangeNotifier {
 
   Future getDeliveryList() async {
     var response = await CallApi().getData('user/deliveries');
-    print(response);
+    //print(response);
     final result = response["data"];
     final data = result.map((e) => DeliveryModel.fromJson(e)).toList();
-    print("dat = $data");
+    //////print("dat = $data");
     return data;
   }
 
@@ -32,11 +32,11 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response =
           await CallApi().getData('user/deliveries?status=processing');
-      print(response);
+      //print(response);
       final data = response['data'];
-      print(data);
+      //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
-      print(result);
+      //print(result);
       return result;
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -49,11 +49,11 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response =
           await CallApi().getData('user/deliveries?status=accepted');
-      print(response);
+      //print(response);
       final data = response['data'];
-      print(data);
+      //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
-      print(result);
+      //print(result);
       return result;
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -66,11 +66,11 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response =
           await CallApi().getData('user/deliveries?status=completed');
-      print(response);
+      //print(response);
       final data = response['data'];
-      print(data);
+      //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
-      print(result);
+      //print(result);
       return result;
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -83,11 +83,11 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response =
           await CallApi().getData('user/deliveries?status=cancelled');
-      print(response);
+      //print(response);
       final data = response['data'];
-      print(data);
+      //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
-      print(result);
+      //print(result);
       return result;
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -100,11 +100,11 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response = await CallApi()
           .getData('user/interstate/deliveries?status=processing');
-      print(response);
+      //print(response);
       final data = response['data'];
-      print(data);
+      //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
-      print(result);
+      //print(result);
       return result;
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -117,11 +117,11 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response =
           await CallApi().getData('user/interstate/deliveries?status=accepted');
-      print(response);
+      //print(response);
       final data = response['data'];
-      print(data);
+      //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
-      print(result);
+      //print(result);
       return result;
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -134,11 +134,11 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response = await CallApi()
           .getData('user/interstate/deliveries?status=completed');
-      print(response);
+      //print(response);
       final data = response['data'];
-      print(data);
+      //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
-      print(result);
+      //print(result);
       return result;
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -151,11 +151,11 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response =
           await CallApi().getData('user/interstate/deliveries?status=canceled');
-      print(response);
+      //print(response);
       final data = response['data'];
-      print(data);
+      //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
-      print(result);
+      //print(result);
       return result;
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -174,7 +174,7 @@ class GetListProvider extends ChangeNotifier {
 
     try {
       var response = await CallApi().postData(request, 'user/delivery/cancel');
-      print(response);
+      //print(response);
       String code = response['code'];
       String message = response['message'];
       CustomDisplayWidget.displayAwesomeSuccessSnackBar(context, code, message);
@@ -196,7 +196,7 @@ class GetListProvider extends ChangeNotifier {
       final response =
           await CallApi().postData("", 'user/delivery/start/$deliveryIde');
       String message = response["message"];
-      print(message);
+      //print(message);
       Navigator.pop(context);
       checkPendingDelivery();
 
@@ -228,7 +228,7 @@ class GetListProvider extends ChangeNotifier {
       }
     } catch (e) {
       const SnackBar(content: AlertDialog());
-      print(e);
+      //print(e);
     }
     notifyListeners();
   }
@@ -250,7 +250,7 @@ class GetListProvider extends ChangeNotifier {
       }
     } catch (e) {
       const SnackBar(content: AlertDialog());
-      print(e);
+      //print(e);
     }
     notifyListeners();
   }

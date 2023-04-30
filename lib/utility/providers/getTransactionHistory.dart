@@ -14,7 +14,7 @@ Future getTransactionHistory(BuildContext context) async {
     Future<String> getToken() async {
       SharedPreferences localStorage = await SharedPreferences.getInstance();
       var token = localStorage.getString('token');
-      print('The token is $token');
+      ////print('The token is $token');
       return token ?? '';
     }
 
@@ -26,11 +26,11 @@ Future getTransactionHistory(BuildContext context) async {
     var res = await http.get(
         Uri.parse("https://goldline.herokuapp.com/api/wallet/transactions"),
         headers: await setHeaders());
-    print(res);
+    //print(res);
     var data = json.decode(res.body);
     final result = data.map((e) => Transactions.fromJson(e)).toList();
 
-    print(data);
+    //print(data);
 
     List processResponse(http.Response response) {
       var data = json.decode(response.body);
@@ -46,11 +46,11 @@ Future getTransactionHistory(BuildContext context) async {
       }
     }
 
-    print(res);
+    //print(res);
     var response = processResponse(res);
-    print(response);
+    //print(response);
 
-    print(transactions);
+    //print(transactions);
     return result;
   } on SocketException {
     throw const SocketException('No internet connection');
@@ -68,11 +68,11 @@ Future getWalletBalance(BuildContext context) async {
 
   try {
     var response = await CallApi().getData('wallet/info');
-    print(response);
+    //print(response);
     String code = response['code'];
     String balance = response['data']['balance'];
     if (code == "success") {
-      print(balance);
+      //print(balance);
       return balance;
     }
   } on SocketException {
