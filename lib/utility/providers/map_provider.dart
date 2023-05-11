@@ -853,7 +853,7 @@ class MapProvider with ChangeNotifier {
         timeCounter = 0;
         percentage = 0;
         lookingForDriver = false;
-        _requestServices!.updateRequest({"id": requestId, "status": "expired"});
+        _requestServices.updateRequest({"id": requestId, "status": "expired"});
         time.cancel();
         if (alertsOnUi) {
           Navigator.pop(context!);

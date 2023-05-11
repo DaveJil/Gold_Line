@@ -223,7 +223,7 @@ class ReferralPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        "Referral Code:   ${this.uuid ?? "mt2m4"}",
+                        "Referral Code:   $uuid",
                         style:
                             const TextStyle(fontSize: 20, color: Colors.black),
                       ),

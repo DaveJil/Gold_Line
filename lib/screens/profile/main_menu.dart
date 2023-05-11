@@ -330,7 +330,7 @@ class _MainMenuState extends State<MainMenu> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => ReferralPage(
-                                        uuid: datum!.uuid!,
+                                        uuid: datum.uuid!,
                                       )));
                         },
                       ),
