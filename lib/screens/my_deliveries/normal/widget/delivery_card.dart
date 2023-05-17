@@ -314,7 +314,7 @@ class _DeliveryCardState extends State<DeliveryCard> {
                                       CustomButton(
                                           color: Colors.redAccent,
                                           onPressed: () {
-                                            print(widget.title);
+                                            //print(widget.title);
                                             deliveryListProvider.cancelDelivery(
                                                 context,
                                                 widget.title.toString());
@@ -377,7 +377,7 @@ class _DeliveryCardState extends State<DeliveryCard> {
             onChanged: (value) {
               reasonProvider.rideCancelReason = value;
               setState(() {
-                print(value);
+                //print(value);
                 reasonProvider.rideCancelReason = value;
               });
             },

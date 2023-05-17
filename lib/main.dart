@@ -16,7 +16,7 @@ import 'firebase_options.dart';
 import 'utility/providers/user_profile_provider.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print('Handling a background message ${message.messageId}');
+  ////print('Handling a background message ${message.messageId}');
 }
 
 Future<void> main() async {
@@ -24,10 +24,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  print("init");
+  //////print("init");
   // Process.runSync('flutter', ['run', '--size=256m']);
-
-
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.instance.subscribeToTopic("general");
@@ -53,7 +51,6 @@ Future<void> main() async {
     sound: true,
   );
 
-
   runApp(const MyApp());
 }
 
@@ -76,7 +73,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     // TODO: implement initState
-    print("init");
+    //////print("init");
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       OnceWidget.showOnEveryNewVersion(builder: () {

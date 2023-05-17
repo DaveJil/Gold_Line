@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/custom_button.dart';
 
+import '../../utility/helpers/dimensions.dart';
+
 class WalletBalance extends StatelessWidget {
   const WalletBalance({Key? key}) : super(key: key);
 
@@ -10,19 +12,29 @@ class WalletBalance extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Wallet Balance',
-            style: TextStyle(
-                color: Colors.black, fontSize: 28, fontWeight: FontWeight.w600),
+          backgroundColor: kPrimaryGoldColor,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            iconSize: getHeight(20, context),
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
-          actions: [
-            const Icon(
-              Icons.history,
-              color: kPrimaryGoldColor,
-            )
-          ],
-          backgroundColor: Colors.white,
         ),
+        // title: const Text(
+        //   'Wallet Balance',
+        //   style: TextStyle(
+        //       color: Colors.black, fontSize: 28, fontWeight: FontWeight.w600),
+        // ),
+        //   actions: [
+        //     const Icon(
+        //       Icons.history,
+        //       color: kPrimaryGoldColor,
+        //     )
+        //   ],
+        //   backgroundColor: Colors.white,
+        // ),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Container(

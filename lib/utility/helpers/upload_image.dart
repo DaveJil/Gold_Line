@@ -64,6 +64,6 @@ class UploadFiles {
 //
 //   dio
 //       .post("user/profile", data: data)
-//       .then((response) => print(response))
-//       .catchError((error) => print(error));
+//       .then((response) => //print(response))
+//       .catchError((error) => //print(error));
 // }

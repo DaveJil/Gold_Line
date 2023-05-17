@@ -77,18 +77,18 @@ class CallApi {
       ..headers.addAll(await _setPictureHeaders())
       ..files.add(
           http.MultipartFile.fromBytes('avatar', image, filename: filepath));
-    print("filepath = $filepath");
+    //////print("filepath = $filepath");
     var streamedResponse = await request.send();
-    print("streamedresponse =  $streamedResponse");
+    //////print("streamedresponse =  $streamedResponse");
     var response = await http.Response.fromStream(streamedResponse);
-    print("response = $response");
-    print(response.statusCode);
+    //////print("response = $response");
+    //print(response.statusCode);
     //
     // var result = jsonDecode(response.body);
-    // print("result = $result");
+    // //////print("result = $result");
 
     if (response.statusCode == 201) {
-      print(response.statusCode);
+      //print(response.statusCode);
       // return result;
     } else {}
   }
@@ -113,7 +113,7 @@ class CallApi {
   Future<String> _getToken() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var token = localStorage.getString('token');
-    print('The token is $token');
+    ////print('The token is $token');
     return token ?? '';
   }
 

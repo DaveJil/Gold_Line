@@ -191,9 +191,9 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                             mounted) {
                           if (mapProvider.startFocusNode.hasFocus) {
                             setState(() {
-                              print(details.result!.formattedAddress!);
+                              //print(details.result!.formattedAddress!);
                               pickUpLocationController.text =
-                              details.result!.formattedAddress!;
+                                  details.result!.formattedAddress!;
                               mapProvider.predictions = [];
                             });
                             mapProvider.pickupLocation = details.result;
@@ -207,15 +207,13 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                             mapProvider.pickUpState =
                                 await mapProvider.getStateFromCoordinates(
                                     point: mapProvider.pickUpLatLng!);
-                            print(mapProvider.pickUpState);
-
-
+                            //print(mapProvider.pickUpState);
                           } else if (mapProvider.endFocusNode.hasFocus) {
                             setState(() {
                               dropOffLocationController.text =
-                              details.result!.formattedAddress!;
+                                  details.result!.formattedAddress!;
                               mapProvider.predictions = [];
-                              print(dropOffLocationController.text);
+                              //print(dropOffLocationController.text);
                             });
 
                             mapProvider.dropoffLocation = details.result;
@@ -226,25 +224,24 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                                 mapProvider
                                     .dropoffLocation!.geometry!.location!.lng!);
 
-
                             String dropOffAddress =
                                 await mapProvider.getAddressFromCoordinates(
                                     point: mapProvider.dropOffLatLng!);
-                            print(dropOffAddress);
+                            //print(dropOffAddress);
                             dropOffLocationController.text =
                                 details.result!.formattedAddress!;
                             mapProvider.dropOffState =
                                 await mapProvider.getStateFromCoordinates(
                                     point: mapProvider.dropOffLatLng!);
-                            print("waiting");
+                            //////print("waiting");
 
-                            print(mapProvider.dropOffState);
+                            //print(mapProvider.dropOffState);
 
                             setState(() {
                               dropOffLocationController.text =
                                   details.result!.formattedAddress!;
                               mapProvider.predictions = [];
-                              print(dropOffLocationController.text);
+                              //print(dropOffLocationController.text);
                             });
                           }
 
@@ -252,7 +249,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                               mapProvider.dropoffLocation != null) {
                           } else if (_useCurrentLocationPickUp == true &&
                               mapProvider.dropoffLocation != null) {
-                            print('navigate');
+                            ////print('navigate');
                           }
                         }
                       },
@@ -312,7 +309,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                     onPressed: () async {
                       await mapProvider.createDeliveryRequest(context);
                       await mapProvider.processDelivery(context);
-                      print('navigate');
+                      ////print('navigate');
                       mapProvider.changeWidgetShowed(
                           showWidget: Show.CHECKOUT_DELIVERY);
 
