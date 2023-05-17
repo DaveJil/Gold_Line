@@ -642,7 +642,7 @@ class MapProvider with ChangeNotifier {
       "status": 'pending',
       "city": cityDropDownValue,
       "state": pickUpState,
-      "size": sizeColor,
+      "package_size": sizeColor,
       "payment_by": whoFuckingPays.toString(),
       // "pickup_time": selectedDate.toString() + selectedTime.toString(),
       "distance": distanceBetweenPickAndDropOff,

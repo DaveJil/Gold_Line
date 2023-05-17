@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwave_standard/flutterwave.dart';
@@ -157,20 +159,22 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
   Future makeCardPayment(String? price, int? deliveryId) async {
     final MapProvider mapProvider =
         Provider.of<MapProvider>(context, listen: false);
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? email = preferences.getString("email");
+    int randomInt = Random().nextInt(100);
+    int refRandom = Random().nextInt(100000000000);
+
 
     final Customer customer = Customer(
-        name: "user", phoneNumber: "0000000000", email: "user@gmail.com");
+        name: "user$randomInt", phoneNumber: "09$randomInt$randomInt$randomInt", email: email?? "user$randomInt@gmail.com");
 
-    var response = await CallApi()
-        .postData(null, "user/delivery/initialize-payment/$deliveryId");
-    String ref_id = response['ref_id'];
-    await CallApi().getData("user/delivery/verify-payment/$deliveryId");
+
     final flutterwave = Flutterwave(
         context: context,
         publicKey: "FLWPUBK-fdc22eaae2024e22b7a5e34ca810bf9a-X",
         currency: "NGN",
         amount: price!,
-        txRef: ref_id,
+        txRef: "trxGold${refRandom}Delivery",
         customer: customer,
         paymentOptions: "card, account, transfer",
         customization: Customization(),
@@ -202,12 +206,17 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
         ..showSnackBar(snackBar);
       await CallApi()
           .postData(null, "user/delivery/verify-payment/$deliveryId");
+      var response = await CallApi()
+          .postData(null, "user/delivery/initialize-payment/$deliveryId");
+      String code = response['code'];
+      if(code == "success") {
+        mapProvider.changeWidgetShowed(showWidget: Show.SEARCHING_FOR_DRIVER);
 
-      mapProvider.changeWidgetShowed(showWidget: Show.SEARCHING_FOR_DRIVER);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const MapWidget()),
+                (Route<dynamic> route) => false);
+      }
 
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const MapWidget()),
-          (Route<dynamic> route) => false);
     } else {
       print(flutterwaveResponse);
 

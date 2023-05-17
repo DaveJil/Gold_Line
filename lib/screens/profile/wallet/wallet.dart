@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gold_line/screens/profile/transaction_item.dart';
+import 'package:gold_line/screens/profile/wallet/deposit%20screen.dart';
+import 'package:gold_line/screens/profile/wallet/transaction_item.dart';
+import 'package:gold_line/screens/profile/wallet/withdrawal_screen.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 
-import '../../utility/helpers/constants.dart';
-import '../../utility/providers/getTransactionHistory.dart';
+import '../../../utility/helpers/constants.dart';
+import '../../../utility/helpers/routing.dart';
+import '../../../utility/providers/getTransactionHistory.dart';
 
 class WalletScreen extends StatefulWidget {
   final String availableBalance;
@@ -81,7 +84,9 @@ class _WalletScreenState extends State<WalletScreen> {
                               backgroundColor: kPrimaryGoldColor,
                               padding: EdgeInsets.symmetric(
                                   vertical: 15, horizontal: 10)),
-                          onPressed: () {},
+                          onPressed: () {
+                            changeScreen(context, DepositScreen());
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -104,7 +109,9 @@ class _WalletScreenState extends State<WalletScreen> {
                               backgroundColor: Colors.grey[400],
                               padding: EdgeInsets.symmetric(
                                   vertical: 15, horizontal: 5)),
-                          onPressed: () {},
+                          onPressed: () {
+                            changeScreen(context, WithdrawalScreen());
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -129,7 +136,7 @@ class _WalletScreenState extends State<WalletScreen> {
                   height: 20.appHeight(context),
                 ),
                 FutureBuilder(
-                    future: getTransactionHistory(context),
+                    future: getTransactionHistory(),
                     builder: (context, snapshot) {
                       // Checking if future is resolved
                       if (snapshot.connectionState == ConnectionState.done) {

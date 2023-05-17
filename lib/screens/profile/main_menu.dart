@@ -2,10 +2,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gold_line/screens/authentication/kyc_info.dart';
 import 'package:gold_line/screens/my_deliveries/select_type.dart';
 import 'package:gold_line/screens/profile/profile.dart';
 import 'package:gold_line/screens/profile/settings_page.dart';
-import 'package:gold_line/screens/profile/wallet.dart';
+import 'package:gold_line/screens/profile/wallet/wallet.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/custom_button.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
@@ -166,13 +167,9 @@ class _MainMenuState extends State<MainMenu> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => const UserProfileScreen()));
                         },
                         child: Text(
-                          datum!.firstName! + " " + datum.lastName!,
+                          "${datum!.firstName!} ${datum.lastName!}",
                           style: TextStyle(
                             decoration: TextDecoration.underline,
                             color: Colors.grey,
@@ -209,7 +206,7 @@ class _MainMenuState extends State<MainMenu> {
                             width: getWidth(10, context),
                           ),
                           Text(
-                            'Agent',
+                            datum.appRole ?? "Agent",
                             style: TextStyle(
                               decoration: TextDecoration.none,
                               color: Colors.grey,

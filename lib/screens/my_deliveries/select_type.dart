@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gold_line/screens/my_deliveries/interstate/my_deliveries.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
@@ -81,7 +82,43 @@ class _MyDeliveriesOptionScreen extends State<MyDeliveriesOptionScreen> {
                     color: Colors.black,
                     fontWeight: FontWeight.w800,
                   )),
+              leading: const Icon(Icons.delivery_dining_outlined),
+            ),
+          ),
+
+          SizedBox(
+            height: getHeight(20, context),
+          ),
+          InkWell(
+            onTap: () {
+              // changeScreen(context, MyInterStateDeliveriesScreen());
+            },
+            child: ListTile(
+              tileColor: Colors.white70,
+              title: Text('International Delivery',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w800,
+                  )),
               leading: const Icon(Icons.airplanemode_active),
+            ),
+          ),
+
+          SizedBox(
+            height: getHeight(20, context),
+          ),
+          InkWell(
+            onTap: () {
+              // changeScreen(context, MyInterStateDeliveriesScreen());
+            },
+            child: ListTile(
+              tileColor: Colors.white70,
+              title: Text('Vans And Trucks',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w800,
+                  )),
+              leading: const Icon(FontAwesomeIcons.truckPickup),
             ),
           ),
         ],

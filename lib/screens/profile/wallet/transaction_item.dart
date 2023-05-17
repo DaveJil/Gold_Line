@@ -49,7 +49,7 @@ class TransactionItem extends StatelessWidget {
                 FontAwesomeIcons.upload,
                 color: Colors.green,
               ),
-        title: Text("${title!} for Delivery ${orderId!}"),
+        title: Text("${title!}"),
         subtitle: Text(createdAt!),
         trailing: Text("₦$amount"),
       ),

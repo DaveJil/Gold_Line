@@ -184,6 +184,18 @@ class SignUpScreenState extends State<SignUpScreen> {
                     SizedBox(
                       height: getHeight(20, context),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Select User Type"),
+                        SizedBox(width: 15,),
+                        UserType()
+                      ],
+                    ),
+                    SizedBox(
+                      height: getHeight(20, context),
+                    ),
                     TextFormField(
                       obscureText: true,
                       decoration: InputDecoration(
@@ -237,6 +249,53 @@ class SignUpScreenState extends State<SignUpScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+
+class UserType extends StatefulWidget {
+  const UserType({Key? key}) : super(key: key);
+
+  @override
+  State<UserType> createState() => _UserTypeState();
+}
+
+class _UserTypeState extends State<UserType> {
+  @override
+  Widget build(BuildContext context) {
+    final provider = Provider.of<UserProvider>(context);
+    // Initial Selected Value
+
+    // List of items in our dropdown menu
+    var items = [
+      'User',
+      'Agent',
+    ];
+
+    return DropdownButton<String>(
+      // Initial Value
+      value: provider.userDropDownValue,
+
+      // Down Arrow Icon
+      icon: const Icon(Icons.keyboard_arrow_down),
+
+      // Array list of items
+      items: items.map((String items) {
+        return DropdownMenuItem(
+          value: items,
+          child: Text(items),
+        );
+      }).toList(),
+      // After selecting the desired option,it will
+      // change button value to selected value
+      onChanged: (String? newValue) {
+        provider.userDropDownValue = newValue!;
+
+        setState(() {
+          provider.userDropDownValue = newValue;
+        });
+      },
     );
   }
 }

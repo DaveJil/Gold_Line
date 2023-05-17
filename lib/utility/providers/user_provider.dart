@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:gold_line/screens/authentication/proceed_login.dart';
 import 'package:gold_line/screens/authentication/user_navigation.dart';
+import 'package:gold_line/screens/profile/wallet/deposit%20screen.dart';
+import 'package:gold_line/screens/profile/wallet/wallet.dart';
+import 'package:gold_line/screens/profile/wallet/withdrawal_screen.dart';
 import 'package:gold_line/utility/helpers/custom_display_widget.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,10 +49,15 @@ class UserProvider with ChangeNotifier {
   TextEditingController userAddress = TextEditingController();
   TextEditingController userLGA = TextEditingController();
   TextEditingController userState = TextEditingController();
+  TextEditingController bankNameController = TextEditingController();
+  TextEditingController accountNumberController = TextEditingController();
+  TextEditingController accountNameController = TextEditingController();
 
   String? firstNamePref;
   String? lastNamePref;
   String? emailPref;
+  String? phonePref;
+  String userDropDownValue = 'User';
 
   // public variables
   final formkey = GlobalKey<FormState>();
@@ -91,9 +100,15 @@ class UserProvider with ChangeNotifier {
         firstNamePref = response['data']['profile']['first_name'];
         lastNamePref = response['data']['profile']['last_name'];
         emailPref = response['data']['email'];
+        phonePref = response['data']['phone'];
+
         referralId = response['data']['uuid'];
+        int randomInt = Random().nextInt(100);
+
 
         pref.setString('token', token);
+        pref.setString("email", emailPref?? "user$randomInt@gmail.com");
+        pref.setString("phone", phonePref?? "09$randomInt$randomInt$randomInt");
 
         pref.setBool(LOGGED_IN, true);
 
@@ -128,6 +143,7 @@ class UserProvider with ChangeNotifier {
       'last_name': lastName.text,
       'email': email.text,
       'password': password.text,
+      'role': userDropDownValue.toLowerCase()
     };
 
     try {
@@ -135,10 +151,19 @@ class UserProvider with ChangeNotifier {
       print(response);
       String code = response['code'];
       if (code == 'success') {
+        emailPref = response['data']['email'];
+        phonePref = response['data']['phone'];
+        int randomInt = Random().nextInt(100);
+
+
         String token = response['token'];
         print(token);
         pref.setString('token', response['token']);
         pref.setString('token', token);
+        pref.setString("email", emailPref?? "user@gmail.com");
+        pref.setString("phone", phonePref?? "09$randomInt$randomInt$randomInt");
+
+
         pref.setBool(LOGGED_IN, true);
 
         CustomDisplayWidget.displayAwesomeSuccessSnackBar(context, "Hey there!",
@@ -195,8 +220,11 @@ class UserProvider with ChangeNotifier {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
     Map<String, dynamic> request = {
-      'login': email.text,
-      'password': password.text,
+      'email': email.text,
+      'first_name': firstName.text,
+      'last_name': lastName.text,
+      'gender': gender.toString().toLowerCase(),
+      'role': userDropDownValue.toLowerCase(),
     };
 
     try {
@@ -206,8 +234,6 @@ class UserProvider with ChangeNotifier {
       if (code == 'success') {
         CustomDisplayWidget.displayAwesomeSuccessSnackBar(
             context, "Congrats", "Profile updated successfully");
-        await saveDeviceToken();
-        changeScreenReplacement(context, const MapWidget());
       } else {
         String message = response['message'];
 
@@ -235,6 +261,7 @@ class UserProvider with ChangeNotifier {
     try {
       var response = await CallApi().addImage(request, 'profile', file, image);
       print(response);
+      getUserData(context);
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {
@@ -270,6 +297,37 @@ class UserProvider with ChangeNotifier {
       throw Exception(err.toString());
     }
   }
+
+  Future addBankDetails(BuildContext context) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    dynamic formData = {
+      'bank_name': bankNameController.text,
+      'account_no': accountNumberController.text,
+      'account_name': accountNameController.text,
+    };
+
+    try {
+      final response =
+      await CallApi().postData(formData, "bank/new");
+      if (response['code'] == 'success') {
+        changeScreenReplacement(context, WithdrawalScreen());
+
+      } else {
+        String message = response['message'];
+        print(message);
+        CustomDisplayWidget.displayAwesomeFailureSnackBar(
+            context, message, message);
+        return message;
+      }
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } on TimeoutException catch (_) {
+      throw AppException(message: 'Service timeout, check internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
 
   Future signOut(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

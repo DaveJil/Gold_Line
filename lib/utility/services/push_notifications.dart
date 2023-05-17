@@ -3,7 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/screens/my_deliveries/select_type.dart';
-import 'package:gold_line/screens/profile/wallet.dart';
+import 'package:gold_line/screens/profile/wallet/wallet.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:gold_line/utility/providers/map_provider.dart';
@@ -32,8 +32,8 @@ class PushNotification {
 
   void initNotification() async {
     channel = const AndroidNotificationChannel(
-        'high_importance_channel', 'High Importance Notifications',
-        importance: Importance.high);
+        'max_importance_channel', 'Max Importance Notifications',
+        importance: Importance.max);
 
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -69,6 +69,8 @@ class PushNotification {
             notification.body,
             NotificationDetails(
                 android: AndroidNotificationDetails(channel.id, channel.name,
+                    sound: const RawResourceAndroidNotificationSound('goldline_sound'),
+
                     icon: 'launch_background')));
       }
     });
@@ -83,9 +85,7 @@ class PushNotification {
 
       print("=== data = ${message.toString()}");
       String notificationType = message.data['navigate_to'];
-      changeScreenReplacement(context, MapWidget());
-        mapProvider.changeWidgetShowed(showWidget: Show.HOME);
-
+      changeScreen(context, MyDeliveriesOptionScreen());
       // if (notificationType == "delivery") {
       //   changeScreenReplacement(context, MyDeliveriesOptionScreen());
       //
