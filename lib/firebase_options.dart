@@ -17,24 +17,15 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for android - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return android;
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -52,13 +43,41 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBI8HIk1HhoeGLWGDHU0-JZ2DhfdmG0v-w',
+    appId: '1:311325913216:web:298bc1a06dda2c2cbab665',
+    messagingSenderId: '311325913216',
+    projectId: 'goldline-79ccc',
+    authDomain: 'goldline-79ccc.firebaseapp.com',
+    storageBucket: 'goldline-79ccc.appspot.com',
+    measurementId: 'G-VMW8VKH6Q9',
+  );
+
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyANZT43ptN8jblMQE2qRC9UOn2R2W7pmGM',
+    appId: '1:311325913216:android:46e358bc7d32db50bab665',
+    messagingSenderId: '311325913216',
+    projectId: 'goldline-79ccc',
+    storageBucket: 'goldline-79ccc.appspot.com',
+  );
+
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAOhpilyrt0rMoju3li0HoUwecIz2bRG88',
     appId: '1:311325913216:ios:97dbc21abf2e359cbab665',
     messagingSenderId: '311325913216',
     projectId: 'goldline-79ccc',
     storageBucket: 'goldline-79ccc.appspot.com',
-    iosClientId: '311325913216-9k4o4j8op2kecfa18l091bunq3e5s9mg.apps.googleusercontent.com',
+    iosClientId: '311325913216-3cpgemff4vq10adjd4oqolk6umnvt9t5.apps.googleusercontent.com',
+    iosBundleId: 'com.imotionnigeria.goldline',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyAOhpilyrt0rMoju3li0HoUwecIz2bRG88',
+    appId: '1:311325913216:ios:97dbc21abf2e359cbab665',
+    messagingSenderId: '311325913216',
+    projectId: 'goldline-79ccc',
+    storageBucket: 'goldline-79ccc.appspot.com',
+    iosClientId: '311325913216-3cpgemff4vq10adjd4oqolk6umnvt9t5.apps.googleusercontent.com',
     iosBundleId: 'com.imotionnigeria.goldline',
   );
 }
