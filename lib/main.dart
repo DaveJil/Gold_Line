@@ -13,10 +13,8 @@ import 'package:once/once.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
-import 'utility/providers/user_profile_provider.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  ////print('Handling a background message ${message.messageId}');
 }
 
 Future<void> main() async {
@@ -24,8 +22,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  //////print("init");
-  // Process.runSync('flutter', ['run', '--size=256m']);
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.instance.subscribeToTopic("general");
@@ -59,8 +55,6 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'High Importance Notifications', // title
   importance: Importance.high,
 );
-// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-//     FlutterLocalNotificationsPlugin();
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -93,10 +87,6 @@ class _MyAppState extends State<MyApp> {
         }),
         ChangeNotifierProvider<UserProvider>(create: (BuildContext context) {
           return UserProvider.initialize();
-        }),
-        ChangeNotifierProvider<UserProfileProvider>(
-            create: (BuildContext context) {
-          return UserProfileProvider(context: context);
         }),
         ChangeNotifierProvider<GetListProvider>(create: (BuildContext context) {
           return GetListProvider();

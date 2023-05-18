@@ -53,20 +53,6 @@ class MapProvider with ChangeNotifier {
   static const PICKUP_MARKER_ID = 'pickup';
   static const LOCATION_MARKER_ID = 'location';
 
-  //general notification
-  static const NAVIGATE_TO_DELIVERY_NOTIFICATION = 'delivery';
-  static const NAVIGATE_TO_WALLET_NOTIFICATION = 'wallet';
-  static const NAVIGATE_TO_NOTIFICATION = 'notifications';
-
-  //delivery stages(status)
-  static const DRIVER_ASSIGNED_NOTIFICATION = 'driver_assigned';
-
-  // static const DELIVERY_PICKED_NOTIFICATION = 'delivery_picked'; //riders don't have app
-  static const DELIVERY_CANCELED_NOTIFICATION = 'delivery_canceled';
-  static const DELIVERY_ACCEPTED_NOTIFICATION = 'delivery_accepted';
-  static const DELIVERY_REJECTED_NOTIFICATION = 'delivery_rejected';
-  static const DELIVERY_COMPLETED_NOTIFICATION = 'delivery_completed';
-
   compon.DetailsResult? pickupLocation;
   compon.DetailsResult? dropoffLocation;
 
@@ -91,7 +77,6 @@ class MapProvider with ChangeNotifier {
   LatLng? destinationCoordinates;
 
   String? deliveryPrice = "0";
-  String? notificationType = "";
   late bool _isPickupSet = false;
   late bool _isDropOffSet = false;
 

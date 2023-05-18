@@ -13,18 +13,6 @@ import '../api.dart';
 import 'contextStoppable.dart';
 
 class PushNotification {
-  static const NAVIGATE_TO_DELIVERY_NOTIFICATION = 'delivery';
-  static const NAVIGATE_TO_WALLET_NOTIFICATION = 'wallet';
-  static const NAVIGATE_TO_NOTIFICATION = 'notifications';
-
-  //delivery stages(status)
-  static const DRIVER_ASSIGNED_NOTIFICATION = 'driver_assigned';
-
-  // static const DELIVERY_PICKED_NOTIFICATION = 'delivery_picked'; //riders don't have app
-  static const DELIVERY_CANCELED_NOTIFICATION = 'delivery_canceled';
-  static const DELIVERY_ACCEPTED_NOTIFICATION = 'delivery_accepted';
-  static const DELIVERY_REJECTED_NOTIFICATION = 'delivery_rejected';
-  static const DELIVERY_COMPLETED_NOTIFICATION = 'delivery_completed';
   MapProvider mapProvider = MapProvider();
   late AndroidNotificationChannel channel;
 
@@ -76,56 +64,12 @@ class PushNotification {
     });
 
     void handleMessage(RemoteMessage message) {
-      if (Stoppable.currentContext == null) {
-        return;
-      }
-
-
-      BuildContext context = Stoppable.currentContext!;
-
       print("=== data = ${message.toString()}");
       String notificationType = message.data['navigate_to'];
-      changeScreen(context, MyDeliveriesOptionScreen());
-      // if (notificationType == "delivery") {
-      //   changeScreenReplacement(context, MyDeliveriesOptionScreen());
-      //
-      // } else if (notificationType == "wallet") {
-      //   changeScreenReplacement(context, WalletScreen());
-      // } else if (notificationType == "notifications") {
-      //   changeScreenReplacement(context, MapWidget());
-      //   mapProvider.changeWidgetShowed(showWidget: Show.HOME);
-      // }
     }
 
 
     FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
-
-
-    Future getNotificationToken() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? fcm_token = prefs.getString("fcm_token");
-      print("testing");
-      print(fcm_token);
-      var request = {"fcm_token": fcm_token};
-      var response = await CallApi().postData(request, "profile");
-      String message = response["code"];
-      print(message);
-      print(response);
-      print("response is " + response);
-      if (fcm_token == null) {
-        await FirebaseMessaging.instance.requestPermission();
-        String? deviceToken = await FirebaseMessaging.instance.getToken();
-        await prefs.setString('fcm_token', deviceToken!);
-        var token = {
-          'fcm_token': deviceToken,
-        };
-        var response = await CallApi().postData(token, "profile");
-        String message = response["code"];
-        print(message);
-      } else {
-        return;
-      }
-    }
   }
 }
 

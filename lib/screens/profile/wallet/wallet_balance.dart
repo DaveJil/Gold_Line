@@ -3,7 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/custom_button.dart';
 
-import '../../utility/helpers/dimensions.dart';
+import '../../../utility/helpers/dimensions.dart';
+
 
 class WalletBalance extends StatelessWidget {
   const WalletBalance({Key? key}) : super(key: key);
