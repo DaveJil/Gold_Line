@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/providers/getTransactionHistory.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +12,15 @@ class DepositScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: kPrimaryGoldColor,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -25,10 +35,14 @@ class DepositScreen extends StatelessWidget {
               ),
               SizedBox(height: 16.0),
               ElevatedButton(
+
                 onPressed: () {
                   makeCardPayment(amount.text, context);
                 },
                 child: Text('Deposit'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: kPrimaryGoldColor
+                ),
               ),
             ],
           ),
