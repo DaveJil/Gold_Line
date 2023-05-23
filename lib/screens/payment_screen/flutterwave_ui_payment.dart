@@ -158,12 +158,13 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
   }
 
   Future makeCardPayment(String? price, int? deliveryId) async {
+    print("payment");
     final MapProvider mapProvider =
         Provider.of<MapProvider>(context, listen: false);
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? email = preferences.getString("email");
     int randomInt = Random().nextInt(100);
-    int refRandom = Random().nextInt(100000000000);
+    int refRandom = Random().nextInt(100000);
 
 
     final Customer customer = Customer(

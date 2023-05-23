@@ -6,6 +6,7 @@ import 'package:gold_line/screens/authentication/kyc_info.dart';
 import 'package:gold_line/screens/my_deliveries/select_type.dart';
 import 'package:gold_line/screens/profile/profile.dart';
 import 'package:gold_line/screens/profile/settings_page.dart';
+import 'package:gold_line/screens/profile/supportScreen.dart';
 import 'package:gold_line/screens/profile/wallet/wallet.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/custom_button.dart';
@@ -334,20 +335,22 @@ class _MainMenuState extends State<MainMenu> {
                       SizedBox(
                         height: getHeight(20, context),
                       ),
+
+
                       ListTile(
                         leading: SizedBox(
                           height: getHeight(60, context),
                           width: getWidth(60, context),
-                          child: SvgPicture.asset("assets/my coupons.svg"),
+                          child: SvgPicture.asset("assets/refferals.svg"),
                         ),
                         title: Text(
-                          "My Coupons",
+                          "Referrals",
                           style: TextStyle(
                               fontSize: getHeight(20, context),
                               fontWeight: FontWeight.w700),
                         ),
                         subtitle: Text(
-                          "View all your discounted offers",
+                          "Refer Agents to AreaConnect",
                           style: TextStyle(
                               fontSize: getHeight(16, context),
                               fontWeight: FontWeight.w400),
@@ -358,20 +361,57 @@ class _MainMenuState extends State<MainMenu> {
                           size: getHeight(20, context),
                         ),
                         onTap: () {
-                          final snackBar = SnackBar(
-                            elevation: 0,
-                            behavior: SnackBarBehavior.floating,
-                            backgroundColor: Colors.transparent,
-                            content: AwesomeSnackbarContent(
-                              title: "Coming soon",
-                              message:
-                                  "Coupons for discounts and promos would be available on the next update",
-                              contentType: ContentType.help,
-                            ),
-                          );
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(snackBar);
+                          // final snackBar = SnackBar(
+                          //   elevation: 0,
+                          //   behavior: SnackBarBehavior.floating,
+                          //   backgroundColor: Colors.transparent,
+                          //   content: AwesomeSnackbarContent(
+                          //     title: "Coming Soon",
+                          //     message:
+                          //         "You would soon be able to refer your friends and earn money",
+                          //     contentType: ContentType.help,
+                          //   ),
+                          // );
+                          // ScaffoldMessenger.of(context)
+                          //   ..hideCurrentSnackBar()
+                          //   ..showSnackBar(snackBar);
+
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => ReferralPage(
+                                    uuid: datum.uuid!,
+                                  )));
+                        },
+                      ),
+                      SizedBox(
+                        height: getHeight(20, context),
+                      ),
+                      ListTile(
+                        leading: SizedBox(
+                          height: getHeight(60, context),
+                          width: getWidth(60, context),
+                          child: SvgPicture.asset("assets/my coupons.svg"),
+                        ),
+                        title: Text(
+                          "Support",
+                          style: TextStyle(
+                              fontSize: getHeight(20, context),
+                              fontWeight: FontWeight.w700),
+                        ),
+                        subtitle: Text(
+                          "Contact Goldline Support Team",
+                          style: TextStyle(
+                              fontSize: getHeight(16, context),
+                              fontWeight: FontWeight.w400),
+                        ),
+                        trailing: Icon(
+                          Icons.arrow_circle_right_sharp,
+                          color: kPrimaryGoldColor,
+                          size: getHeight(20, context),
+                        ),
+                        onTap: () {
+                          changeScreen(context, const SupportScreen());
                         },
                       ),
                       SizedBox(
