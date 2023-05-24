@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
+import 'package:gold_line/screens/profile/wallet/wallet.dart';
 // import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
+import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:gold_line/utility/providers/getTransactionHistory.dart';
 import 'package:provider/provider.dart';
 
@@ -38,7 +40,7 @@ class _DepositScreenState extends State<DepositScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Navigator.pop(context);
+            changeScreenReplacement(context, WalletScreen());
           },
         ),
       ),

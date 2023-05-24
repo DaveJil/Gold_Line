@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:gold_line/screens/authentication/proceed_login.dart';
 import 'package:gold_line/screens/authentication/user_navigation.dart';
+import 'package:gold_line/screens/payment_screen/payment_details.dart';
 import 'package:gold_line/screens/profile/wallet/deposit%20screen.dart';
 import 'package:gold_line/screens/profile/wallet/wallet.dart';
 import 'package:gold_line/screens/profile/wallet/withdrawal_screen.dart';
@@ -118,7 +119,7 @@ class UserProvider with ChangeNotifier {
         String? deviceToken = await FirebaseMessaging.instance.getToken();
         print(deviceToken);
 
-        changeScreenReplacement(context, const MapWidget());
+        removeScreenUntil(context, const MapWidget());
       } else {
         String message = response['message'];
 
@@ -169,7 +170,7 @@ class UserProvider with ChangeNotifier {
         CustomDisplayWidget.displayAwesomeSuccessSnackBar(context, "Hey there!",
             "Welcome to GoldLine. Account Created Successfully");
 
-        changeScreenReplacement(context, const MapWidget());
+        changeScreen(context, const PaymentDetails());
       } else {
         String message = response['message'];
         print(message);
@@ -309,7 +310,7 @@ class UserProvider with ChangeNotifier {
       final response =
       await CallApi().postData(formData, "bank/new");
       if (response['code'] == 'success') {
-        changeScreenReplacement(context, WithdrawalScreen());
+        removeScreenUntil(context, MapWidget());
 
       } else {
         String message = response['message'];
@@ -336,11 +337,26 @@ class UserProvider with ChangeNotifier {
     await prefs.setString(ID, "");
     await prefs.setString(TOKEN, "");
     await prefs.setBool(LOGGED_IN, false);
-    changeScreenReplacement(context, LoginChoice());
+    removeScreenUntil(context, LoginChoice());
 
     notifyListeners();
     return Future.delayed(Duration.zero);
   }
+
+  Future deleteAccount(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await CallApi().getData('delete');
+    status = Status.Unauthenticated;
+    await prefs.setString(ID, "");
+    await prefs.setString(TOKEN, "");
+    await prefs.setBool(LOGGED_IN, false);
+    removeScreenUntil(context, LoginChoice());
+
+    notifyListeners();
+    return Future.delayed(Duration.zero);
+  }
+
 
   saveDeviceToken() async {
     firebaseMessaging.requestPermission();

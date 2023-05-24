@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gold_line/screens/authentication/kyc_info.dart';
 import 'package:gold_line/screens/my_deliveries/select_type.dart';
@@ -447,12 +448,24 @@ class _MainMenuState extends State<MainMenu> {
                       SizedBox(
                         height: getHeight(20, context),
                       ),
-                      CustomButton(
-                        width: MediaQuery.of(context).size.width / 3,
-                        onPressed: () {
-                          userProvider.signOut(context);
-                        },
-                        text: 'Log Out',
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CustomButton(
+                            onPressed: () {
+                              userProvider.signOut(context);
+                            },
+                            text: 'Log Out',
+                          ),
+                          SizedBox(width: 10.h,),
+                          CustomButton(
+                            onPressed: () {
+                              userProvider.deleteAccount(context);
+                            },
+                            text: 'Delete Account',
+                          ),
+                        ],
                       ),
                     ],
                   )),
