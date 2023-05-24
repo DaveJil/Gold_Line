@@ -1,29 +1,29 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterwave_standard/core/flutterwave.dart';
-import 'package:flutterwave_standard/models/requests/customer.dart';
-import 'package:flutterwave_standard/models/requests/customizations.dart';
-import 'package:flutterwave_standard/models/responses/charge_response.dart';
+import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:gold_line/screens/payment_screen/payment_details.dart';
+import 'package:gold_line/screens/profile/wallet/deposit%20screen.dart';
+import 'package:gold_line/screens/profile/wallet/paystack_checkout.dart';
 import 'package:gold_line/screens/profile/wallet/wallet.dart';
+import 'package:gold_line/utility/api_keys.dart';
 import 'package:gold_line/utility/helpers/custom_display_widget.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
-import 'package:http/http.dart' as http;
+import 'package:gold_line/utility/services/paystack_api.dart';
+import 'package:pay_with_paystack/pay_with_paystack.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../models/transaction/transactions.dart';
-import '../../screens/map/map_widget.dart';
 import '../api.dart';
 import 'map_provider.dart';
 
 Transactions? transactions = Transactions();
+String? checkOutURL;
+String? accessCode;
+String? reference;
 // Future getTransactionHistory(BuildContext context) async {
 //   try {
 //     Future<String> getToken() async {
@@ -181,47 +181,39 @@ Future withdraw(String amount, BuildContext context) async {
 }
 
 Future makeCardPayment(String? amount, BuildContext context) async {
-  final MapProvider mapProvider =
-  Provider.of<MapProvider>(context, listen: false);
+
+}
+
+
+
+Future makePayStackPayment(String? amount,
+     BuildContext context) async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
   String? email = preferences.getString("email");
-  int randomInt = Random().nextInt(100);
-  var uuid = Uuid();
-  var refId = uuid.v4();
+  int randomInt = Random().nextInt(1000);
 
+  Charge charge = Charge()
+  ..email = email ?? "user$randomInt@gmail.com"
+  ..amount = int.parse("${amount}00")
+    ..reference = 'GoldLine_${DateTime.now()}'
+  ..currency = 'NG';
 
+  CheckoutResponse checkoutResponse = await payStackPlugin.checkout
+    (context,
+      method: CheckoutMethod.card,
+      charge: charge);
+  print(checkoutResponse);
 
-  final Customer customer = Customer(
-      name: "user$randomInt", phoneNumber: "09$randomInt$randomInt$randomInt", email: email?? "user$randomInt@gmail.com");
-
-  final flutterwave = Flutterwave(
-      context: context,
-      publicKey: "FLWPUBK-fdc22eaae2024e22b7a5e34ca810bf9a-X",
-      currency: "NGN",
-      amount: amount!,
-      txRef: refId,
-      customer: customer,
-      paymentOptions: "card, account, transfer",
-      customization: Customization(),
-      redirectUrl: 'www.google.com',
-      isTestMode: false);
-
-  final ChargeResponse flutterwaveResponse = await flutterwave.charge();
-  bool success = flutterwaveResponse.success!;
-  print(flutterwaveResponse);
-  if (success == true) {
+  if (checkoutResponse.status == true) {
+    String message  = checkoutResponse.message;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String message = flutterwaveResponse.status!;
-    print(flutterwaveResponse);
-
-    print(message);
     final snackBar = SnackBar(
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
       content: AwesomeSnackbarContent(
         title: "Transaction successful",
-        message: "Your rider would be at pickup location in a moment",
+        message: message,
         contentType: ContentType.success,
       ),
     );
@@ -229,31 +221,102 @@ Future makeCardPayment(String? amount, BuildContext context) async {
       ..hideCurrentSnackBar()
       ..showSnackBar(snackBar);
 
-   await makeCardPayment(amount, context);
+    await makeCardPayment(amount, context);
 
   } else {
-    print(flutterwaveResponse);
-
-    String message = flutterwaveResponse.status!;
-    final snackBar = SnackBar(
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: "Transaction unsuccessful",
-        message: message,
-        contentType: ContentType.failure,
-      ),
-    );
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text("Transaction Failed Try Again"),
+    String message  = checkoutResponse.message;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
       backgroundColor: Colors.redAccent,
     ));
   }
 }
 
 
+
+void payWithPayStack(String? amount,
+    BuildContext context) async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  String? email = preferences.getString("email");
+  int randomInt = Random().nextInt(1000);
+  PayWithPayStack payStack = PayWithPayStack();
+
+  PayWithPayStack().now(
+      context: context,
+      secretKey: paystackSecretKey,
+      customerEmail: email ?? "user${randomInt}@gmail.com",
+      reference: DateTime.now().microsecondsSinceEpoch.toString(),
+      currency: "NGN",
+      amount: "${amount}00",
+      transactionCompleted: () {
+        print("testing");
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Transaction Successful"),
+          backgroundColor: Colors.redAccent,
+        ));
+        // await makeCardPayment(amount, context);
+        changeScreen(context, WalletScreen());
+
+
+        print("Transaction Successful");
+      },
+      transactionNotCompleted: () {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Transaction Failed"),
+          backgroundColor: Colors.redAccent,
+        ));
+        print("Transaction Not Successful!");
+        changeScreen(context, WalletScreen());
+      });
+
+}
+
+void webPaystackView(String? amount, BuildContext context) async{
+
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  String? email = preferences.getString("email");
+  int randomInt = Random().nextInt(1000);
+
+  final data = {
+    "email": email?? "user$randomInt@gmail.com",
+    "amount": "${amount}00"
+  };
+  var response = await CallPayStackApi().postData(data, "transaction/initialize");
+  print(response);
+  bool status = response['status'];
+  final responseData = response['data'];
+
+  if(status == true) {
+    checkOutURL = responseData['authorization_url'];
+    accessCode = responseData['access_code'];
+    reference = responseData['reference'];
+    print(reference);
+    changeScreen(context, PayStackCheckOut(url: checkOutURL!, amount: amount!,));
+
+  }
+}
+
+void verifyTransaction(String? amount, BuildContext context) async{
+  final response = await CallPayStackApi().getData("transaction/verify/$reference");
+  print(response);
+  String status = response['data']['status'];
+  if(status == "success") {
+
+    deposit(amount!, context);
+    String message =  response['data']['gateway_response'];
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  removeScreenUntil(context, WalletScreen());
+  }
+  else {
+    String message =  response['data']['gateway_response'];
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    removeScreenUntil(context,WalletScreen());
+
+  }
+  
+  reference = '';
+  accessCode = '';
+  checkOutURL = '';
+
+}
 

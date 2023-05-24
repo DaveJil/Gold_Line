@@ -276,12 +276,11 @@ class UserProvider with ChangeNotifier {
       var response = await CallApi().getData('profile');
       print(response);
       userData = GetData.fromJson(response['data']);
-      print(response['data']['email']);
+      String email = response['data']['email'];
+      pref.setString('email', email);
       print(userData);
       String code = response['code'];
       if (code == 'success') {
-        CustomDisplayWidget.displayAwesomeSuccessSnackBar(
-            context, "Congrats", "Profile retrieved successfully");
         return userData;
       } else {
         String message = response['message'];

@@ -1,13 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_paystack/flutter_paystack.dart';
+// import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/providers/getTransactionHistory.dart';
 import 'package:provider/provider.dart';
 
-class DepositScreen extends StatelessWidget {
+import '../../../utility/api_keys.dart';
+
+final payStackPlugin = PaystackPlugin();
+
+class DepositScreen extends StatefulWidget {
+
+  const DepositScreen({super.key});
+
+  @override
+  State<DepositScreen> createState() => _DepositScreenState();
+}
+
+class _DepositScreenState extends State<DepositScreen> {
   final TextEditingController amount = TextEditingController();
+
   final TextEditingController email = TextEditingController();
 
-  DepositScreen({super.key});
+  @override
+  void initState() {
+    payStackPlugin.initialize(publicKey: paystackPublicKey);
+
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +58,9 @@ class DepositScreen extends StatelessWidget {
               ElevatedButton(
 
                 onPressed: () {
-                  makeCardPayment(amount.text, context);
+                  // makePayStackPayment(amount.text, context);
+                  // payWithPayStack(amount.text, context);
+                  webPaystackView(amount.text, context);
                 },
                 child: Text('Deposit'),
                 style: ElevatedButton.styleFrom(

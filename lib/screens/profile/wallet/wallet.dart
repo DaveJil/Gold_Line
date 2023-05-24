@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/screens/profile/wallet/deposit%20screen.dart';
 import 'package:gold_line/screens/profile/wallet/transaction_item.dart';
 import 'package:gold_line/screens/profile/wallet/withdrawal_screen.dart';
@@ -24,6 +25,14 @@ class _WalletScreenState extends State<WalletScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            removeScreenUntil(context, MapWidget());
+          },
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(8),
