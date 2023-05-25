@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utility/api.dart';
 import '../../utility/helpers/custom_button.dart';
+import '../../utility/providers/getTransactionHistory.dart';
 import '../map/map_widget.dart';
 
 class FlutterwavePaymentScreen extends StatefulWidget {
@@ -138,10 +139,13 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
                     onPressed: () async {
                       optionIsCash
                           ? await mapProvider.submitCashDelivery()
-                          : await makeCardPayment(
-                              mapProvider.deliveryPrice.toString(),
-                              mapProvider.deliveryId,
-                            );
+                          : payStackDelivery(
+                        mapProvider.deliveryPrice.toString(), context
+                      );
+                      // change (
+                      //         mapProvider.deliveryPrice.toString(),
+                      //         mapProvider.deliveryId,
+                      //       );
                     },
                     text: "Pay",
                     fontSize: 18,
@@ -157,89 +161,89 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
         });
   }
 
-  Future makeCardPayment(String? price, int? deliveryId) async {
-    print("payment");
-    final MapProvider mapProvider =
-        Provider.of<MapProvider>(context, listen: false);
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    String? email = preferences.getString("email");
-    int randomInt = Random().nextInt(100);
-    int refRandom = Random().nextInt(100000);
-
-
-    final Customer customer = Customer(
-        name: "user$randomInt", phoneNumber: "09$randomInt$randomInt$randomInt", email: email?? "user$randomInt@gmail.com");
-
-
-    final flutterwave = Flutterwave(
-        context: context,
-        publicKey: "FLWPUBK-fdc22eaae2024e22b7a5e34ca810bf9a-X",
-        currency: "NGN",
-        amount: price!,
-        txRef: "trxGold${refRandom}Delivery",
-        customer: customer,
-        paymentOptions: "card, account, transfer",
-        customization: Customization(),
-        redirectUrl: 'www.google.com',
-        isTestMode: false);
-
-    final ChargeResponse flutterwaveResponse = await flutterwave.charge();
-    bool success = flutterwaveResponse.success!;
-    //print(flutterwaveResponse);
-    if (success == true) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String deliveryId = prefs.getString("deliveryId")!;
-      String message = flutterwaveResponse.status!;
-      //print(flutterwaveResponse);
-
-      //print(message);
-      final snackBar = SnackBar(
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: "Transaction successful",
-          message: "Your rider would be at pickup location in a moment",
-          contentType: ContentType.success,
-        ),
-      );
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar);
-      await CallApi()
-          .postData(null, "user/delivery/verify-payment/$deliveryId");
-      var response = await CallApi()
-          .postData(null, "user/delivery/initialize-payment/$deliveryId");
-      String code = response['code'];
-      if(code == "success") {
-        mapProvider.changeWidgetShowed(showWidget: Show.SEARCHING_FOR_DRIVER);
-
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const MapWidget()),
-                (Route<dynamic> route) => false);
-      }
-
-    } else {
-      //print(flutterwaveResponse);
-
-      String message = flutterwaveResponse.status!;
-      final snackBar = SnackBar(
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: "Transaction unsuccessful",
-          message: message,
-          contentType: ContentType.failure,
-        ),
-      );
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Transaction Failed Try Again"),
-        backgroundColor: Colors.redAccent,
-      ));
-    }
-  }
+  // Future makeCardPayment(String? price, int? deliveryId) async {
+  //   print("payment");
+  //   final MapProvider mapProvider =
+  //       Provider.of<MapProvider>(context, listen: false);
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   String? email = preferences.getString("email");
+  //   int randomInt = Random().nextInt(100);
+  //   int refRandom = Random().nextInt(100000);
+  //
+  //
+  //   final Customer customer = Customer(
+  //       name: "user$randomInt", phoneNumber: "09$randomInt$randomInt$randomInt", email: email?? "user$randomInt@gmail.com");
+  //
+  //
+  //   final flutterwave = Flutterwave(
+  //       context: context,
+  //       publicKey: "FLWPUBK-fdc22eaae2024e22b7a5e34ca810bf9a-X",
+  //       currency: "NGN",
+  //       amount: price!,
+  //       txRef: "trxGold${refRandom}Delivery",
+  //       customer: customer,
+  //       paymentOptions: "card, account, transfer",
+  //       customization: Customization(),
+  //       redirectUrl: 'www.google.com',
+  //       isTestMode: false);
+  //
+  //   final ChargeResponse flutterwaveResponse = await flutterwave.charge();
+  //   bool success = flutterwaveResponse.success!;
+  //   //print(flutterwaveResponse);
+  //   if (success == true) {
+  //     SharedPreferences prefs = await SharedPreferences.getInstance();
+  //     String deliveryId = prefs.getString("deliveryId")!;
+  //     String message = flutterwaveResponse.status!;
+  //     //print(flutterwaveResponse);
+  //
+  //     //print(message);
+  //     final snackBar = SnackBar(
+  //       elevation: 0,
+  //       behavior: SnackBarBehavior.floating,
+  //       backgroundColor: Colors.transparent,
+  //       content: AwesomeSnackbarContent(
+  //         title: "Transaction successful",
+  //         message: "Your rider would be at pickup location in a moment",
+  //         contentType: ContentType.success,
+  //       ),
+  //     );
+  //     ScaffoldMessenger.of(context)
+  //       ..hideCurrentSnackBar()
+  //       ..showSnackBar(snackBar);
+  //     await CallApi()
+  //         .postData(null, "user/delivery/verify-payment/$deliveryId");
+  //     var response = await CallApi()
+  //         .postData(null, "user/delivery/initialize-payment/$deliveryId");
+  //     String code = response['code'];
+  //     if(code == "success") {
+  //       mapProvider.changeWidgetShowed(showWidget: Show.SEARCHING_FOR_DRIVER);
+  //
+  //       Navigator.of(context).pushAndRemoveUntil(
+  //           MaterialPageRoute(builder: (context) => const MapWidget()),
+  //               (Route<dynamic> route) => false);
+  //     }
+  //
+  //   } else {
+  //     //print(flutterwaveResponse);
+  //
+  //     String message = flutterwaveResponse.status!;
+  //     final snackBar = SnackBar(
+  //       elevation: 0,
+  //       behavior: SnackBarBehavior.floating,
+  //       backgroundColor: Colors.transparent,
+  //       content: AwesomeSnackbarContent(
+  //         title: "Transaction unsuccessful",
+  //         message: message,
+  //         contentType: ContentType.failure,
+  //       ),
+  //     );
+  //     ScaffoldMessenger.of(context)
+  //       ..hideCurrentSnackBar()
+  //       ..showSnackBar(snackBar);
+  //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+  //       content: Text("Transaction Failed Try Again"),
+  //       backgroundColor: Colors.redAccent,
+  //     ));
+  //   }
+  // }
 }

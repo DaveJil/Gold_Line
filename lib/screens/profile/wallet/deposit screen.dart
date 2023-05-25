@@ -62,7 +62,7 @@ class _DepositScreenState extends State<DepositScreen> {
                 onPressed: () {
                   // makePayStackPayment(amount.text, context);
                   // payWithPayStack(amount.text, context);
-                  webPaystackView(amount.text, context);
+                  payStackDeposit(amount.text, context);
                 },
                 child: Text('Deposit'),
                 style: ElevatedButton.styleFrom(
