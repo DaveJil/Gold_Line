@@ -7,14 +7,14 @@ import 'widget/cancelled_deliveries.dart';
 import 'widget/completed_deliveries.dart';
 import 'widget/pending_deliveries.dart';
 
-class MyDeliveriesScreen extends StatefulWidget {
-  const MyDeliveriesScreen({Key? key}) : super(key: key);
+class MyInternationalDeliveriesScreen extends StatefulWidget {
+  const MyInternationalDeliveriesScreen({Key? key}) : super(key: key);
 
   @override
-  State<MyDeliveriesScreen> createState() => _MyDeliveriesScreenState();
+  State<MyInternationalDeliveriesScreen> createState() => _MyInternationalDeliveriesScreenState();
 }
 
-class _MyDeliveriesScreenState extends State<MyDeliveriesScreen> {
+class _MyInternationalDeliveriesScreenState extends State<MyInternationalDeliveriesScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

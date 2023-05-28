@@ -44,7 +44,7 @@ class _RequestDeliveryTypeState extends State<RequestDeliveryType> {
               title: Text("Delivery Type 2"),
               subtitle: Text("Vans And Trucks"),
               onTap: () {
-                changeScreen(context, VanDeliveryDetails());
+                changeScreen(context, const VanDeliveryDetails());
               },
             )
           ],

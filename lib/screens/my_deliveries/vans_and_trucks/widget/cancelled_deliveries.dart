@@ -75,7 +75,7 @@ class _CancelledDeliveriesState extends State<CancelledDeliveries> {
                             itemCount: data!.length,
                             shrinkWrap: true,
                             itemBuilder: (BuildContext context, int index) {
-                              return CompletedDeliveryCard(
+                              return CompletedVansDeliveryCard(
                                 id: data[index].id!,
                                 description: data[index].description,
                                 type: data[index].type,

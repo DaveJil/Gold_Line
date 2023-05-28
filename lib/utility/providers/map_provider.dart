@@ -134,6 +134,8 @@ class MapProvider with ChangeNotifier {
   String deliveryType = "";
   String? pickUpState;
   String? dropOffState;
+  String? pickUpCountry;
+  String? dropOffCountry;
 
   //  this variable will listen to the status of the ride request
   StreamSubscription<AsyncSnapshot>? requestStream;
@@ -166,6 +168,8 @@ class MapProvider with ChangeNotifier {
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
   String deliveryDropDownValue = 'Select Delivery Type';
+  String vansDropDownValue = 'Select Delivery Type';
+
   String cityDropDownValue = 'Select City';
 
   bool isExpress = false;
@@ -251,6 +255,15 @@ class MapProvider with ChangeNotifier {
     String state = "${addresses.first.administrativeArea},";
     return state;
   }
+
+  Future<String> getCountryFromCoordinates({required LatLng point}) async {
+    List<Placemark> addresses =
+    await placemarkFromCoordinates(point.latitude, point.longitude);
+
+    String country = "${addresses.first.country},";
+    return country;
+  }
+
 
   onCreate(mapController) {
     _controller.complete(mapController);
@@ -624,42 +637,39 @@ class MapProvider with ChangeNotifier {
       "dropoff_latitude": dropOffLatLng!.latitude,
       "dropoff_longitude": dropOffLatLng!.longitude,
       "status": 'pending',
-      "city": cityDropDownValue,
+      "city": pickUpState,
       "state": pickUpState,
       "package_size": sizeColor,
       "payment_by": whoFuckingPays.toString(),
-      // "pickup_time": selectedDate.toString() + selectedTime.toString(),
       "distance": distanceBetweenPickAndDropOff,
-      // "duration": routeModel!.timeNeeded,
       "pickup_address": pickUpLocationController.text,
       "dropoff_address": dropOffLocationController.text,
       "payment_method": "card",
       "description": description.text,
+      "country": pickUpCountry,
+
     };
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    //print(values);
 
     try {
-      if (pickUpState != dropOffState) {
-        values["state"] = pickUpState;
-        values["city"] = pickUpState;
-        values["dropoff_city"] = dropOffState;
 
+      if(pickUpCountry != dropOffCountry) {
+        values["country"] = pickUpCountry;
+        values["dropoff_country"] = dropOffCountry;
         values["dropoff_state"] = dropOffState;
-        final response =
-            await CallApi().postData(values, 'user/interstate/delivery/new');
+        distanceBetweenPickAndDropOff = 0;
+        values['distance'] = 0;
 
-        ////print('delivery sent');
-        //print(response);
+        print(pickUpCountry);
+        print(dropOffCountry);
+        print(dropOffState);
+        final response =
+        await CallApi().postData(values, 'user/international/delivery/new');
+        print("international delivery");
+
         String code = response['code'];
-        //print(code);
         if (code == "success") {
-          //////print("success");
           distanceBetweenPickAndDropOff = 0;
-          final data = response['data'];
-          //print(data);
           deliveryId = response['data']['id'];
-          //print(deliveryId);
           notifyListeners();
         } else {
           distanceBetweenPickAndDropOff = 0;
@@ -668,25 +678,21 @@ class MapProvider with ChangeNotifier {
           CustomDisplayWidget.displayAwesomeSuccessSnackBar(
               context, message, "Check entered city, state");
         }
-      } else {
-        if (isExpress == true) {
-          values['type'] = 'express';
+      }
+      else {
+        if (pickUpState != dropOffState) {
+          values["state"] = pickUpState;
+          values["city"] = pickUpState;
+          values["dropoff_city"] = dropOffState;
+          values["dropoff_state"] = dropOffState;
           final response =
-              await CallApi().postData(values, 'user/delivery/new');
+          await CallApi().postData(values, 'user/interstate/delivery/new');
+          print("interstatedelivery");
 
-          ////print('delivery sent');
-          //print(response);
           String code = response['code'];
-          //print(code);
           if (code == "success") {
-            //print(isExpress);
-
-            //////print("success");
             distanceBetweenPickAndDropOff = 0;
-            final data = response['data'];
-            //print(data);
             deliveryId = response['data']['id'];
-            //print(deliveryId);
             notifyListeners();
           } else {
             distanceBetweenPickAndDropOff = 0;
@@ -696,21 +702,80 @@ class MapProvider with ChangeNotifier {
                 context, message, "Check entered city, state");
           }
         } else {
+          if (isExpress == true) {
+            values['type'] = 'express';
+            final response =
+            await CallApi().postData(values, 'user/delivery/new');
+            print("express");
+
+            String code = response['code'];
+            //print(code);
+            if (code == "success") {
+              distanceBetweenPickAndDropOff = 0;
+              deliveryId = response['data']['id'];
+              notifyListeners();
+            } else {
+              distanceBetweenPickAndDropOff = 0;
+              String message = (response['message']).toString();
+
+              CustomDisplayWidget.displayAwesomeSuccessSnackBar(
+                  context, message, "Check entered city, state");
+            }
+          } else {
+            final response =
+            await CallApi().postData(values, 'user/delivery/new');
+
+            String code = response['code'];
+            if (code == "success") {
+              distanceBetweenPickAndDropOff = 0;
+              final data = response['data'];
+              //print(data);
+              deliveryId = response['data']['id'];
+              //print(deliveryId);
+              notifyListeners();
+            } else {
+              distanceBetweenPickAndDropOff = 0;
+              String message = (response['message']).toString();
+
+              CustomDisplayWidget.displayAwesomeSuccessSnackBar(
+                  context, message, "Check entered city, state");
+            }
+          }
+        }
+        isExpress = false;
+      }
+      notifyListeners();
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+    notifyListeners();
+  }
+
+  Future createVanDeliveryRequest(BuildContext context) async {
+    Map<String, dynamic> values = {
+      "receiver_name": vanReceiverName.text,
+      "receiver_phone": vanReceiverPhone.text,
+      "sender_name": vanSenderName.text,
+      "sender_phone": vanSenderPhone.text,
+      "status": 'pending',
+      "instruction": vanInstruction.text,
+      "bid_price": vanPrice.text,
+      "state": cityDropDownValue,
+      "city": cityDropDownValue,
+      "pickup_address": vanPickUpLocationController.text,
+      "dropoff_address": vanDropOffLocationController.text,
+      "payment_method": "card",
+      "description": vanDescription.text,
+    };
+
+    try {
           final response =
-              await CallApi().postData(values, 'user/delivery/new');
-          //print(values);
-          ////print('delivery sent');
-          //print(response);
+          await CallApi().postData(values, 'user/cargo/delivery/new');
           String code = response['code'];
-          //print(code);
           if (code == "success") {
-            //print(isExpress);
-            //////print("success");
-            distanceBetweenPickAndDropOff = 0;
-            final data = response['data'];
-            //print(data);
             deliveryId = response['data']['id'];
-            //print(deliveryId);
             notifyListeners();
           } else {
             distanceBetweenPickAndDropOff = 0;
@@ -719,9 +784,6 @@ class MapProvider with ChangeNotifier {
             CustomDisplayWidget.displayAwesomeSuccessSnackBar(
                 context, message, "Check entered city, state");
           }
-        }
-      }
-      isExpress = false;
 
       notifyListeners();
     } on SocketException {
@@ -731,6 +793,8 @@ class MapProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
+
 
   Future updatePaymentMethod() async {
     Map<String, dynamic> values = {

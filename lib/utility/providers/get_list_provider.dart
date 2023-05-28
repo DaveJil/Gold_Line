@@ -164,6 +164,146 @@ class GetListProvider extends ChangeNotifier {
     }
   }
 
+
+  Future checkPendingInternationalDelivery() async {
+    try {
+      final response = await CallApi()
+          .getData('user/international/deliveries?status=processing');
+      //print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkAcceptedInternationalDelivery() async {
+    try {
+      final response =
+      await CallApi().getData('user/international/deliveries?status=accepted');
+      //print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkCompletedInternationalDelivery() async {
+    try {
+      final response = await CallApi()
+          .getData('user/international/deliveries?status=completed');
+      //print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkCancelledInternationalDelivery() async {
+    try {
+      final response =
+      await CallApi().getData('user/international/deliveries?status=canceled');
+      //print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+
+  Future checkPendingVansDelivery() async {
+    try {
+      final response = await CallApi()
+          .getData('user/cargo/deliveries?status=processing');
+      //print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkAcceptedVansStateDelivery() async {
+    try {
+      final response =
+      await CallApi().getData('user/cargo/deliveries?status=accepted');
+      //print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkCompletedVansStateDelivery() async {
+    try {
+      final response = await CallApi()
+          .getData('user/cargo/deliveries?status=completed');
+      //print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkCancelledVansStateDelivery() async {
+    try {
+      final response =
+      await CallApi().getData('user/cargo/deliveries?status=canceled');
+      //print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+
+
   Future cancelDelivery(BuildContext context, String deliveryIde) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     Map<String, dynamic> request = {

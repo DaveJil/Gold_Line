@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/screens/my_deliveries/normal/delivery_details.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
+import 'package:gold_line/utility/providers/getTransactionHistory.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../utility/helpers/constants.dart';
@@ -11,14 +13,14 @@ import '../../../../utility/providers/get_list_provider.dart';
 import '../../../../utility/providers/map_provider.dart';
 import 'pending_deliveries.dart';
 
-class NewDeliveryCard extends StatelessWidget {
+class NewVansDeliveryCard extends StatelessWidget {
   final String? title;
   final String? pickUpLocation;
   final String? dropOffLocation;
   final String? description;
   final String? id;
 
-  const NewDeliveryCard(
+  const NewVansDeliveryCard(
       {Key? key,
       this.title,
       this.description,
@@ -75,7 +77,7 @@ class NewDeliveryCard extends StatelessWidget {
   }
 }
 
-class DeliveryCard extends StatefulWidget {
+class VansDeliveryCard extends StatefulWidget {
   final String? title;
   final int? id;
   final String? type;
@@ -100,7 +102,7 @@ class DeliveryCard extends StatefulWidget {
   final String? senderPhone;
   final List? children;
 
-  const DeliveryCard(
+  const VansDeliveryCard(
       {Key? key,
       this.title,
       this.status,
@@ -130,12 +132,13 @@ class DeliveryCard extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<DeliveryCard> createState() => _DeliveryCardState();
+  State<VansDeliveryCard> createState() => _VansDeliveryCardState();
 }
 
-class _DeliveryCardState extends State<DeliveryCard> {
+class _VansDeliveryCardState extends State<VansDeliveryCard> {
   @override
   Widget build(BuildContext context) {
+    final mapProvider = Provider.of<MapProvider>(context);
     final deliveryListProvider =
         Provider.of<GetListProvider>(context, listen: false);
 
@@ -199,32 +202,10 @@ class _DeliveryCardState extends State<DeliveryCard> {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        showCupertinoDialog(
-                            context: context,
-                            builder: (_) {
-                              return CupertinoAlertDialog(
-                                title: Text("Confirm Pick Up"),
-                                content: Text(
-                                    "Click Confirm to confirm that rider has picked up your package"),
-                                actions: [
-                                  CupertinoDialogAction(
-                                    child: Text("CONFIRM"),
-                                    onPressed: () {
-                                      deliveryListProvider.confirmPickUp(
-                                          context, widget.title);
-                                    },
-                                  ),
-                                  CupertinoDialogAction(
-                                    child: Text("CANCEL"),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              );
-                            });
-                      },
-                      child: Text("Confirm Pick Up"),
+                        mapProvider.deliveryPrice = widget.price!;
+                     payStackDelivery(widget.price, context);
+            },
+                      child: Text("Accept/Make Payment"),
                       style: ElevatedButton.styleFrom(
                           shape: StadiumBorder(),
                           backgroundColor: kPrimaryGoldColor),
@@ -233,102 +214,10 @@ class _DeliveryCardState extends State<DeliveryCard> {
                       width: 10,
                     ),
                     ElevatedButton(
-                      onPressed: () async {
-                        showModalBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return Container(
-                                decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: kPrimaryGoldColor,
-                                          offset: Offset(3, 2),
-                                          blurRadius: 7)
-                                    ]),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(6.0),
-                                  child: ListView(
-                                    children: [
-                                      Row(
-                                        children: const [
-                                          Text(
-                                            'Why Do you Want to Cancel',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 30,
-                                      ),
-                                      addRadioButton(0, "Rider did not move"),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      addRadioButton(
-                                          1, "Rider asked to cancel"),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      addRadioButton(
-                                          2, 'Wrong pickup location'),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      addRadioButton(3,
-                                          'Receiver does not need the package anymore'),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      addRadioButton(4, "Long Pickup time"),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      const Text("Other Reasons:"),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      TextFormField(
-                                        maxLines: 3,
-                                        controller: deliveryListProvider
-                                            .cancelDescription,
-                                        decoration: const InputDecoration(
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.blue,
-                                                  width: 1.0),
-                                            ),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.blueGrey,
-                                                  width: 1.0),
-                                            ),
-                                            hintText: "Kindly tell us"),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      CustomButton(
-                                          color: Colors.redAccent,
-                                          onPressed: () {
-                                            print(widget.title);
-                                            deliveryListProvider.cancelDelivery(
-                                                context,
-                                                widget.title.toString());
-                                          },
-                                          text: "Cancel")
-                                    ],
-                                  ),
-                                ),
-                              );
-                            });
-                        // deliveryListProvider.cancelDelivery(
-                        //     context, id!.toString());
+                      onPressed: () {
+                        deliveryListProvider.cancelDelivery(context, widget.id.toString());
                       },
-                      child: Text("Cancel Delivery"),
+                      child: Text("Reject Price/ Cancel Delivery"),
                       style: ElevatedButton.styleFrom(
                           shape: StadiumBorder(), backgroundColor: Colors.red),
                     ),
@@ -396,7 +285,7 @@ class _DeliveryCardState extends State<DeliveryCard> {
   }
 }
 
-class CompletedDeliveryCard extends StatefulWidget {
+class CompletedVansDeliveryCard extends StatefulWidget {
   final String? title;
   final int? id;
   final String? type;
@@ -421,7 +310,7 @@ class CompletedDeliveryCard extends StatefulWidget {
   final String? senderPhone;
   final List? children;
 
-  const CompletedDeliveryCard(
+  const CompletedVansDeliveryCard(
       {Key? key,
       this.title,
       this.status,
@@ -451,10 +340,10 @@ class CompletedDeliveryCard extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<CompletedDeliveryCard> createState() => _CompletedDeliveryCardState();
+  State<CompletedVansDeliveryCard> createState() => _CompletedVansDeliveryCardState();
 }
 
-class _CompletedDeliveryCardState extends State<CompletedDeliveryCard> {
+class _CompletedVansDeliveryCardState extends State<CompletedVansDeliveryCard> {
   @override
   Widget build(BuildContext context) {
     final deliveryListProvider =

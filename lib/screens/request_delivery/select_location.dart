@@ -112,10 +112,13 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                       value: _useCurrentLocationPickUp,
                       activeColor: kPrimaryGoldColor,
                       onChanged: (bool? value) async {
+                        mapProvider.pickUpLatLng = LatLng(
+                            mapProvider.center!.latitude,
+                            mapProvider.center!.longitude);
                         mapProvider.pickUpState =
                             await mapProvider.getStateFromCoordinates(
                                 point: mapProvider.center!);
-
+                        mapProvider.pickUpCountry = await mapProvider.getCountryFromCoordinates(point: mapProvider.center!);
                         setState(() {
                           mapProvider.predictions = [];
                           pickUpLocationController.text =
@@ -207,6 +210,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                             mapProvider.pickUpState =
                                 await mapProvider.getStateFromCoordinates(
                                     point: mapProvider.pickUpLatLng!);
+                            mapProvider.pickUpCountry = await mapProvider.getCountryFromCoordinates(point: mapProvider.pickUpLatLng!);
                             //print(mapProvider.pickUpState);
                           } else if (mapProvider.endFocusNode.hasFocus) {
                             setState(() {
@@ -224,18 +228,12 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                                 mapProvider
                                     .dropoffLocation!.geometry!.location!.lng!);
 
-                            String dropOffAddress =
-                                await mapProvider.getAddressFromCoordinates(
-                                    point: mapProvider.dropOffLatLng!);
-                            //print(dropOffAddress);
                             dropOffLocationController.text =
                                 details.result!.formattedAddress!;
                             mapProvider.dropOffState =
                                 await mapProvider.getStateFromCoordinates(
                                     point: mapProvider.dropOffLatLng!);
-                            //////print("waiting");
-
-                            //print(mapProvider.dropOffState);
+                            mapProvider.dropOffCountry = await mapProvider.getCountryFromCoordinates(point: mapProvider.dropOffLatLng!);
 
                             setState(() {
                               dropOffLocationController.text =
@@ -276,6 +274,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                         mapProvider.dropOffState =
                             await mapProvider.getStateFromCoordinates(
                                 point: mapProvider.center!);
+                        mapProvider.dropOffCountry = await mapProvider.getCountryFromCoordinates(point: mapProvider.center!);
                         setState(() {
                           mapProvider.predictions = [];
                           dropOffLocationController.text =
@@ -297,7 +296,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Colors.grey,
                       blurRadius: 4,

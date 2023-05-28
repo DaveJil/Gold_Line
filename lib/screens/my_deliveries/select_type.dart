@@ -2,10 +2,12 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gold_line/screens/my_deliveries/interstate/my_deliveries.dart';
+import 'package:gold_line/screens/my_deliveries/vans_and_trucks/my_deliveries.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 
 import '../../../utility/helpers/constants.dart';
+import 'international/my_deliveries.dart';
 import 'normal/my_deliveries.dart';
 
 class MyDeliveriesOptionScreen extends StatefulWidget {
@@ -91,7 +93,7 @@ class _MyDeliveriesOptionScreen extends State<MyDeliveriesOptionScreen> {
           ),
           InkWell(
             onTap: () {
-              // changeScreen(context, MyInterStateDeliveriesScreen());
+              changeScreen(context, MyInternationalDeliveriesScreen());
             },
             child: ListTile(
               tileColor: Colors.white70,
@@ -109,7 +111,7 @@ class _MyDeliveriesOptionScreen extends State<MyDeliveriesOptionScreen> {
           ),
           InkWell(
             onTap: () {
-              // changeScreen(context, MyInterStateDeliveriesScreen());
+              changeScreen(context, const MyVansDeliveriesScreen());
             },
             child: ListTile(
               tileColor: Colors.white70,
