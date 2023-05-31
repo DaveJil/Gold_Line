@@ -775,16 +775,16 @@ class MapProvider with ChangeNotifier {
           await CallApi().postData(values, 'user/cargo/delivery/new');
           String code = response['code'];
           if (code == "success") {
+            print("success");
+            CustomDisplayWidget.displayAwesomeSuccessSnackBar(context, "Request For Van Submitted Successfully", "Success");
             deliveryId = response['data']['id'];
             notifyListeners();
           } else {
             distanceBetweenPickAndDropOff = 0;
             String message = (response['message']).toString();
-
             CustomDisplayWidget.displayAwesomeSuccessSnackBar(
                 context, message, "Check entered city, state");
           }
-
       notifyListeners();
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -805,14 +805,10 @@ class MapProvider with ChangeNotifier {
     isLoading = true;
     try {
       final response = await CallApi().postData(values, 'user/delivery/update');
-      //print(response);
       if (response['success'] == "success") {
         final body = response;
-
         isLoading = false;
         notifyListeners();
-
-        //print(body);
       }
     } on SocketException {
       throw const SocketException('No internet connection');

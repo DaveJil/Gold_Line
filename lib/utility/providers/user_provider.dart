@@ -346,7 +346,7 @@ class UserProvider with ChangeNotifier {
   Future deleteAccount(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    await CallApi().getData('delete');
+    await CallApi().postData(null, 'delete-account');
     status = Status.Unauthenticated;
     await prefs.setString(ID, "");
     await prefs.setString(TOKEN, "");
