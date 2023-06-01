@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../../utility/helpers/constants.dart';
 import '../../../utility/providers/get_list_provider.dart';
+import '../../../utility/services/calls_and_sms.dart';
 
 class DeliveryDetailsScreen extends StatefulWidget {
   final String? title;
@@ -133,7 +134,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: CircleAvatar(
-                                      child: Icon(Icons.edit_document, color: kPrimaryGoldColor, size: 14.r,),
+                                      child: Icon(Icons.person, color: kPrimaryGoldColor, size: 14.r,),
                                       backgroundColor: kPrimaryGoldColor.withOpacity(0.1),
                                       radius: 16.r,
                                     ),
@@ -174,7 +175,11 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                     alignment: Alignment.centerRight,
                                     child: Center(
                                       child: CircleAvatar(
-                                        child: Icon(Icons.call, color: Colors.black, size: 9.r,),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              CallsAndMessagesService().call(widget.senderPhone!);
+                                            },
+                                            icon: Icon(Icons.call, color: Colors.black, size: 9.r,)),
                                         backgroundColor: Colors.grey,
                                         radius: 12.r,
                                       ),
@@ -201,7 +206,8 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: CircleAvatar(
-                                      child: Icon(Icons.person, color: kPrimaryGoldColor, size: 14.r,),
+                                      child: Icon(Icons.edit_document, color: kPrimaryGoldColor, size: 14.r,),
+
                                       backgroundColor: kPrimaryGoldColor.withOpacity(0.1),
                                       radius: 16.r,
                                     ),
@@ -242,7 +248,11 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                     alignment: Alignment.centerRight,
                                     child: Center(
                                       child: CircleAvatar(
-                                        child: Icon(Icons.call, color: Colors.black, size: 9.r,),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              CallsAndMessagesService().call(widget.receiverPhone!);
+                                            },
+                                            icon: Icon(Icons.call, color: Colors.black, size: 9.r,)),
                                         backgroundColor: Colors.grey,
                                         radius: 12.r,
                                       ),
