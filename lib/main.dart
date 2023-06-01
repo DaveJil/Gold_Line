@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gold_line/goldline.dart';
 import 'package:gold_line/utility/providers/get_list_provider.dart';
 import 'package:gold_line/utility/providers/map_provider.dart';
@@ -48,7 +49,15 @@ Future<void> main() async {
     sound: true,
   );
 
-  runApp(const MyApp());
+  runApp(ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return const MaterialApp(
+          home: MyApp(),
+        );}
+  ));
 }
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
