@@ -21,7 +21,7 @@ class GetListProvider extends ChangeNotifier {
 
   Future getDeliveryList() async {
     var response = await CallApi().getData('user/deliveries');
-    //print(response);
+    print(response);
     final result = response["data"];
     final data = result.map((e) => DeliveryModel.fromJson(e)).toList();
     //////print("dat = $data");
@@ -31,8 +31,8 @@ class GetListProvider extends ChangeNotifier {
   Future checkPendingDelivery() async {
     try {
       final response =
-          await CallApi().getData('user/deliveries?status=processing');
-      //print(response);
+          await CallApi().getData('user/deliveries?status=pending');
+      print(response);
       final data = response['data'];
       //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
@@ -49,7 +49,7 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response =
           await CallApi().getData('user/deliveries?status=accepted');
-      //print(response);
+      print(response);
       final data = response['data'];
       //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
@@ -66,7 +66,7 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response =
           await CallApi().getData('user/deliveries?status=completed');
-      //print(response);
+      print(response);
       final data = response['data'];
       //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
@@ -82,8 +82,8 @@ class GetListProvider extends ChangeNotifier {
   Future checkCancelledDelivery() async {
     try {
       final response =
-          await CallApi().getData('user/deliveries?status=cancelled');
-      //print(response);
+          await CallApi().getData('user/deliveries?status=canceled');
+      print(response);
       final data = response['data'];
       //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
@@ -99,8 +99,8 @@ class GetListProvider extends ChangeNotifier {
   Future checkPendingInterStateDelivery() async {
     try {
       final response = await CallApi()
-          .getData('user/interstate/deliveries?status=processing');
-      //print(response);
+          .getData('user/interstate/deliveries?status=pending');
+      print(response);
       final data = response['data'];
       //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
@@ -117,7 +117,7 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response =
           await CallApi().getData('user/interstate/deliveries?status=accepted');
-      //print(response);
+      print(response);
       final data = response['data'];
       //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
@@ -134,7 +134,7 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response = await CallApi()
           .getData('user/interstate/deliveries?status=completed');
-      //print(response);
+      print(response);
       final data = response['data'];
       //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
@@ -151,7 +151,7 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response =
           await CallApi().getData('user/interstate/deliveries?status=canceled');
-      //print(response);
+      print(response);
       final data = response['data'];
       //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
@@ -168,8 +168,8 @@ class GetListProvider extends ChangeNotifier {
   Future checkPendingInternationalDelivery() async {
     try {
       final response = await CallApi()
-          .getData('user/international/deliveries?status=processing');
-      //print(response);
+          .getData('user/international/deliveries?status=pending');
+      print(response);
       final data = response['data'];
       //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
@@ -186,7 +186,7 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response =
       await CallApi().getData('user/international/deliveries?status=accepted');
-      //print(response);
+      print(response);
       final data = response['data'];
       //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
@@ -203,7 +203,7 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response = await CallApi()
           .getData('user/international/deliveries?status=completed');
-      //print(response);
+      print(response);
       final data = response['data'];
       //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
@@ -220,7 +220,7 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response =
       await CallApi().getData('user/international/deliveries?status=canceled');
-      //print(response);
+      print(response);
       final data = response['data'];
       //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
@@ -237,8 +237,8 @@ class GetListProvider extends ChangeNotifier {
   Future checkPendingVansDelivery() async {
     try {
       final response = await CallApi()
-          .getData('user/cargo/deliveries?status=processing');
-      //print(response);
+          .getData('user/cargo/deliveries?status=pending');
+      print(response);
       final data = response['data'];
       //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
@@ -254,8 +254,8 @@ class GetListProvider extends ChangeNotifier {
   Future checkAcceptedVansStateDelivery() async {
     try {
       final response =
-      await CallApi().getData('user/cargo/deliveries?status=accepted');
-      //print(response);
+      await CallApi().getData('user/cargo/deliveries?status=processing');
+      print(response);
       final data = response['data'];
       //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
@@ -272,7 +272,7 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response = await CallApi()
           .getData('user/cargo/deliveries?status=completed');
-      //print(response);
+      print(response);
       final data = response['data'];
       //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
@@ -289,7 +289,7 @@ class GetListProvider extends ChangeNotifier {
     try {
       final response =
       await CallApi().getData('user/cargo/deliveries?status=canceled');
-      //print(response);
+      print(response);
       final data = response['data'];
       //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();

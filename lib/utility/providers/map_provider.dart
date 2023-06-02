@@ -647,7 +647,9 @@ class MapProvider with ChangeNotifier {
       "payment_method": "card",
       "description": description.text,
       "country": pickUpCountry,
-
+      "dropoff_city": dropOffState,
+      "dropoff_state": dropOffState,
+      "dropoff_country": dropOffCountry
     };
 
     try {
@@ -655,7 +657,6 @@ class MapProvider with ChangeNotifier {
       if(pickUpCountry != dropOffCountry) {
         values["country"] = pickUpCountry;
         values["dropoff_country"] = dropOffCountry;
-        values["dropoff_state"] = dropOffState;
         distanceBetweenPickAndDropOff = 0;
         values['distance'] = 0;
 
@@ -668,6 +669,8 @@ class MapProvider with ChangeNotifier {
 
         String code = response['code'];
         if (code == "success") {
+          print("international delivery");
+
           distanceBetweenPickAndDropOff = 0;
           deliveryId = response['data']['id'];
           notifyListeners();

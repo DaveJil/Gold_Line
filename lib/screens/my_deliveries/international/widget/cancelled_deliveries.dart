@@ -20,7 +20,7 @@ class _CancelledDeliveriesState extends State<CancelledDeliveries> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final deliveryListProvider =
           Provider.of<GetListProvider>(context, listen: false);
-      deliveries = deliveryListProvider.checkCancelledDelivery();
+      deliveries = deliveryListProvider.checkCancelledInternationalDelivery();
     });
     super.initState();
   }
@@ -51,7 +51,7 @@ class _CancelledDeliveriesState extends State<CancelledDeliveries> {
                 height: 10.appHeight(context),
               ),
               FutureBuilder(
-                  future: deliveryListProvider.checkCancelledDelivery(),
+                  future: deliveryListProvider.checkCancelledInternationalDelivery(),
                   builder: (context, snapshot) {
                     // Checking if future is resolved
                     if (snapshot.connectionState == ConnectionState.done) {

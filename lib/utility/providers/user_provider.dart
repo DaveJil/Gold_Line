@@ -7,9 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:gold_line/screens/authentication/proceed_login.dart';
 import 'package:gold_line/screens/authentication/user_navigation.dart';
 import 'package:gold_line/screens/payment_screen/payment_details.dart';
-import 'package:gold_line/screens/profile/wallet/deposit%20screen.dart';
-import 'package:gold_line/screens/profile/wallet/wallet.dart';
-import 'package:gold_line/screens/profile/wallet/withdrawal_screen.dart';
+import 'package:gold_line/screens/profile/profile.dart';
 import 'package:gold_line/utility/helpers/custom_display_widget.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,11 +37,15 @@ class UserProvider with ChangeNotifier {
   FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
   TextEditingController email = TextEditingController();
+  TextEditingController phone = TextEditingController();
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
 
   TextEditingController password = TextEditingController();
+  TextEditingController newPassword = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
+  TextEditingController confirmNewPassword = TextEditingController();
+
 
   TextEditingController otherName = TextEditingController();
   TextEditingController gender = TextEditingController();
@@ -121,7 +123,7 @@ class UserProvider with ChangeNotifier {
 
         removeScreenUntil(context, const MapWidget());
       } else {
-        String message = response['message'];
+        String message = response['message'].toString();
 
         print(message);
         CustomDisplayWidget.displayAwesomeFailureSnackBar(
@@ -143,6 +145,7 @@ class UserProvider with ChangeNotifier {
       'first_name': firstName.text,
       'last_name': lastName.text,
       'email': email.text,
+      'phone': phone.text,
       'password': password.text,
       'role': userDropDownValue.toLowerCase()
     };
@@ -172,7 +175,7 @@ class UserProvider with ChangeNotifier {
 
         changeScreen(context, const PaymentDetails());
       } else {
-        String message = response['message'];
+        String message = response['message'].toString();
         print(message);
         CustomDisplayWidget.displayAwesomeFailureSnackBar(
             context, message, message);
@@ -201,9 +204,41 @@ class UserProvider with ChangeNotifier {
       if (code == 'success') {
         changeScreen(context, ProceedLogin());
         CustomDisplayWidget.displayAwesomeSuccessSnackBar(
-            context, "Relax", "Check Email for password reset link");
+            context, "Relax", "Please Check your Email for password reset link");
       } else {
-        String message = response['message'];
+        String message = response['message'].toString();
+
+        print(message);
+        CustomDisplayWidget.displayAwesomeFailureSnackBar(
+            context, message, message);
+        return message;
+      }
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future changePassword(BuildContext context) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    Map<String, dynamic> request = {
+      'current_password': password.text,
+      'new_password': newPassword.text,
+      'password_confirmation': confirmNewPassword
+    };
+
+    try {
+      final response = await CallApi().postData(request, 'forgot-password');
+      print(response);
+      String code = response['code'];
+
+      if (code == 'success') {
+        changeScreenReplacement(context, UserProfileScreen());
+        CustomDisplayWidget.displayAwesomeSuccessSnackBar(
+            context, "", "Password Reset Successfully");
+      } else {
+        String message = response['message'].toString();
 
         print(message);
         CustomDisplayWidget.displayAwesomeFailureSnackBar(
@@ -222,10 +257,8 @@ class UserProvider with ChangeNotifier {
 
     Map<String, dynamic> request = {
       'email': email.text,
-      'first_name': firstName.text,
-      'last_name': lastName.text,
-      'gender': gender.toString().toLowerCase(),
-      'role': userDropDownValue.toLowerCase(),
+      'phone': phone.text,
+      'address': userAddress.text
     };
 
     try {
@@ -236,7 +269,7 @@ class UserProvider with ChangeNotifier {
         CustomDisplayWidget.displayAwesomeSuccessSnackBar(
             context, "Congrats", "Profile updated successfully");
       } else {
-        String message = response['message'];
+        String message = response['message'].toString();
 
         print(message);
         CustomDisplayWidget.displayAwesomeFailureSnackBar(
@@ -263,6 +296,7 @@ class UserProvider with ChangeNotifier {
       var response = await CallApi().addImage(request, 'profile', file, image);
       print(response);
       getUserData(context);
+      changeScreenReplacement(context, UserProfileScreen());
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {
@@ -284,7 +318,7 @@ class UserProvider with ChangeNotifier {
       if (code == 'success') {
         return userData;
       } else {
-        String message = response['message'];
+        String message = response['message'].toString();
 
         print(message);
         CustomDisplayWidget.displayAwesomeFailureSnackBar(
@@ -313,7 +347,7 @@ class UserProvider with ChangeNotifier {
         removeScreenUntil(context, MapWidget());
 
       } else {
-        String message = response['message'];
+        String message = response['message'].toString();
         print(message);
         CustomDisplayWidget.displayAwesomeFailureSnackBar(
             context, message, message);

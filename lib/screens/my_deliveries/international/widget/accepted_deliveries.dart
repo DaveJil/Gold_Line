@@ -20,7 +20,7 @@ class _AcceptedDeliveriesState extends State<AcceptedDeliveries> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final deliveryListProvider =
           Provider.of<GetListProvider>(context, listen: false);
-      deliveries = deliveryListProvider.checkAcceptedDelivery();
+      deliveries = deliveryListProvider.checkAcceptedInternationalDelivery();
     });
     super.initState();
   }
@@ -51,7 +51,7 @@ class _AcceptedDeliveriesState extends State<AcceptedDeliveries> {
               ),
               SingleChildScrollView(
                 child: FutureBuilder(
-                    future: deliveryListProvider.checkAcceptedDelivery(),
+                    future: deliveryListProvider.checkAcceptedInternationalDelivery(),
                     builder: (context, snapshot) {
                       // Checking if future is resolved
                       if (snapshot.connectionState == ConnectionState.done) {

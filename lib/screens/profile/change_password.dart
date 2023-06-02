@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gold_line/screens/authentication/proceed_login.dart';
 import 'package:gold_line/screens/authentication/sign_in.dart';
+import 'package:gold_line/screens/profile/supportScreen.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +48,7 @@ class ChangePassState extends State<ChangePass> {
                       SizedBox(
                         width: getWidth(20, context),
                       ),
-                      AutoSizeText(
+                      const AutoSizeText(
                         'Change your Account Password',
                         style: TextStyle(
                             color: Colors.black,
@@ -61,13 +62,13 @@ class ChangePassState extends State<ChangePass> {
                   height: getHeight(40, context),
                 ),
                 SizedBox(
-                    width: getHeight(300, context),
-                    height: getHeight(300, context),
+                    width: getHeight(250, context),
+                    height: getHeight(250, context),
                     child: SvgPicture.asset("assets/forgotpass.svg")),
                 SizedBox(
                   height: getHeight(40, context),
                 ),
-                AutoSizeText(
+                const AutoSizeText(
                   'Please Fill Password Details',
                   style: TextStyle(
                     color: Colors.black,
@@ -136,9 +137,7 @@ class ChangePassState extends State<ChangePass> {
                 ),
                 TextButton(
                   onPressed: () async {
-                    await userProvider.forgotPassword(context);
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => SignInScreen()));
+                    changeScreen(context, const SupportScreen());
                   },
                   child: const Text(
                     "Can't Change Password? Contact Support",
@@ -161,8 +160,7 @@ class ChangePassState extends State<ChangePass> {
                       borderRadius: BorderRadius.circular(20)),
                   child: TextButton(
                     onPressed: () async {
-                      await userProvider.forgotPassword(context);
-                      changeScreenReplacement(context, ProceedLogin());
+                      await userProvider.changePassword(context);
                     },
                     child: const AutoSizeText(
                       'Change Password',

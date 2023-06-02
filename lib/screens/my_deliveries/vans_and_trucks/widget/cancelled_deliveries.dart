@@ -51,7 +51,7 @@ class _CancelledDeliveriesState extends State<CancelledDeliveries> {
                 height: 10.appHeight(context),
               ),
               FutureBuilder(
-                  future: deliveryListProvider.checkCancelledDelivery(),
+                  future: deliveryListProvider.checkCancelledVansStateDelivery(),
                   builder: (context, snapshot) {
                     // Checking if future is resolved
                     if (snapshot.connectionState == ConnectionState.done) {

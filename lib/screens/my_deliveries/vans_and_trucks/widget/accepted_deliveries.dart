@@ -51,7 +51,7 @@ class _AcceptedDeliveriesState extends State<AcceptedDeliveries> {
               ),
               SingleChildScrollView(
                 child: FutureBuilder(
-                    future: deliveryListProvider.checkAcceptedDelivery(),
+                    future: deliveryListProvider.checkAcceptedVansStateDelivery(),
                     builder: (context, snapshot) {
                       // Checking if future is resolved
                       if (snapshot.connectionState == ConnectionState.done) {

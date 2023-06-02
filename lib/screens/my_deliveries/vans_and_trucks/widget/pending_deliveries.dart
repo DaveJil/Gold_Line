@@ -51,7 +51,7 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
               ),
               SingleChildScrollView(
                 child: FutureBuilder(
-                    future: deliveryListProvider.checkPendingDelivery(),
+                    future: deliveryListProvider.checkPendingVansDelivery(),
                     builder: (context, snapshot) {
                       // Checking if future is resolved
                       if (snapshot.connectionState == ConnectionState.done) {

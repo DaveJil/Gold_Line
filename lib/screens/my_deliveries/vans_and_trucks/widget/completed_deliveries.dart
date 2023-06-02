@@ -51,7 +51,7 @@ class _CompletedDeliveriesState extends State<CompletedDeliveries> {
                 height: 10.appHeight(context),
               ),
               FutureBuilder(
-                  future: deliveryListProvider.checkCompletedDelivery(),
+                  future: deliveryListProvider.checkCompletedVansStateDelivery(),
                   builder: (context, snapshot) {
                     // Checking if future is resolved
                     if (snapshot.connectionState == ConnectionState.done) {

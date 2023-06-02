@@ -1,10 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gold_line/screens/authentication/kyc_info.dart';
 import 'package:gold_line/screens/my_deliveries/select_type.dart';
-import 'package:gold_line/screens/profile/profile.dart';
 import 'package:gold_line/screens/profile/settings_page.dart';
 import 'package:gold_line/screens/profile/supportScreen.dart';
 import 'package:gold_line/screens/profile/wallet/wallet.dart';
@@ -409,6 +406,7 @@ class _MainMenuState extends State<MainMenu> {
                           ),
                           SizedBox(width: 10,),
                           CustomButton(
+                            color: Colors.redAccent,
                             onPressed: () {
                               userProvider.deleteAccount(context);
                             },

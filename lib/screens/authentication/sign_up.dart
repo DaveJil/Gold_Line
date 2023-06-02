@@ -130,6 +130,33 @@ class SignUpScreenState extends State<SignUpScreen> {
                     SizedBox(
                       height: getHeight(20, context),
                     ),
+
+                    TextFormField(
+                      controller: userProvider.phone,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter valid phone number';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 1,
+                            color: kPrimaryGoldColor,
+                          ),
+                        ),
+                        labelText: 'Phone',
+                        labelStyle: TextStyle(
+                          fontWeight: FontWeight.w700,
+                        ),
+                        hintText: 'Enter your phone number',
+                      ),
+                    ),
+                    SizedBox(
+                      height: getHeight(20, context),
+                    ),
+
                     TextFormField(
                       controller: userProvider.password,
                       validator: (value) {
@@ -186,7 +213,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text("Select User Type"),
                         SizedBox(width: 15,),
