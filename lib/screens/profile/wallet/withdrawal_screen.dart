@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gold_line/screens/profile/wallet/wallet.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/providers/getTransactionHistory.dart';
+
+import '../../../utility/helpers/routing.dart';
 
 class WithdrawalScreen extends StatelessWidget {
   final TextEditingController amount = TextEditingController();
@@ -11,6 +14,16 @@ class WithdrawalScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: kPrimaryGoldColor,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            changeScreenReplacement(context, WalletScreen());
+          },
+        ),
+      ),
+
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
