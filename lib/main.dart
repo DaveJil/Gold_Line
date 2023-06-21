@@ -56,6 +56,7 @@ Future<void> main() async {
       builder: (context, child) {
         return const MaterialApp(
           home: MyApp(),
+          debugShowCheckedModeBanner: false,
         );}
   ));
 }
