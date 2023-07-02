@@ -164,7 +164,8 @@ class MapProvider with ChangeNotifier {
 
   String? dateTime;
 
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedBookingDate = DateTime.now();
+  TimeOfDay selectedBookingTime = TimeOfDay.now();
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
   String deliveryDropDownValue = 'Select Delivery Type';
@@ -1120,5 +1121,27 @@ class MapProvider with ChangeNotifier {
   void changeScreenReplacement(Widget widget) {
     Navigator.push(
         mainContext!, MaterialPageRoute(builder: (context) => widget));
+  }
+
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedBookingDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+        selectedBookingDate = picked;
+    }
+  }
+
+  Future<void> selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedBookingTime,
+    );
+    if (picked != null && picked != selectedBookingTime) {
+        selectedBookingTime = picked;
+    }
   }
 }

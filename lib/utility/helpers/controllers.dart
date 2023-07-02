@@ -32,3 +32,10 @@ TextEditingController vanPrice = TextEditingController();
 TextEditingController vanReceiverName = TextEditingController();
 TextEditingController vanReceiverPhone = TextEditingController();
 TextEditingController vanDropOffLocationController = TextEditingController();
+
+
+TextEditingController interCityBookingName = TextEditingController();
+TextEditingController interCityBookingPhone = TextEditingController();
+TextEditingController interCityBookingNumberOfSeats = TextEditingController();
+
+

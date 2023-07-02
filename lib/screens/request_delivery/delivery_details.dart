@@ -186,15 +186,11 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
               SizedBox(
                 height: getHeight(20, context),
               ),
-              Row(
-                children: [
-                  Expanded(child: DeliveryOption()),
-                  SizedBox(
-                    width: getWidth(20, context),
-                  ),
-                  Expanded(child: SelectCity())
-                ],
+              DeliveryOption(),
+              SizedBox(
+                height: getHeight(20, context),
               ),
+              SelectCity(),
               SizedBox(
                 height: getHeight(20, context),
               ),
@@ -534,6 +530,7 @@ class _DeliveryOptionState extends State<DeliveryOption> {
       'Select Delivery Type',
       'Dispatch Bike',
       'Interstate Courier',
+      'International'
     ];
 
     return DropdownButton<String>(

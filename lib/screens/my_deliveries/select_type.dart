@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gold_line/components/select_type_card.dart';
 import 'package:gold_line/screens/my_deliveries/interstate/my_deliveries.dart';
 import 'package:gold_line/screens/my_deliveries/vans_and_trucks/my_deliveries.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
@@ -22,11 +23,11 @@ class _MyDeliveriesOptionScreen extends State<MyDeliveriesOptionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: kPrimaryGoldColor,
+        backgroundColor: Colors.transparent,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           iconSize: getHeight(20, context),
-          color: Colors.white,
+          color: kPrimaryGoldColor,
           onPressed: () {
             Navigator.pop(context);
           },
@@ -34,7 +35,7 @@ class _MyDeliveriesOptionScreen extends State<MyDeliveriesOptionScreen> {
         title: AutoSizeText(
           'Choose Delivery Option',
           style: TextStyle(
-            color: Colors.white,
+            color: kPrimaryGoldColor,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -45,7 +46,7 @@ class _MyDeliveriesOptionScreen extends State<MyDeliveriesOptionScreen> {
             height: getHeight(20, context),
           ),
           AutoSizeText(
-            'You will see the delivery history for \n the selected delivery type',
+            'You will see the delivery history for \nthe selected delivery type',
             style: TextStyle(
               color: Colors.black26,
               fontWeight: FontWeight.w400,
@@ -60,6 +61,7 @@ class _MyDeliveriesOptionScreen extends State<MyDeliveriesOptionScreen> {
             onTap: () {
               changeScreen(context, MyDeliveriesScreen());
             },
+
             child: ListTile(
               tileColor: Colors.white70,
               title: Text('Normal Delivery',
