@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
@@ -308,7 +309,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Text("Rider's Name: ", style: TextStyle(fontWeight: FontWeight.bold),),
+                                          AutoSizeText("Rider's Name: ", style: TextStyle(fontWeight: FontWeight.bold),),
                                           Text("${widget.riderFirstName!} ${widget.riderLastName!}")
                                         ],
                                       ),
@@ -318,7 +319,13 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                       Row(
                                         children: [
                                           Text("Rider's Phone: ", style: TextStyle(fontWeight: FontWeight.bold)),
-                                          Text("${widget.riderPhoneNumber}")
+                                          Text("${widget.riderPhoneNumber}",
+                                            softWrap: true,
+                                            overflow: TextOverflow.ellipsis,
+                                            style:  TextStyle(
+                                              fontSize: getHeight(16, context),
+                                            ),
+                                          ),
                                         ],
                                       ),
                                       SizedBox(
@@ -327,7 +334,12 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                       Row(
                                         children: [
                                           Text("Bike's Plate Number: ", style: TextStyle(fontWeight: FontWeight.bold)),
-                                          Text("${widget.riderPlateNumber}")
+                                          Text("${widget.riderPlateNumber}", softWrap: true,
+                                            overflow: TextOverflow.ellipsis,
+                                            style:  TextStyle(
+                                              fontSize: getHeight(16, context),
+                                            ),
+                                          ),
                                         ],
                                       ), ],
                                   ),
