@@ -108,7 +108,7 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
               EdgeInsets.symmetric(horizontal: 50.appWidth(context)),
               child: CustomButton(
                   onPressed: () async{
-                    await mapProvider.createVanDeliveryRequest(context);
+                    // await mapProvider.createVanDeliveryRequest(context);
                     // changeScreenReplacement(context, MyVansDeliveriesScreen());
                   },
                   text: "Request Van/Truck"),
