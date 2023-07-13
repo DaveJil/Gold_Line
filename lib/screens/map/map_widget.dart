@@ -149,7 +149,7 @@ class _MapWidgetState extends State<MapWidget> {
 
               Visibility(
                   visible: mapProvider.show == Show.CHECKOUT_DELIVERY,
-                  child: SummaryWidget()),
+                  child: DeliverySummaryWidget()),
 
               Visibility(
                   visible: mapProvider.show == Show.SEARCHING_FOR_DRIVER,

@@ -6,6 +6,7 @@ import 'dart:io';
 import 'dart:math';
 
 // import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:date_format/date_format.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_google_places/flutter_google_places.dart';
@@ -16,6 +17,7 @@ import 'package:gold_line/utility/helpers/controllers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_place/google_place.dart' as compon;
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
@@ -131,6 +133,7 @@ class MapProvider with ChangeNotifier {
   int? deliveryId;
   String? userAddressText;
   String? whoFuckingPays;
+  String? interCityBookingType;
   String deliveryType = "";
   String? pickUpState;
   String? dropOffState;
@@ -164,14 +167,17 @@ class MapProvider with ChangeNotifier {
 
   String? dateTime;
 
-  DateTime selectedBookingDate = DateTime.now();
-  TimeOfDay selectedBookingTime = TimeOfDay.now();
+  String selectedBookingDate = "Select Departure Date";
+  String selectedBookingTime = "Select Departure Time";
+
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
   String deliveryDropDownValue = 'Select Delivery Type';
   String vansDropDownValue = 'Select Delivery Type';
 
   String cityDropDownValue = 'Select City';
+  String vehicleDropDownValue = "Select Vehicle";
+  String routeDropDownValue = "Select Route";
 
   bool isExpress = false;
 
@@ -1126,22 +1132,28 @@ class MapProvider with ChangeNotifier {
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: selectedBookingDate,
+      initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
     if (picked != null) {
-        selectedBookingDate = picked;
+
+      selectedBookingDate = DateFormat('dd MMMM yyyy').format(picked);
+
     }
   }
 
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: selectedBookingTime,
+      initialTime: TimeOfDay.now(),
     );
-    if (picked != null && picked != selectedBookingTime) {
-        selectedBookingTime = picked;
+    if (picked != null) {
+      String period = picked.hour >= 12 ? 'PM' : 'AM';
+      int hour = picked.hourOfPeriod == 0 ? 12 : picked.hourOfPeriod;
+
+
+      selectedBookingTime =  '${hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')} $period';
     }
   }
 }

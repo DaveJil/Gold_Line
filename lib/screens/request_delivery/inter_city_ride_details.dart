@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
@@ -24,7 +25,7 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
 
     return Scaffold(
       appBar: AppBar(
-        elevation: 5,
+        elevation: 0,
         backgroundColor: Colors.white,
         leading: IconButton(
             icon: const Icon(
@@ -68,9 +69,6 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
             const SizedBox(
               height: 12,
             ),
-            const SizedBox(
-              height: 12,
-            ),
             CustomDeliveryTextField(
               hint: "Phone Number",
               icon: const Icon(Icons.phone),
@@ -90,16 +88,31 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
             const SizedBox(
               height: 12,
             ),
-            ElevatedButton(onPressed: () {}, child: Text(
-              mapProvider.selectedBookingDate.toString()
-            )),
 
             const SizedBox(
               height: 12,
             ),
-            ElevatedButton(onPressed: () {}, child: Text(
-                mapProvider.selectedBookingTime.toString()
-            )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(onPressed: () {
+                  mapProvider.selectDate(context);
+                },
+                    style: ElevatedButton.styleFrom(backgroundColor: kPrimaryGoldColor),
+                    child: Text(
+                    mapProvider.selectedBookingDate.toString()
+                )),
+
+                ElevatedButton(onPressed: () {
+                  mapProvider.selectTime(context);
+                },
+                    style: ElevatedButton.styleFrom(backgroundColor: kPrimaryGoldColor),
+
+                    child: Text(
+                    mapProvider.selectedBookingTime.toString()
+                )),
+              ],
+            ),
             SizedBox(
               height: 20.appHeight(context),
             ),
@@ -107,11 +120,8 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
               padding:
               EdgeInsets.symmetric(horizontal: 50.appWidth(context)),
               child: CustomButton(
-                  onPressed: () async{
-                    // await mapProvider.createVanDeliveryRequest(context);
-                    // changeScreenReplacement(context, MyVansDeliveriesScreen());
-                  },
-                  text: "Request Van/Truck"),
+                  onPressed: () async{},
+                  text: "Proceed"),
             )
           ],
         ),
@@ -120,14 +130,14 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
   }
 }
 
-class SelectCity extends StatefulWidget {
-  const SelectCity({Key? key}) : super(key: key);
+class SelectVehicle extends StatefulWidget {
+  const SelectVehicle({Key? key}) : super(key: key);
 
   @override
-  State<SelectCity> createState() => _SelectCityState();
+  State<SelectVehicle> createState() => _SelectVehicleState();
 }
 
-class _SelectCityState extends State<SelectCity> {
+class _SelectVehicleState extends State<SelectVehicle> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<MapProvider>(context);
@@ -135,7 +145,7 @@ class _SelectCityState extends State<SelectCity> {
 
     // List of items in our dropdown menu
     var items = [
-      'Select City',
+      'Select Vehicle',
       'Abia',
       'Adamawa',
       'Akwa Ibom',
@@ -201,7 +211,7 @@ class _SelectCityState extends State<SelectCity> {
         isExpanded: true,
 
         // Initial Value
-        value: provider.cityDropDownValue,
+        value: provider.vehicleDropDownValue,
 
         // Down Arrow Icon
         icon: const Icon(Icons.keyboard_arrow_down),
@@ -216,10 +226,10 @@ class _SelectCityState extends State<SelectCity> {
         // After selecting the desired option,it will
         // change button value to selected value
         onChanged: (String? newValue) {
-          provider.cityDropDownValue = newValue!;
+          provider.vehicleDropDownValue = newValue!;
 
           setState(() {
-            provider.cityDropDownValue = newValue;
+            provider.vehicleDropDownValue = newValue;
           });
         },
       ),
@@ -229,18 +239,14 @@ class _SelectCityState extends State<SelectCity> {
 
 
 
-
-
-
-
-class DeliveryOption extends StatefulWidget {
-  const DeliveryOption({Key? key}) : super(key: key);
+class SelectRoute extends StatefulWidget {
+  const SelectRoute({Key? key}) : super(key: key);
 
   @override
-  State<DeliveryOption> createState() => _DeliveryOptionState();
+  State<SelectRoute> createState() => _SelectRouteState();
 }
 
-class _DeliveryOptionState extends State<DeliveryOption> {
+class _SelectRouteState extends State<SelectRoute> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<MapProvider>(context);
@@ -248,36 +254,328 @@ class _DeliveryOptionState extends State<DeliveryOption> {
 
     // List of items in our dropdown menu
     var items = [
-      'Select Delivery Type',
-      'Vans',
-      'Trucks',
+      'Select Route',
+      'Abia',
+      'Adamawa',
+      'Akwa Ibom',
+      'Anambra',
+      'Bauchi',
+      'Bayelsa',
+      'Benue',
+      "Borno",
+      "Cross River",
+      "Delta",
+      "Ebonyi",
+      "Edo",
+      "Ekiti",
+      "Enugu",
+      "Federal Capital Territory",
+      "Gombe",
+      "Imo",
+      "Jigawa",
+      "Kaduna",
+      "Kano",
+      "Katsina",
+      "Kebbi",
+      "Kogi",
+      "Kwara",
+      "Lagos",
+      "Nasarawa",
+      "Niger",
+      "Ogun",
+      "Ondo",
+      "Osun",
+      "Oyo",
+      "Plateau",
+      "Rivers",
+      "Sokoto",
+      "Taraba",
+      "Yobe",
+      "Zamfara"
+
+
     ];
 
-    return DropdownButton<String>(
-      // Initial Value
-      value: provider.deliveryDropDownValue,
+    return Container(
 
-      // Down Arrow Icon
-      icon: const Icon(Icons.keyboard_arrow_down),
+      height: MediaQuery.of(context).size.height /18,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+          horizontal: 15, vertical: 0),
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 2.0,
+          // color: const Color.fromARGB(255, 205, 226, 243),
+          color: const Color.fromARGB(255, 117, 117, 117)
+              .withOpacity(0.4),
+        ),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      child: DropdownButton<String>(
 
-      // Array list of items
-      items: items.map((String items) {
-        return DropdownMenuItem(
-          value: items,
-          child: Text(items),
-        );
-      }).toList(),
-      // After selecting the desired option,it will
-      // change button value to selected value
-      onChanged: (String? newValue) {
-        provider.deliveryDropDownValue = newValue!;
+        focusColor: kPrimaryGoldColor.withOpacity(0.6),
+        dropdownColor: Colors.white70,
+        isExpanded: true,
 
-        setState(() {
-          provider.deliveryDropDownValue = newValue;
-        });
-      },
+        // Initial Value
+        value: provider.vehicleDropDownValue,
+
+        // Down Arrow Icon
+        icon: const Icon(Icons.keyboard_arrow_down),
+
+        // Array list of items
+        items: items.map((String items) {
+          return DropdownMenuItem(
+            value: items,
+            child: Text(items),
+          );
+        }).toList(),
+        // After selecting the desired option,it will
+        // change button value to selected value
+        onChanged: (String? newValue) {
+          provider.routeDropDownValue = newValue!;
+
+          setState(() {
+            provider.routeDropDownValue = newValue;
+          });
+        },
+      ),
     );
   }
 }
 
+
+class BuildItemSize extends StatefulWidget {
+  const BuildItemSize({Key? key}) : super(key: key);
+
+  @override
+  State<BuildItemSize> createState() => _BuildItemSizeState();
+}
+
+class _BuildItemSizeState extends State<BuildItemSize> {
+  List size = ["none", "small", "medium", "large"];
+
+  // String? provider.sizeColor;
+
+  @override
+  Widget build(BuildContext context) {
+    // final provider = Provider.of<MapProvider>(context);
+    final provider = context.watch<MapProvider>();
+    return SizedBox(
+      // height: height(context)/10,
+      child: Row(
+        children: [
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  provider.sizeColor = "small";
+                  //print(provider.sizeColor);
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: provider.sizeColor == "small"
+                      ? kPrimaryGoldColor
+                      : kVistaWhite,
+                  // provider.packageSize == PackageSize.medium? MaterialStateProperty.all<Color>(Colors.blue):kVistaWhite,
+                  elevation: 10),
+              child: SizedBox(
+                height: getHeight(70, context),
+                width: getWidth(60, context),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      FontAwesomeIcons.boxOpen,
+                      size: 15,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    AutoSizeText(
+                      "Small",
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 15.appWidth(context),
+          ),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  provider.sizeColor = "medium";
+                  //print(provider.sizeColor);
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: provider.sizeColor == "medium"
+                      ? kPrimaryGoldColor
+                      : kVistaWhite,
+                  // provider.packageSize == PackageSize.medium? MaterialStateProperty.all<Color>(Colors.blue):kVistaWhite,
+                  elevation: 10),
+              child: SizedBox(
+                height: getHeight(70, context),
+                width: getWidth(80, context),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      FontAwesomeIcons.boxOpen,
+                      size: 15,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    AutoSizeText(
+                      "Medium",
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 15.appWidth(context),
+          ),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  provider.sizeColor = "large";
+                  //print(provider.sizeColor);
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: provider.sizeColor == "large"
+                      ? kPrimaryGoldColor
+                      : kVistaWhite,
+                  elevation: 10),
+              child: SizedBox(
+                height: getHeight(70, context),
+                width: getWidth(70, context),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      FontAwesomeIcons.boxOpen,
+                      size: 15,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    AutoSizeText(
+                      "Large",
+                      maxLines: 1,
+                      style: TextStyle(fontSize: 6, color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BookingTypeRadioButton extends StatefulWidget {
+  const BookingTypeRadioButton({Key? key}) : super(key: key);
+
+  @override
+  State<BookingTypeRadioButton> createState() => _BookingTypeRadioButtonState();
+}
+
+class _BookingTypeRadioButtonState extends State<BookingTypeRadioButton> {
+  List bookingType = [
+    "Charter Booking",
+    "Single Booking",
+  ];
+
+  String? select;
+  // int btnValue;
+  // String title;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+          width: 10.appWidth(context),
+        ),
+        Expanded(child: buildPayerOption(0, "Charter Booking")),
+        SizedBox(
+          width: 10.appWidth(context),
+        ),
+        Expanded(child: buildPayerOption(1, "Single Booking"))
+      ],
+    );
+  }
+
+  Widget buildPayerOption(int btnValue, String title) {
+    final mapProvider = Provider.of<MapProvider>(context);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          width: 20,
+          height: 20,
+          decoration: BoxDecoration(
+              color: mapProvider.interCityBookingType == bookingType[btnValue]
+                  ? kPrimaryGoldColor
+                  : Colors.white,
+              border: Border.all(
+                color: kPrimaryGoldColor,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(3))),
+          child: Radio<String>(
+            fillColor: MaterialStateColor.resolveWith((states) =>
+            mapProvider.interCityBookingType == bookingType[btnValue]
+                ? kPrimaryGoldColor
+                : Colors.white),
+            activeColor: Theme.of(context).primaryColor,
+            value: bookingType[btnValue],
+            groupValue: mapProvider.interCityBookingType,
+            onChanged: (value) async {
+              setState(() {
+                //print(value);
+                mapProvider.interCityBookingType = value;
+              });
+              mapProvider.interCityBookingType = value;
+
+            },
+          ),
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        Expanded(
+          child: AutoSizeText(title,
+              maxLines: 1,
+              style: const TextStyle(
+                fontWeight: FontWeight.w300,
+                color: Colors.black,
+              )),
+        )
+      ],
+    );
+  }
+}
 
