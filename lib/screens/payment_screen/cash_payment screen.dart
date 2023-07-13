@@ -53,7 +53,7 @@ class CashPaymentWidget extends StatelessWidget {
                       height: 15,
                     ),
                     Text(
-                        "You will pay ₦${mapProvider.deliveryPrice} to the driver on arrival"),
+                        "You will pay ₦${mapProvider.deliveryPrice} to the Rider on arrival"),
                     const SizedBox(
                       height: 15,
                     ),
@@ -62,7 +62,7 @@ class CashPaymentWidget extends StatelessWidget {
                         padding: const EdgeInsets.all(20.0),
                         child: CustomButton(
                           height: 60,
-                          fontSize: 22,
+                          fontSize: 18,
                           onPressed: () async {
                             await mapProvider.updatePaymentMethod();
                             mapProvider.changeWidgetShowed(

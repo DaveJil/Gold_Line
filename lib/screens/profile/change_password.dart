@@ -52,7 +52,7 @@ class ChangePassState extends State<ChangePass> {
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            fontSize: 28),
+                            fontSize: 20),
                       ),
                     ],
                   ),
@@ -70,9 +70,9 @@ class ChangePassState extends State<ChangePass> {
                 AutoSizeText(
                   'Please Fill Password Details',
                   style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18),
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 SizedBox(
                   height: getHeight(20, context),
@@ -145,7 +145,7 @@ class ChangePassState extends State<ChangePass> {
                     style: TextStyle(
                       decoration: TextDecoration.underline,
                       color: kPrimaryGoldColor,
-                      fontSize: 22,
+                      fontSize: 18,
                       fontWeight: FontWeight.w400,
                     ),
                   ),

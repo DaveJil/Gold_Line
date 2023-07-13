@@ -26,33 +26,6 @@ class _UserProfileState extends State<UserProfileScreen> {
                   SizedBox(
                     height: getHeight(30, context),
                   ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: getWidth(20, context),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(
-                          Icons.arrow_back,
-                          color: Colors.black,
-                          size: getHeight(24, context),
-                        ),
-                      ),
-                      SizedBox(
-                        width: getWidth(150, context),
-                      ),
-                      const Text(
-                        'Your account',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 28),
-                      ),
-                    ],
-                  ),
                   Stack(children: [
                     Container(
                       height: getHeight(150, context),

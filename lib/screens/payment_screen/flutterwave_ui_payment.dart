@@ -35,109 +35,100 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
         minChildSize: 0.1,
         maxChildSize: 0.8,
         builder: (BuildContext context, myScrollController) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(color: Colors.white,
+          return Container(
+            decoration: BoxDecoration(color: Colors.white,
 //                        borderRadius: BorderRadius.only(
 //                            topLeft: Radius.circular(20),
 //                            topRight: Radius.circular(20)),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey.withOpacity(.8),
-                        offset: const Offset(3, 2),
-                        blurRadius: 7)
-                  ]),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey.withOpacity(.8),
+                      offset: const Offset(3, 2),
+                      blurRadius: 7)
+                ]),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView(
                 children: [
-                  Expanded(
-                    child: SizedBox(
-                      child: SingleChildScrollView(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: size.width / 14,
-                            vertical: size.height / 80),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: const [
-                                Text(
-                                  "Payment Methods",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: size.height / 80),
-                            SizedBox(
-                              width: size.width,
-                              height: size.height / 19,
-                              child: InkWell(
-                                onTap: (() {
-                                  setState(() {
-                                    optionIsCash = true;
-                                  });
-                                  print("optionIsCash is now $optionIsCash");
-                                }),
-                                child: ListTile(
-                                  contentPadding:
-                                      const EdgeInsets.only(left: 5),
-                                  minVerticalPadding: 5,
-                                  leading: const Icon(
-                                      FontAwesomeIcons.moneyBill1,
-                                      color: Colors.black),
-                                  minLeadingWidth: 5,
-                                  title: const Text(
-                                    "Cash",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  trailing: Icon(Icons.circle,
-                                      color: optionIsCash
-                                          ? Colors.blue
-                                          : Colors.black38),
-                                ),
+                  SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: size.width / 14,
+                        vertical: size.height / 80),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: const [
+                            Text(
+                              "Payment Methods",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
                               ),
                             ),
-                            SizedBox(
-                              width: size.width,
-                              height: size.height / 19,
-                              child: InkWell(
-                                onTap: (() {
-                                  setState(() {
-                                    optionIsCash = false;
-                                  });
-                                  print("optionIsCash is now $optionIsCash");
-                                }),
-                                child: ListTile(
-                                  contentPadding:
-                                      const EdgeInsets.only(left: 5),
-                                  minVerticalPadding: 5,
-                                  leading: const Icon(
-                                      FontAwesomeIcons.creditCard,
-                                      color: Colors.black),
-                                  minLeadingWidth: 5,
-                                  title: const Text(
-                                    "Pay With Card",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  trailing: Icon(Icons.arrow_circle_right,
-                                      color: optionIsCash
-                                          ? Colors.black38
-                                          : Colors.blue),
-                                ),
-                              ),
-                            ),
-                            //
                           ],
                         ),
-                      ),
+                        SizedBox(height: size.height / 80),
+                        SizedBox(
+                          width: size.width,
+                          height: size.height / 19,
+                          child: InkWell(
+                            onTap: (() {
+                              setState(() {
+                                optionIsCash = true;
+                              });
+                              print("optionIsCash is now $optionIsCash");
+                            }),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.only(left: 5),
+                              minVerticalPadding: 5,
+                              leading: const Icon(FontAwesomeIcons.moneyBill1,
+                                  color: Colors.black),
+                              minLeadingWidth: 5,
+                              title: const Text(
+                                "Cash",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              trailing: Icon(Icons.circle,
+                                  color: optionIsCash
+                                      ? Colors.blue
+                                      : Colors.black38),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: size.width,
+                          height: size.height / 19,
+                          child: InkWell(
+                            onTap: (() {
+                              setState(() {
+                                optionIsCash = false;
+                              });
+                              print("optionIsCash is now $optionIsCash");
+                            }),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.only(left: 5),
+                              minVerticalPadding: 5,
+                              leading: const Icon(FontAwesomeIcons.creditCard,
+                                  color: Colors.black),
+                              minLeadingWidth: 5,
+                              title: const Text(
+                                "Card/Bank Transfer",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              trailing: Icon(Icons.arrow_circle_right,
+                                  color: optionIsCash
+                                      ? Colors.black38
+                                      : Colors.blue),
+                            ),
+                          ),
+                        ),
+                        //
+                      ],
                     ),
                   ),
                   CustomButton(
@@ -146,12 +137,11 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
                           ? await mapProvider.submitCashDelivery()
                           : await makeCardPayment(
                               mapProvider.deliveryPrice.toString(),
-                              mapProvider.deliveryId);
-                      mapProvider.changeWidgetShowed(
-                          showWidget: Show.SEARCHING_FOR_DRIVER);
+                              mapProvider.deliveryId,
+                            );
                     },
                     text: "Pay",
-                    fontSize: 20,
+                    fontSize: 18,
                     width: size.width / 2.5,
                     height: size.height * 0.06,
                     elevation: 8,
@@ -165,6 +155,9 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
   }
 
   Future makeCardPayment(String? price, int? deliveryId) async {
+    final MapProvider mapProvider =
+        Provider.of<MapProvider>(context, listen: false);
+
     final Customer customer = Customer(
         name: "user", phoneNumber: "0000000000", email: "user@gmail.com");
 
@@ -186,55 +179,56 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
 
     final ChargeResponse flutterwaveResponse = await flutterwave.charge();
     bool success = flutterwaveResponse.success!;
-
+    print(flutterwaveResponse);
     if (success == true) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String deliveryId = prefs.getString("deliveryId")!;
       String message = flutterwaveResponse.status!;
-      print(message);
-      if (message == "success") {
-        final snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: "Transaction successful",
-            message: "Your rider would be at pickup location in a moment",
-            contentType: ContentType.success,
-          ),
-        );
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
-        await CallApi()
-            .postData(null, "user/delivery/verify-payment/$deliveryId");
+      print(flutterwaveResponse);
 
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const MapWidget()),
-            (Route<dynamic> route) => false);
-      } else {
-        String message = flutterwaveResponse.status!;
-        final snackBar = SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: "Transaction unsuccessful",
-            message: "Your transaction failed",
-            contentType: ContentType.failure,
-          ),
-        );
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(snackBar);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Transaction Failed Try Again"),
-          backgroundColor: Colors.redAccent,
-        ));
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const MapWidget()),
-            (Route<dynamic> route) => false);
-      }
+      print(message);
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: "Transaction successful",
+          message: "Your rider would be at pickup location in a moment",
+          contentType: ContentType.success,
+        ),
+      );
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+      await CallApi()
+          .postData(null, "user/delivery/verify-payment/$deliveryId");
+
+      mapProvider.changeWidgetShowed(showWidget: Show.SEARCHING_FOR_DRIVER);
+
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const MapWidget()),
+          (Route<dynamic> route) => false);
+    } else {
+      print(flutterwaveResponse);
+
+      String message = flutterwaveResponse.status!;
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: "Transaction unsuccessful",
+          message: message,
+          contentType: ContentType.failure,
+        ),
+      );
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Transaction Failed Try Again"),
+        backgroundColor: Colors.redAccent,
+      ));
     }
   }
 }

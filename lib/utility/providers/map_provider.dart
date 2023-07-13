@@ -1,7 +1,9 @@
 // ignore_for_file: constant_identifier_names
 
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
+import 'dart:math';
 
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -24,6 +26,7 @@ import '../../models/user_profile/user_profile.dart';
 import '../api.dart';
 import '../helpers/constants.dart';
 import '../helpers/custom_button.dart';
+import '../helpers/custom_display_widget.dart';
 import '../helpers/stars.dart';
 import '../services/calls_and_sms.dart';
 import '../services/delivery_services.dart';
@@ -38,6 +41,9 @@ enum Show {
   TRIP,
   CHECKOUT_DELIVERY,
   ORDER_STATUS
+}
+enum PackageSize{
+  none, small, medium, large
 }
 
 class MapProvider with ChangeNotifier {
@@ -55,6 +61,7 @@ class MapProvider with ChangeNotifier {
 
   //delivery stages(status)
   static const DRIVER_ASSIGNED_NOTIFICATION = 'driver_assigned';
+
   // static const DELIVERY_PICKED_NOTIFICATION = 'delivery_picked'; //riders don't have app
   static const DELIVERY_CANCELED_NOTIFICATION = 'delivery_canceled';
   static const DELIVERY_ACCEPTED_NOTIFICATION = 'delivery_accepted';
@@ -92,12 +99,15 @@ class MapProvider with ChangeNotifier {
   String? countryCode;
   Set<Marker> _markers = {};
   Set<Polyline> _poly = {};
+
   Set<Polyline> get poly => _poly;
   Set<Polyline> _routeToDestinationPolys = {};
   Set<Polyline> _routeToDriverpoly = {};
+
   Set<Marker> get markers => _markers;
 
   GoogleMapController? _mapController;
+
   GoogleMapController? get mapController => _mapController;
   GoogleMapsServices _googleMapsServices = GoogleMapsServices();
 
@@ -106,9 +116,18 @@ class MapProvider with ChangeNotifier {
   UserProfile? user;
 
   Show show = Show.HOME;
+  String? selectSize;
+  String? sizeColor;
 
+  PackageSize packageSize = PackageSize.none;
+  double? distanceStartLongitude;
+  double? distanceEndLongitude;
+  double? distanceStartLatitude;
+  double? distanceEndLatitude;
+  double? distanceBetweenPickAndDropOff;
   DriverProfile? driverProfile;
   RouteModel? routeModel;
+  Color packageColor = Colors.white;
 
   final Completer<GoogleMapController> _controller = Completer();
 
@@ -128,11 +147,16 @@ class MapProvider with ChangeNotifier {
   int? deliveryId;
   String? userAddressText;
   String? whoFuckingPays;
+  String deliveryType = "";
+  String? pickUpState;
+  String? dropOffState;
 
   //  this variable will listen to the status of the ride request
   StreamSubscription<AsyncSnapshot>? requestStream;
+
   // this variable will keep track of the drivers position before and during the ride
   StreamSubscription<AsyncSnapshot>? driverStream;
+
 //  this stream is for all the driver on the app
   StreamSubscription<List<DriverProfile>>? allDriversStream;
 
@@ -157,6 +181,10 @@ class MapProvider with ChangeNotifier {
   DateTime selectedDate = DateTime.now();
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
+  String deliveryDropDownValue = 'Select Delivery Type';
+  String cityDropDownValue = 'Select City';
+
+  bool isExpress = false;
 
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
@@ -166,7 +194,7 @@ class MapProvider with ChangeNotifier {
   MapProvider() {
     _setCustomMapPin();
     _getUserLocation();
-    _listenToDrivers();
+    // _listenToDrivers();
     Geolocator.getPositionStream().listen(_updatePosition);
   }
 
@@ -207,6 +235,7 @@ class MapProvider with ChangeNotifier {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemark);
     Placemark place = placemark[0];
+    print(place);
     userAddressText =
         '${place.street}, ${place.subLocality}, ${place.locality}';
 
@@ -227,8 +256,16 @@ class MapProvider with ChangeNotifier {
         await placemarkFromCoordinates(point.latitude, point.longitude);
 
     String address =
-        "${addresses.first.administrativeArea}, ${addresses.first.street}, ${addresses.first.locality}";
+        " ${addresses.first.street}, ${addresses.first.administrativeArea},";
     return address;
+  }
+
+  Future<String> getStateFromCoordinates({required LatLng point}) async {
+    List<Placemark> addresses =
+        await placemarkFromCoordinates(point.latitude, point.longitude);
+
+    String state = "${addresses.first.administrativeArea},";
+    return state;
   }
 
   onCreate(mapController) {
@@ -244,7 +281,7 @@ class MapProvider with ChangeNotifier {
   onCameraMove(CameraPosition position) {
     //  MOVE the pickup marker only when selecting the pickup location
     lastPosition = position.target;
-    changePickupLocationAddress(address: "loading...");
+    // changePickupLocationAddress(address: "loading...");
     if (_markers.isNotEmpty) {
       _markers.forEach((element) async {
         if (element.markerId.value == PICKUP_MARKER_ID) {
@@ -307,7 +344,7 @@ class MapProvider with ChangeNotifier {
     //   route.points,
     // );
     _routeToDestinationPolys = _poly;
-    createDeliveryRequest();
+    // createDeliveryRequest();
     notifyListeners();
   }
 
@@ -317,8 +354,6 @@ class MapProvider with ChangeNotifier {
   }
 
   createRoute({Color? color}) async {
-    print(pickUpLatLng!);
-    print(dropOffLatLng!);
     clearPoly();
     var uuid = const Uuid();
     String polyId = uuid.v1();
@@ -337,6 +372,7 @@ class MapProvider with ChangeNotifier {
       );
       notifyListeners();
     }
+    notifyListeners();
     addPolyLine(polylineCoordinates);
     _poly = Set<Polyline>.of(polylines.values);
 
@@ -582,8 +618,18 @@ class MapProvider with ChangeNotifier {
         });
   }
 
-  Future createDeliveryRequest() async {
-    clearPoly();
+  Future createDeliveryRequest(BuildContext context) async {
+    print(isExpress);
+    await clearPoly();
+
+    distanceBetweenPickAndDropOff = 0;
+    polylineCoordinates = [];
+
+    polylineCoordinates.add(pickUpLatLng!);
+    polylineCoordinates.add(dropOffLatLng!);
+    await calculateDistance();
+    await createRoute();
+    print(distanceBetweenPickAndDropOff);
     Map<String, dynamic> values = {
       "receiver_name": receiverName.text,
       "receiver_phone": receiverPhone.text,
@@ -594,53 +640,116 @@ class MapProvider with ChangeNotifier {
       "dropoff_latitude": dropOffLatLng!.latitude,
       "dropoff_longitude": dropOffLatLng!.longitude,
       "status": 'pending',
-      "city": city.text,
-      "state": state.text,
+      "city": cityDropDownValue,
+      "state": pickUpState,
+      "size": sizeColor,
       "payment_by": whoFuckingPays.toString(),
-      "pickup_time": selectedDate.toString() + selectedTime.toString(),
-      // "distance": routeModel!.distance,
+      // "pickup_time": selectedDate.toString() + selectedTime.toString(),
+      "distance": distanceBetweenPickAndDropOff,
       // "duration": routeModel!.timeNeeded,
       "pickup_address": pickUpLocationController.text,
       "dropoff_address": dropOffLocationController.text,
       "payment_method": "card",
-      "description": description.text
+      "description": description.text,
     };
     SharedPreferences pref = await SharedPreferences.getInstance();
-    isLoading = true;
+    print(values);
+
 
     try {
-      final response = await CallApi().postData(values, 'user/delivery/new');
+      if (pickUpState != dropOffState) {
+        values["state"] = pickUpState;
+        values["city"] = pickUpState;
+        values["dropoff_city"] = dropOffState;
 
-      final body = response;
-      print('delivery sent');
-      deliveryId = body['data']['id'];
-      print(deliveryId);
-      pref.setInt('deliveryId', deliveryId!);
-      if (response['success'] == "success") {
-        createRoute();
-        final body = response;
+        values["dropoff_state"] = dropOffState;
+        final response =
+            await CallApi().postData(values, 'user/interstate/delivery/new');
+
         print('delivery sent');
-        String deliveryId = response['id'];
-        print(deliveryId);
-        pref.setString('deliveryId', response['id']);
-        createRoute();
-
-        print(body);
-        if ((body as Map<String, dynamic>).containsKey('id')) {
-          pref.setString('deliveryId', body["id"]);
-          print(body["id"]);
+        print(response);
+        String code = response['code'];
+        print(code);
+        if (code == "success") {
+          print("success");
+          distanceBetweenPickAndDropOff = 0;
+          final data = response['data'];
+          print(data);
+          deliveryId = response['data']['id'];
+          print(deliveryId);
+          notifyListeners();
         } else {
-          print('no token added');
+          distanceBetweenPickAndDropOff = 0;
+          String message = (response['message']).toString();
+
+          CustomDisplayWidget.displayAwesomeSuccessSnackBar(
+              context, message, "Check entered city, state");
+        }
+      } else {
+
+        if (isExpress == true) {
+          values['type'] = 'express';
+          final response = await CallApi().postData(values, 'user/delivery/new');
+
+          print('delivery sent');
+          print(response);
+          String code = response['code'];
+          print(code);
+          if (code == "success") {
+            print(isExpress);
+
+            print("success");
+            distanceBetweenPickAndDropOff = 0;
+            final data = response['data'];
+            print(data);
+            deliveryId = response['data']['id'];
+            print(deliveryId);
+            notifyListeners();
+          } else {
+            distanceBetweenPickAndDropOff = 0;
+            String message = (response['message']).toString();
+
+            CustomDisplayWidget.displayAwesomeSuccessSnackBar(
+                context, message, "Check entered city, state");
+          }
+
+        }
+        else {
+
+
+          final response = await CallApi().postData(
+              values, 'user/delivery/new');
+          print(values);
+          print('delivery sent');
+          print(response);
+          String code = response['code'];
+          print(code);
+          if (code == "success") {
+            print(isExpress);
+            print("success");
+            distanceBetweenPickAndDropOff = 0;
+            final data = response['data'];
+            print(data);
+            deliveryId = response['data']['id'];
+            print(deliveryId);
+            notifyListeners();
+          } else {
+            distanceBetweenPickAndDropOff = 0;
+            String message = (response['message']).toString();
+
+            CustomDisplayWidget.displayAwesomeSuccessSnackBar(
+                context, message, "Check entered city, state");
+          }
         }
       }
+      isExpress = false;
+
       notifyListeners();
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {
       throw Exception(err.toString());
     }
-    isLoading = false;
-
     notifyListeners();
   }
 
@@ -656,20 +765,11 @@ class MapProvider with ChangeNotifier {
       print(response);
       if (response['success'] == "success") {
         final body = response;
-        print('delivery sent');
-        String deliveryId = response['id'];
-        print(deliveryId);
-        pref.setString('deliveryId', response['id']);
+
         isLoading = false;
         notifyListeners();
 
         print(body);
-        if ((body as Map<String, dynamic>).containsKey('id')) {
-          pref.setString('deliveryId', body["id"]);
-          print(body["id"]);
-        } else {
-          print('no token added');
-        }
       }
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -714,30 +814,32 @@ class MapProvider with ChangeNotifier {
   _listenToDrivers() {
     // allDriversStream = _driverService.getDrivers().listen(_updateMarkers);
   }
+
 // trip process endpoint
 
-  Future processDelivery() async {
+  Future processDelivery(BuildContext context) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     try {
       final response =
           await CallApi().postData(null, "user/delivery/process/$deliveryId");
       final body = response;
-      print(body);
-      print('delivery processing');
-      deliveryPrice = response['data']['price'];
-      print(deliveryPrice);
-      preferences.setString('price', deliveryPrice!);
-      if (response['success'] == "success") {
+      if (response['code'] == "success") {
         print(body);
-        if ((body as Map<String, dynamic>).containsKey('id')) {
-          preferences.setString('deliveryId', body["id"]);
-          print(body["id"]);
-        } else {
-          print('no token added');
-        }
-        return deliveryPrice;
+
+        var val = response['data']['price'];
+        print("val = $val");
+        deliveryPrice = (((val + 50) ~/ 100) * 100).toInt().toString();
+        preferences.setString('price', deliveryPrice!);
+      } else {
+        String code = response['code'];
+
+        String message = response['message'];
+        CustomDisplayWidget.displayAwesomeFailureSnackBar(
+            context, message, code);
       }
+
+      return deliveryPrice;
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {
@@ -911,5 +1013,69 @@ class MapProvider with ChangeNotifier {
   changeWidgetShowed({Show? showWidget}) {
     show = showWidget!;
     notifyListeners();
+  }
+
+
+  changePackageSize({PackageSize? packageSize}) {
+    packageSize = packageSize!;
+    print(packageSize);
+    notifyListeners();
+  }
+
+  // Method for calculating the distance between two places
+  Future<bool> calculateDistance() async {
+    try {
+      // Use the retrieved coordinates of the current position,
+      // instead of the address if the start position is user's
+      // current position, as it results in better accuracy.
+
+      distanceStartLatitude = pickUpLatLng!.latitude;
+
+      distanceStartLongitude = pickUpLatLng!.longitude;
+      distanceEndLatitude = dropOffLatLng!.latitude;
+      distanceEndLongitude = dropOffLatLng!.longitude;
+
+      double totalDistance = 0.0;
+      distanceBetweenPickAndDropOff = 0;
+
+      // Calculating the total distance by adding the distance
+      // between small segments
+      for (int i = 0; i < polylineCoordinates.length - 1; i++) {
+        totalDistance += _coordinateDistance(
+          polylineCoordinates[i].latitude,
+          polylineCoordinates[i].longitude,
+          polylineCoordinates[i + 1].latitude,
+          polylineCoordinates[i + 1].longitude,
+        );
+      }
+
+      distanceBetweenPickAndDropOff = totalDistance;
+      print('DISTANCE: $distanceBetweenPickAndDropOff km');
+      notifyListeners();
+
+      return true;
+    } catch (e) {
+      print(e);
+    }
+    return false;
+  }
+
+// Formula for calculating distance between two coordinates
+  double _coordinateDistance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a));
+  }
+
+  void changeScreen(Widget widget) {
+    Navigator.push(mainContext!, MaterialPageRoute(builder: (context) => widget));
+  }
+
+// request here
+  void changeScreenReplacement(Widget widget) {
+    Navigator.push(mainContext!, MaterialPageRoute(builder: (context) => widget));
   }
 }

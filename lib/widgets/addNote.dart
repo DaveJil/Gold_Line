@@ -8,6 +8,7 @@ class CardInPage extends StatefulWidget {
   final String letter;
   final Color color;
   CardInPage({
+    super.key,
     required this.color,
     required this.letter,
     required this.price,

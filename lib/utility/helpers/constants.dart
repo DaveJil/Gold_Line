@@ -18,7 +18,6 @@ const LOCATION_ENABLED = "location_enabled";
 const GOOGLE_MAPS_API_KEY = "AIzaSyDuBwnC0ov7JuH9XN6b6q9l8FUrtWwoBpw";
 
 const COUNTRY = "country";
-const BASEURL = 'http://thesafedrop.herokuapp.com';
 
 //COLORS
 const Color kVistaWhite = Color.fromRGBO(253, 252, 250, 1);

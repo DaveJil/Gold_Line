@@ -9,6 +9,8 @@ import 'package:gold_line/utility/helpers/validators.dart';
 import 'package:gold_line/utility/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../utility/helpers/custom_button.dart';
+
 class SignInScreen extends StatefulWidget {
   @override
   _SignInScreenState createState() => _SignInScreenState();
@@ -29,13 +31,13 @@ class _SignInScreenState extends State<SignInScreen> {
                 padding: EdgeInsets.only(
                   top: getHeight(150, context),
                 ),
-                child: const AutoSizeText(
+                child: AutoSizeText(
                   "Welcome, Enter your Login Details",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 24),
+                      fontSize: getHeight(24, context)),
                 ),
               ),
               SizedBox(
@@ -57,8 +59,17 @@ class _SignInScreenState extends State<SignInScreen> {
                     if (!val!.isValidEmail) return 'Enter valid email';
                   },
                   decoration: const InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: kPrimaryGoldColor,
+                      ),
+                    ),
                     border: OutlineInputBorder(),
                     labelText: 'Email',
+                    labelStyle: TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
                     hintText: 'Enter your email',
                   ),
                 ),
@@ -76,13 +87,22 @@ class _SignInScreenState extends State<SignInScreen> {
                     if (!val!.isValidPassword) return 'Enter valid password';
                   },
                   decoration: const InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: kPrimaryGoldColor,
+                        ),
+                      ),
                       border: OutlineInputBorder(),
                       labelText: 'Password',
+                      labelStyle: TextStyle(
+                        fontWeight: FontWeight.w600,
+                      ),
                       hintText: 'Enter your password'),
                 ),
               ),
               SizedBox(
-                height: getHeight(50, context),
+                height: getHeight(30, context),
               ),
               TextButton(
                 onPressed: () {
@@ -93,31 +113,25 @@ class _SignInScreenState extends State<SignInScreen> {
                   'New User? Create an account',
                   style: TextStyle(
                       color: kPrimaryGoldColor,
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.w500),
                 ),
               ),
               SizedBox(
-                height: getHeight(30, context),
+                height: getHeight(2, context),
               ),
-              Container(
-                height: getHeight(45, context),
-                width: getWidth(200, context),
-                decoration: BoxDecoration(
-                    color: kPrimaryGoldColor,
-                    borderRadius: BorderRadius.circular(20)),
-                child: TextButton(
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: CustomButton(
+                  width: getWidth(200, context),
                   onPressed: () async {
                     await userProvider.signIn(context);
                   },
-                  child: const AutoSizeText(
-                    'Login',
-                    style: TextStyle(color: Colors.white, fontSize: 25),
-                  ),
+                  text: 'Login',
                 ),
               ),
               SizedBox(
-                height: getHeight(30, context),
+                height: getHeight(2, context),
               ),
               TextButton(
                 onPressed: () {

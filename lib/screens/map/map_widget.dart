@@ -1,22 +1,18 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gold_line/screens/bottom_sheets/order_status.dart';
 import 'package:gold_line/screens/bottom_sheets/searching%20for%20driver.dart';
 import 'package:gold_line/screens/map/widgets/driver_found.dart';
-import 'package:gold_line/screens/my_deliveries/my_deliveries.dart';
+import 'package:gold_line/screens/map/widgets/home_container.dart';
 import 'package:gold_line/screens/payment_screen/cash_payment%20screen.dart';
 import 'package:gold_line/screens/payment_screen/flutterwave_ui_payment.dart';
-import 'package:gold_line/screens/profile/main_menu.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
-import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../utility/providers/map_provider.dart';
 import '../../utility/providers/user_provider.dart';
 import '../bottom_sheets/trip_bottom_sheet.dart';
-import '../request_delivery/delivery_details.dart';
 import 'widgets/checkout_bottom.dart';
 
 class MapWidget extends StatefulWidget {
@@ -127,109 +123,7 @@ class _MapWidgetState extends State<MapWidget> {
                   visible: mapProvider.show == Show.HOME,
                   child: Align(
                       alignment: Alignment.bottomCenter,
-                      child: Container(
-                        height: 80.appHeight(context),
-                        width: double.infinity,
-                        color: kVistaWhite,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Center(
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      child: IconButton(
-                                        onPressed: () async {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      const MainMenu()));
-                                        },
-                                        icon: const Icon(
-                                          Icons.home_outlined,
-                                          color: kPrimaryGoldColor,
-                                          size: 40,
-                                        ),
-                                        alignment: Alignment.center,
-                                      ),
-                                    ),
-                                    const Text(
-                                      "Main Menu",
-                                      style: TextStyle(fontSize: 12),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10.appWidth(context),
-                            ),
-                            Expanded(
-                              child: Center(
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      child: IconButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      const DeliveryDetails()));
-                                        },
-                                        icon: const Icon(
-                                          Icons.add_circle,
-                                          color: kPrimaryGoldColor,
-                                          size: 40,
-                                        ),
-                                        alignment: Alignment.center,
-                                      ),
-                                    ),
-                                    const Text(
-                                      "New Delivery",
-                                      style: TextStyle(fontSize: 12),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10.appWidth(context),
-                            ),
-                            Expanded(
-                              child: Center(
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      child: IconButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      const MyDeliveriesScreen()));
-                                        },
-                                        icon: const Icon(
-                                          Icons.history,
-                                          color: kPrimaryGoldColor,
-                                          size: 40,
-                                        ),
-                                        alignment: Alignment.center,
-                                      ),
-                                    ),
-                                    const AutoSizeText(
-                                      "My Deliveries",
-                                      style: TextStyle(fontSize: 12),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ))),
+                      child: HomeContainer())),
               // ANCHOR PICK UP WIDGET
               //  ANCHOR Draggable PAYMENT METHOD
 

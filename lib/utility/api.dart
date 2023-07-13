@@ -9,43 +9,95 @@ class CallApi {
 
   postData(data, apiUrl) async {
     var fullUrl = _url + apiUrl;
-    var res = await http.post(Uri.parse(fullUrl),
-        body: jsonEncode(data), headers: await _setHeaders());
+    var res = await http
+        .post(Uri.parse(fullUrl),
+            body: jsonEncode(data), headers: await _setHeaders())
+        .timeout(const Duration(
+          seconds: 40,
+        ));
     return _processResponse(res);
   }
 
   postTryData(data, apiUrl) async {
     var fullUrl = _urlTry + apiUrl;
-    var res = await http.post(Uri.parse(fullUrl),
-        body: jsonEncode(data), headers: await _setHeaders());
+    var res = await http
+        .post(Uri.parse(fullUrl),
+            body: jsonEncode(data), headers: await _setHeaders())
+        .timeout(const Duration(
+          seconds: 40,
+        ));
     return _processResponse(res);
   }
 
   getData(apiUrl) async {
     var fullUrl = _url + apiUrl;
-    var res = await http.get(Uri.parse(fullUrl), headers: await _setHeaders());
+    var res = await http
+        .get(Uri.parse(fullUrl), headers: await _setHeaders())
+        .timeout(const Duration(
+          seconds: 40,
+        ));
     return _processResponse(res);
   }
 
   updateData(data, apiUrl) async {
     var fullUrl = _url + apiUrl;
-    var res = await http.put(Uri.parse(fullUrl), headers: await _setHeaders());
+    var res = await http
+        .put(Uri.parse(fullUrl), headers: await _setHeaders())
+        .timeout(const Duration(
+          seconds: 40,
+        ));
     return _processResponse(res);
   }
 
   patchData(data, apiUrl) async {
     var fullUrl = _url + apiUrl;
-    var res =
-        await http.patch(Uri.parse(fullUrl), headers: await _setHeaders());
+    var res = await http
+        .patch(Uri.parse(fullUrl), headers: await _setHeaders())
+        .timeout(const Duration(
+          seconds: 40,
+        ));
     return _processResponse(res);
   }
 
   deleteData(apiUrl) async {
     var fullUrl = _url + apiUrl;
-    var res =
-        await http.delete(Uri.parse(fullUrl), headers: await _setHeaders());
+    var res = await http
+        .delete(Uri.parse(fullUrl), headers: await _setHeaders())
+        .timeout(const Duration(
+          seconds: 40,
+        ));
     return _processResponse(res);
   }
+
+  Future addImage(data, apiUrl, dynamic filepath, dynamic image) async {
+    var fullUrl = _url + apiUrl;
+
+    var request = http.MultipartRequest('POST', Uri.parse(fullUrl))
+      // ..fields.addAll(data)
+      ..headers.addAll(await _setPictureHeaders())
+      ..files.add(
+          http.MultipartFile.fromBytes('avatar', image, filename: filepath));
+    print("filepath = $filepath");
+    var streamedResponse = await request.send();
+    print("streamedresponse =  $streamedResponse");
+    var response = await http.Response.fromStream(streamedResponse);
+    print("response = $response");
+    print(response.statusCode);
+    //
+    // var result = jsonDecode(response.body);
+    // print("result = $result");
+
+    if (response.statusCode == 201) {
+      print(response.statusCode);
+      // return result;
+    } else {}
+  }
+
+  Future<Map<String, String>> _setPictureHeaders() async => {
+        'Content-type': 'multipart/form-data',
+        'Accept': 'multipart/form-data',
+        'Authorization': 'Bearer ${await _getToken()} '
+      };
 
   // _setHeaders() => {
   //   'Content-type': 'application/json',

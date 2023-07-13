@@ -7,7 +7,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gold_line/screens/authentication/sign_in.dart';
 import 'package:gold_line/screens/authentication/sign_up.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
+import 'package:gold_line/utility/helpers/custom_button.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
+import 'package:gold_line/utility/helpers/routing.dart';
 
 class LoginChoice extends StatefulWidget {
   const LoginChoice({super.key});
@@ -49,23 +51,24 @@ class LoginChoiceState extends State<LoginChoice> {
                   height: getHeight(20, context),
                 ),
                 const Text(
-                  'Lets get you Started',
+                  "Let's get you Started",
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 28),
                 ),
                 SizedBox(
-                  height: getHeight(10, context),
+                  height: getHeight(20, context),
                 ),
-                const Center(
+                Center(
                   child: Text(
-                    'Welcome, Please Choose your Login / SignUp Option',
+                    'Welcome, \n Please Choose your Login / SignUp Option',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        color: kPrimaryGoldColor,
-                        fontWeight: FontWeight.w300,
-                        fontSize: 18),
+                      color: kPrimaryGoldColor,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -79,65 +82,41 @@ class LoginChoiceState extends State<LoginChoice> {
                       fontSize: 18),
                 ),
                 SizedBox(
-                  height: getHeight(40, context),
+                  height: getHeight(20, context),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(40.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: kPrimaryGoldColor,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => const SignUpScreen()));
-                            },
-                            child: const AutoSizeText(
-                              'Sign Up as an Agent',
-                              maxLines: 1,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                          ),
+                        child: CustomButton(
+                          width: getWidth(320, context),
+                          onPressed: () {
+                            changeScreen(context, SignUpScreen());
+                          },
+                          text: 'Sign Up As Agent',
+                          fontSize: getHeight(13, context),
                         ),
                       ),
                       SizedBox(
-                        width: 50.appWidth(context),
+                        width: 10,
                       ),
                       Expanded(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.appWidth(context)),
-                          decoration: BoxDecoration(
-                              color: kPrimaryGoldColor,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => const SignUpScreen()));
-                            },
-                            child: const AutoSizeText(
-                              'Sign Up as a User',
-                              maxLines: 1,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                          ),
+                        child: CustomButton(
+                          width: getWidth(300, context),
+                          onPressed: () {
+                            changeScreen(context, SignUpScreen());
+                          },
+                          text: 'Sign Up As User',
+                          fontSize: getHeight(14, context),
                         ),
                       )
                     ],
                   ),
                 ),
                 SizedBox(
-                  height: getHeight(10, context),
+                  height: getHeight(5, context),
                 ),
                 TextButton(
                   onPressed: () {
@@ -155,7 +134,7 @@ class LoginChoiceState extends State<LoginChoice> {
                   ),
                 ),
                 SizedBox(
-                  height: getHeight(10, context),
+                  height: getHeight(5, context),
                 ),
                 TextButton(
                   onPressed: () {
@@ -176,7 +155,7 @@ class LoginChoiceState extends State<LoginChoice> {
                   ),
                 ),
                 SizedBox(
-                  height: getHeight(40, context),
+                  height: getHeight(10, context),
                 ),
                 const BuildCheckBox(),
               ],

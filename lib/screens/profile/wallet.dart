@@ -1,220 +1,188 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:gold_line/utility/helpers/constants.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gold_line/screens/profile/transaction_item.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
-import 'package:gold_line/widgets/cardInPage.dart';
-import 'package:gold_line/widgets/otherDetailsDivider.dart';
 
-class Wallet extends StatefulWidget {
+import '../../utility/helpers/constants.dart';
+import '../../utility/providers/getTransactionHistory.dart';
+
+class WalletScreen extends StatefulWidget {
+  final String availableBalance;
+  const WalletScreen({Key? key, this.availableBalance = "40000"})
+      : super(key: key);
+
   @override
-  _WalletState createState() => _WalletState();
+  State<WalletScreen> createState() => _WalletScreenState();
 }
 
-class _WalletState extends State<Wallet> {
+class _WalletScreenState extends State<WalletScreen> {
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 40,
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: getWidth(5, context),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(Icons.arrow_back),
-                    iconSize: getHeight(20, context),
-                    color: kPrimaryGoldColor,
-                  ),
-                  SizedBox(
-                    width: getWidth(15, context),
-                  ),
-                  AutoSizeText(
-                    "Wallet Balance",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 28,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(
-                    width: getWidth(310, context),
-                  ),
-                  Icon(
-                    Icons.history,
-                    color: Colors.blue,
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Text(
-                'Available Balance',
-                style: TextStyle(
-                  color: Color(0xFF938E8E),
-                  fontSize: getFont(20, context),
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Wallet Balance",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                 ),
-              ),
-              SizedBox(
-                height: getHeight(20, context),
-              ),
-              Text(
-                '₦ 0.00',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: getFont(60, context),
-                  fontWeight: FontWeight.w800,
+                SizedBox(height: 50.appHeight(context)),
+                Text(
+                  "Available Balance",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
-              ),
-              SizedBox(
-                height: getHeight(20, context),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  InkWell(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: getHeight(40, context),
-                          vertical: getWidth(10, context)),
-                      height: getHeight(47, context),
-                      width: getWidth(170, context),
-                      decoration: BoxDecoration(
+                SizedBox(height: 10.appHeight(context)),
+                FutureBuilder(
+                    future: getWalletBalance(context),
+                    builder: (context, snapshot) {
+                      // Checking if future is resolved
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        // If we got an error
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              '${snapshot.error} occurred',
+                              style: TextStyle(
+                                  fontSize: 18, color: kPrimaryGoldColor),
+                            ),
+                          );
+
+                          // if we got our data
+                        } else if (snapshot.hasData) {
+                          // Extracting data from snapshot object
+                          final data = snapshot.data;
+                          return Text(
+                            "₦$data",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 40),
+                          );
+                        }
+                      }
+
+                      return CircularProgressIndicator(
                         color: kPrimaryGoldColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.account_balance_wallet_outlined,
-                            size: 20,
-                            color: Colors.white,
-                          ),
-                          SizedBox(
-                            width: getWidth(10, context),
-                          ),
-                          Text(
-                            'Fund',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: getFont(20, context),
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    onTap: () {
-                      final snackBar = SnackBar(
-                        elevation: 0,
-                        behavior: SnackBarBehavior.floating,
-                        backgroundColor: Colors.transparent,
-                        content: AwesomeSnackbarContent(
-                          title: "Coming Soon",
-                          message:
-                              "You would soon be able to deposit and receive money from referrals",
-                          contentType: ContentType.help,
-                        ),
                       );
-                      ScaffoldMessenger.of(context)
-                        ..hideCurrentSnackBar()
-                        ..showSnackBar(snackBar);
-
-                      // Navigator.push(
-                      //     context, MaterialPageRoute(builder: (_) => ReferralPage()));
-                    },
-                  ),
-                  SizedBox(
-                    width: getWidth(20, context),
-                  ),
-                  InkWell(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: getHeight(24, context),
-                          vertical: getWidth(10, context)),
-                      height: getHeight(47, context),
-                      width: getWidth(170, context),
-                      decoration: BoxDecoration(
-                        color: Color(0xffD9D9D9),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.download_outlined,
-                            size: 20,
-                            color: Colors.black,
-                          ),
-                          SizedBox(
-                            width: getWidth(10, context),
-                          ),
-                          Text(
-                            'Withdraw',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: getFont(20, context),
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
+                    }),
+                SizedBox(height: 30.appHeight(context)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: screenWidth / 3,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: kPrimaryGoldColor,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 15, horizontal: 10)),
+                          onPressed: () {},
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(FontAwesomeIcons.plus),
+                              SizedBox(
+                                width: 7,
+                              ),
+                              Text("Fund")
+                            ],
+                          )),
                     ),
-                    onTap: () {
-                      final snackBar = SnackBar(
-                        elevation: 0,
-                        behavior: SnackBarBehavior.floating,
-                        backgroundColor: Colors.transparent,
-                        content: AwesomeSnackbarContent(
-                          title: "Coming Soon",
-                          message:
-                              "You would soon be able to withdraw and receive money from referrals to your bank Account",
-                          contentType: ContentType.help,
-                        ),
-                      );
-                      ScaffoldMessenger.of(context)
-                        ..hideCurrentSnackBar()
-                        ..showSnackBar(snackBar);
-
-                      // Navigator.push(
-                      //     context, MaterialPageRoute(builder: (_) => ReferralPage()));
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: getHeight(60, context),
-              ),
-              Text(
-                'Transaction History',
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  color: Colors.black,
-                  fontSize: getFont(20, context),
-                  fontWeight: FontWeight.w600,
+                    SizedBox(
+                      width: screenWidth / 10,
+                    ),
+                    SizedBox(
+                      width: screenWidth / 3,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.grey[400],
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 15, horizontal: 5)),
+                          onPressed: () {},
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.download,
+                                color: Colors.black,
+                              ),
+                              SizedBox(
+                                width: 7,
+                              ),
+                              Text(
+                                "Withdraw",
+                                style: TextStyle(color: Colors.black),
+                              )
+                            ],
+                          )),
+                    )
+                  ],
                 ),
-              ),
-              SizedBox(
-                height: getHeight(60, context),
-              ),
-              CardInPage(
-                  color: kPrimaryGoldColor,
-                  letter: 'Nil',
-                  price: '₦ 0.0000',
-                  subTitle: 'Fund Wallet to Begin',
-                  title: 'No Transactions Done'),
-              OtherDetailsDivider(),
-            ],
+                SizedBox(
+                  height: 20.appHeight(context),
+                ),
+                FutureBuilder(
+                    future: getTransactionHistory(context),
+                    builder: (context, snapshot) {
+                      // Checking if future is resolved
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        // If we got an error
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              '${snapshot.error} occurred',
+                              style: TextStyle(
+                                  fontSize: 18, color: kPrimaryGoldColor),
+                            ),
+                          );
+
+                          // if we got our data
+                        } else if (snapshot.hasData) {
+                          // Extracting data from snapshot object
+                          final data = snapshot.data;
+                          if (data!.isNotEmpty) {
+                            return ListView.builder(
+                              itemCount: data!.length,
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                return TransactionItem(
+                                  id: data[index].id.toString(),
+                                  inOut: data[index].inout.toString(),
+                                  title: data[index].title.toString(),
+                                  createdAt: data[index].createdAt.toString(),
+                                  amount: data[index].amount.toString(),
+                                  orderId: data[index].orderId.toString(),
+                                );
+                              },
+                            );
+                          } else {
+                            return Align(
+                                alignment: Alignment.center,
+                                child: Center(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: const Text(
+                                      'You have not made any transactions yet',
+                                    ),
+                                  ),
+                                ));
+                          }
+                        }
+                      }
+
+                      return CircularProgressIndicator(
+                        color: kPrimaryGoldColor,
+                      );
+                    }),
+              ],
+            ),
           ),
         ),
       ),

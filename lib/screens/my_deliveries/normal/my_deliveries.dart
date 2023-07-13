@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gold_line/screens/my_deliveries/widget/completed_deliveries.dart';
-import 'package:gold_line/screens/my_deliveries/widget/pending_deliveries.dart';
 
-import '../../utility/helpers/constants.dart';
+import '../../../utility/helpers/constants.dart';
+import 'widget/accepted_deliveries.dart';
+import 'widget/cancelled_deliveries.dart';
+import 'widget/completed_deliveries.dart';
+import 'widget/pending_deliveries.dart';
 
 class MyDeliveriesScreen extends StatefulWidget {
   const MyDeliveriesScreen({Key? key}) : super(key: key);
@@ -16,7 +18,7 @@ class _MyDeliveriesScreenState extends State<MyDeliveriesScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: kPrimaryGoldColor,
@@ -25,18 +27,31 @@ class _MyDeliveriesScreenState extends State<MyDeliveriesScreen> {
             indicatorColor: Colors.blueGrey,
             tabs: [
               Tab(
-                icon: Icon(FontAwesomeIcons.list),
+                icon: Icon(FontAwesomeIcons.stackExchange),
                 text: "Pending",
+              ),
+              Tab(
+                icon: Icon(FontAwesomeIcons.list),
+                text: "Accepted",
               ),
               Tab(
                 icon: Icon(FontAwesomeIcons.listCheck),
                 text: "Completed",
+              ),
+              Tab(
+                icon: Icon(FontAwesomeIcons.ban),
+                text: "Cancelled",
               )
             ],
           ),
         ),
         body: TabBarView(
-          children: [PendingDeliveries(), CompletedDeliveries()],
+          children: [
+            PendingDeliveries(),
+            AcceptedDeliveries(),
+            CompletedDeliveries(),
+            CancelledDeliveries()
+          ],
         ),
       ),
     );

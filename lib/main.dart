@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +24,10 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  print("init");
+  // Process.runSync('flutter', ['run', '--size=256m']);
+
+
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.instance.subscribeToTopic("general");
@@ -47,6 +53,7 @@ Future<void> main() async {
     sound: true,
   );
 
+
   runApp(const MyApp());
 }
 
@@ -69,6 +76,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     // TODO: implement initState
+    print("init");
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       OnceWidget.showOnEveryNewVersion(builder: () {
@@ -97,7 +105,8 @@ class _MyAppState extends State<MyApp> {
           return GetListProvider();
         }),
       ],
-      child: const MaterialApp(home: GoldLine()),
+      child: const MaterialApp(
+          debugShowCheckedModeBanner: false, home: GoldLine()),
     );
   }
 }

@@ -1,13 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:gold_line/screens/authentication/proceed_login.dart';
 import 'package:gold_line/screens/authentication/sign_in.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:provider/provider.dart';
 
-import '../../utility/helpers/routing.dart';
 import '../../utility/providers/user_provider.dart';
 
 class ForgotPass extends StatefulWidget {
@@ -52,7 +50,7 @@ class ForgotPassState extends State<ForgotPass> {
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            fontSize: 28),
+                            fontSize: 20),
                       ),
                     ],
                   ),
@@ -70,9 +68,9 @@ class ForgotPassState extends State<ForgotPass> {
                 const Text(
                   'Enter your Registered Email Address',
                   style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18),
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 SizedBox(
                   height: getHeight(20, context),
@@ -111,7 +109,7 @@ class ForgotPassState extends State<ForgotPass> {
                     style: TextStyle(
                       decoration: TextDecoration.underline,
                       color: kPrimaryGoldColor,
-                      fontSize: 22,
+                      fontSize: 18,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -128,11 +126,10 @@ class ForgotPassState extends State<ForgotPass> {
                   child: TextButton(
                     onPressed: () async {
                       await userProvider.forgotPassword(context);
-                      changeScreenReplacement(context, ProceedLogin());
                     },
                     child: const AutoSizeText(
                       'Forgot Password',
-                      style: TextStyle(color: Colors.white, fontSize: 22),
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
                 ),

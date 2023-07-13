@@ -2,25 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:provider/provider.dart';
 
-import '../../../utility/helpers/constants.dart';
-import '../../../utility/providers/get_list_provider.dart';
+import '../../../../utility/helpers/constants.dart';
+import '../../../../utility/providers/get_list_provider.dart';
 import 'delivery_card.dart';
 
-class CompletedDeliveries extends StatefulWidget {
-  const CompletedDeliveries({Key? key}) : super(key: key);
+class CancelledDeliveries extends StatefulWidget {
+  const CancelledDeliveries({Key? key}) : super(key: key);
 
   @override
-  State<CompletedDeliveries> createState() => _CompletedDeliveriesState();
+  State<CancelledDeliveries> createState() => _CancelledDeliveriesState();
 }
 
-class _CompletedDeliveriesState extends State<CompletedDeliveries> {
+class _CancelledDeliveriesState extends State<CancelledDeliveries> {
   late Future deliveries;
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final deliveryListProvider =
           Provider.of<GetListProvider>(context, listen: false);
-      deliveries = deliveryListProvider.checkCompletedDelivery();
+      deliveries = deliveryListProvider.checkCancelledDelivery();
     });
     super.initState();
   }
@@ -43,15 +43,15 @@ class _CompletedDeliveriesState extends State<CompletedDeliveries> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              const Text(
-                "Completed Deliveries",
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+              Text(
+                "Cancelled Deliveries",
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
               ),
               SizedBox(
                 height: 10.appHeight(context),
               ),
               FutureBuilder(
-                  future: deliveryListProvider.checkCompletedDelivery(),
+                  future: deliveryListProvider.checkCancelledDelivery(),
                   builder: (context, snapshot) {
                     // Checking if future is resolved
                     if (snapshot.connectionState == ConnectionState.done) {
@@ -60,7 +60,7 @@ class _CompletedDeliveriesState extends State<CompletedDeliveries> {
                         return Center(
                           child: Text(
                             '${snapshot.error} occurred',
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 18, color: kPrimaryGoldColor),
                           ),
                         );
@@ -76,13 +76,27 @@ class _CompletedDeliveriesState extends State<CompletedDeliveries> {
                             shrinkWrap: true,
                             itemBuilder: (BuildContext context, int index) {
                               return CompletedDeliveryCard(
-                                  description: data[index].description,
-                                  id: data[index].id,
-                                  title: data[index].id!.toString(),
-                                  dropOffLocation: data[index].dropOffAddress!,
-                                  price: data[index].price.toString(),
-                                  status: data[index].status,
-                                  pickUpLocation: data[index].pickupAddress!);
+                                id: data[index].id!,
+                                description: data[index].description,
+                                type: data[index].type,
+                                title: data[index].id!.toString(),
+                                paymentStatus: data[index].paymentStatus,
+                                dropOffLocation: data[index].dropOffAddress!,
+                                price: data[index].price.toString(),
+                                status: data[index].status,
+                                pickUpLocation: data[index].pickupAddress!,
+                                date: data[index].pickupTime!,
+                                paymentMethod: data[index].paymentMethod!,
+                                riderFirstName: data[index].riderFirstName,
+                                riderLastName: data[index].riderLastName,
+                                riderPhoneNumber: data[index].riderPhone,
+                                riderPlateNumber: data[index].riderPlateNumber,
+                                paymentBy: data[index].paymentBy,
+                                senderName: data[index].senderName,
+                                senderPhone: data[index].senderPhone,
+                                receiverName: data[index].receiverName,
+                                receiverPhone: data[index].receiverPhone,
+                              );
                             },
                           );
                         } else {
@@ -100,7 +114,7 @@ class _CompletedDeliveriesState extends State<CompletedDeliveries> {
                       }
                     }
 
-                    return const CircularProgressIndicator(
+                    return CircularProgressIndicator(
                       color: kPrimaryGoldColor,
                     );
                   }),

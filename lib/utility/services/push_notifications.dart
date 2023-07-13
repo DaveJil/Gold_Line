@@ -1,9 +1,16 @@
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:gold_line/screens/map/map_widget.dart';
+import 'package:gold_line/screens/my_deliveries/select_type.dart';
+import 'package:gold_line/screens/profile/wallet.dart';
+import 'package:gold_line/utility/helpers/routing.dart';
+import 'package:flutter/material.dart';
 import 'package:gold_line/utility/providers/map_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api.dart';
+import 'contextStoppable.dart';
 
 class PushNotification {
   static const NAVIGATE_TO_DELIVERY_NOTIFICATION = 'delivery';
@@ -65,20 +72,34 @@ class PushNotification {
                     icon: 'launch_background')));
       }
     });
-    void handleMessage(RemoteMessage message) {
-      print("=== data = ${message.toString()}");
-      String notificationType = message.data['status'];
 
-      if (notificationType == DRIVER_ASSIGNED_NOTIFICATION) {
-        mapProvider.changeWidgetShowed(showWidget: Show.DRIVER_FOUND);
-      } else if (notificationType == DELIVERY_CANCELED_NOTIFICATION) {
-        mapProvider.changeWidgetShowed(showWidget: Show.HOME);
-      } else if (notificationType == DELIVERY_COMPLETED_NOTIFICATION) {
-        mapProvider.changeWidgetShowed(showWidget: Show.HOME);
+    void handleMessage(RemoteMessage message) {
+      if (Stoppable.currentContext == null) {
+        return;
       }
+
+
+      BuildContext context = Stoppable.currentContext!;
+
+      print("=== data = ${message.toString()}");
+      String notificationType = message.data['navigate_to'];
+      changeScreenReplacement(context, MapWidget());
+        mapProvider.changeWidgetShowed(showWidget: Show.HOME);
+
+      // if (notificationType == "delivery") {
+      //   changeScreenReplacement(context, MyDeliveriesOptionScreen());
+      //
+      // } else if (notificationType == "wallet") {
+      //   changeScreenReplacement(context, WalletScreen());
+      // } else if (notificationType == "notifications") {
+      //   changeScreenReplacement(context, MapWidget());
+      //   mapProvider.changeWidgetShowed(showWidget: Show.HOME);
+      // }
     }
 
+
     FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+
 
     Future getNotificationToken() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();

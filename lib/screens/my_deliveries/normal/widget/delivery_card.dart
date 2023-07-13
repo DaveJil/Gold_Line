@@ -1,14 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gold_line/screens/my_deliveries/normal/delivery_details.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:provider/provider.dart';
 
-import '../../../utility/helpers/constants.dart';
-import '../../../utility/helpers/custom_button.dart';
-import '../../../utility/providers/get_list_provider.dart';
-import '../../../utility/providers/map_provider.dart';
-import '../delivery_details.dart';
+import '../../../../utility/helpers/constants.dart';
+import '../../../../utility/helpers/custom_button.dart';
+import '../../../../utility/providers/get_list_provider.dart';
+import '../../../../utility/providers/map_provider.dart';
+import 'pending_deliveries.dart';
 
 class NewDeliveryCard extends StatelessWidget {
   final String? title;
@@ -76,33 +77,56 @@ class NewDeliveryCard extends StatelessWidget {
 
 class DeliveryCard extends StatefulWidget {
   final String? title;
+  final int? id;
+  final String? type;
+  final String? price;
+  final String? status;
   final String? pickUpLocation;
   final String? dropOffLocation;
   final String? description;
-  final String? id;
+  final String? riderFirstName,
+      riderLastName,
+      riderPhoneNumber,
+      riderPlateNumber;
+  final String? pickUpLatitude,
+      pickUpLongitude,
+      dropOffLatitude,
+      dropOffLongitude;
   final String? date;
-  final String? price;
-  final String? riderFirstName;
-  final String? riderLastName;
-  final String? riderPhoneNumber;
-  final String? riderPlateNumber;
-  final String? paymentMethod;
-  final String? status;
+  final String? paymentMethod, paymentBy, paymentStatus;
+  final String? receiverName;
+  final String? receiverPhone;
+  final String? senderName;
+  final String? senderPhone;
+  final List? children;
+
   const DeliveryCard(
       {Key? key,
       this.title,
+      this.status,
+      this.price,
+      this.type,
+      this.id,
+      this.senderPhone,
+      this.senderName,
+      this.receiverPhone,
+      this.receiverName,
       this.description,
       this.dropOffLocation,
-      this.price,
-      this.riderFirstName,
+      this.pickUpLocation,
+      this.riderPlateNumber,
       this.riderLastName,
       this.riderPhoneNumber,
-      this.riderPlateNumber,
-      this.date,
+      this.riderFirstName,
+      this.dropOffLatitude,
+      this.dropOffLongitude,
+      this.pickUpLatitude,
+      this.pickUpLongitude,
+      this.paymentBy,
       this.paymentMethod,
-      this.id,
-      this.pickUpLocation,
-      this.status})
+      this.paymentStatus,
+      this.children,
+      this.date})
       : super(key: key);
 
   @override
@@ -372,69 +396,149 @@ class _DeliveryCardState extends State<DeliveryCard> {
   }
 }
 
-class CompletedDeliveryCard extends StatelessWidget {
+class CompletedDeliveryCard extends StatefulWidget {
   final String? title;
   final int? id;
+  final String? type;
   final String? price;
   final String? status;
   final String? pickUpLocation;
   final String? dropOffLocation;
   final String? description;
+  final String? riderFirstName,
+      riderLastName,
+      riderPhoneNumber,
+      riderPlateNumber;
+  final String? pickUpLatitude,
+      pickUpLongitude,
+      dropOffLatitude,
+      dropOffLongitude;
+  final String? date;
+  final String? paymentMethod, paymentBy, paymentStatus;
+  final String? receiverName;
+  final String? receiverPhone;
+  final String? senderName;
+  final String? senderPhone;
+  final List? children;
 
   const CompletedDeliveryCard(
       {Key? key,
       this.title,
       this.status,
       this.price,
+      this.type,
       this.id,
+      this.senderPhone,
+      this.senderName,
+      this.receiverPhone,
+      this.receiverName,
       this.description,
       this.dropOffLocation,
-      this.pickUpLocation})
+      this.pickUpLocation,
+      this.riderPlateNumber,
+      this.riderLastName,
+      this.riderPhoneNumber,
+      this.riderFirstName,
+      this.dropOffLatitude,
+      this.dropOffLongitude,
+      this.pickUpLatitude,
+      this.pickUpLongitude,
+      this.paymentBy,
+      this.paymentMethod,
+      this.paymentStatus,
+      this.children,
+      this.date})
       : super(key: key);
 
+  @override
+  State<CompletedDeliveryCard> createState() => _CompletedDeliveryCardState();
+}
+
+class _CompletedDeliveryCardState extends State<CompletedDeliveryCard> {
   @override
   Widget build(BuildContext context) {
     final deliveryListProvider =
         Provider.of<MapProvider>(context, listen: false);
 
-    return Container(
+    return InkWell(
+      onTap: () {
+        (widget.type == "bulk")
+            ? changeScreen(context, PendingDeliveries())
+            : changeScreen(
+                context,
+                DeliveryDetailsScreen(
+                  title: widget.title,
+                  description: widget.description,
+                  dropOffLocation: widget.dropOffLocation,
+                  pickUpLocation: widget.pickUpLocation,
+                  price: widget.price,
+                  riderFirstName: widget.riderFirstName,
+                  riderLastName: widget.riderLastName,
+                  riderPhoneNumber: widget.riderPhoneNumber,
+                  riderPlateNumber: widget.riderPlateNumber,
+                  date: widget.date,
+                  paymentMethod: widget.paymentMethod,
+                  paymentBy: widget.paymentBy,
+                  paymentStatus: widget.paymentStatus,
+                  pickUpLatitude: widget.pickUpLatitude,
+                  pickUpLongitude: widget.pickUpLongitude,
+                  dropOffLatitude: widget.dropOffLatitude,
+                  dropOffLongitude: widget.dropOffLongitude,
+                  senderPhone: widget.senderPhone,
+                  senderName: widget.senderName,
+                  receiverPhone: widget.receiverPhone,
+                  receiverName: widget.receiverName,
+                ));
+      },
       child: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Row(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Delivery #$title",
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                color: kPrimaryGoldColor,
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  widget.type ?? "Single",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      color: Colors.white),
                 ),
-                SizedBox(
-                  height: 4.appHeight(context),
-                ),
-                Text("Pick Up Location: $pickUpLocation"),
-                SizedBox(
-                  height: 4.appHeight(context),
-                ),
-                Text("Drop Off Location: $dropOffLocation"),
-                SizedBox(
-                  height: 4.appHeight(context),
-                ),
-                Text("Description: $description"),
-                Divider()
-              ],
+              ),
             ),
-            Spacer(),
-            Column(
-              children: [
-                Text("Amount: ₦${price!}"),
-                SizedBox(
-                  height: 4.appHeight(context),
-                ),
-                Text("Status: ${status!}"),
-              ],
+            Text(
+              "Delivery #${widget.title}",
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
             ),
+            SizedBox(
+              height: 4.appHeight(context),
+            ),
+            Text("Pick Up Location: ${widget.pickUpLocation}"),
+            SizedBox(
+              height: 4.appHeight(context),
+            ),
+            Text("Drop Off Location: ${widget.dropOffLocation}"),
+            SizedBox(
+              height: 4.appHeight(context),
+            ),
+            Text("Description: ${widget.description}"),
+            Align(
+              alignment: Alignment.topRight,
+              child: Column(
+                children: [
+                  Text("Amount: ₦${widget.price!}"),
+                  SizedBox(
+                    height: 4.appHeight(context),
+                  ),
+                  Text("Status: ${widget.status!}"),
+                ],
+              ),
+            ),
+            Divider()
           ],
         ),
       ),

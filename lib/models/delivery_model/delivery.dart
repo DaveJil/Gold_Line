@@ -24,6 +24,7 @@ class DeliveryModel {
   String? riderPlateNumber;
   String? paymentStatus;
   String? paymentMethod;
+  String? paymentBy;
 
   DeliveryModel(
       {this.id,
@@ -43,6 +44,7 @@ class DeliveryModel {
       this.paymentMethod,
       this.paymentStatus,
       this.pickupTime,
+      this.paymentBy,
       this.riderPlateNumber,
       this.riderFirstName,
       this.riderLastName,
@@ -83,6 +85,7 @@ class DeliveryModel {
             : (json['rider']['profile'] == null)
                 ? 'Rider Not assigned Yet'
                 : json['rider']['profile']['plate_number'],
+        paymentBy = json['payment_by'],
         paymentStatus = json['payment_status'];
 
   Map<String, dynamic> toJson() {

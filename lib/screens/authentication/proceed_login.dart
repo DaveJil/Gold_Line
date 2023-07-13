@@ -41,7 +41,7 @@ class ProceedLoginState extends State<ProceedLogin> {
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        fontSize: 28),
+                        fontSize: 20),
                   ),
                 ),
                 SizedBox(
@@ -156,7 +156,7 @@ class ProceedLoginState extends State<ProceedLogin> {
                   },
                   child: const Text(
                     'Already have an account? Login',
-                    style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
+                    style: TextStyle(color: kPrimaryGoldColor, fontSize: 18),
                   ),
                 ),
                 SizedBox(
@@ -174,7 +174,7 @@ class ProceedLoginState extends State<ProceedLogin> {
                     },
                     child: const Text(
                       'Proceed to Login',
-                      style: TextStyle(color: Colors.white, fontSize: 25),
+                      style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
                 ),

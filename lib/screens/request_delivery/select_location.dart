@@ -111,7 +111,11 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                   Checkbox(
                       value: _useCurrentLocationPickUp,
                       activeColor: kPrimaryGoldColor,
-                      onChanged: (bool? value) {
+                      onChanged: (bool? value) async {
+                        mapProvider.pickUpState =
+                            await mapProvider.getStateFromCoordinates(
+                                point: mapProvider.center!);
+
                         setState(() {
                           mapProvider.predictions = [];
                           pickUpLocationController.text =
@@ -186,29 +190,61 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                             details.result != null &&
                             mounted) {
                           if (mapProvider.startFocusNode.hasFocus) {
+                            setState(() {
+                              print(details.result!.formattedAddress!);
+                              pickUpLocationController.text =
+                              details.result!.formattedAddress!;
+                              mapProvider.predictions = [];
+                            });
                             mapProvider.pickupLocation = details.result;
                             mapProvider.pickUpLatLng = LatLng(
                                 mapProvider
                                     .pickupLocation!.geometry!.location!.lat!,
                                 mapProvider
                                     .pickupLocation!.geometry!.location!.lng!);
-                            setState(() {
-                              pickUpLocationController.text =
-                                  details.result!.name!;
-                              mapProvider.predictions = [];
-                            });
+                            pickUpLocationController.text =
+                                details.result!.formattedAddress!;
+                            mapProvider.pickUpState =
+                                await mapProvider.getStateFromCoordinates(
+                                    point: mapProvider.pickUpLatLng!);
+                            print(mapProvider.pickUpState);
+
+
                           } else if (mapProvider.endFocusNode.hasFocus) {
+                            setState(() {
+                              dropOffLocationController.text =
+                              details.result!.formattedAddress!;
+                              mapProvider.predictions = [];
+                              print(dropOffLocationController.text);
+                            });
+
                             mapProvider.dropoffLocation = details.result;
+
                             mapProvider.dropOffLatLng = LatLng(
                                 mapProvider
                                     .dropoffLocation!.geometry!.location!.lat!,
                                 mapProvider
                                     .dropoffLocation!.geometry!.location!.lng!);
 
+
+                            String dropOffAddress =
+                                await mapProvider.getAddressFromCoordinates(
+                                    point: mapProvider.dropOffLatLng!);
+                            print(dropOffAddress);
+                            dropOffLocationController.text =
+                                details.result!.formattedAddress!;
+                            mapProvider.dropOffState =
+                                await mapProvider.getStateFromCoordinates(
+                                    point: mapProvider.dropOffLatLng!);
+                            print("waiting");
+
+                            print(mapProvider.dropOffState);
+
                             setState(() {
                               dropOffLocationController.text =
-                                  details.result!.name!;
+                                  details.result!.formattedAddress!;
                               mapProvider.predictions = [];
+                              print(dropOffLocationController.text);
                             });
                           }
 
@@ -236,10 +272,13 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                   Checkbox(
                       value: _useCurrentLocationDropOff,
                       activeColor: kPrimaryGoldColor,
-                      onChanged: (bool? value) {
+                      onChanged: (bool? value) async {
                         mapProvider.dropOffLatLng = LatLng(
                             mapProvider.center!.latitude,
                             mapProvider.center!.longitude);
+                        mapProvider.dropOffState =
+                            await mapProvider.getStateFromCoordinates(
+                                point: mapProvider.center!);
                         setState(() {
                           mapProvider.predictions = [];
                           dropOffLocationController.text =
@@ -257,8 +296,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                 height: getHeight(30, context),
               ),
               Container(
-                height: getHeight(58, context),
-                width: getWidth(200, context),
+                padding: EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -272,24 +310,18 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                 ),
                 child: TextButton(
                     onPressed: () async {
-                      await mapProvider.createDeliveryRequest();
-                      await mapProvider.createRoute();
-                      await mapProvider.processDelivery();
+                      await mapProvider.createDeliveryRequest(context);
+                      await mapProvider.processDelivery(context);
                       print('navigate');
                       mapProvider.changeWidgetShowed(
                           showWidget: Show.CHECKOUT_DELIVERY);
 
                       changeScreenReplacement(context, MapWidget());
                     },
-                    child: mapProvider.isLoading
-                        ? CircularProgressIndicator(
-                            color: kPrimaryGoldColor,
-                          )
-                        : const Text(
-                            'Continue',
-                            style: TextStyle(
-                                color: kPrimaryGoldColor, fontSize: 22),
-                          )),
+                    child: const Text(
+                      'Continue',
+                      style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
+                    )),
               ),
             ],
           ),

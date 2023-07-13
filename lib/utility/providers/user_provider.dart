@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:gold_line/screens/authentication/proceed_login.dart';
 import 'package:gold_line/screens/authentication/user_navigation.dart';
 import 'package:gold_line/utility/helpers/custom_display_widget.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
@@ -12,6 +13,7 @@ import '../../../models/user_profile/user_profile.dart';
 import '../../models/user_profile/get_data_model.dart';
 import '../../screens/map/map_widget.dart';
 import '../api.dart';
+import '../helpers/upload_image.dart';
 import '../services/user_services.dart';
 
 enum Status { Uninitialized, Authenticated, Unauthenticated }
@@ -135,11 +137,6 @@ class UserProvider with ChangeNotifier {
         String token = response['token'];
         print(token);
         pref.setString('token', response['token']);
-        firstNamePref = response['data']['profile']['first_name'];
-        lastNamePref = response['data']['profile']['last_name'];
-        emailPref = response['data']['email'];
-        referralId = response['data']['uuid'];
-
         pref.setString('token', token);
         pref.setBool(LOGGED_IN, true);
 
@@ -175,10 +172,7 @@ class UserProvider with ChangeNotifier {
       String code = response['code'];
 
       if (code == 'success') {
-        String token = response['token'];
-        print(token);
-        pref.setString('token', response['token']);
-        pref.setBool(LOGGED_IN, true);
+        changeScreen(context, ProceedLogin());
         CustomDisplayWidget.displayAwesomeSuccessSnackBar(
             context, "Relax", "Check Email for password reset link");
       } else {
@@ -221,6 +215,25 @@ class UserProvider with ChangeNotifier {
             context, message, message);
         return message;
       }
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future updateProfilePic(BuildContext context) async {
+    final file = await UploadFiles().getImage();
+    // String profilePhoto = base64Encode(file.readAsBytesSync());
+    print(file);
+    dynamic image = File(file).readAsBytesSync();
+    // print(profilePhoto);
+
+    dynamic request = {};
+
+    try {
+      var response = await CallApi().addImage(request, 'profile', file, image);
+      print(response);
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {

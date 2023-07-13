@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:gold_line/screens/my_deliveries/my_deliveries.dart';
+import 'package:gold_line/screens/my_deliveries/select_type.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:provider/provider.dart';
@@ -105,53 +105,50 @@ class _SearchingForDriverSheetState extends State<SearchingForDriverSheet> {
                     SizedBox(
                       height: 10.appHeight(context),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: SizedBox(
-                        height: 50.appHeight(context),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                mapProvider.changeWidgetShowed(
-                                    showWidget: Show.HOME);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                elevation: 20,
-                                backgroundColor: kPrimaryGoldColor,
-                              ),
-                              child: const Text(
-                                "Go Back To Home",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700),
-                              ),
+                    SizedBox(
+                      height: 50.appHeight(context),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              mapProvider.changeWidgetShowed(
+                                  showWidget: Show.HOME);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              elevation: 20,
+                              backgroundColor: kPrimaryGoldColor,
                             ),
-                            SizedBox(
-                              width: 50.appWidth(context),
+                            child: const Text(
+                              "Home",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700),
                             ),
-                            ElevatedButton(
-                              onPressed: () {
-                                changeScreenReplacement(
-                                    context, MyDeliveriesScreen());
-                              },
-                              style: ElevatedButton.styleFrom(
-                                elevation: 20,
-                                backgroundColor: Colors.white70,
-                              ),
-                              child: const Text(
-                                "Go To My Deliveries",
-                                style: TextStyle(
-                                    color: kPrimaryGoldColor,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700),
-                              ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              changeScreenReplacement(
+                                  context, MyDeliveriesOptionScreen());
+                            },
+                            style: ElevatedButton.styleFrom(
+                              elevation: 20,
+                              backgroundColor: Colors.white70,
                             ),
-                          ],
-                        ),
+                            child: const Text(
+                              "My Deliveries",
+                              style: TextStyle(
+                                  color: kPrimaryGoldColor,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(
