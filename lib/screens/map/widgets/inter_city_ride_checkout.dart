@@ -10,10 +10,10 @@ import '../../../utility/providers/map_provider.dart';
 import '../../../utility/providers/user_provider.dart';
 import '../../../utility/services/calls_and_sms.dart';
 
-class DeliverySummaryWidget extends StatelessWidget {
+class InterCityRideSummaryWidget extends StatelessWidget {
   final CallsAndMessagesService? _service = CallsAndMessagesService();
 
-  DeliverySummaryWidget({Key? key}) : super(key: key);
+  InterCityRideSummaryWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +83,7 @@ class DeliverySummaryWidget extends StatelessWidget {
                           width: 10,
                         ),
                         AutoSizeText(
-                          "Sender Details",
+                          "Booking Personal Details",
                           style: TextStyle(fontSize: 20),
                         ),
                       ],
@@ -92,8 +92,9 @@ class DeliverySummaryWidget extends StatelessWidget {
                       height: 7,
                     ),
                     AutoSizeText('''
-                ${senderName.text}
-                ${senderPhone.text}            
+                Name: ${interCityBookingName.text}
+                Phone: ${interCityBookingPhone.text}  
+                Number of seats: ${interCityBookingNumberOfSeats}        
                            ''',
                         style: TextStyle(
                           fontSize: 16,
@@ -112,7 +113,7 @@ class DeliverySummaryWidget extends StatelessWidget {
                           width: 10,
                         ),
                         const AutoSizeText(
-                          "Receiver Details",
+                          "Other Details",
                           style: TextStyle(fontSize: 22),
                         ),
                       ],
@@ -121,41 +122,15 @@ class DeliverySummaryWidget extends StatelessWidget {
                       height: 7,
                     ),
                     AutoSizeText('''
-                ${receiverName.text}
-                ${receiverPhone.text}            
+                Luggage Size: ${receiverName.text}
+                Departure Date: ${mapProvider.selectedBookingDate}
+                Departure Time: ${mapProvider.selectedBookingTime}
+                Booking Type: ${receiverPhone.text}            
                  ''', style: TextStyle(fontSize: 16)),
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.gif_box_rounded,
-                          color: Colors.grey,
-                          size: getHeight(24, context),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        AutoSizeText("Parcel Details:",
-                            style: TextStyle(fontSize: 22)),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 7,
-                    ),
-                    AutoSizeText(
-                      '''
-             Delivery Status: Pending 
-             PickUp Address: ${pickUpLocationController.text}  
-             Delivery Address: ${dropOffLocationController.text}  
-             Payment Method: ${mapProvider.whoFuckingPays} Pays
-             ''',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(
-                      height: 7,
-                    ),
+
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.all(20.0),

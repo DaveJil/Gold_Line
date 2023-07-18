@@ -97,7 +97,7 @@ class _HomeContainerState extends State<HomeContainer> {
                     height: getHeight(5, context),
                   ),
                   AutoSizeText(
-                    "New Delivery",
+                    "New Booking",
                     style: TextStyle(fontSize: getHeight(12, context)),
                   )
                 ],
@@ -135,7 +135,7 @@ class _HomeContainerState extends State<HomeContainer> {
                     height: getHeight(10, context),
                   ),
                   AutoSizeText(
-                    "My Deliveries",
+                    "My Bookings",
                     style: TextStyle(fontSize: getHeight(12, context)),
                   )
                 ],

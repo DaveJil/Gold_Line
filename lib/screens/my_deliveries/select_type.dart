@@ -23,7 +23,7 @@ class _MyDeliveriesOptionScreen extends State<MyDeliveriesOptionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           iconSize: getHeight(20, context),
@@ -123,6 +123,58 @@ class _MyDeliveriesOptionScreen extends State<MyDeliveriesOptionScreen> {
                     fontWeight: FontWeight.w800,
                   )),
               leading: const Icon(FontAwesomeIcons.truckPickup),
+            ),
+          ),
+
+          SizedBox(
+            height: getHeight(20, context),
+          ),
+          InkWell(
+            onTap: () {
+              changeScreen(context, const MyVansDeliveriesScreen());
+            },
+            child: ListTile(
+              tileColor: Colors.white70,
+              title: Text('Vans And Trucks',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w800,
+                  )),
+              leading: const Icon(FontAwesomeIcons.truckPickup),
+            ),
+          ),
+          SizedBox(
+            height: getHeight(20, context),
+          ),
+          InkWell(
+            onTap: () {
+              changeScreen(context, const MyVansDeliveriesScreen());
+            },
+            child: ListTile(
+              tileColor: Colors.white70,
+              title: Text('Vans And Trucks',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w800,
+                  )),
+              leading: const Icon(FontAwesomeIcons.truckPickup),
+            ),
+          ),
+          SizedBox(
+            height: getHeight(20, context),
+          ),
+          InkWell(
+            onTap: () {
+              changeScreen(context, const MyVansDeliveriesScreen());
+            },
+            child: ListTile(
+              tileColor: Colors.white70,
+              title: Text('Inter City Rides',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w800,
+                  )),
+              leading: const Icon(FontAwesomeIcons.car),
             ),
           ),
         ],
