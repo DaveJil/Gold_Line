@@ -112,10 +112,13 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                       value: _useCurrentLocationPickUp,
                       activeColor: kPrimaryGoldColor,
                       onChanged: (bool? value) async {
+                        mapProvider.pickUpLatLng = LatLng(
+                            mapProvider.center!.latitude,
+                            mapProvider.center!.longitude);
                         mapProvider.pickUpState =
                             await mapProvider.getStateFromCoordinates(
                                 point: mapProvider.center!);
-
+                        mapProvider.pickUpCountry = await mapProvider.getCountryFromCoordinates(point: mapProvider.center!);
                         setState(() {
                           mapProvider.predictions = [];
                           pickUpLocationController.text =
@@ -191,9 +194,9 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                             mounted) {
                           if (mapProvider.startFocusNode.hasFocus) {
                             setState(() {
-                              print(details.result!.formattedAddress!);
+                              //print(details.result!.formattedAddress!);
                               pickUpLocationController.text =
-                              details.result!.formattedAddress!;
+                                  details.result!.formattedAddress!;
                               mapProvider.predictions = [];
                             });
                             mapProvider.pickupLocation = details.result;
@@ -207,15 +210,14 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                             mapProvider.pickUpState =
                                 await mapProvider.getStateFromCoordinates(
                                     point: mapProvider.pickUpLatLng!);
-                            print(mapProvider.pickUpState);
-
-
+                            mapProvider.pickUpCountry = await mapProvider.getCountryFromCoordinates(point: mapProvider.pickUpLatLng!);
+                            //print(mapProvider.pickUpState);
                           } else if (mapProvider.endFocusNode.hasFocus) {
                             setState(() {
                               dropOffLocationController.text =
-                              details.result!.formattedAddress!;
+                                  details.result!.formattedAddress!;
                               mapProvider.predictions = [];
-                              print(dropOffLocationController.text);
+                              //print(dropOffLocationController.text);
                             });
 
                             mapProvider.dropoffLocation = details.result;
@@ -226,25 +228,18 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                                 mapProvider
                                     .dropoffLocation!.geometry!.location!.lng!);
 
-
-                            String dropOffAddress =
-                                await mapProvider.getAddressFromCoordinates(
-                                    point: mapProvider.dropOffLatLng!);
-                            print(dropOffAddress);
                             dropOffLocationController.text =
                                 details.result!.formattedAddress!;
                             mapProvider.dropOffState =
                                 await mapProvider.getStateFromCoordinates(
                                     point: mapProvider.dropOffLatLng!);
-                            print("waiting");
-
-                            print(mapProvider.dropOffState);
+                            mapProvider.dropOffCountry = await mapProvider.getCountryFromCoordinates(point: mapProvider.dropOffLatLng!);
 
                             setState(() {
                               dropOffLocationController.text =
                                   details.result!.formattedAddress!;
                               mapProvider.predictions = [];
-                              print(dropOffLocationController.text);
+                              //print(dropOffLocationController.text);
                             });
                           }
 
@@ -252,7 +247,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                               mapProvider.dropoffLocation != null) {
                           } else if (_useCurrentLocationPickUp == true &&
                               mapProvider.dropoffLocation != null) {
-                            print('navigate');
+                            ////print('navigate');
                           }
                         }
                       },
@@ -279,6 +274,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                         mapProvider.dropOffState =
                             await mapProvider.getStateFromCoordinates(
                                 point: mapProvider.center!);
+                        mapProvider.dropOffCountry = await mapProvider.getCountryFromCoordinates(point: mapProvider.center!);
                         setState(() {
                           mapProvider.predictions = [];
                           dropOffLocationController.text =
@@ -300,7 +296,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Colors.grey,
                       blurRadius: 4,
@@ -312,7 +308,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                     onPressed: () async {
                       await mapProvider.createDeliveryRequest(context);
                       await mapProvider.processDelivery(context);
-                      print('navigate');
+                      ////print('navigate');
                       mapProvider.changeWidgetShowed(
                           showWidget: Show.CHECKOUT_DELIVERY);
 

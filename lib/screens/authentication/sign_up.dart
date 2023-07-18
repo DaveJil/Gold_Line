@@ -130,6 +130,33 @@ class SignUpScreenState extends State<SignUpScreen> {
                     SizedBox(
                       height: getHeight(20, context),
                     ),
+
+                    TextFormField(
+                      controller: userProvider.phone,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter valid phone number';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 1,
+                            color: kPrimaryGoldColor,
+                          ),
+                        ),
+                        labelText: 'Phone',
+                        labelStyle: TextStyle(
+                          fontWeight: FontWeight.w700,
+                        ),
+                        hintText: 'Enter your phone number',
+                      ),
+                    ),
+                    SizedBox(
+                      height: getHeight(20, context),
+                    ),
+
                     TextFormField(
                       controller: userProvider.password,
                       validator: (value) {
@@ -180,6 +207,18 @@ class SignUpScreenState extends State<SignUpScreen> {
                         }
                         return null;
                       },
+                    ),
+                    SizedBox(
+                      height: getHeight(20, context),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text("Select User Type"),
+                        SizedBox(width: 15,),
+                        UserType()
+                      ],
                     ),
                     SizedBox(
                       height: getHeight(20, context),
@@ -237,6 +276,53 @@ class SignUpScreenState extends State<SignUpScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+
+class UserType extends StatefulWidget {
+  const UserType({Key? key}) : super(key: key);
+
+  @override
+  State<UserType> createState() => _UserTypeState();
+}
+
+class _UserTypeState extends State<UserType> {
+  @override
+  Widget build(BuildContext context) {
+    final provider = Provider.of<UserProvider>(context);
+    // Initial Selected Value
+
+    // List of items in our dropdown menu
+    var items = [
+      'User',
+      'Agent',
+    ];
+
+    return DropdownButton<String>(
+      // Initial Value
+      value: provider.userDropDownValue,
+
+      // Down Arrow Icon
+      icon: const Icon(Icons.keyboard_arrow_down),
+
+      // Array list of items
+      items: items.map((String items) {
+        return DropdownMenuItem(
+          value: items,
+          child: Text(items),
+        );
+      }).toList(),
+      // After selecting the desired option,it will
+      // change button value to selected value
+      onChanged: (String? newValue) {
+        provider.userDropDownValue = newValue!;
+
+        setState(() {
+          provider.userDropDownValue = newValue;
+        });
+      },
     );
   }
 }

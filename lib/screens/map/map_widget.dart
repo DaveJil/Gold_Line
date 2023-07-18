@@ -208,7 +208,6 @@ class _MapScreenState extends State<MapScreen> {
                   mapType: MapType.normal,
                   compassEnabled: true,
                   rotateGesturesEnabled: true,
-                  // markers: mapProvider.markers,
                   onCameraMove: mapProvider.onCameraMove,
                   polylines: mapProvider.poly,
                   markers: mapProvider.markers),

@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gold_line/goldline.dart';
 import 'package:gold_line/utility/providers/get_list_provider.dart';
 import 'package:gold_line/utility/providers/map_provider.dart';
@@ -13,10 +14,8 @@ import 'package:once/once.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
-import 'utility/providers/user_profile_provider.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print('Handling a background message ${message.messageId}');
 }
 
 Future<void> main() async {
@@ -24,9 +23,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  print("init");
-  // Process.runSync('flutter', ['run', '--size=256m']);
-
 
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -53,8 +49,16 @@ Future<void> main() async {
     sound: true,
   );
 
-
-  runApp(const MyApp());
+  runApp(ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return const MaterialApp(
+          home: MyApp(),
+          debugShowCheckedModeBanner: false,
+        );}
+  ));
 }
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -62,8 +66,6 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'High Importance Notifications', // title
   importance: Importance.high,
 );
-// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-//     FlutterLocalNotificationsPlugin();
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -76,7 +78,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     // TODO: implement initState
-    print("init");
+    //////print("init");
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       OnceWidget.showOnEveryNewVersion(builder: () {
@@ -96,10 +98,6 @@ class _MyAppState extends State<MyApp> {
         }),
         ChangeNotifierProvider<UserProvider>(create: (BuildContext context) {
           return UserProvider.initialize();
-        }),
-        ChangeNotifierProvider<UserProfileProvider>(
-            create: (BuildContext context) {
-          return UserProfileProvider(context: context);
         }),
         ChangeNotifierProvider<GetListProvider>(create: (BuildContext context) {
           return GetListProvider();

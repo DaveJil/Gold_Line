@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:gold_line/screens/request_delivery/delivery_request_type/request_delivery_type.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 
@@ -82,7 +83,7 @@ class _HomeContainerState extends State<HomeContainer> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => const DeliveryDetails()));
+                                builder: (_) => const RequestDeliveryType()));
                       },
                       icon: Icon(
                         Icons.add_circle,

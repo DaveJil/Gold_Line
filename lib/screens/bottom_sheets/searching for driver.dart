@@ -62,20 +62,8 @@ class _SearchingForDriverSheetState extends State<SearchingForDriverSheet> {
                     SizedBox(
                       height: getHeight(10, context),
                     ),
-                    Text(
-                      "Delivery Created",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        color: kPrimaryGoldColor,
-                      ),
-                    ),
-                    SizedBox(
-                      height: getHeight(4, context),
-                    ),
-                    Text(
-                      "Successfully...",
+                    AutoSizeText(
+                      "Delivery Created Successfully..",
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 24,
@@ -96,10 +84,10 @@ class _SearchingForDriverSheetState extends State<SearchingForDriverSheet> {
                       height: 10.appHeight(context),
                     ),
                     const Center(
-                      child: AutoSizeText(
-                        "You can check your delivery status as well as see the\ndetails of the rider by going to My Deliveries",
+                      child: Text(
+                        "A Rider/Driver will PICKUP within the hour.\nYou will be notified when the rider/driver is assigned to pick up\nCheck My Deliveries Page for delivery status and details of the rider/driver. \nOR Call 0813 896 9994 for Support",
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w400),
+                            fontSize: 16, fontWeight: FontWeight.w400),
                       ),
                     ),
                     SizedBox(

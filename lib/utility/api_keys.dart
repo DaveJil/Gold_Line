@@ -1,0 +1,2 @@
+String paystackSecretKey = "sk_live_23060c403f86f417f3d2cca769237dead4f0b2ac";
+String paystackPublicKey = "pk_live_3357a59b1c748ab61e4798916013271d7ebe6a68";

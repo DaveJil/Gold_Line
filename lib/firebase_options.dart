@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyANZT43ptN8jblMQE2qRC9UOn2R2W7pmGM',
-    appId: '1:311325913216:android:92ad2c11ff72f737bab665',
+    appId: '1:311325913216:android:46e358bc7d32db50bab665',
     messagingSenderId: '311325913216',
     projectId: 'goldline-79ccc',
     storageBucket: 'goldline-79ccc.appspot.com',
@@ -63,23 +63,21 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAOhpilyrt0rMoju3li0HoUwecIz2bRG88',
-    appId: '1:311325913216:ios:71f2ed204ee8ae2ebab665',
+    appId: '1:311325913216:ios:97dbc21abf2e359cbab665',
     messagingSenderId: '311325913216',
     projectId: 'goldline-79ccc',
     storageBucket: 'goldline-79ccc.appspot.com',
-    iosClientId:
-        '311325913216-nvtlanjpnk5l3sejbh5fbg01li9c7a95.apps.googleusercontent.com',
+    iosClientId: '311325913216-3cpgemff4vq10adjd4oqolk6umnvt9t5.apps.googleusercontent.com',
     iosBundleId: 'com.imotionnigeria.goldline',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyAOhpilyrt0rMoju3li0HoUwecIz2bRG88',
-    appId: '1:311325913216:ios:71f2ed204ee8ae2ebab665',
+    appId: '1:311325913216:ios:97dbc21abf2e359cbab665',
     messagingSenderId: '311325913216',
     projectId: 'goldline-79ccc',
     storageBucket: 'goldline-79ccc.appspot.com',
-    iosClientId:
-        '311325913216-nvtlanjpnk5l3sejbh5fbg01li9c7a95.apps.googleusercontent.com',
+    iosClientId: '311325913216-3cpgemff4vq10adjd4oqolk6umnvt9t5.apps.googleusercontent.com',
     iosBundleId: 'com.imotionnigeria.goldline',
   );
 }

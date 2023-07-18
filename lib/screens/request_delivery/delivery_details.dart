@@ -72,168 +72,161 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  "Specify Delivery Details",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      fontSize: 16,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "Specify Delivery Details",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: kPrimaryGoldColor),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              CustomDeliveryTextField(
+                hint: "Sender Name",
+                icon: const Icon(Icons.person),
+                controller: senderName,
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              CustomDeliveryTextField(
+                hint: "Sender Phone Number",
+                icon: const Icon(Icons.phone),
+                controller: senderPhone,
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              CustomDeliveryTextField(
+                hint: "Receiver Name",
+                icon: const Icon(Icons.person),
+                controller: receiverName,
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              CustomDeliveryTextField(
+                hint: "Receiver Mobile Number",
+                icon: const Icon(Icons.phone),
+                controller: receiverPhone,
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              CustomDeliveryTextField(
+                hint: "Package Description",
+                icon: const Icon(Icons.description),
+                controller: description,
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              CustomDeliveryTextField(
+                hint: "Special Instruction",
+                icon: const Icon(Icons.question_mark),
+                controller: instruction,
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              const BuildCheckBox(),
+              SizedBox(
+                height: getHeight(20, context),
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Size Of Item:",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: getHeight(20, context),
                       fontWeight: FontWeight.bold,
-                      color: kPrimaryGoldColor),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomDeliveryTextField(
-                  hint: "Sender Name",
-                  icon: const Icon(Icons.person),
-                  controller: senderName,
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                CustomDeliveryTextField(
-                  hint: "Sender Phone Number",
-                  icon: const Icon(Icons.phone),
-                  controller: senderPhone,
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                CustomDeliveryTextField(
-                  hint: "Receiver Name",
-                  icon: const Icon(Icons.person),
-                  controller: receiverName,
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                CustomDeliveryTextField(
-                  hint: "Receiver Mobile Number",
-                  icon: const Icon(Icons.phone),
-                  controller: receiverPhone,
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                CustomDeliveryTextField(
-                  hint: "Package Description",
-                  icon: const Icon(Icons.description),
-                  controller: description,
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                CustomDeliveryTextField(
-                  hint: "Special Instruction",
-                  icon: const Icon(Icons.question_mark),
-                  controller: instruction,
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                const BuildCheckBox(),
-                SizedBox(
-                  height: getHeight(20, context),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "Size Of Item:",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontSize: getHeight(20, context),
-                        fontWeight: FontWeight.bold,
-                      ),
                     ),
-                    SizedBox(width: getWidth(5, context)),
-                    Expanded(
-                      child: Divider(
-                        color: Colors.grey[600],
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: getHeight(20, context),
-                ),
-                const BuildItemSize(),
-                SizedBox(
-                  height: getHeight(20, context),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "Delivery Options:",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontSize: getHeight(20, context),
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  SizedBox(width: getWidth(5, context)),
+                  Expanded(
+                    child: Divider(
+                      color: Colors.grey[600],
                     ),
-                    const SizedBox(width: 5),
-                    Expanded(
-                      child: Divider(
-                        color: Colors.grey[600],
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: getHeight(20, context),
-                ),
-                Row(
-                  children: [
-                    Expanded(child: DeliveryOption()),
-                    SizedBox(
-                      width: getWidth(20, context),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: getHeight(20, context),
+              ),
+              const BuildItemSize(),
+              SizedBox(
+                height: getHeight(20, context),
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Delivery Options:",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: getHeight(20, context),
+                      fontWeight: FontWeight.bold,
                     ),
-                    Expanded(child: SelectCity())
-                  ],
-                ),
-                SizedBox(
-                  height: getHeight(20, context),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "Payment Options:",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontSize: getHeight(20, context),
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  const SizedBox(width: 5),
+                  Expanded(
+                    child: Divider(
+                      color: Colors.grey[600],
                     ),
-                    SizedBox(width: getWidth(5, context)),
-                    Expanded(
-                      child: Divider(
-                        color: Colors.grey[600],
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: getHeight(14, context),
-                ),
-                PayerRadioButton(),
-                SizedBox(height: size.width / 15),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 50.appWidth(context)),
-                  child: CustomButton(
-                      onPressed: () {
-                        changeScreen(context, SelectLocationScreen());
-                      },
-                      text: "Set Delivery Location"),
-                )
-              ],
-            ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: getHeight(20, context),
+              ),
+              DeliveryOption(),
+              SizedBox(
+                height: getHeight(20, context),
+              ),
+              SelectCity(),
+              SizedBox(
+                height: getHeight(20, context),
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Payment Options:",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: getHeight(20, context),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: getWidth(5, context)),
+                  Expanded(
+                    child: Divider(
+                      color: Colors.grey[600],
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: getHeight(14, context),
+              ),
+              PayerRadioButton(),
+              SizedBox(height: size.width / 15),
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: 50.appWidth(context)),
+                child: CustomButton(
+                    onPressed: () {
+                      changeScreen(context, SelectLocationScreen());
+                    },
+                    text: "Set Delivery Location"),
+              )
+            ],
           ),
         ),
       ),
@@ -280,7 +273,7 @@ class _BuildCheckBoxState extends State<BuildCheckBox> {
                 provider.isExpress = value!;
               });
               // provider.isExpress = value!;
-              print(provider.isExpress);
+              //print(provider.isExpress);
             })
       ],
     );
@@ -295,14 +288,12 @@ class BuildItemSize extends StatefulWidget {
 }
 
 class _BuildItemSizeState extends State<BuildItemSize> {
-  List size = [  "none", "small", "medium", "large"
-  ];
+  List size = ["none", "small", "medium", "large"];
 
   // String? provider.sizeColor;
 
   @override
   Widget build(BuildContext context) {
-
     // final provider = Provider.of<MapProvider>(context);
     final provider = context.watch<MapProvider>();
     return SizedBox(
@@ -314,14 +305,13 @@ class _BuildItemSizeState extends State<BuildItemSize> {
               onPressed: () {
                 setState(() {
                   provider.sizeColor = "small";
-                  print(provider.sizeColor);
-
+                  //print(provider.sizeColor);
                 });
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: provider.sizeColor == "small"
                       ? kPrimaryGoldColor
-                      :kVistaWhite,
+                      : kVistaWhite,
                   // provider.packageSize == PackageSize.medium? MaterialStateProperty.all<Color>(Colors.blue):kVistaWhite,
                   elevation: 10),
               child: SizedBox(
@@ -357,14 +347,13 @@ class _BuildItemSizeState extends State<BuildItemSize> {
               onPressed: () {
                 setState(() {
                   provider.sizeColor = "medium";
-                  print(provider.sizeColor);
-
+                  //print(provider.sizeColor);
                 });
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: provider.sizeColor == "medium"
                       ? kPrimaryGoldColor
-                      :kVistaWhite,
+                      : kVistaWhite,
                   // provider.packageSize == PackageSize.medium? MaterialStateProperty.all<Color>(Colors.blue):kVistaWhite,
                   elevation: 10),
               child: SizedBox(
@@ -400,14 +389,13 @@ class _BuildItemSizeState extends State<BuildItemSize> {
               onPressed: () {
                 setState(() {
                   provider.sizeColor = "large";
-                  print(provider.sizeColor);
-
+                  //print(provider.sizeColor);
                 });
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: provider.sizeColor == "large"
                       ? kPrimaryGoldColor
-                      :kVistaWhite,
+                      : kVistaWhite,
                   elevation: 10),
               child: SizedBox(
                 height: getHeight(70, context),
@@ -453,7 +441,7 @@ class _PayerRadioButtonState extends State<PayerRadioButton> {
     "receiver",
   ];
 
-  // String? select;
+  String? select;
   // int btnValue;
   // String title;
   @override
@@ -499,12 +487,12 @@ class _PayerRadioButtonState extends State<PayerRadioButton> {
             value: payer[btnValue],
             groupValue: mapProvider.whoFuckingPays,
             onChanged: (value) async {
-              mapProvider.whoFuckingPays = value;
-
               setState(() {
-                print(value);
+                //print(value);
                 mapProvider.whoFuckingPays = value;
               });
+              mapProvider.whoFuckingPays = value;
+
             },
           ),
         ),
@@ -542,6 +530,7 @@ class _DeliveryOptionState extends State<DeliveryOption> {
       'Select Delivery Type',
       'Dispatch Bike',
       'Interstate Courier',
+      'International'
     ];
 
     return DropdownButton<String>(

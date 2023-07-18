@@ -9,6 +9,43 @@
       "client_info": {
         "mobilesdk_app_id": "1:311325913216:android:92ad2c11ff72f737bab665",
         "android_client_info": {
+          "package_name": "com.example.gold_line"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "311325913216-c85oifvbruuqal82qn4hutn5n6uqkbei.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANZT43ptN8jblMQE2qRC9UOn2R2W7pmGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "311325913216-c85oifvbruuqal82qn4hutn5n6uqkbei.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "311325913216-3cpgemff4vq10adjd4oqolk6umnvt9t5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.imotionnigeria.goldline",
+                "app_store_id": "6447006037"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311325913216:android:46e358bc7d32db50bab665",
+        "android_client_info": {
           "package_name": "com.imotionnigeria.goldline"
         }
       },
@@ -29,6 +66,51 @@
             {
               "client_id": "311325913216-c85oifvbruuqal82qn4hutn5n6uqkbei.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "311325913216-3cpgemff4vq10adjd4oqolk6umnvt9t5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.imotionnigeria.goldline",
+                "app_store_id": "6447006037"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311325913216:android:ff19a58ff8b2b04bbab665",
+        "android_client_info": {
+          "package_name": "com.imotionnigeria.goldlinedriver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "311325913216-c85oifvbruuqal82qn4hutn5n6uqkbei.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANZT43ptN8jblMQE2qRC9UOn2R2W7pmGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "311325913216-c85oifvbruuqal82qn4hutn5n6uqkbei.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "311325913216-3cpgemff4vq10adjd4oqolk6umnvt9t5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.imotionnigeria.goldline",
+                "app_store_id": "6447006037"
+              }
             }
           ]
         }

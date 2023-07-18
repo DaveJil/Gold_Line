@@ -80,33 +80,7 @@ class Settings extends StatelessWidget {
             ),
             SizedBox(
               height: getHeight(35, context),
-            ),
-            ListTile(
-              leading: SvgPicture.asset("assets/refferals.svg"),
-              title: const Text("Contact Support"),
-              subtitle: const Text("Have an issues, contact support"),
-              trailing: const Icon(
-                Icons.arrow_circle_right_sharp,
-                color: kPrimaryGoldColor,
-              ),
-              onTap: () {
-                final snackBar = SnackBar(
-                  elevation: 0,
-                  behavior: SnackBarBehavior.floating,
-                  backgroundColor: Colors.transparent,
-                  content: AwesomeSnackbarContent(
-                    title: "Coming soon",
-                    message: "You will soon be able to contact support",
-                    contentType: ContentType.help,
-                  ),
-                );
-                ScaffoldMessenger.of(context)
-                  ..hideCurrentSnackBar()
-                  ..showSnackBar(snackBar);
-              },
-            ),
-            SizedBox(
-              height: getHeight(35, context),
+
             ),
           ],
         )),

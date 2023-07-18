@@ -74,3 +74,22 @@ String getFormattedDate(String timestamp) {
     return "";
   }
 }
+InputDecoration GoldlineInputDeco = InputDecoration(
+  prefixIconColor: Colors.black54,
+  isDense: true,
+
+  // fillColor: const Color.fromARGB(255, 205, 226, 243).withOpacity(0.4),
+  fillColor: Colors.grey[200],
+  filled: true,
+
+  contentPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+  border: OutlineInputBorder(
+    borderSide: BorderSide.none,
+    borderRadius: BorderRadius.circular(10.0),
+  ),
+  focusedBorder: const OutlineInputBorder(
+    borderSide: BorderSide(color: kPrimaryGoldColor, width: 1.0),
+  ),
+  labelStyle: labelTextStyles,
+  hintStyle: hintTextStyles,
+);

@@ -1,11 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gold_line/screens/my_deliveries/select_type.dart';
-import 'package:gold_line/screens/profile/profile.dart';
 import 'package:gold_line/screens/profile/settings_page.dart';
-import 'package:gold_line/screens/profile/wallet.dart';
+import 'package:gold_line/screens/profile/supportScreen.dart';
+import 'package:gold_line/screens/profile/wallet/wallet.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/custom_button.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
@@ -77,7 +76,7 @@ class _MainMenuState extends State<MainMenu> {
               } else if (snapshot.hasData) {
                 // Extracting data from snapshot object
                 final datum = snapshot.data;
-                print(datum);
+                //print(datum);
                 return Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: SingleChildScrollView(
@@ -112,8 +111,8 @@ class _MainMenuState extends State<MainMenu> {
                                     } else if (snapshot.hasData) {
                                       // Extracting data from snapshot object
                                       final datum = snapshot.data;
-                                      print(datum!.avatar);
-                                      print(datum);
+                                      //print(datum!.avatar);
+                                      //print(datum);
                                       return Container(
                                         padding: EdgeInsets.all(16),
                                         height: getHeight(150, context),
@@ -166,13 +165,9 @@ class _MainMenuState extends State<MainMenu> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => const UserProfileScreen()));
                         },
                         child: Text(
-                          datum!.firstName! + " " + datum.lastName!,
+                          "${datum!.firstName!} ${datum.lastName!}",
                           style: TextStyle(
                             decoration: TextDecoration.underline,
                             color: Colors.grey,
@@ -209,7 +204,7 @@ class _MainMenuState extends State<MainMenu> {
                             width: getWidth(10, context),
                           ),
                           Text(
-                            'Agent',
+                            datum.appRole ?? "Agent",
                             style: TextStyle(
                               decoration: TextDecoration.none,
                               color: Colors.grey,
@@ -287,6 +282,8 @@ class _MainMenuState extends State<MainMenu> {
                       SizedBox(
                         height: getHeight(20, context),
                       ),
+
+
                       ListTile(
                         leading: SizedBox(
                           height: getHeight(60, context),
@@ -330,8 +327,8 @@ class _MainMenuState extends State<MainMenu> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => ReferralPage(
-                                        uuid: datum!.uuid!,
-                                      )));
+                                    uuid: datum.uuid!,
+                                  )));
                         },
                       ),
                       SizedBox(
@@ -344,13 +341,13 @@ class _MainMenuState extends State<MainMenu> {
                           child: SvgPicture.asset("assets/my coupons.svg"),
                         ),
                         title: Text(
-                          "My Coupons",
+                          "Support",
                           style: TextStyle(
                               fontSize: getHeight(20, context),
                               fontWeight: FontWeight.w700),
                         ),
                         subtitle: Text(
-                          "View all your discounted offers",
+                          "Contact Goldline Support Team",
                           style: TextStyle(
                               fontSize: getHeight(16, context),
                               fontWeight: FontWeight.w400),
@@ -361,20 +358,7 @@ class _MainMenuState extends State<MainMenu> {
                           size: getHeight(20, context),
                         ),
                         onTap: () {
-                          final snackBar = SnackBar(
-                            elevation: 0,
-                            behavior: SnackBarBehavior.floating,
-                            backgroundColor: Colors.transparent,
-                            content: AwesomeSnackbarContent(
-                              title: "Coming soon",
-                              message:
-                                  "Coupons for discounts and promos would be available on the next update",
-                              contentType: ContentType.help,
-                            ),
-                          );
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(snackBar);
+                          changeScreen(context, const SupportScreen());
                         },
                       ),
                       SizedBox(
@@ -410,12 +394,25 @@ class _MainMenuState extends State<MainMenu> {
                       SizedBox(
                         height: getHeight(20, context),
                       ),
-                      CustomButton(
-                        width: MediaQuery.of(context).size.width / 3,
-                        onPressed: () {
-                          userProvider.signOut(context);
-                        },
-                        text: 'Log Out',
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CustomButton(
+                            onPressed: () {
+                              userProvider.signOut(context);
+                            },
+                            text: 'Log Out',
+                          ),
+                          SizedBox(width: 10,),
+                          CustomButton(
+                            color: Colors.redAccent,
+                            onPressed: () {
+                              userProvider.deleteAccount(context);
+                            },
+                            text: 'Delete Account',
+                          ),
+                        ],
                       ),
                     ],
                   )),

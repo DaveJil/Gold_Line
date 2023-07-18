@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gold_line/screens/authentication/sign_up.dart';
 import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +42,7 @@ class KycInfoState extends State<KycInfo> {
                       ),
                     ),
                     const Text(
-                      'Fill in your details',
+                      'Update your Info',
                       style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -53,49 +54,22 @@ class KycInfoState extends State<KycInfo> {
                   height: getHeight(20, context),
                 ),
                 const Text(
-                  'Kindly fill in your Information below.',
+                  'You can edit your Information here.',
                   style: TextStyle(color: kPrimaryGoldColor, fontSize: 18),
                 ),
                 SizedBox(
                   height: getHeight(40, context),
                 ),
-                Stack(children: [
-                  Container(
-                    height: getHeight(150, context),
-                    width: getHeight(136, context),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.grey,
-                      border: Border.all(
-                        width: 1.appWidth(context),
-                        style: BorderStyle.solid,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 7.23,
-                    bottom: 0,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.amber,
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.camera_enhance_rounded,
-                            color: Colors.white,
-                            size: getHeight(16, context),
-                          )),
-                    ),
-                  ),
-                ]),
-                SizedBox(
-                  height: getHeight(15, context),
-                ),
-                Text(
-                  'Click to Upload Profile Image',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Colors.black,
-                    fontSize: getHeight(16, context),
+
+                Padding(
+                  padding:
+                  EdgeInsets.symmetric(horizontal: getWidth(30, context)),
+                  child: TextField(
+                    controller: userProvider.email,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Email',
+                        hintText: 'Enter your email'),
                   ),
                 ),
                 SizedBox(
@@ -105,25 +79,11 @@ class KycInfoState extends State<KycInfo> {
                   padding:
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
                   child: TextField(
-                    controller: userProvider.otherName,
+                    controller: userProvider.phone,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: 'Other Name',
-                        hintText: 'Enter your Other/Middle Name'),
-                  ),
-                ),
-                SizedBox(
-                  height: getHeight(20, context),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: TextField(
-                    controller: userProvider.gender,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Gender',
-                        hintText: 'Are you Male or Female?'),
+                        labelText: 'Phone',
+                        hintText: 'Enter Phone'),
                   ),
                 ),
                 SizedBox(
@@ -144,37 +104,6 @@ class KycInfoState extends State<KycInfo> {
                 SizedBox(
                   height: getHeight(20, context),
                 ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: TextField(
-                    controller: userProvider.userLGA,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Enter your LGA',
-                        hintText: 'Enter your Residental LGA'),
-                  ),
-                ),
-                SizedBox(
-                  height: getHeight(20, context),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: getWidth(30, context)),
-                  child: TextField(
-                    controller: userProvider.userState,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Enter your State',
-                        hintText: 'Enter your Residental State'),
-                  ),
-                ),
-                SizedBox(
-                  height: getHeight(20, context),
-                ),
-                SizedBox(
-                  height: getHeight(30, context),
-                ),
                 Container(
                   height: getHeight(50, context),
                   width: getWidth(250, context),
@@ -182,8 +111,8 @@ class KycInfoState extends State<KycInfo> {
                       color: kPrimaryGoldColor,
                       borderRadius: BorderRadius.circular(20)),
                   child: TextButton(
-                    onPressed: () {
-                      userProvider.updateProfile(context);
+                    onPressed: () async{
+                     await  userProvider.updateProfile(context);
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (_) => const MapWidget()));
                     },

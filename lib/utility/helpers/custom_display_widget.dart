@@ -74,6 +74,24 @@ class CustomDisplayWidget {
       ..showSnackBar(snackBar);
   }
 
+
+  static displayAwesomeNotificationSnackBar(
+      BuildContext context, String? message, String? title) {
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: title ?? "",
+        message: message ?? "",
+        contentType: ContentType.warning,
+      ),
+    );
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
+  }
+
   static displayAwesomeFailureSnackBar(
       BuildContext context, String? message, String? title) {
     final snackBar = SnackBar(

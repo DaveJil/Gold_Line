@@ -24,19 +24,19 @@ class GetListProvider extends ChangeNotifier {
     print(response);
     final result = response["data"];
     final data = result.map((e) => DeliveryModel.fromJson(e)).toList();
-    print("dat = $data");
+    //////print("dat = $data");
     return data;
   }
 
   Future checkPendingDelivery() async {
     try {
       final response =
-          await CallApi().getData('user/deliveries?status=processing');
+          await CallApi().getData('user/deliveries?status=pending');
       print(response);
       final data = response['data'];
-      print(data);
+      //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
-      print(result);
+      //print(result);
       return result;
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -51,9 +51,9 @@ class GetListProvider extends ChangeNotifier {
           await CallApi().getData('user/deliveries?status=accepted');
       print(response);
       final data = response['data'];
-      print(data);
+      //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
-      print(result);
+      //print(result);
       return result;
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -68,9 +68,9 @@ class GetListProvider extends ChangeNotifier {
           await CallApi().getData('user/deliveries?status=completed');
       print(response);
       final data = response['data'];
-      print(data);
+      //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
-      print(result);
+      //print(result);
       return result;
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -82,12 +82,12 @@ class GetListProvider extends ChangeNotifier {
   Future checkCancelledDelivery() async {
     try {
       final response =
-          await CallApi().getData('user/deliveries?status=cancelled');
+          await CallApi().getData('user/deliveries?status=canceled');
       print(response);
       final data = response['data'];
-      print(data);
+      //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
-      print(result);
+      //print(result);
       return result;
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -98,13 +98,13 @@ class GetListProvider extends ChangeNotifier {
 
   Future checkPendingInterStateDelivery() async {
     try {
-      final response = await CallApi()
-          .getData('user/interstate/deliveries?status=processing');
+      final response =
+          await CallApi().getData('user/interstate/deliveries?status=pending');
       print(response);
       final data = response['data'];
-      print(data);
+      //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
-      print(result);
+      //print(result);
       return result;
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -119,9 +119,9 @@ class GetListProvider extends ChangeNotifier {
           await CallApi().getData('user/interstate/deliveries?status=accepted');
       print(response);
       final data = response['data'];
-      print(data);
+      //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
-      print(result);
+      //print(result);
       return result;
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -136,9 +136,9 @@ class GetListProvider extends ChangeNotifier {
           .getData('user/interstate/deliveries?status=completed');
       print(response);
       final data = response['data'];
-      print(data);
+      //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
-      print(result);
+      //print(result);
       return result;
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -153,9 +153,145 @@ class GetListProvider extends ChangeNotifier {
           await CallApi().getData('user/interstate/deliveries?status=canceled');
       print(response);
       final data = response['data'];
-      print(data);
+      //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
-      print(result);
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkPendingInternationalDelivery() async {
+    try {
+      final response = await CallApi()
+          .getData('user/international/deliveries?status=pending');
+      print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkAcceptedInternationalDelivery() async {
+    try {
+      final response = await CallApi()
+          .getData('user/international/deliveries?status=accepted');
+      print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkCompletedInternationalDelivery() async {
+    try {
+      final response = await CallApi()
+          .getData('user/international/deliveries?status=completed');
+      print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkCancelledInternationalDelivery() async {
+    try {
+      final response = await CallApi()
+          .getData('user/international/deliveries?status=canceled');
+      print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkPendingVansDelivery() async {
+    try {
+      final response =
+          await CallApi().getData('user/cargo/deliveries?status=pending');
+      print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkAcceptedVansStateDelivery() async {
+    try {
+      final response =
+          await CallApi().getData('user/cargo/deliveries?status=processing');
+      print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkCompletedVansStateDelivery() async {
+    try {
+      final response =
+          await CallApi().getData('user/cargo/deliveries?status=completed');
+      print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkCancelledVansStateDelivery() async {
+    try {
+      final response =
+          await CallApi().getData('user/cargo/deliveries?status=canceled');
+      print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      //print(result);
       return result;
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -174,7 +310,7 @@ class GetListProvider extends ChangeNotifier {
 
     try {
       var response = await CallApi().postData(request, 'user/delivery/cancel');
-      print(response);
+      //print(response);
       String code = response['code'];
       String message = response['message'];
       CustomDisplayWidget.displayAwesomeSuccessSnackBar(context, code, message);
@@ -196,7 +332,7 @@ class GetListProvider extends ChangeNotifier {
       final response =
           await CallApi().postData("", 'user/delivery/start/$deliveryIde');
       String message = response["message"];
-      print(message);
+      //print(message);
       Navigator.pop(context);
       checkPendingDelivery();
 
@@ -242,7 +378,7 @@ class GetListProvider extends ChangeNotifier {
       }
     } catch (e) {
       const SnackBar(content: AlertDialog());
-      print(e);
+      //print(e);
     }
     notifyListeners();
   }
