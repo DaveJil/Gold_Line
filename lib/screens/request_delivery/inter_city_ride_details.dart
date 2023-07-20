@@ -1,9 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gold_line/screens/request_delivery/select_location.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/controllers.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
+import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:provider/provider.dart';
 
 import '../../utility/helpers/custom_button.dart';
@@ -18,7 +20,6 @@ class InterCityRideDetails extends StatefulWidget {
 }
 
 class _InterCityRideDetailsState extends State<InterCityRideDetails> {
-
   @override
   Widget build(BuildContext context) {
     final MapProvider mapProvider = Provider.of<MapProvider>(context);
@@ -39,7 +40,9 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
         title: const Text(
           "Booking Details",
           style: TextStyle(
-              color: kPrimaryGoldColor, fontSize: 16, fontWeight: FontWeight.w500),
+              color: kPrimaryGoldColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w500),
         ),
         centerTitle: false,
       ),
@@ -77,10 +80,7 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
             const SizedBox(
               height: 12,
             ),
-
-
             CustomDeliveryTextField(
-
               hint: "How many seats are you booking?",
               icon: const Icon(FontAwesomeIcons.chair),
               controller: interCityBookingNumberOfSeats,
@@ -88,40 +88,39 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
             const SizedBox(
               height: 12,
             ),
-
             const SizedBox(
               height: 12,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ElevatedButton(onPressed: () {
-                  mapProvider.selectDate(context);
-                },
-                    style: ElevatedButton.styleFrom(backgroundColor: kPrimaryGoldColor),
-                    child: Text(
-                    mapProvider.selectedBookingDate.toString()
-                )),
-
-                ElevatedButton(onPressed: () {
-                  mapProvider.selectTime(context);
-                },
-                    style: ElevatedButton.styleFrom(backgroundColor: kPrimaryGoldColor),
-
-                    child: Text(
-                    mapProvider.selectedBookingTime.toString()
-                )),
+                ElevatedButton(
+                    onPressed: () {
+                      mapProvider.selectDate(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: kPrimaryGoldColor),
+                    child: Text(mapProvider.selectedBookingDate.toString())),
+                ElevatedButton(
+                    onPressed: () {
+                      mapProvider.selectTime(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: kPrimaryGoldColor),
+                    child: Text(mapProvider.selectedBookingTime.toString())),
               ],
             ),
             SizedBox(
               height: 20.appHeight(context),
             ),
             Padding(
-              padding:
-              EdgeInsets.symmetric(horizontal: 50.appWidth(context)),
+              padding: EdgeInsets.symmetric(horizontal: 50.appWidth(context)),
               child: CustomButton(
-                  onPressed: () async{},
-                  text: "Proceed"),
+                  onPressed: () async {
+                    changeScreen(
+                        context, SelectLocationScreen(deliveryType: "RIDE"));
+                  },
+                  text: "Select Location"),
             )
           ],
         ),
@@ -183,29 +182,23 @@ class _SelectVehicleState extends State<SelectVehicle> {
       "Taraba",
       "Yobe",
       "Zamfara"
-
-
     ];
 
     return Container(
-
-      height: MediaQuery.of(context).size.height /18,
+      height: MediaQuery.of(context).size.height / 18,
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-          horizontal: 15, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
       decoration: BoxDecoration(
         border: Border.all(
           width: 2.0,
           // color: const Color.fromARGB(255, 205, 226, 243),
-          color: const Color.fromARGB(255, 117, 117, 117)
-              .withOpacity(0.4),
+          color: const Color.fromARGB(255, 117, 117, 117).withOpacity(0.4),
         ),
         borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
       ),
       child: DropdownButton<String>(
-
         focusColor: kPrimaryGoldColor.withOpacity(0.6),
         dropdownColor: Colors.white70,
         isExpanded: true,
@@ -236,8 +229,6 @@ class _SelectVehicleState extends State<SelectVehicle> {
     );
   }
 }
-
-
 
 class SelectRoute extends StatefulWidget {
   const SelectRoute({Key? key}) : super(key: key);
@@ -292,29 +283,23 @@ class _SelectRouteState extends State<SelectRoute> {
       "Taraba",
       "Yobe",
       "Zamfara"
-
-
     ];
 
     return Container(
-
-      height: MediaQuery.of(context).size.height /18,
+      height: MediaQuery.of(context).size.height / 18,
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-          horizontal: 15, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
       decoration: BoxDecoration(
         border: Border.all(
           width: 2.0,
           // color: const Color.fromARGB(255, 205, 226, 243),
-          color: const Color.fromARGB(255, 117, 117, 117)
-              .withOpacity(0.4),
+          color: const Color.fromARGB(255, 117, 117, 117).withOpacity(0.4),
         ),
         borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
       ),
       child: DropdownButton<String>(
-
         focusColor: kPrimaryGoldColor.withOpacity(0.6),
         dropdownColor: Colors.white70,
         isExpanded: true,
@@ -345,7 +330,6 @@ class _SelectRouteState extends State<SelectRoute> {
     );
   }
 }
-
 
 class BuildItemSize extends StatefulWidget {
   const BuildItemSize({Key? key}) : super(key: key);
@@ -547,9 +531,9 @@ class _BookingTypeRadioButtonState extends State<BookingTypeRadioButton> {
               borderRadius: const BorderRadius.all(Radius.circular(3))),
           child: Radio<String>(
             fillColor: MaterialStateColor.resolveWith((states) =>
-            mapProvider.interCityBookingType == bookingType[btnValue]
-                ? kPrimaryGoldColor
-                : Colors.white),
+                mapProvider.interCityBookingType == bookingType[btnValue]
+                    ? kPrimaryGoldColor
+                    : Colors.white),
             activeColor: Theme.of(context).primaryColor,
             value: bookingType[btnValue],
             groupValue: mapProvider.interCityBookingType,
@@ -559,7 +543,6 @@ class _BookingTypeRadioButtonState extends State<BookingTypeRadioButton> {
                 mapProvider.interCityBookingType = value;
               });
               mapProvider.interCityBookingType = value;
-
             },
           ),
         ),
@@ -578,4 +561,3 @@ class _BookingTypeRadioButtonState extends State<BookingTypeRadioButton> {
     );
   }
 }
-

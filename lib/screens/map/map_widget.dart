@@ -4,6 +4,7 @@ import 'package:gold_line/screens/bottom_sheets/order_status.dart';
 import 'package:gold_line/screens/bottom_sheets/searching%20for%20driver.dart';
 import 'package:gold_line/screens/map/widgets/driver_found.dart';
 import 'package:gold_line/screens/map/widgets/home_container.dart';
+import 'package:gold_line/screens/map/widgets/inter_city_ride_checkout.dart';
 import 'package:gold_line/screens/payment_screen/cash_payment%20screen.dart';
 import 'package:gold_line/screens/payment_screen/flutterwave_ui_payment.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
@@ -150,6 +151,9 @@ class _MapWidgetState extends State<MapWidget> {
               Visibility(
                   visible: mapProvider.show == Show.CHECKOUT_DELIVERY,
                   child: DeliverySummaryWidget()),
+              Visibility(
+                  visible: mapProvider.show == Show.CHECKOUT_INTERCITY_RIDE,
+                  child: InterCityRideSummaryWidget()),
 
               Visibility(
                   visible: mapProvider.show == Show.SEARCHING_FOR_DRIVER,

@@ -14,7 +14,8 @@ import 'package:provider/provider.dart';
 import '../../utility/helpers/controllers.dart';
 
 class SelectLocationScreen extends StatefulWidget {
-  const SelectLocationScreen({super.key});
+  final String deliveryType;
+  const SelectLocationScreen({super.key, required this.deliveryType});
 
   @override
   SelectLocationScreenState createState() => SelectLocationScreenState();
@@ -118,7 +119,9 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                         mapProvider.pickUpState =
                             await mapProvider.getStateFromCoordinates(
                                 point: mapProvider.center!);
-                        mapProvider.pickUpCountry = await mapProvider.getCountryFromCoordinates(point: mapProvider.center!);
+                        mapProvider.pickUpCountry =
+                            await mapProvider.getCountryFromCoordinates(
+                                point: mapProvider.center!);
                         setState(() {
                           mapProvider.predictions = [];
                           pickUpLocationController.text =
@@ -210,7 +213,9 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                             mapProvider.pickUpState =
                                 await mapProvider.getStateFromCoordinates(
                                     point: mapProvider.pickUpLatLng!);
-                            mapProvider.pickUpCountry = await mapProvider.getCountryFromCoordinates(point: mapProvider.pickUpLatLng!);
+                            mapProvider.pickUpCountry =
+                                await mapProvider.getCountryFromCoordinates(
+                                    point: mapProvider.pickUpLatLng!);
                             //print(mapProvider.pickUpState);
                           } else if (mapProvider.endFocusNode.hasFocus) {
                             setState(() {
@@ -233,7 +238,9 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                             mapProvider.dropOffState =
                                 await mapProvider.getStateFromCoordinates(
                                     point: mapProvider.dropOffLatLng!);
-                            mapProvider.dropOffCountry = await mapProvider.getCountryFromCoordinates(point: mapProvider.dropOffLatLng!);
+                            mapProvider.dropOffCountry =
+                                await mapProvider.getCountryFromCoordinates(
+                                    point: mapProvider.dropOffLatLng!);
 
                             setState(() {
                               dropOffLocationController.text =
@@ -274,7 +281,9 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                         mapProvider.dropOffState =
                             await mapProvider.getStateFromCoordinates(
                                 point: mapProvider.center!);
-                        mapProvider.dropOffCountry = await mapProvider.getCountryFromCoordinates(point: mapProvider.center!);
+                        mapProvider.dropOffCountry =
+                            await mapProvider.getCountryFromCoordinates(
+                                point: mapProvider.center!);
                         setState(() {
                           mapProvider.predictions = [];
                           dropOffLocationController.text =
@@ -306,13 +315,23 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                 ),
                 child: TextButton(
                     onPressed: () async {
-                      await mapProvider.createDeliveryRequest(context);
-                      await mapProvider.processDelivery(context);
-                      ////print('navigate');
-                      mapProvider.changeWidgetShowed(
-                          showWidget: Show.CHECKOUT_DELIVERY);
+                      if (widget.deliveryType == "DELIVERY") {
+                        await mapProvider.createDeliveryRequest(context);
+                        await mapProvider.processDelivery(context);
+                        ////print('navigate');
+                        mapProvider.changeWidgetShowed(
+                            showWidget: Show.CHECKOUT_DELIVERY);
 
-                      changeScreenReplacement(context, MapWidget());
+                        changeScreenReplacement(context, MapWidget());
+                      } else if (widget.deliveryType == "RIDE") {
+                        await mapProvider.createInterstateRideRequest(context);
+                        await mapProvider.processDelivery(context);
+                        ////print('navigate');
+                        mapProvider.changeWidgetShowed(
+                            showWidget: Show.CHECKOUT_DELIVERY);
+
+                        changeScreenReplacement(context, MapWidget());
+                      }
                     },
                     child: const Text(
                       'Continue',

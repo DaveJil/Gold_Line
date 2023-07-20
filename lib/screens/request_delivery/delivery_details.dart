@@ -218,11 +218,14 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
               PayerRadioButton(),
               SizedBox(height: size.width / 15),
               Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 50.appWidth(context)),
+                padding: EdgeInsets.symmetric(horizontal: 50.appWidth(context)),
                 child: CustomButton(
                     onPressed: () {
-                      changeScreen(context, SelectLocationScreen());
+                      changeScreen(
+                          context,
+                          SelectLocationScreen(
+                            deliveryType: "DELIVERY",
+                          ));
                     },
                     text: "Set Delivery Location"),
               )
@@ -492,7 +495,6 @@ class _PayerRadioButtonState extends State<PayerRadioButton> {
                 mapProvider.whoFuckingPays = value;
               });
               mapProvider.whoFuckingPays = value;
-
             },
           ),
         ),

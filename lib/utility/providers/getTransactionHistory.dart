@@ -1,19 +1,14 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/screens/payment_screen/payment_details.dart';
-import 'package:gold_line/screens/profile/wallet/deposit%20screen.dart';
 import 'package:gold_line/screens/profile/wallet/paystack_checkout.dart';
 import 'package:gold_line/screens/profile/wallet/wallet.dart';
-import 'package:gold_line/utility/api_keys.dart';
 import 'package:gold_line/utility/helpers/custom_display_widget.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:gold_line/utility/services/paystack_api.dart';
-import 'package:pay_with_paystack/pay_with_paystack.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,55 +20,6 @@ Transactions? transactions = Transactions();
 String? checkOutURL;
 String? accessCode;
 String? reference;
-// Future getTransactionHistory(BuildContext context) async {
-//   try {
-//     Future<String> getToken() async {
-//       SharedPreferences localStorage = await SharedPreferences.getInstance();
-//       var token = localStorage.getString('token');
-//       print('The token is $token');
-//       return token ?? '';
-//     }
-//
-//     Future<Map<String, String>> setHeaders() async => {
-//           'Content-type': 'application/json',
-//           'Accept': 'application/json',
-//           'Authorization': 'Bearer ${await getToken()} '
-//         };
-//     var res = await http.get(
-//         Uri.parse("https://goldline.herokuapp.com/api/wallet/transactions"),
-//         headers: await setHeaders());
-//     print(res);
-//     var data = json.decode(res.body);
-//     final result = data.map((e) => Transactions.fromJson(e)).toList();
-//
-//     print(data);
-//
-//     List processResponse(http.Response response) {
-//       var data = json.decode(response.body);
-//       switch (response.statusCode) {
-//         case 200:
-//           return data;
-//         case 409:
-//           throw AppException(message: '${data['message']}');
-//         case 412:
-//           throw AppException(message: '${data['message']}');
-//         default:
-//           return data;
-//       }
-//     }
-//
-//     print(res);
-//     var response = processResponse(res);
-//     print(response);
-//
-//     print(transactions);
-//     return result;
-//   } on SocketException {
-//     throw const SocketException('No internet connection');
-//   } catch (err) {
-//     throw Exception(err.toString());
-//   }
-// }
 
 Future getTransactionHistory() async {
   var response = await CallApi().getData('wallet/transactions');
@@ -110,9 +56,7 @@ Future getWalletBalance(BuildContext context) async {
 Future deposit(String amount, BuildContext context) async {
   SharedPreferences pref = await SharedPreferences.getInstance();
 
-
   Map<String, dynamic> request = {
-
     'amount': amount,
   };
 
@@ -122,8 +66,7 @@ Future deposit(String amount, BuildContext context) async {
     String code = response['code'];
     if (code == "success") {
       changeScreenReplacement(context, WalletScreen());
-    }
-    else{
+    } else {
       String message = response['message'];
       {
         CustomDisplayWidget.displaySnackBar(context, message);
@@ -140,9 +83,7 @@ Future deposit(String amount, BuildContext context) async {
 Future withdraw(String amount, BuildContext context) async {
   SharedPreferences pref = await SharedPreferences.getInstance();
 
-
   Map<String, dynamic> request = {
-
     'amount': amount,
   };
 
@@ -156,23 +97,18 @@ Future withdraw(String amount, BuildContext context) async {
       CustomDisplayWidget.displaySnackBar(context, message);
 
       changeScreenReplacement(context, WalletScreen());
-    }
-    else{
+    } else {
       String message = response['message'];
       String code = response['code'];
       {
         CustomDisplayWidget.displaySnackBar(context, message);
 
-      if(code == "bank-not-found"
-      )
-      {
-        await CustomDisplayWidget.displaySnackBar(context, message);
+        if (code == "bank-not-found") {
+          await CustomDisplayWidget.displaySnackBar(context, message);
 
-        changeScreenReplacement(context, PaymentDetails());
+          changeScreenReplacement(context, PaymentDetails());
+        }
       }
-      }
-
-
     }
   } on SocketException {
     throw const SocketException('No internet connection');
@@ -181,104 +117,109 @@ Future withdraw(String amount, BuildContext context) async {
   }
 }
 
-void payStackDeposit(String? amount, BuildContext context) async{
-
+void payStackDeposit(String? amount, BuildContext context) async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
   String? email = preferences.getString("email");
   int randomInt = Random().nextInt(1000);
 
   final data = {
-    "email": email?? "user$randomInt@gmail.com",
+    "email": email ?? "user$randomInt@gmail.com",
     "amount": "${amount}00"
   };
-  var response = await CallPayStackApi().postData(data, "transaction/initialize");
+  var response =
+      await CallPayStackApi().postData(data, "transaction/initialize");
   print(response);
   bool status = response['status'];
   final responseData = response['data'];
 
-  if(status == true) {
+  if (status == true) {
     checkOutURL = responseData['authorization_url'];
     accessCode = responseData['access_code'];
     reference = responseData['reference'];
     print(reference);
-    changeScreen(context, PayStackCheckOut(url: checkOutURL!, amount: amount!,));
-
+    changeScreen(
+        context,
+        PayStackCheckOut(
+          url: checkOutURL!,
+          amount: amount!,
+        ));
   }
 }
 
-void payStackDelivery(String? amount, BuildContext context) async{
-
+void payStackDelivery(String? amount, BuildContext context) async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
   String? email = preferences.getString("email");
   int randomInt = Random().nextInt(1000);
 
   final data = {
-    "email": email?? "user$randomInt@gmail.com",
+    "email": email ?? "user$randomInt@gmail.com",
     "amount": "${amount}00"
   };
-  var response = await CallPayStackApi().postData(data, "transaction/initialize");
+  var response =
+      await CallPayStackApi().postData(data, "transaction/initialize");
   print(response);
   bool status = response['status'];
   final responseData = response['data'];
 
-  if(status == true) {
+  if (status == true) {
     checkOutURL = responseData['authorization_url'];
     accessCode = responseData['access_code'];
     reference = responseData['reference'];
     print(reference);
-    changeScreen(context, PayStackCheckOut(url: checkOutURL!, amount: amount!,));
-
+    changeScreen(
+        context,
+        PayStackCheckOut(
+          url: checkOutURL!,
+          amount: amount!,
+        ));
   }
 }
 
-
-void verifyTransaction(String? amount, BuildContext context) async{
-  final response = await CallPayStackApi().getData("transaction/verify/$reference");
+void verifyTransaction(String? amount, BuildContext context) async {
+  final response =
+      await CallPayStackApi().getData("transaction/verify/$reference");
   print(response);
   String status = response['data']['status'];
-  if(status == "success") {
-
+  if (status == "success") {
     deposit(amount!, context);
-    String message =  response['data']['gateway_response'];
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
-  removeScreenUntil(context, WalletScreen());
-  }
-  else {
-    String message =  response['data']['gateway_response'];
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
-    removeScreenUntil(context,WalletScreen());
-
-  }
-  
-  reference = '';
-  accessCode = '';
-  checkOutURL = '';
-
-}
-
-void verifyDeliveryPayment(String? amount, BuildContext context) async{
-  final response = await CallPayStackApi().getData("transaction/verify/$reference");
-  print(response);
-  String status = response['data']['status'];
-  if(status == "success") {
-
-    deposit(amount!, context);
-    String message =  response['data']['gateway_response'];
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
-  final provider = Provider.of<MapProvider>(context);
-  await provider.submitCardDelivery();
-  provider.changeWidgetShowed(showWidget: Show.SEARCHING_FOR_DRIVER);
-  removeScreenUntil(context, MapWidget());
-  }
-  else {
-    String message =  response['data']['gateway_response'];
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
-    removeScreenUntil(context,WalletScreen());
-
+    String message = response['data']['gateway_response'];
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+    removeScreenUntil(context, WalletScreen());
+  } else {
+    String message = response['data']['gateway_response'];
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+    removeScreenUntil(context, WalletScreen());
   }
 
   reference = '';
   accessCode = '';
   checkOutURL = '';
+}
 
+void verifyDeliveryPayment(String? amount, BuildContext context) async {
+  final response =
+      await CallPayStackApi().getData("transaction/verify/$reference");
+  print(response);
+  String status = response['data']['status'];
+  if (status == "success") {
+    deposit(amount!, context);
+    String message = response['data']['gateway_response'];
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+    final provider = Provider.of<MapProvider>(context);
+    await provider.submitCardDelivery();
+    provider.changeWidgetShowed(showWidget: Show.SEARCHING_FOR_DRIVER);
+    removeScreenUntil(context, MapWidget());
+  } else {
+    String message = response['data']['gateway_response'];
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+    removeScreenUntil(context, WalletScreen());
+  }
+
+  reference = '';
+  accessCode = '';
+  checkOutURL = '';
 }
