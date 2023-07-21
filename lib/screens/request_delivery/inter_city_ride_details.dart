@@ -81,12 +81,29 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
               height: 12,
             ),
             CustomDeliveryTextField(
-              hint: "How many seats are you booking?",
+              hint: "How many seats are you booking(eg 1,2, 3)?",
               icon: const Icon(FontAwesomeIcons.chair),
               controller: interCityBookingNumberOfSeats,
             ),
             const SizedBox(
               height: 12,
+            ),
+            SelectVehicle(),
+            const SizedBox(
+              height: 12,
+            ),
+            BuildItemSize(),
+            const SizedBox(
+              height: 12,
+            ),
+            BookingTypeRadioButton(),
+            const SizedBox(
+              height: 12,
+            ),
+            CustomDeliveryTextField(
+              hint: "Transport Route",
+              icon: const Icon(FontAwesomeIcons.chair),
+              controller: interCityBookingTransportRoute,
             ),
             const SizedBox(
               height: 12,
@@ -143,46 +160,7 @@ class _SelectVehicleState extends State<SelectVehicle> {
     // Initial Selected Value
 
     // List of items in our dropdown menu
-    var items = [
-      'Select Vehicle',
-      'Abia',
-      'Adamawa',
-      'Akwa Ibom',
-      'Anambra',
-      'Bauchi',
-      'Bayelsa',
-      'Benue',
-      "Borno",
-      "Cross River",
-      "Delta",
-      "Ebonyi",
-      "Edo",
-      "Ekiti",
-      "Enugu",
-      "Federal Capital Territory",
-      "Gombe",
-      "Imo",
-      "Jigawa",
-      "Kaduna",
-      "Kano",
-      "Katsina",
-      "Kebbi",
-      "Kogi",
-      "Kwara",
-      "Lagos",
-      "Nasarawa",
-      "Niger",
-      "Ogun",
-      "Ondo",
-      "Osun",
-      "Oyo",
-      "Plateau",
-      "Rivers",
-      "Sokoto",
-      "Taraba",
-      "Yobe",
-      "Zamfara"
-    ];
+    var items = ['Select Vehicle', "Classic", "Business", "Executive"];
 
     return Container(
       height: MediaQuery.of(context).size.height / 18,

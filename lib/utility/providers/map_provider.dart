@@ -821,14 +821,15 @@ class MapProvider with ChangeNotifier {
     Map<String, dynamic> values = {
       "type": "interstate_transport",
       "pickup_time": dateTimeObj,
-      "seats": interCityBookingNumberOfSeats,
+      "seats": interCityBookingNumberOfSeats.text,
       "transport_type": interCityBookingType,
       "transport_vehicle_type": interCityVehicleType,
+      "transport_route": interCityBookingTransportRoute.text,
       "status": 'pending',
       "city": pickUpState,
       "state": pickUpState,
       "package_size": sizeColor,
-      "payment_by": whoFuckingPays.toString(),
+      "payment_by": "sender",
       "distance": distanceBetweenPickAndDropOff,
       "pickup_address": pickUpLocationController.text,
       "dropoff_address": dropOffLocationController.text,
@@ -841,32 +842,8 @@ class MapProvider with ChangeNotifier {
 
     try {
       if (pickUpCountry != dropOffCountry) {
-        values["country"] = pickUpCountry;
-        values["dropoff_country"] = dropOffCountry;
-        distanceBetweenPickAndDropOff = 0;
-        values['distance'] = 0;
-
-        print(pickUpCountry);
-        print(dropOffCountry);
-        print(dropOffState);
-        final response = await CallApi()
-            .postData(values, 'user/interstate-transport/delivery/new');
-        print("international delivery");
-
-        String code = response['code'];
-        if (code == "success") {
-          print("international delivery");
-
-          distanceBetweenPickAndDropOff = 0;
-          deliveryId = response['data']['id'];
-          notifyListeners();
-        } else {
-          distanceBetweenPickAndDropOff = 0;
-          String message = (response['message']).toString();
-
-          CustomDisplayWidget.displayAwesomeSuccessSnackBar(
-              context, message, "Check entered city, state");
-        }
+        CustomDisplayWidget.displayAwesomeSuccessSnackBar(context,
+            "Booking Not Created Successfully", "Check entered city, state");
       } else {
         if (pickUpState != dropOffState) {
           values["state"] = pickUpState;
@@ -890,45 +867,8 @@ class MapProvider with ChangeNotifier {
                 context, message, "Check entered city, state");
           }
         } else {
-          if (isExpress == true) {
-            values['type'] = 'express';
-            final response = await CallApi()
-                .postData(values, 'user/interstate-transport/delivery/new');
-            print("express");
-
-            String code = response['code'];
-            //print(code);
-            if (code == "success") {
-              distanceBetweenPickAndDropOff = 0;
-              deliveryId = response['data']['id'];
-              notifyListeners();
-            } else {
-              distanceBetweenPickAndDropOff = 0;
-              String message = (response['message']).toString();
-
-              CustomDisplayWidget.displayAwesomeSuccessSnackBar(
-                  context, message, "Check entered city, state");
-            }
-          } else {
-            final response = await CallApi()
-                .postData(values, 'user/interstate-transport/delivery/new');
-
-            String code = response['code'];
-            if (code == "success") {
-              distanceBetweenPickAndDropOff = 0;
-              final data = response['data'];
-              //print(data);
-              deliveryId = response['data']['id'];
-              //print(deliveryId);
-              notifyListeners();
-            } else {
-              distanceBetweenPickAndDropOff = 0;
-              String message = (response['message']).toString();
-
-              CustomDisplayWidget.displayAwesomeSuccessSnackBar(
-                  context, message, "Check entered city, state");
-            }
-          }
+          CustomDisplayWidget.displayAwesomeSuccessSnackBar(context,
+              "Delivery not Created Sucessfully", "Check entered city, state");
         }
         isExpress = false;
       }
