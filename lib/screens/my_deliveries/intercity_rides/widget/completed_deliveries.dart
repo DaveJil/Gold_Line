@@ -10,7 +10,8 @@ class CompletedInterCityRides extends StatefulWidget {
   const CompletedInterCityRides({Key? key}) : super(key: key);
 
   @override
-  State<CompletedInterCityRides> createState() => _CompletedInterCityRidesState();
+  State<CompletedInterCityRides> createState() =>
+      _CompletedInterCityRidesState();
 }
 
 class _CompletedInterCityRidesState extends State<CompletedInterCityRides> {
@@ -76,7 +77,7 @@ class _CompletedInterCityRidesState extends State<CompletedInterCityRides> {
                             itemCount: data!.length,
                             shrinkWrap: true,
                             itemBuilder: (BuildContext context, int index) {
-                              return CompletedDeliveryCard(
+                              return CompletedInterCityRideCard(
                                 id: data[index].id!,
                                 description: data[index].description,
                                 type: data[index].type,

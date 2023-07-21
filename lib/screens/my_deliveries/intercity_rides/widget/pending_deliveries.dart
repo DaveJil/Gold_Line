@@ -80,7 +80,7 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
                                 BuildContext context,
                                 int index,
                               ) {
-                                return DeliveryCard(
+                                return InterCityRideCard(
                                   id: data[index].id!,
                                   description: data[index].description,
                                   type: data[index].type,

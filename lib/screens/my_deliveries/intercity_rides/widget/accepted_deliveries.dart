@@ -20,7 +20,7 @@ class _AcceptedInterCityRidesState extends State<AcceptedInterCityRides> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final deliveryListProvider =
           Provider.of<GetListProvider>(context, listen: false);
-      deliveries = deliveryListProvider.checkAcceptedInterStateDelivery();
+      deliveries = deliveryListProvider.checkAcceptedVInterCityRides();
     });
     super.initState();
   }
@@ -80,7 +80,7 @@ class _AcceptedInterCityRidesState extends State<AcceptedInterCityRides> {
                                 BuildContext context,
                                 int index,
                               ) {
-                                return DeliveryCard(
+                                return InterCityRideCard(
                                   id: data[index].id!,
                                   description: data[index].description,
                                   type: data[index].type,

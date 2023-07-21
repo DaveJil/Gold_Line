@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/delivery_model/delivery.dart';
+import '../../models/delivery_model/intercity_ride.dart';
 import '../../models/notifications/notifications.dart';
 import '../../models/transaction/transaction.dart';
 import '../../screens/map/map_widget.dart';
@@ -291,6 +292,74 @@ class GetListProvider extends ChangeNotifier {
       final data = response['data'];
       //print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkPendingInterCityRides() async {
+    try {
+      final response = await CallApi()
+          .getData('user/interstate-transport/deliveries?status=pending');
+      print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => InterCityRideModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkAcceptedVInterCityRides() async {
+    try {
+      final response = await CallApi()
+          .getData('user/interstate-transport/deliveries?status=accepted');
+      print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => InterCityRideModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkCompletedInterCityRides() async {
+    try {
+      final response = await CallApi()
+          .getData('user/interstate-transport/deliveries?status=completed');
+      print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => InterCityRideModel.fromJson(e)).toList();
+      //print(result);
+      return result;
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future checkCancelledIntercityRides() async {
+    try {
+      final response =
+          await CallApi().getData('user/cargo/deliveries?status=canceled');
+      print(response);
+      final data = response['data'];
+      //print(data);
+      final result = data.map((e) => InterCityRideModel.fromJson(e)).toList();
       //print(result);
       return result;
     } on SocketException {

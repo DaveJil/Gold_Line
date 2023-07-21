@@ -11,14 +11,14 @@ import '../../../../utility/providers/get_list_provider.dart';
 import '../../../../utility/providers/map_provider.dart';
 import '../delivery_details.dart';
 
-class NewDeliveryCard extends StatelessWidget {
+class NewInterCityRideCard extends StatelessWidget {
   final String? title;
   final String? pickUpLocation;
   final String? dropOffLocation;
   final String? description;
   final String? id;
 
-  const NewDeliveryCard(
+  const NewInterCityRideCard(
       {Key? key,
       this.title,
       this.description,
@@ -75,7 +75,7 @@ class NewDeliveryCard extends StatelessWidget {
   }
 }
 
-class DeliveryCard extends StatefulWidget {
+class InterCityRideCard extends StatefulWidget {
   final String? title;
   final int? id;
   final String? type;
@@ -88,10 +88,10 @@ class DeliveryCard extends StatefulWidget {
       riderLastName,
       riderPhoneNumber,
       riderPlateNumber;
-  final String? pickUpLatitude,
-      pickUpLongitude,
-      dropOffLatitude,
-      dropOffLongitude;
+  final String? transportType;
+  final String? transportVehicleType;
+  final String? transportRoute;
+  final int? seats;
   final String? date;
   final String? paymentMethod, paymentBy, paymentStatus;
   final String? receiverName;
@@ -100,7 +100,7 @@ class DeliveryCard extends StatefulWidget {
   final String? senderPhone;
   final List? children;
 
-  const DeliveryCard(
+  const InterCityRideCard(
       {Key? key,
       this.title,
       this.status,
@@ -118,22 +118,22 @@ class DeliveryCard extends StatefulWidget {
       this.riderLastName,
       this.riderPhoneNumber,
       this.riderFirstName,
-      this.dropOffLatitude,
-      this.dropOffLongitude,
-      this.pickUpLatitude,
-      this.pickUpLongitude,
       this.paymentBy,
       this.paymentMethod,
       this.paymentStatus,
+      this.seats,
+      this.transportRoute,
+      this.transportType,
+      this.transportVehicleType,
       this.children,
       this.date})
       : super(key: key);
 
   @override
-  State<DeliveryCard> createState() => _DeliveryCardState();
+  State<InterCityRideCard> createState() => _InterCityRideCardState();
 }
 
-class _DeliveryCardState extends State<DeliveryCard> {
+class _InterCityRideCardState extends State<InterCityRideCard> {
   @override
   Widget build(BuildContext context) {
     final deliveryListProvider =
@@ -143,7 +143,7 @@ class _DeliveryCardState extends State<DeliveryCard> {
       onTap: () {
         changeScreen(
             context,
-            DeliveryDetailsScreen(
+            InterCityRideDetailsScreen(
               title: widget.title,
               description: widget.description,
               dropOffLocation: widget.dropOffLocation,
@@ -151,7 +151,7 @@ class _DeliveryCardState extends State<DeliveryCard> {
               price: widget.price,
               riderFirstName: widget.riderFirstName,
               riderLastName: widget.riderLastName,
-              riderPhoneNumber: widget.riderPhoneNumber,
+              riderPhone: widget.riderPhoneNumber,
               riderPlateNumber: widget.riderPlateNumber,
               date: widget.date,
               paymentMethod: widget.paymentMethod,
@@ -396,7 +396,7 @@ class _DeliveryCardState extends State<DeliveryCard> {
   }
 }
 
-class CompletedDeliveryCard extends StatefulWidget {
+class CompletedInterCityRideCard extends StatefulWidget {
   final String? title;
   final int? id;
   final String? type;
@@ -409,10 +409,10 @@ class CompletedDeliveryCard extends StatefulWidget {
       riderLastName,
       riderPhoneNumber,
       riderPlateNumber;
-  final String? pickUpLatitude,
-      pickUpLongitude,
-      dropOffLatitude,
-      dropOffLongitude;
+  final String? transportType;
+  final String? transportVehicleType;
+  final String? transportRoute;
+  final int? seats;
   final String? date;
   final String? paymentMethod, paymentBy, paymentStatus;
   final String? receiverName;
@@ -421,7 +421,7 @@ class CompletedDeliveryCard extends StatefulWidget {
   final String? senderPhone;
   final List? children;
 
-  const CompletedDeliveryCard(
+  const CompletedInterCityRideCard(
       {Key? key,
       this.title,
       this.status,
@@ -439,22 +439,24 @@ class CompletedDeliveryCard extends StatefulWidget {
       this.riderLastName,
       this.riderPhoneNumber,
       this.riderFirstName,
-      this.dropOffLatitude,
-      this.dropOffLongitude,
-      this.pickUpLatitude,
-      this.pickUpLongitude,
       this.paymentBy,
       this.paymentMethod,
       this.paymentStatus,
+      this.seats,
+      this.transportRoute,
+      this.transportType,
+      this.transportVehicleType,
       this.children,
       this.date})
       : super(key: key);
 
   @override
-  State<CompletedDeliveryCard> createState() => _CompletedDeliveryCardState();
+  State<CompletedInterCityRideCard> createState() =>
+      _CompletedInterCityRideCardState();
 }
 
-class _CompletedDeliveryCardState extends State<CompletedDeliveryCard> {
+class _CompletedInterCityRideCardState
+    extends State<CompletedInterCityRideCard> {
   @override
   Widget build(BuildContext context) {
     final deliveryListProvider =
@@ -466,7 +468,7 @@ class _CompletedDeliveryCardState extends State<CompletedDeliveryCard> {
             ? changeScreen(context, PendingDeliveries())
             : changeScreen(
                 context,
-                DeliveryDetailsScreen(
+                InterCityRideDetailsScreen(
                   title: widget.title,
                   description: widget.description,
                   dropOffLocation: widget.dropOffLocation,
@@ -474,20 +476,18 @@ class _CompletedDeliveryCardState extends State<CompletedDeliveryCard> {
                   price: widget.price,
                   riderFirstName: widget.riderFirstName,
                   riderLastName: widget.riderLastName,
-                  riderPhoneNumber: widget.riderPhoneNumber,
+                  riderPhone: widget.riderPhoneNumber,
                   riderPlateNumber: widget.riderPlateNumber,
                   date: widget.date,
                   paymentMethod: widget.paymentMethod,
                   paymentBy: widget.paymentBy,
                   paymentStatus: widget.paymentStatus,
-                  pickUpLatitude: widget.pickUpLatitude,
-                  pickUpLongitude: widget.pickUpLongitude,
-                  dropOffLatitude: widget.dropOffLatitude,
-                  dropOffLongitude: widget.dropOffLongitude,
+                  transportType: widget.transportType,
+                  transportVehicleType: widget.transportVehicleType,
+                  transportRoute: widget.transportRoute,
+                  seats: widget.seats,
                   senderPhone: widget.senderPhone,
                   senderName: widget.senderName,
-                  receiverPhone: widget.receiverPhone,
-                  receiverName: widget.receiverName,
                 ));
       },
       child: Padding(
