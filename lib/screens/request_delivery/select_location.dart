@@ -317,20 +317,30 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                     onPressed: () async {
                       if (widget.deliveryType == "DELIVERY") {
                         await mapProvider.createDeliveryRequest(context);
-                        await mapProvider.processDelivery(context);
-                        ////print('navigate');
-                        mapProvider.changeWidgetShowed(
-                            showWidget: Show.CHECKOUT_DELIVERY);
+                        var response =
+                            await mapProvider.processDelivery(context);
+                        if (response == true) {
+                          ////print('navigate');
+                          mapProvider.changeWidgetShowed(
+                              showWidget: Show.CHECKOUT_DELIVERY);
 
-                        changeScreenReplacement(context, MapWidget());
+                          changeScreenReplacement(context, MapWidget());
+                        } else {
+                          return;
+                        }
                       } else if (widget.deliveryType == "RIDE") {
                         await mapProvider.createInterstateRideRequest(context);
                         await mapProvider.processDelivery(context);
-                        ////print('navigate');
-                        mapProvider.changeWidgetShowed(
-                            showWidget: Show.CHECKOUT_DELIVERY);
+                        var response =
+                            await mapProvider.processDelivery(context);
+                        if (response == true) {
+                          mapProvider.changeWidgetShowed(
+                              showWidget: Show.CHECKOUT_INTERCITY_RIDE);
 
-                        changeScreenReplacement(context, MapWidget());
+                          changeScreenReplacement(context, MapWidget());
+                        }
+                      } else {
+                        return;
                       }
                     },
                     child: const Text(

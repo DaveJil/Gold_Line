@@ -88,7 +88,15 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
             const SizedBox(
               height: 12,
             ),
-            SelectVehicle(),
+            Row(
+              children: [
+                Text(
+                  "Luggage Size",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Divider()
+              ],
+            ),
             const SizedBox(
               height: 12,
             ),
@@ -100,33 +108,70 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
             const SizedBox(
               height: 12,
             ),
-            CustomDeliveryTextField(
-              hint: "Transport Route",
-              icon: const Icon(FontAwesomeIcons.chair),
-              controller: interCityBookingTransportRoute,
+            Row(
+              children: [
+                Text(
+                  "Select Vehicle Type:",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: getHeight(20, context),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(width: 8.appWidth(context)),
+                Expanded(
+                  child: SelectVehicle(),
+                )
+              ],
             ),
             const SizedBox(
               height: 12,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ElevatedButton(
-                    onPressed: () {
-                      mapProvider.selectDate(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: kPrimaryGoldColor),
-                    child: Text(mapProvider.selectedBookingDate.toString())),
-                ElevatedButton(
-                    onPressed: () {
-                      mapProvider.selectTime(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: kPrimaryGoldColor),
-                    child: Text(mapProvider.selectedBookingTime.toString())),
+                Text(
+                  "Select Route:",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: getHeight(20, context),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(width: 8.appWidth(context)),
+                Expanded(
+                  child: SelectRoute(),
+                )
               ],
             ),
+            const SizedBox(
+              height: 12,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Select Departure Time:",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: getHeight(20, context),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(width: 8.appWidth(context)),
+                Expanded(
+                  child: SelectDepartureTime(),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  mapProvider.selectDate(context);
+                },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: kPrimaryGoldColor),
+                child: Text(mapProvider.selectedBookingDate.toString())),
             SizedBox(
               height: 20.appHeight(context),
             ),
@@ -160,7 +205,78 @@ class _SelectVehicleState extends State<SelectVehicle> {
     // Initial Selected Value
 
     // List of items in our dropdown menu
-    var items = ['Select Vehicle', "Classic", "Business", "Executive"];
+    var items = [
+      "Classic(4 seater salon car)",
+      "Business(8 seater mini bus)",
+      "Executive(6 seater jeep)"
+    ];
+
+    return Container(
+      height: MediaQuery.of(context).size.height / 18,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 2.0,
+          // color: const Color.fromARGB(255, 205, 226, 243),
+          color: const Color.fromARGB(255, 117, 117, 117).withOpacity(0.4),
+        ),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      child: DropdownButton<String>(
+        focusColor: kPrimaryGoldColor.withOpacity(0.6),
+        dropdownColor: Colors.white70,
+        isExpanded: true,
+
+        // Initial Value
+        value: provider.vehicleDropDownValue,
+
+        // Down Arrow Icon
+        icon: const Icon(Icons.keyboard_arrow_down),
+
+        // Array list of items
+        items: items.map((String items) {
+          return DropdownMenuItem(
+            value: items,
+            child: Text(items),
+          );
+        }).toList(),
+        // After selecting the desired option,it will
+        // change button value to selected value
+        onChanged: (String? newValue) {
+          provider.vehicleDropDownValue = newValue!;
+
+          setState(() {
+            provider.vehicleDropDownValue = newValue;
+          });
+        },
+      ),
+    );
+  }
+}
+
+class SelectDepartureTime extends StatefulWidget {
+  const SelectDepartureTime({Key? key}) : super(key: key);
+
+  @override
+  State<SelectDepartureTime> createState() => _SelectDepartureTimeState();
+}
+
+class _SelectDepartureTimeState extends State<SelectDepartureTime> {
+  @override
+  Widget build(BuildContext context) {
+    final provider = Provider.of<MapProvider>(context);
+    // Initial Selected Value
+
+    // List of items in our dropdown menu
+    var items = [
+      'Select Vehicle',
+      "Classic(4 seater salon car)",
+      "Business(8 seater mini bus)",
+      "Executive(6 seater jeep)"
+    ];
 
     return Container(
       height: MediaQuery.of(context).size.height / 18,
@@ -223,44 +339,12 @@ class _SelectRouteState extends State<SelectRoute> {
 
     // List of items in our dropdown menu
     var items = [
-      'Select Route',
-      'Abia',
-      'Adamawa',
-      'Akwa Ibom',
-      'Anambra',
-      'Bauchi',
-      'Bayelsa',
-      'Benue',
-      "Borno",
-      "Cross River",
-      "Delta",
-      "Ebonyi",
-      "Edo",
-      "Ekiti",
-      "Enugu",
-      "Federal Capital Territory",
-      "Gombe",
-      "Imo",
-      "Jigawa",
-      "Kaduna",
-      "Kano",
-      "Katsina",
-      "Kebbi",
-      "Kogi",
-      "Kwara",
-      "Lagos",
-      "Nasarawa",
-      "Niger",
-      "Ogun",
-      "Ondo",
-      "Osun",
-      "Oyo",
-      "Plateau",
-      "Rivers",
-      "Sokoto",
-      "Taraba",
-      "Yobe",
-      "Zamfara"
+      'Lagos - Federal Capital Territory',
+      'Lagos - Rivers',
+      'Federal Capital Territory - Lagos',
+      'Federal Capital Territory - Rivers',
+      'Rivers - Lagos',
+      'Rivers - Federal Capital Territory'
     ];
 
     return Container(
@@ -283,7 +367,7 @@ class _SelectRouteState extends State<SelectRoute> {
         isExpanded: true,
 
         // Initial Value
-        value: provider.vehicleDropDownValue,
+        value: provider.routeDropDownValue,
 
         // Down Arrow Icon
         icon: const Icon(Icons.keyboard_arrow_down),

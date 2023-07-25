@@ -175,22 +175,31 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(width: 5),
+                  SizedBox(width: 8.appWidth(context)),
                   Expanded(
-                    child: Divider(
-                      color: Colors.grey[600],
-                    ),
+                    child: DeliveryOption(),
                   )
                 ],
               ),
               SizedBox(
                 height: getHeight(20, context),
               ),
-              DeliveryOption(),
-              SizedBox(
-                height: getHeight(20, context),
+              Row(
+                children: [
+                  Text(
+                    "Select City:",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: getHeight(20, context),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: 8.appWidth(context)),
+                  Expanded(
+                    child: SelectCity(),
+                  )
+                ],
               ),
-              SelectCity(),
               SizedBox(
                 height: getHeight(20, context),
               ),
@@ -528,12 +537,7 @@ class _DeliveryOptionState extends State<DeliveryOption> {
     // Initial Selected Value
 
     // List of items in our dropdown menu
-    var items = [
-      'Select Delivery Type',
-      'Dispatch Bike',
-      'Interstate Courier',
-      'International'
-    ];
+    var items = ['Dispatch Bike', 'Interstate Courier', 'International'];
 
     return DropdownButton<String>(
       // Initial Value
@@ -576,12 +580,7 @@ class _SelectCityState extends State<SelectCity> {
     // Initial Selected Value
 
     // List of items in our dropdown menu
-    var items = [
-      'Select City',
-      'Lagos',
-      'Federal Capital Territory',
-      'Rivers',
-    ];
+    var items = ['Lagos', 'Federal Capital Territory', 'Rivers', 'Others'];
 
     return DropdownButton<String>(
       // Initial Value

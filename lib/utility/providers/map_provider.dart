@@ -171,13 +171,13 @@ class MapProvider with ChangeNotifier {
   String selectedBookingTime = "Select Departure Time";
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
-  String deliveryDropDownValue = 'Select Delivery Type';
+  String deliveryDropDownValue = 'Dispatch Bike';
   String vansDropDownValue = 'Select Delivery Type';
 
-  String cityDropDownValue = 'Select City';
-  String vehicleDropDownValue = "Select Vehicle";
-  String routeDropDownValue = "Select Route";
-
+  String cityDropDownValue = 'Lagos';
+  String vehicleDropDownValue = "Classic(4 seater salon car)";
+  String routeDropDownValue = "Lagos - Federal Capital Territory";
+  String travelTimeDownDownValue = "Early Morning(6-7am)";
   bool isExpress = false;
 
   TextEditingController dateController = TextEditingController();
@@ -650,7 +650,6 @@ class MapProvider with ChangeNotifier {
       "pickup_address": pickUpLocationController.text,
       "dropoff_address": dropOffLocationController.text,
       "payment_method": "card",
-      "type": "interstate_transport",
       "description": description.text,
       "country": pickUpCountry,
       "dropoff_city": dropOffState,
@@ -659,7 +658,7 @@ class MapProvider with ChangeNotifier {
     };
 
     try {
-      if (pickUpCountry != dropOffCountry) {
+      if (deliveryDropDownValue == "International") {
         values["country"] = pickUpCountry;
         values["dropoff_country"] = dropOffCountry;
         distanceBetweenPickAndDropOff = 0;
@@ -687,13 +686,14 @@ class MapProvider with ChangeNotifier {
               context, message, "Check entered city, state");
         }
       } else {
-        if (pickUpState != dropOffState) {
+        if (deliveryDropDownValue == "Interstate Courier") {
           values["state"] = pickUpState;
           values["city"] = pickUpState;
           values["dropoff_city"] = dropOffState;
           values["dropoff_state"] = dropOffState;
           final response =
               await CallApi().postData(values, 'user/interstate/delivery/new');
+          print(response);
           print("interstatedelivery");
 
           String code = response['code'];
@@ -714,6 +714,7 @@ class MapProvider with ChangeNotifier {
             final response =
                 await CallApi().postData(values, 'user/delivery/new');
             print("express");
+            print(response);
 
             String code = response['code'];
             //print(code);
@@ -731,6 +732,7 @@ class MapProvider with ChangeNotifier {
           } else {
             final response =
                 await CallApi().postData(values, 'user/delivery/new');
+            print(response);
 
             String code = response['code'];
             if (code == "success") {
@@ -820,7 +822,7 @@ class MapProvider with ChangeNotifier {
     //print(distanceBetweenPickAndDropOff);
     Map<String, dynamic> values = {
       "type": "interstate_transport",
-      "pickup_time": dateTimeObj,
+      "pickup_time": dateTimeObj.toIso8601String(),
       "seats": interCityBookingNumberOfSeats.text,
       "transport_type": interCityBookingType,
       "transport_vehicle_type": interCityVehicleType,
@@ -852,7 +854,7 @@ class MapProvider with ChangeNotifier {
           values["dropoff_state"] = dropOffState;
           final response = await CallApi()
               .postData(values, 'user/interstate-transport/delivery/new');
-          print("interstatedelivery");
+          print("interstateride");
 
           String code = response['code'];
           if (code == "success") {
@@ -941,7 +943,7 @@ class MapProvider with ChangeNotifier {
 
 // trip process endpoint
 
-  Future processDelivery(BuildContext context) async {
+  Future<bool> processDelivery(BuildContext context) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     try {
@@ -949,12 +951,11 @@ class MapProvider with ChangeNotifier {
           await CallApi().postData(null, "user/delivery/process/$deliveryId");
       final body = response;
       if (response['code'] == "success") {
-        //print(body);
-
         var val = response['data']['price'];
         //////print("val = $val");
         deliveryPrice = (((val + 50) ~/ 100) * 100).toInt().toString();
         preferences.setString('price', deliveryPrice!);
+        return true;
       } else {
         String code = response['code'];
 
@@ -963,7 +964,7 @@ class MapProvider with ChangeNotifier {
             context, message, code);
       }
 
-      return deliveryPrice;
+      return false;
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {
@@ -1212,7 +1213,10 @@ class MapProvider with ChangeNotifier {
       lastDate: DateTime(2100),
     );
     if (picked != null) {
-      selectedBookingDate = DateFormat('dd MMMM yyyy').format(picked);
+      print(picked);
+      selectedBookingDate =
+          "${picked.year}-${(picked.month).toString().padLeft(2, '0')}-${(picked.day).toString().padLeft(2, '0')}";
+      print(selectedBookingDate);
     }
   }
 
@@ -1222,7 +1226,9 @@ class MapProvider with ChangeNotifier {
       initialTime: TimeOfDay.now(),
     );
     if (picked != null) {
-      selectedBookingTime = "${picked.toString()}:00";
+      print(picked);
+      selectedBookingTime =
+          "${(picked.hour).toString().padLeft(2, '0')}:${(picked.minute).toString().padLeft(2, '0')}:00";
     }
   }
 }

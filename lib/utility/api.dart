@@ -113,6 +113,7 @@ class CallApi {
   Future<String> _getToken() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var token = localStorage.getString('token');
+    print(token);
     ////print('The token is $token');
     return token ?? '';
   }

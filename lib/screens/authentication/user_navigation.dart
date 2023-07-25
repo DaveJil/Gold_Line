@@ -84,36 +84,32 @@ class LoginChoiceState extends State<LoginChoice> {
                 SizedBox(
                   height: getHeight(20, context),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CustomButton(
-                          width: getWidth(320, context),
-                          onPressed: () {
-                            changeScreen(context, SignUpScreen());
-                          },
-                          text: 'Sign Up As Agent',
-                          fontSize: getHeight(13, context),
-                        ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: CustomButton(
+                        width: getWidth(320, context),
+                        onPressed: () {
+                          changeScreen(context, SignUpScreen());
+                        },
+                        text: 'Sign Up As Agent',
+                        fontSize: getHeight(13, context),
                       ),
-                      SizedBox(
-                        width: 10,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: CustomButton(
+                        onPressed: () {
+                          changeScreen(context, SignUpScreen());
+                        },
+                        text: 'Sign Up As User',
+                        fontSize: getHeight(14, context),
                       ),
-                      Expanded(
-                        child: CustomButton(
-                          width: getWidth(300, context),
-                          onPressed: () {
-                            changeScreen(context, SignUpScreen());
-                          },
-                          text: 'Sign Up As User',
-                          fontSize: getHeight(14, context),
-                        ),
-                      )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
                 SizedBox(
                   height: getHeight(5, context),
