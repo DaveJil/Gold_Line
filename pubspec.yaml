@@ -85,6 +85,7 @@ dependencies:
   flutter_paystack: ^1.0.7
   pay_with_paystack: ^1.0.3
   webview_flutter: ^3.0.4
+  upgrader: ^8.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -45,7 +45,6 @@ class UserProvider with ChangeNotifier {
   TextEditingController confirmPassword = TextEditingController();
   TextEditingController confirmNewPassword = TextEditingController();
 
-
   TextEditingController otherName = TextEditingController();
   TextEditingController gender = TextEditingController();
   TextEditingController userAddress = TextEditingController();
@@ -107,10 +106,10 @@ class UserProvider with ChangeNotifier {
         referralId = response['data']['uuid'];
         int randomInt = Random().nextInt(100);
 
-
         pref.setString('token', token);
-        pref.setString("email", emailPref?? "user$randomInt@gmail.com");
-        pref.setString("phone", phonePref?? "09$randomInt$randomInt$randomInt");
+        pref.setString("email", emailPref ?? "user$randomInt@gmail.com");
+        pref.setString(
+            "phone", phonePref ?? "09$randomInt$randomInt$randomInt");
 
         pref.setBool(LOGGED_IN, true);
 
@@ -119,6 +118,7 @@ class UserProvider with ChangeNotifier {
         await FirebaseMessaging.instance.requestPermission();
         String? deviceToken = await FirebaseMessaging.instance.getToken();
         print(deviceToken);
+        status = Status.Authenticated;
 
         removeScreenUntil(context, const MapWidget());
       } else {
@@ -158,16 +158,17 @@ class UserProvider with ChangeNotifier {
         phonePref = response['data']['phone'];
         int randomInt = Random().nextInt(100);
 
-
         String token = response['token'];
         print(token);
         pref.setString('token', response['token']);
         pref.setString('token', token);
-        pref.setString("email", emailPref?? "user@gmail.com");
-        pref.setString("phone", phonePref?? "09$randomInt$randomInt$randomInt");
-
+        pref.setString("email", emailPref ?? "user@gmail.com");
+        pref.setString(
+            "phone", phonePref ?? "09$randomInt$randomInt$randomInt");
 
         pref.setBool(LOGGED_IN, true);
+        status = Status.Authenticated;
+        notifyListeners();
 
         CustomDisplayWidget.displayAwesomeSuccessSnackBar(context, "Hey there!",
             "Welcome to GoldLine. Account Created Successfully");
@@ -202,8 +203,8 @@ class UserProvider with ChangeNotifier {
 
       if (code == 'success') {
         changeScreen(context, ProceedLogin());
-        CustomDisplayWidget.displayAwesomeSuccessSnackBar(
-            context, "Relax", "Please Check your Email for password reset link");
+        CustomDisplayWidget.displayAwesomeSuccessSnackBar(context, "Relax",
+            "Please Check your Email for password reset link");
       } else {
         String message = response['message'].toString();
 
@@ -340,11 +341,9 @@ class UserProvider with ChangeNotifier {
     };
 
     try {
-      final response =
-      await CallApi().postData(formData, "bank/new");
+      final response = await CallApi().postData(formData, "bank/new");
       if (response['code'] == 'success') {
         removeScreenUntil(context, MapWidget());
-
       } else {
         String message = response['message'].toString();
         print(message);
@@ -360,7 +359,6 @@ class UserProvider with ChangeNotifier {
       throw Exception(err.toString());
     }
   }
-
 
   Future signOut(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -391,7 +389,6 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
     return Future.delayed(Duration.zero);
   }
-
 
   saveDeviceToken() async {
     firebaseMessaging.requestPermission();

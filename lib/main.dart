@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -12,18 +10,17 @@ import 'package:gold_line/utility/providers/map_provider.dart';
 import 'package:gold_line/utility/providers/user_provider.dart';
 import 'package:once/once.dart';
 import 'package:provider/provider.dart';
+import 'package:upgrader/upgrader.dart';
 
 import 'firebase_options.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-}
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.instance.subscribeToTopic("general");
@@ -57,8 +54,8 @@ Future<void> main() async {
         return const MaterialApp(
           home: MyApp(),
           debugShowCheckedModeBanner: false,
-        );}
-  ));
+        );
+      }));
 }
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -103,8 +100,14 @@ class _MyAppState extends State<MyApp> {
           return GetListProvider();
         }),
       ],
-      child: const MaterialApp(
-          debugShowCheckedModeBanner: false, home: GoldLine()),
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: UpgradeAlert(
+              upgrader: Upgrader(
+                  showIgnore: false,
+                  showReleaseNotes: false,
+                  messages: UpgraderMessages()),
+              child: GoldLine())),
     );
   }
 }

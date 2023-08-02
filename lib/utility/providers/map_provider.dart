@@ -839,7 +839,12 @@ class MapProvider with ChangeNotifier {
       "country": pickUpCountry,
       "dropoff_city": dropOffState,
       "dropoff_state": dropOffState,
-      "dropoff_country": dropOffCountry
+      "dropoff_country": dropOffCountry,
+
+      "pickup_longitude": pickUpLatLng!.longitude,
+      "pickup_latitude": pickUpLatLng!.latitude,
+      "dropoff_latitude": dropOffLatLng!.latitude,
+      "dropoff_longitude": dropOffLatLng!.longitude,
     };
 
     try {
