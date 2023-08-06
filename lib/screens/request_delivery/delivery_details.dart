@@ -537,7 +537,12 @@ class _DeliveryOptionState extends State<DeliveryOption> {
     // Initial Selected Value
 
     // List of items in our dropdown menu
-    var items = ['Dispatch Bike', 'Interstate Courier', 'International'];
+    var items = [
+      'Select Delivery Option',
+      'Dispatch Bike',
+      'Interstate Courier',
+      'International'
+    ];
 
     return DropdownButton<String>(
       // Initial Value
@@ -580,7 +585,13 @@ class _SelectCityState extends State<SelectCity> {
     // Initial Selected Value
 
     // List of items in our dropdown menu
-    var items = ['Lagos', 'Federal Capital Territory', 'Rivers', 'Others'];
+    var items = [
+      'Select City',
+      'Lagos',
+      'Federal Capital Territory',
+      'Rivers',
+      'Others'
+    ];
 
     return DropdownButton<String>(
       // Initial Value

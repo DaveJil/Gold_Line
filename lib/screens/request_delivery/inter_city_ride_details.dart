@@ -272,10 +272,11 @@ class _SelectDepartureTimeState extends State<SelectDepartureTime> {
 
     // List of items in our dropdown menu
     var items = [
-      'Select Vehicle',
-      "Classic(4 seater salon car)",
-      "Business(8 seater mini bus)",
-      "Executive(6 seater jeep)"
+      'Select Departure time',
+      "Early Morning 6am-7am",
+      "Morning 8am-11am ",
+      "Afternoon 12pm-5pm",
+      "Night 6pm-12am"
     ];
 
     return Container(
@@ -298,7 +299,7 @@ class _SelectDepartureTimeState extends State<SelectDepartureTime> {
         isExpanded: true,
 
         // Initial Value
-        value: provider.vehicleDropDownValue,
+        value: provider.departureTimeDownDownValue,
 
         // Down Arrow Icon
         icon: const Icon(Icons.keyboard_arrow_down),
@@ -313,10 +314,10 @@ class _SelectDepartureTimeState extends State<SelectDepartureTime> {
         // After selecting the desired option,it will
         // change button value to selected value
         onChanged: (String? newValue) {
-          provider.vehicleDropDownValue = newValue!;
+          provider.departureTimeDownDownValue = newValue!;
 
           setState(() {
-            provider.vehicleDropDownValue = newValue;
+            provider.departureTimeDownDownValue = newValue;
           });
         },
       ),

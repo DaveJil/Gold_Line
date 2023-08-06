@@ -49,8 +49,8 @@ class InterCityRideDetailsScreen extends StatefulWidget {
       this.riderFirstName,
       this.riderLastName,
       this.riderPhone,
-        this.seats,
-        this.transportRoute,
+      this.seats,
+      this.transportRoute,
       this.transportType,
       this.transportVehicleType,
       this.pickUpLocation})
@@ -70,7 +70,7 @@ class _InterCityRideDetailsScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Delivery Details"),
+        title: const Text("Ride Details"),
         backgroundColor: kPrimaryGoldColor,
       ),
       body: SingleChildScrollView(
@@ -85,7 +85,7 @@ class _InterCityRideDetailsScreenState
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Text(
-                      "Delivery Time",
+                      "Ride Time",
                       style: TextStyle(fontWeight: FontWeight.w100),
                     ),
                     SizedBox(
@@ -118,7 +118,7 @@ class _InterCityRideDetailsScreenState
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  "Trip #${widget.title}",
+                                  "Ride #${widget.title}",
                                   style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 16.sp),
@@ -281,7 +281,6 @@ class _InterCityRideDetailsScreenState
                                       SizedBox(
                                         height: 5.h,
                                       ),
-
                                       Row(
                                         children: [
                                           Text("Booking Type: ",

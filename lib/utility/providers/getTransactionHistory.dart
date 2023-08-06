@@ -70,7 +70,7 @@ Future deposit(String amount, BuildContext context) async {
       String message = response['message'];
       {
         CustomDisplayWidget.displaySnackBar(context, message);
-        changeScreenReplacement(context, PaymentDetails());
+        changeScreenReplacement(context, WalletScreen());
       }
     }
   } on SocketException {
@@ -185,11 +185,15 @@ void verifyTransaction(String? amount, BuildContext context) async {
     String message = response['data']['gateway_response'];
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
+    await getWalletBalance(context);
+
     removeScreenUntil(context, WalletScreen());
   } else {
     String message = response['data']['gateway_response'];
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
+    await getWalletBalance(context);
+
     removeScreenUntil(context, WalletScreen());
   }
 
