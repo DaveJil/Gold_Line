@@ -23,7 +23,6 @@ class WithdrawalScreen extends StatelessWidget {
           },
         ),
       ),
-
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -39,13 +38,15 @@ class WithdrawalScreen extends StatelessWidget {
               SizedBox(height: 16.0),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: kPrimaryGoldColor
-                ),
+                    backgroundColor: kPrimaryGoldColor),
                 onPressed: () {
                   withdraw(amount.text, context);
                 },
                 child: Text('Withdraw'),
               ),
+              SizedBox(height: 16.0),
+              Text(
+                  "AreaConnect Withdrawals are processed Within 1-3 working days after requst has been made. You can contact support team with any issues")
             ],
           ),
         ),
