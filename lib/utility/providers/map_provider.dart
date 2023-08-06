@@ -171,13 +171,13 @@ class MapProvider with ChangeNotifier {
   String selectedBookingTime = "Select Departure Time";
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
-  String deliveryDropDownValue = 'Dispatch Bike';
+  String deliveryDropDownValue = 'Select Delivery Option';
   String vansDropDownValue = 'Select Delivery Type';
 
-  String cityDropDownValue = 'Lagos';
+  String cityDropDownValue = 'Select City';
   String vehicleDropDownValue = "Classic(4 seater salon car)";
-  String routeDropDownValue = "Lagos - Federal Capital Territory";
-  String travelTimeDownDownValue = "Early Morning(6-7am)";
+  String routeDropDownValue = "Select Route";
+  String departureTimeDownDownValue = "Early Morning 6am-7am";
   bool isExpress = false;
 
   TextEditingController dateController = TextEditingController();
@@ -815,6 +815,7 @@ class MapProvider with ChangeNotifier {
     polylineCoordinates.add(dropOffLatLng!);
     await calculateDistance();
     await createRoute();
+    await getTime();
     String dateTimeString = "$selectedBookingDate $selectedBookingTime";
     DateTime dateTimeObj =
         DateFormat("yyyy-MM-dd HH:mm:ss").parse(dateTimeString);
@@ -840,7 +841,6 @@ class MapProvider with ChangeNotifier {
       "dropoff_city": dropOffState,
       "dropoff_state": dropOffState,
       "dropoff_country": dropOffCountry,
-
       "pickup_longitude": pickUpLatLng!.longitude,
       "pickup_latitude": pickUpLatLng!.latitude,
       "dropoff_latitude": dropOffLatLng!.latitude,
@@ -1225,15 +1225,15 @@ class MapProvider with ChangeNotifier {
     }
   }
 
-  Future<void> selectTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    if (picked != null) {
-      print(picked);
-      selectedBookingTime =
-          "${(picked.hour).toString().padLeft(2, '0')}:${(picked.minute).toString().padLeft(2, '0')}:00";
+  Future<void> getTime() async {
+    if (departureTimeDownDownValue.contains("6am")) {
+      selectedBookingTime = "06:00:00";
+    } else if (departureTimeDownDownValue.contains("8am")) {
+      selectedBookingTime = "08:00:00";
+    } else if (departureTimeDownDownValue.contains("12pm")) {
+      selectedBookingTime = "12:00:00";
+    } else if (departureTimeDownDownValue.contains("6pm")) {
+      selectedBookingTime = "18:00:00";
     }
   }
 }

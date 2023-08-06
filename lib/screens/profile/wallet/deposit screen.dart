@@ -5,14 +5,12 @@ import 'package:gold_line/screens/profile/wallet/wallet.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:gold_line/utility/providers/getTransactionHistory.dart';
-import 'package:provider/provider.dart';
 
 import '../../../utility/api_keys.dart';
 
 final payStackPlugin = PaystackPlugin();
 
 class DepositScreen extends StatefulWidget {
-
   const DepositScreen({super.key});
 
   @override
@@ -27,7 +25,6 @@ class _DepositScreenState extends State<DepositScreen> {
   @override
   void initState() {
     payStackPlugin.initialize(publicKey: paystackPublicKey);
-
 
     super.initState();
   }
@@ -45,7 +42,8 @@ class _DepositScreenState extends State<DepositScreen> {
         ),
       ),
       body: Center(
-        child: Padding(
+        child: Container(
+          width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +56,6 @@ class _DepositScreenState extends State<DepositScreen> {
               ),
               SizedBox(height: 16.0),
               ElevatedButton(
-
                 onPressed: () {
                   // makePayStackPayment(amount.text, context);
                   // payWithPayStack(amount.text, context);
@@ -66,9 +63,11 @@ class _DepositScreenState extends State<DepositScreen> {
                 },
                 child: Text('Deposit'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: kPrimaryGoldColor
-                ),
+                    backgroundColor: kPrimaryGoldColor),
               ),
+              SizedBox(height: 20.0),
+              Text(
+                  "Wallet Top Ups  may encounter delays due to bank network. Ensure you don't quit the paystack checkout until transaction is successful. Contact support for any issues/complaints regarding this")
             ],
           ),
         ),

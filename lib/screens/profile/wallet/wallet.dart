@@ -11,9 +11,7 @@ import '../../../utility/helpers/routing.dart';
 import '../../../utility/providers/getTransactionHistory.dart';
 
 class WalletScreen extends StatefulWidget {
-  final String availableBalance;
-  const WalletScreen({Key? key, this.availableBalance = "40000"})
-      : super(key: key);
+  const WalletScreen({Key? key}) : super(key: key);
 
   @override
   State<WalletScreen> createState() => _WalletScreenState();
