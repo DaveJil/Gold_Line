@@ -67,8 +67,8 @@ android {
             keyAlias 'goldlineng'
             keyPassword 'goldline'
 //            storeFile file('C:\\Users\\David Ogaranya\\goldline.jks')
-            storeFile file('/home/ezeevidence/goldline.jks')
-
+            //storeFile file('/home/ezeevidence/goldline.jks')
+            storeFile file('/Users/guest1/Documents/goldline.jks')
             storePassword 'goldline'
         }
     }
