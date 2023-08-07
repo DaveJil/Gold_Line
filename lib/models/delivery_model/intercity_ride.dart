@@ -76,10 +76,10 @@ class InterCityRideModel {
         paymentMethod = json['payment_method'],
         pickupTime = json['pickup_time'],
         riderLastName = (json['rider'] == null)
-            ? ''
+            ? 'Rider Not assigned Yet'
             : (json['rider']['profile'] == null)
-                ? ''
-                : json['delivery_manager']['profile']['last_name'],
+            ? 'RiderNotAssigned Yet'
+            : json['rider']['profile']['last_name'],
         riderFirstName = (json['rider'] == null)
             ? 'Rider Not assigned Yet'
             : (json['rider']['profile'] == null)

@@ -100,14 +100,13 @@ Future withdraw(String amount, BuildContext context) async {
     } else {
       String message = response['message'];
       String code = response['code'];
-      {
-        CustomDisplayWidget.displaySnackBar(context, message);
 
-        if (code == "bank-not-found") {
-          await CustomDisplayWidget.displaySnackBar(context, message);
+      CustomDisplayWidget.displaySnackBar(context, message);
 
-          changeScreenReplacement(context, PaymentDetails());
-        }
+      if (code == "bank-not-found") {
+        await CustomDisplayWidget.displaySnackBar(context, message);
+
+        changeScreenReplacement(context, PaymentDetails());
       }
     }
   } on SocketException {
