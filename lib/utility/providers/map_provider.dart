@@ -175,9 +175,9 @@ class MapProvider with ChangeNotifier {
   String vansDropDownValue = 'Select Delivery Type';
 
   String cityDropDownValue = 'Select City';
-  String vehicleDropDownValue = "Classic(4 seater salon car)";
+  String vehicleDropDownValue = "Select Vehicle Type";
   String routeDropDownValue = "Select Route";
-  String departureTimeDownDownValue = "Early Morning 6am-7am";
+  String departureTimeDownDownValue = "Select Departure Time";
   bool isExpress = false;
 
   TextEditingController dateController = TextEditingController();
@@ -807,6 +807,7 @@ class MapProvider with ChangeNotifier {
   Future createInterstateRideRequest(BuildContext context) async {
     //print(isExpress);
     await clearPoly();
+    print("inn");
 
     distanceBetweenPickAndDropOff = 0;
     polylineCoordinates = [];
@@ -815,18 +816,23 @@ class MapProvider with ChangeNotifier {
     polylineCoordinates.add(dropOffLatLng!);
     await calculateDistance();
     await createRoute();
+    print(departureTimeDownDownValue);
     await getTime();
     String dateTimeString = "$selectedBookingDate $selectedBookingTime";
+    print(dateTimeString);
     DateTime dateTimeObj =
         DateFormat("yyyy-MM-dd HH:mm:ss").parse(dateTimeString);
+    print(dateTimeObj);
+    print(vehicleDropDownValue);
+    print(interCityBookingType);
 
     //print(distanceBetweenPickAndDropOff);
     Map<String, dynamic> values = {
       "type": "interstate_transport",
-      "pickup_time": dateTimeObj.toIso8601String(),
+      "pickup_time": dateTimeString,
       "seats": interCityBookingNumberOfSeats.text,
-      "transport_type": interCityBookingType,
-      "transport_vehicle_type": interCityVehicleType,
+      "transport_type": interCityBookingType!.toLowerCase(),
+      "transport_vehicle_type": vehicleDropDownValue.toLowerCase(),
       "transport_route": interCityBookingTransportRoute.text,
       "status": 'pending',
       "city": pickUpState,
@@ -859,7 +865,7 @@ class MapProvider with ChangeNotifier {
           values["dropoff_state"] = dropOffState;
           final response = await CallApi()
               .postData(values, 'user/interstate-transport/delivery/new');
-          print("interstateride");
+          print(response);
 
           String code = response['code'];
           if (code == "success") {
@@ -869,7 +875,7 @@ class MapProvider with ChangeNotifier {
           } else {
             distanceBetweenPickAndDropOff = 0;
             String message = (response['message']).toString();
-
+            print(message);
             CustomDisplayWidget.displayAwesomeSuccessSnackBar(
                 context, message, "Check entered city, state");
           }
@@ -955,6 +961,7 @@ class MapProvider with ChangeNotifier {
       final response =
           await CallApi().postData(null, "user/delivery/process/$deliveryId");
       final body = response;
+      print(response);
       if (response['code'] == "success") {
         var val = response['data']['price'];
         //////print("val = $val");
@@ -1225,7 +1232,8 @@ class MapProvider with ChangeNotifier {
     }
   }
 
-  Future<void> getTime() async {
+  getTime() async {
+    print(departureTimeDownDownValue);
     if (departureTimeDownDownValue.contains("6am")) {
       selectedBookingTime = "06:00:00";
     } else if (departureTimeDownDownValue.contains("8am")) {
@@ -1235,5 +1243,6 @@ class MapProvider with ChangeNotifier {
     } else if (departureTimeDownDownValue.contains("6pm")) {
       selectedBookingTime = "18:00:00";
     }
+    print(selectedBookingTime);
   }
 }

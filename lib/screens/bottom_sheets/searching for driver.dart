@@ -85,7 +85,7 @@ class _SearchingForDriverSheetState extends State<SearchingForDriverSheet> {
                     ),
                     const Center(
                       child: Text(
-                        "A Rider/Driver will PICKUP within the hour.\nYou will be notified when the rider/driver is assigned to pick up\nCheck My Deliveries Page for delivery status and details of the rider/driver. \nOR Call 0813 896 9994 for Support",
+                        "A Rider/Driver will PICKUP within the hour/at selcted departure time.\nYou will be notified when the rider/driver is assigned to pick up\nCheck My Deliveries Page for delivery status and details of the rider/driver. \nOR Call 0813 896 9994 for Support",
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w400),
                       ),

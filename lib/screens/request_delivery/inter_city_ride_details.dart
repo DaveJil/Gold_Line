@@ -205,11 +205,7 @@ class _SelectVehicleState extends State<SelectVehicle> {
     // Initial Selected Value
 
     // List of items in our dropdown menu
-    var items = [
-      "Classic(4 seater salon car)",
-      "Business(8 seater mini bus)",
-      "Executive(6 seater jeep)"
-    ];
+    var items = ["Select Vehicle Type", "Classic", "Business", "Executive"];
 
     return Container(
       height: MediaQuery.of(context).size.height / 18,
@@ -272,7 +268,7 @@ class _SelectDepartureTimeState extends State<SelectDepartureTime> {
 
     // List of items in our dropdown menu
     var items = [
-      'Select Departure time',
+      'Select Departure Time',
       "Early Morning 6am-7am",
       "Morning 8am-11am ",
       "Afternoon 12pm-5pm",
@@ -340,6 +336,7 @@ class _SelectRouteState extends State<SelectRoute> {
 
     // List of items in our dropdown menu
     var items = [
+      "Select Route",
       'Lagos - Federal Capital Territory',
       'Lagos - Rivers',
       'Federal Capital Territory - Lagos',
@@ -551,8 +548,8 @@ class BookingTypeRadioButton extends StatefulWidget {
 
 class _BookingTypeRadioButtonState extends State<BookingTypeRadioButton> {
   List bookingType = [
-    "Charter Booking",
-    "Single Booking",
+    "charter",
+    "single",
   ];
 
   String? select;

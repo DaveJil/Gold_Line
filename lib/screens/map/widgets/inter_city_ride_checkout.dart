@@ -94,7 +94,7 @@ class InterCityRideSummaryWidget extends StatelessWidget {
                     AutoSizeText('''
                 Name: ${interCityBookingName.text}
                 Phone: ${interCityBookingPhone.text}  
-                Number of seats: ${interCityBookingNumberOfSeats}        
+                Number of seats: ${interCityBookingNumberOfSeats.text}        
                            ''',
                         style: TextStyle(
                           fontSize: 16,
@@ -124,13 +124,12 @@ class InterCityRideSummaryWidget extends StatelessWidget {
                     AutoSizeText('''
                 Luggage Size: ${receiverName.text}
                 Departure Date: ${mapProvider.selectedBookingDate}
-                Departure Time: ${mapProvider.selectedBookingTime}
-                Booking Type: ${receiverPhone.text}            
+                Departure Time: ${mapProvider.departureTimeDownDownValue}
+                Booking Type: ${mapProvider.interCityBookingType}            
                  ''', style: TextStyle(fontSize: 16)),
                     SizedBox(
                       height: 10,
                     ),
-
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.all(20.0),
