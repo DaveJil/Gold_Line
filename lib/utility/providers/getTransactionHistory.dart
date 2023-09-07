@@ -16,6 +16,19 @@ import '../../models/transaction/transactions.dart';
 import '../api.dart';
 import 'map_provider.dart';
 
+enum OrderPaymentMethod { cash, card, wallet }
+
+class OrderPaymentProvider with ChangeNotifier {
+  OrderPaymentMethod _orderPaymentMethod = OrderPaymentMethod.card;
+
+  OrderPaymentMethod get orderPaymentMethod => _orderPaymentMethod;
+
+  set setTransactionsTypeEnum(OrderPaymentMethod paymentMethod) {
+    _orderPaymentMethod = paymentMethod;
+    notifyListeners();
+  }
+}
+
 Transactions? transactions = Transactions();
 String? checkOutURL;
 String? accessCode;
@@ -65,6 +78,34 @@ Future deposit(String amount, BuildContext context) async {
     print(response);
     String code = response['code'];
     if (code == "success") {
+      changeScreenReplacement(context, WalletScreen());
+    } else {
+      String message = response['message'];
+      {
+        CustomDisplayWidget.displaySnackBar(context, message);
+        changeScreenReplacement(context, WalletScreen());
+      }
+    }
+  } on SocketException {
+    throw const SocketException('No internet connection');
+  } catch (err) {
+    throw Exception(err.toString());
+  }
+}
+
+Future interWalletTransfer(
+    String amount, String email, BuildContext context) async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+
+  Map<String, dynamic> request = {'amount': amount, 'email': email};
+
+  try {
+    var response = await CallApi().postData(request, 'wallet/transfer');
+    print(response);
+    String code = response['code'];
+    if (code == "success") {
+      changeScreenReplacement(context, WalletScreen());
+      CustomDisplayWidget.displaySnackBar(context, "Transfer sucessful");
       changeScreenReplacement(context, WalletScreen());
     } else {
       String message = response['message'];

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gold_line/utility/providers/map_provider.dart';
-import 'package:gold_line/utility/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../utility/helpers/custom_button.dart';
@@ -18,16 +17,15 @@ class FlutterwavePaymentScreen extends StatefulWidget {
 }
 
 class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
-  bool optionIsCash = false;
-
   @override
   Widget build(BuildContext context) {
     final MapProvider mapProvider = Provider.of<MapProvider>(context);
-    UserProvider userProvider = Provider.of<UserProvider>(context);
+    final OrderPaymentProvider paymentProvider =
+        Provider.of<OrderPaymentProvider>(context);
     Size size = MediaQuery.of(context).size;
 
     return DraggableScrollableSheet(
-        initialChildSize: 0.3,
+        initialChildSize: 0.5,
         minChildSize: 0.1,
         maxChildSize: 0.8,
         builder: (BuildContext context, myScrollController) {
@@ -53,8 +51,8 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
                         vertical: size.height / 80),
                     child: Column(
                       children: [
-                        Row(
-                          children: const [
+                        const Row(
+                          children: [
                             Text(
                               "Payment Methods",
                               style: TextStyle(
@@ -72,7 +70,8 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
                           child: InkWell(
                             onTap: (() {
                               setState(() {
-                                optionIsCash = true;
+                                paymentProvider.setTransactionsTypeEnum =
+                                    OrderPaymentMethod.cash;
                               });
                               //////print("optionIsCash is now $optionIsCash");
                             }),
@@ -89,7 +88,8 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
                                 ),
                               ),
                               trailing: Icon(Icons.circle,
-                                  color: optionIsCash
+                                  color: paymentProvider.orderPaymentMethod ==
+                                          OrderPaymentMethod.cash
                                       ? Colors.blue
                                       : Colors.black38),
                             ),
@@ -101,7 +101,8 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
                           child: InkWell(
                             onTap: (() {
                               setState(() {
-                                optionIsCash = false;
+                                paymentProvider.setTransactionsTypeEnum =
+                                    OrderPaymentMethod.card;
                               });
                               //////print("optionIsCash is now $optionIsCash");
                             }),
@@ -118,22 +119,72 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
                                 ),
                               ),
                               trailing: Icon(Icons.arrow_circle_right,
-                                  color: optionIsCash
-                                      ? Colors.black38
-                                      : Colors.blue),
+                                  color: paymentProvider.orderPaymentMethod ==
+                                          OrderPaymentMethod.card
+                                      ? Colors.blue
+                                      : Colors.black38),
                             ),
                           ),
                         ),
+
+                        SizedBox(
+                          width: size.width,
+                          height: size.height / 19,
+                          child: InkWell(
+                            onTap: (() {
+                              setState(() {
+                                paymentProvider.setTransactionsTypeEnum =
+                                    OrderPaymentMethod.wallet;
+                              });
+                              //////print("optionIsCash is now $optionIsCash");
+                            }),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.only(left: 5),
+                              minVerticalPadding: 5,
+                              leading: const Icon(FontAwesomeIcons.creditCard,
+                                  color: Colors.black),
+                              minLeadingWidth: 5,
+                              title: const Text(
+                                "Wallet",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              trailing: Icon(Icons.arrow_circle_right,
+                                  color: paymentProvider.orderPaymentMethod ==
+                                          OrderPaymentMethod.wallet
+                                      ? Colors.blue
+                                      : Colors.black38),
+                            ),
+                          ),
+                        ),
+
                         //
                       ],
                     ),
                   ),
                   CustomButton(
                     onPressed: () async {
-                      optionIsCash
-                          ? await mapProvider.submitCashDelivery()
-                          : payStackDelivery(
-                              mapProvider.deliveryPrice.toString(), context);
+                      if (paymentProvider.orderPaymentMethod ==
+                          OrderPaymentMethod.cash) {
+                        await mapProvider.updatePaymentMethod(
+                            "cash", "cash", context);
+                        await mapProvider.submitCashDelivery();
+                      }
+
+                      if (paymentProvider.orderPaymentMethod ==
+                          OrderPaymentMethod.card) {
+                        await mapProvider.updatePaymentMethod(
+                            "card", "paystack", context);
+
+                        payStackDelivery(
+                            mapProvider.deliveryPrice.toString(), context);
+                      }
+                      if (paymentProvider.orderPaymentMethod ==
+                          OrderPaymentMethod.wallet) {
+                        await mapProvider.updatePaymentMethod(
+                            "wallet", "wallet", context);
+                      }
                     },
                     text: "Pay",
                     fontSize: 18,

@@ -24,7 +24,8 @@ class CashPaymentWidget extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(1.0),
             child: Container(
-              decoration: BoxDecoration(color: Colors.white,
+              decoration: BoxDecoration(
+                  color: Colors.white,
 //                        borderRadius: BorderRadius.only(
 //                            topLeft: Radius.circular(20),
 //                            topRight: Radius.circular(20)),
@@ -64,7 +65,7 @@ class CashPaymentWidget extends StatelessWidget {
                           height: 60,
                           fontSize: 18,
                           onPressed: () async {
-                            await mapProvider.updatePaymentMethod();
+                            // await mapProvider.updatePaymentMethod();
                             mapProvider.changeWidgetShowed(
                                 showWidget: Show.SEARCHING_FOR_DRIVER);
                           },

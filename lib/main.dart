@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gold_line/goldline.dart';
+import 'package:gold_line/utility/providers/getTransactionHistory.dart';
 import 'package:gold_line/utility/providers/get_list_provider.dart';
 import 'package:gold_line/utility/providers/map_provider.dart';
 import 'package:gold_line/utility/providers/user_provider.dart';
@@ -98,6 +99,10 @@ class _MyAppState extends State<MyApp> {
         }),
         ChangeNotifierProvider<GetListProvider>(create: (BuildContext context) {
           return GetListProvider();
+        }),
+        ChangeNotifierProvider<OrderPaymentProvider>(
+            create: (BuildContext context) {
+          return OrderPaymentProvider();
         }),
       ],
       child: MaterialApp(

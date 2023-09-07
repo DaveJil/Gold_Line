@@ -842,7 +842,6 @@ class MapProvider with ChangeNotifier {
       "distance": distanceBetweenPickAndDropOff,
       "pickup_address": pickUpLocationController.text,
       "dropoff_address": dropOffLocationController.text,
-      "payment_method": "card",
       "country": pickUpCountry,
       "dropoff_city": dropOffState,
       "dropoff_state": dropOffState,
@@ -894,19 +893,24 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future updatePaymentMethod() async {
+  Future updatePaymentMethod(
+      String paymentMethod, String paymentGateway, BuildContext context) async {
     Map<String, dynamic> values = {
-      "delivery_id": deliveryId,
-      "payment_method": "cash"
+      "payment_gateway": paymentGateway,
+      "payment_method": paymentMethod,
     };
     SharedPreferences pref = await SharedPreferences.getInstance();
     isLoading = true;
     try {
-      final response = await CallApi().postData(values, 'user/delivery/update');
+      final response = await CallApi()
+          .postData(values, 'user/delivery/create-payment/$deliveryId');
       if (response['success'] == "success") {
         final body = response;
         isLoading = false;
         notifyListeners();
+      } else {
+        return CustomDisplayWidget.displaySnackBar(
+            context, "Generating payment unsucessful");
       }
     } on SocketException {
       throw const SocketException('No internet connection');
@@ -947,9 +951,21 @@ class MapProvider with ChangeNotifier {
     }
   }
 
-// ANCHOR LISTEN TO DRIVER
-  _listenToDrivers() {
-    // allDriversStream = _driverService.getDrivers().listen(_updateMarkers);
+  Future submitWalletDelivery() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    Map<String, dynamic> values = {"payment_method": "cash"};
+
+    try {
+      final response =
+          await CallApi().postData(values, 'user/delivery/submit/$deliveryId');
+      String message = response["message"];
+      //print(message);
+      changeWidgetShowed(showWidget: Show.SEARCHING_FOR_DRIVER);
+    } on SocketException {
+      throw const SocketException('No internet connection');
+    } catch (err) {
+      throw Exception(err.toString());
+    }
   }
 
 // trip process endpoint
