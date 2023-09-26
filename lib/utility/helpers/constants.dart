@@ -14,8 +14,7 @@ const String appFont = "Poppins";
 
 const HAS_PERMISSION = "has_permission";
 const LOCATION_ENABLED = "location_enabled";
-// const GOOGLE_MAPS_API_KEY = "AIzaSyAbncVH9Pjn3jurZ2N12nnit6js3XPAqtc";
-const GOOGLE_MAPS_API_KEY = "AIzaSyDuBwnC0ov7JuH9XN6b6q9l8FUrtWwoBpw";
+const GOOGLE_MAPS_API_KEY = "AIzaSyAJa8NMwKE5L8wbXm_3LJdkQHC_7ipu4no";
 
 const COUNTRY = "country";
 
@@ -74,6 +73,7 @@ String getFormattedDate(String timestamp) {
     return "";
   }
 }
+
 InputDecoration GoldlineInputDeco = InputDecoration(
   prefixIconColor: Colors.black54,
   isDense: true,

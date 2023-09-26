@@ -17,7 +17,6 @@ import '../../models/user_profile/get_data_model.dart';
 import '../../screens/map/map_widget.dart';
 import '../api.dart';
 import '../helpers/upload_image.dart';
-import '../services/user_services.dart';
 
 enum Status { Uninitialized, Authenticated, Unauthenticated }
 
@@ -27,7 +26,6 @@ class UserProvider with ChangeNotifier {
   static const TOKEN = "token";
   static const FIRSTNAME = "first_name";
 
-  final UserServices _services = UserServices();
   Status status = Status.Uninitialized;
   UserProfile? userProfile;
   GetData? userData;

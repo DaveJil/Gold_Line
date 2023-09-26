@@ -1,5 +1,3 @@
-// ignore_for_file: constant_identifier_names
-
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
@@ -24,11 +22,7 @@ import '../../models/route_model.dart';
 import '../../models/user_profile/user_profile.dart';
 import '../api.dart';
 import '../helpers/constants.dart';
-import '../helpers/custom_button.dart';
 import '../helpers/custom_display_widget.dart';
-import '../helpers/stars.dart';
-import '../services/calls_and_sms.dart';
-import '../services/delivery_services.dart';
 import '../services/map_request.dart';
 
 enum Show {
@@ -77,8 +71,6 @@ class MapProvider with ChangeNotifier {
   LatLng? destinationCoordinates;
 
   String? deliveryPrice = "0";
-  late bool _isPickupSet = false;
-  late bool _isDropOffSet = false;
 
   String? countryCode;
   Set<Marker> _markers = {};
@@ -121,7 +113,6 @@ class MapProvider with ChangeNotifier {
   bool driverFound = false;
   bool driverArrived = false;
   bool deliveryCompleted = false;
-  DeliveryRequestServices _requestServices = DeliveryRequestServices();
   int timeCounter = 0;
   double percentage = 0;
   Timer? periodicTimer;
@@ -140,14 +131,9 @@ class MapProvider with ChangeNotifier {
   String? pickUpCountry;
   String? dropOffCountry;
 
-  //  this variable will listen to the status of the ride request
-  StreamSubscription<AsyncSnapshot>? requestStream;
-
-  // this variable will keep track of the drivers position before and during the ride
-  StreamSubscription<AsyncSnapshot>? driverStream;
-
-//  this stream is for all the driver on the app
-  StreamSubscription<List<DriverProfile>>? allDriversStream;
+  Timer? debounce;
+  bool useCurrentLocationPickUp = false;
+  bool useCurrentLocationDropOff = false;
 
   GoogleMapsPlaces places = GoogleMapsPlaces(apiKey: GOOGLE_MAPS_API_KEY);
 
@@ -224,14 +210,15 @@ class MapProvider with ChangeNotifier {
 
     Position position = await Geolocator.getCurrentPosition();
     center = LatLng(position.latitude, position.longitude);
-
+    print(center);
     List<Placemark> placemark =
         await placemarkFromCoordinates(position.latitude, position.longitude);
     //print(placemark);
     Placemark place = placemark[0];
+    print(place);
     //print(place);
     userAddressText =
-        '${place.street}, ${place.subLocality}, ${place.locality}';
+        ' ${place.street}, ${place.subLocality}, ${place.locality}';
 
     if (prefs.getString(COUNTRY) == null) {
       String country = placemark[0].isoCountryCode!.toLowerCase();
@@ -298,11 +285,6 @@ class MapProvider with ChangeNotifier {
       });
     }
     notifyListeners();
-  }
-
-  _animateCamera({required LatLng point}) async {
-    await _mapController!.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: point, tilt: 15, zoom: 19)));
   }
 
   _setCustomMapPin() async {
@@ -395,6 +377,96 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  clearPickUpLocationPredictions() {
+    predictions = [];
+    useCurrentLocationPickUp = false;
+    pickUpLocationController.clear();
+    notifyListeners();
+  }
+
+  clearDropOffLocationPredictions() {
+    predictions = [];
+    useCurrentLocationDropOff = false;
+    dropOffLocationController.clear();
+    notifyListeners();
+  }
+
+  setPickUpPredictions() {
+    predictions = [];
+    pickupLocation = null;
+    pickUpLatLng = LatLng(pickupLocation!.geometry!.location!.lat!,
+        pickupLocation!.geometry!.location!.lng!);
+    notifyListeners();
+  }
+
+  useCheckBoxForCurrentPickUp() async {
+    pickUpLatLng = LatLng(center!.latitude, center!.longitude);
+    notifyListeners();
+    pickUpState = await getStateFromCoordinates(point: center!);
+    notifyListeners();
+
+    pickUpCountry = await getCountryFromCoordinates(point: center!);
+    notifyListeners();
+    predictions = [];
+    pickUpLocationController.text = userAddressText!;
+    pickUpLatLng = LatLng(center!.latitude, center!.longitude);
+    useCurrentLocationPickUp = !useCurrentLocationPickUp;
+  }
+
+  useCheckBoxForCurrentDropOff() async {
+    dropOffLatLng = LatLng(center!.latitude, center!.longitude);
+    notifyListeners();
+    dropOffState = await getStateFromCoordinates(point: center!);
+    notifyListeners();
+
+    dropOffCountry = await getCountryFromCoordinates(point: center!);
+    notifyListeners();
+    predictions = [];
+    dropOffLocationController.text = userAddressText!;
+    notifyListeners();
+
+    dropOffLatLng = LatLng(center!.latitude, center!.longitude);
+    notifyListeners();
+
+    useCurrentLocationDropOff = !useCurrentLocationDropOff;
+    notifyListeners();
+  }
+
+  setPickUpLocation(int index) async {
+    final placeId = predictions[index].placeId!;
+    final details = await googlePlace.details.get(placeId);
+    pickUpLocationController.text = predictions[index].description!;
+
+    // pickUpLocationController.text = details!.result!.formattedAddress!;
+    predictions = [];
+    notifyListeners();
+    pickupLocation = details!.result;
+    notifyListeners();
+    pickUpLatLng = LatLng(pickupLocation!.geometry!.location!.lat!,
+        pickupLocation!.geometry!.location!.lng!);
+    notifyListeners();
+    pickUpState = await getStateFromCoordinates(point: pickUpLatLng!);
+    pickUpCountry = await getCountryFromCoordinates(point: pickUpLatLng!);
+    notifyListeners();
+  }
+
+  setDropOffLocation(int index) async {
+    final placeId = predictions[index].placeId!;
+    final details = await googlePlace.details.get(placeId);
+    dropOffLocationController.text = predictions[index].description!;
+
+    // dropOffLocationController.text = details!.result!.formattedAddress!;
+    predictions = [];
+    notifyListeners();
+    dropoffLocation = details!.result;
+
+    dropOffLatLng = LatLng(dropoffLocation!.geometry!.location!.lat!,
+        dropoffLocation!.geometry!.location!.lng!);
+    dropOffState = await getStateFromCoordinates(point: dropOffLatLng!);
+    dropOffCountry = await getCountryFromCoordinates(point: dropOffLatLng!);
+    notifyListeners();
+  }
+
   autoCompleteSearch(String value) async {
     var result = await googlePlace.autocomplete.get(value);
     if (result != null && result.predictions != null) {
@@ -402,6 +474,7 @@ class MapProvider with ChangeNotifier {
       predictions = result.predictions!;
       notifyListeners();
     }
+    notifyListeners();
   }
 
 // ANCHOR: MARKERS AND POLYS
@@ -428,69 +501,9 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void _addDriverMarker(
-      {LatLng? position, double? rotation, String? driverId}) {
-    var uuid = const Uuid();
-    String markerId = uuid.v1();
-    _markers.add(Marker(
-        markerId: MarkerId(markerId),
-        position: position!,
-        rotation: rotation!,
-        draggable: false,
-        zIndex: 2,
-        flat: true,
-        anchor: const Offset(1, 1),
-        icon: driverPin!));
-    notifyListeners();
-  }
-
-  _updateMarkers(List<DriverProfile> drivers) {
-//    this code will ensure that when the driver markers are updated the location marker wont be deleted
-    List<Marker> locationMarkers = _markers
-        .where((element) => element.markerId.value == 'location')
-        .toList();
-    clearMarkers();
-    if (locationMarkers.isNotEmpty) {
-      _markers.add(locationMarkers[0]);
-    }
-
-//    here we are updating the drivers markers
-    drivers.forEach((DriverProfile driver) {
-      _addDriverMarker(
-          driverId: driver.id,
-          position:
-              LatLng(driver.profile?.latitude!, driver.profile?.longitude));
-      // rotation: driver.heading);
-    });
-    notifyListeners();
-  }
-
-  // _updateDriverMarker(Marker marker) {
-  //   _markers.remove(marker);
-  //   sendRequest(
-  //       origin: pickupCoordinates, destination: driverProfile?.getPosition());
-  //   notifyListeners();
-  //   _addDriverMarker(
-  //       position: driverProfile!.getPosition(),
-  //       rotation: driverProfile!.heading,
-  //       driverId: driverProfile!.id);
-  // }
-
   clearMarkers() {
     _markers.clear();
     notifyListeners();
-  }
-
-  _clearDriverMarkers() {
-    _markers.forEach((element) {
-      String _markerId = element.markerId.value;
-      if (_markerId != driverProfile?.id ||
-          _markerId != LOCATION_MARKER_ID ||
-          _markerId != PICKUP_MARKER_ID) {
-        _markers.remove(element);
-        notifyListeners();
-      }
-    });
   }
 
   clearPoly() {
@@ -500,124 +513,6 @@ class MapProvider with ChangeNotifier {
 
   navigateToHomeWidget() {
     changeWidgetShowed(showWidget: Show.HOME);
-  }
-
-  changeRequestedDestination(
-      {String? reqDestination, double? lat, double? lng}) {
-    requestedDestination = reqDestination;
-    requestedDestinationLat = lat;
-    requestedDestinationLng = lng;
-    notifyListeners();
-  }
-
-  showDriverBottomSheet(BuildContext context) {
-    if (alertsOnUi) Navigator.pop(context);
-
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return SizedBox(
-              height: 400,
-              child: Column(
-                children: [
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(routeModel!.timeNeeded.toString(),
-                          style: const TextStyle(
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Visibility(
-                        visible: driverProfile?.avatar == null,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(40)),
-                          child: const CircleAvatar(
-                            backgroundColor: Colors.transparent,
-                            radius: 45,
-                            child: Icon(
-                              Icons.person,
-                              size: 65,
-                              color: kVistaWhite,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        visible: driverProfile!.avatar != null,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.deepOrange,
-                              borderRadius: BorderRadius.circular(40)),
-                          child: CircleAvatar(
-                            radius: 45,
-                            backgroundImage:
-                                NetworkImage(driverProfile?.avatar),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(driverProfile?.profile?.firstName ?? "Driver"),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  stars(
-                      rating: driverProfile?.rating ?? 5.0,
-                      votes: driverProfile?.rating?.toInt() ?? 5),
-                  const Divider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      TextButton.icon(
-                          onPressed: null,
-                          icon: const Icon(Icons.directions_car),
-                          label: Text(driverProfile!.profile!.rideType!)),
-                      Text(driverProfile!.profile!.plateNumber!,
-                          style: const TextStyle(color: Colors.deepOrange))
-                    ],
-                  ),
-                  const Divider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      CustomButton(
-                        onPressed: () {
-                          CallsAndMessagesService()
-                              .call(driverProfile!.phone ?? "07014261561");
-                        },
-                        text: "Call",
-                        color: Colors.green,
-                      ),
-                      CustomButton(
-                        onPressed: () {
-                          // showBottomSheet(
-                          //     context: mainContext!,
-                          //     builder: (_) {
-                          //       return const RideCancelReason();
-                          //     });
-                        },
-                        text: "Cancel",
-                        color: Colors.red,
-                      )
-                    ],
-                  )
-                ],
-              ));
-        });
   }
 
   Future createDeliveryRequest(BuildContext context) async {
@@ -737,10 +632,7 @@ class MapProvider with ChangeNotifier {
             String code = response['code'];
             if (code == "success") {
               distanceBetweenPickAndDropOff = 0;
-              final data = response['data'];
-              //print(data);
               deliveryId = response['data']['id'];
-              //print(deliveryId);
               notifyListeners();
             } else {
               distanceBetweenPickAndDropOff = 0;
@@ -899,13 +791,11 @@ class MapProvider with ChangeNotifier {
       "payment_gateway": paymentGateway,
       "payment_method": paymentMethod,
     };
-    SharedPreferences pref = await SharedPreferences.getInstance();
     isLoading = true;
     try {
       final response = await CallApi()
           .postData(values, 'user/delivery/create-payment/$deliveryId');
       if (response['success'] == "success") {
-        final body = response;
         isLoading = false;
         notifyListeners();
       } else {
@@ -925,8 +815,6 @@ class MapProvider with ChangeNotifier {
     try {
       final response =
           await CallApi().postData(values, 'user/delivery/submit/$deliveryId');
-      String message = response["message"];
-      //print(message);
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {
@@ -1000,31 +888,6 @@ class MapProvider with ChangeNotifier {
     }
   }
 
-//  Timer counter for driver request
-  percentageCounter({String? requestId, BuildContext? context}) {
-    lookingForDriver = true;
-    notifyListeners();
-    periodicTimer = Timer.periodic(const Duration(seconds: 1), (time) {
-      timeCounter = timeCounter + 1;
-      percentage = timeCounter / 100;
-      //////print("====== GOOOO $timeCounter");
-      if (timeCounter == 100) {
-        timeCounter = 0;
-        percentage = 0;
-        lookingForDriver = false;
-        _requestServices.updateRequest({"id": requestId, "status": "expired"});
-        time.cancel();
-        if (alertsOnUi) {
-          Navigator.pop(context!);
-          alertsOnUi = false;
-          notifyListeners();
-        }
-        requestStream!.cancel();
-      }
-      notifyListeners();
-    });
-  }
-
   setPickCoordinates({LatLng? coordinates}) {
     pickupCoordinates = coordinates;
     notifyListeners();
@@ -1052,7 +915,6 @@ class MapProvider with ChangeNotifier {
       //print(deliveryStatus);
 
       notifyListeners();
-      //print(deliveryId);
       if (deliveryStatus == "accepted") {
         changeWidgetShowed(showWidget: Show.DRIVER_FOUND);
       } else {
@@ -1088,22 +950,6 @@ class MapProvider with ChangeNotifier {
 
   Timer checkStatusTimer = Timer.periodic(Duration(seconds: 10), (timer) {});
 
-  ///TOFIX
-  // void _moveMarkerAndChangeAddress(
-  //     {required CameraPosition cameraPosition,
-  //     required String markerId,
-  //     required String markerTitle}) {
-  //   LatLng _point = cameraPosition.target;
-  //   _updateLocationMarker(
-  //       cameraPosition: cameraPosition,
-  //       markerTitle: markerTitle,
-  //       markerId: markerId);
-  //   _setCoordinates(coordinates: _point);
-  //   _getAddressFromCoordinates(point: _point).then((value) async {
-  //     _changeAddress(address: address!.name!);
-  //   });
-  // }
-
   void _updateLocationMarker(
       {required CameraPosition cameraPosition,
       required String markerId,
@@ -1121,16 +967,6 @@ class MapProvider with ChangeNotifier {
     }
   }
 
-  ///tofix
-  _setCoordinates({required LatLng coordinates}) {
-    if (_isPickupSet == false) {
-      pickupCoordinates = coordinates;
-    } else {
-      destinationCoordinates = coordinates;
-    }
-    notifyListeners();
-  }
-
   _addMarker(
       {required LatLng markerPosition,
       required String id,
@@ -1141,15 +977,6 @@ class MapProvider with ChangeNotifier {
         zIndex: 10,
         infoWindow: InfoWindow(title: title),
         icon: locationPin!));
-    notifyListeners();
-  }
-
-  _changeAddress({required String address}) async {
-    if (_isPickupSet == false) {
-      pickUpLocationController.text = address;
-    } else {
-      dropOffLocationController.text = address;
-    }
     notifyListeners();
   }
 

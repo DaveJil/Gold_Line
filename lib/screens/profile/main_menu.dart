@@ -9,7 +9,6 @@ import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/custom_button.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
-import 'package:gold_line/widgets/otherDetailsDivider.dart';
 import 'package:provider/provider.dart';
 
 import '../../utility/providers/user_provider.dart';
@@ -214,7 +213,6 @@ class _MainMenuState extends State<MainMenu> {
                           ),
                         ],
                       ),
-                      OtherDetailsDivider(),
                       SizedBox(
                         height: getHeight(20, context),
                       ),

@@ -1,16 +1,6 @@
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:gold_line/screens/map/map_widget.dart';
-import 'package:gold_line/screens/my_deliveries/select_type.dart';
-import 'package:gold_line/screens/profile/wallet/wallet.dart';
-import 'package:gold_line/utility/helpers/routing.dart';
-import 'package:flutter/material.dart';
 import 'package:gold_line/utility/providers/map_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../api.dart';
-import 'contextStoppable.dart';
 
 class PushNotification {
   MapProvider mapProvider = MapProvider();
@@ -57,8 +47,8 @@ class PushNotification {
             notification.body,
             NotificationDetails(
                 android: AndroidNotificationDetails(channel.id, channel.name,
-                    sound: const RawResourceAndroidNotificationSound('goldline_sound'),
-
+                    sound: const RawResourceAndroidNotificationSound(
+                        'goldline_sound'),
                     icon: 'launch_background')));
       }
     });
@@ -67,7 +57,6 @@ class PushNotification {
       print("=== data = ${message.toString()}");
       String notificationType = message.data['navigate_to'];
     }
-
 
     FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
   }

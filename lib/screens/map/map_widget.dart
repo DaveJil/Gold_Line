@@ -48,46 +48,6 @@ class _MapWidgetState extends State<MapWidget> {
             children: [
               MapScreen(scaffoldState),
               Visibility(
-                visible: mapProvider.show == Show.DRIVER_FOUND,
-                child: Positioned(
-                    top: 60,
-                    left: 15,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: mapProvider.driverArrived
-                                ? Container(
-                                    color: Colors.green,
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(16),
-                                      child: Text(
-                                        "Meet driver at the pick up location",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  )
-                                : Container(
-                                    color: kPrimaryGoldColor,
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(16),
-                                      child: Text(
-                                        "Meet driver at the pick up location",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w300,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                          ),
-                        ],
-                      ),
-                    )),
-              ),
-              Visibility(
                 visible: mapProvider.show == Show.TRIP,
                 child: Positioned(
                     top: 60,

@@ -4,7 +4,7 @@ import 'constants.dart';
 
 class CustomButton extends StatelessWidget {
   final Color? color;
-  final VoidCallback onPressed;
+  final void Function()? onPressed;
   final String text;
   final double? width;
   final double? height;
@@ -37,18 +37,13 @@ class CustomButton extends StatelessWidget {
         onPressed: onPressed,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child: InkWell(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  text,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: fontSize),
-                ),
-              ],
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: fontSize),
             ),
           ),
         ),
