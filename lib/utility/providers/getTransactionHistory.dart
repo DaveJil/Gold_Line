@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:gold_line/screens/map/map_widget.dart';
+import 'package:gold_line/screens/bottom_sheets/searching%20for%20driver.dart';
 import 'package:gold_line/screens/payment_screen/payment_details.dart';
 import 'package:gold_line/screens/profile/wallet/paystack_checkout.dart';
 import 'package:gold_line/screens/profile/wallet/wallet.dart';
@@ -254,8 +254,7 @@ void verifyDeliveryPayment(String? amount, BuildContext context) async {
         .showSnackBar(SnackBar(content: Text(message)));
     final provider = Provider.of<MapProvider>(context);
     await provider.submitCardDelivery();
-    provider.changeWidgetShowed(showWidget: Show.SEARCHING_FOR_DRIVER);
-    removeScreenUntil(context, MapWidget());
+    removeScreenUntil(context, SearchingForDriver());
   } else {
     String message = response['data']['gateway_response'];
     ScaffoldMessenger.of(context)

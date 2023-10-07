@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/screens/profile/wallet/deposit%20screen.dart';
 import 'package:gold_line/screens/profile/wallet/transaction_item.dart';
 import 'package:gold_line/screens/profile/wallet/withdrawal_screen.dart';
@@ -9,6 +8,7 @@ import 'package:gold_line/utility/helpers/dimensions.dart';
 import '../../../utility/helpers/constants.dart';
 import '../../../utility/helpers/routing.dart';
 import '../../../utility/providers/getTransactionHistory.dart';
+import '../../home/home_screen.dart';
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({Key? key}) : super(key: key);
@@ -27,7 +27,7 @@ class _WalletScreenState extends State<WalletScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
-            removeScreenUntil(context, MapWidget());
+            removeScreenUntil(context, HomeScreen());
           },
         ),
       ),

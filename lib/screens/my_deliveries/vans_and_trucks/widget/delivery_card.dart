@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/screens/my_deliveries/normal/delivery_details.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
@@ -8,7 +6,6 @@ import 'package:gold_line/utility/providers/getTransactionHistory.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../utility/helpers/constants.dart';
-import '../../../../utility/helpers/custom_button.dart';
 import '../../../../utility/providers/get_list_provider.dart';
 import '../../../../utility/providers/map_provider.dart';
 import 'pending_deliveries.dart';
@@ -48,7 +45,8 @@ class NewVansDeliveryCard extends StatelessWidget {
             children: [
               Text(
                 "Delivery #$title",
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
               ),
               Text("Pick Up Location: $pickUpLocation"),
               SizedBox(
@@ -63,9 +61,10 @@ class NewVansDeliveryCard extends StatelessWidget {
                     onPressed: () async {
                       deliveryListProvider.cancelDelivery(context, id!);
                     },
-                    child: Text("Reject"),
+                    child: const Text("Reject"),
                     style: ElevatedButton.styleFrom(
-                        shape: StadiumBorder(), backgroundColor: Colors.red),
+                        shape: const StadiumBorder(),
+                        backgroundColor: Colors.red),
                   ),
                 ],
               )
@@ -168,7 +167,7 @@ class _VansDeliveryCardState extends State<VansDeliveryCard> {
           children: [
             Text(
               "Delivery #${widget.title}",
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
             ),
             SizedBox(
               height: 4.appHeight(context),
@@ -203,23 +202,25 @@ class _VansDeliveryCardState extends State<VansDeliveryCard> {
                     ElevatedButton(
                       onPressed: () async {
                         mapProvider.deliveryPrice = widget.price!;
-                     payStackDelivery(widget.price, context);
-            },
-                      child: Text("Accept/Make Payment"),
+                        payStackDelivery(widget.price, context);
+                      },
+                      child: const Text("Accept/Make Payment"),
                       style: ElevatedButton.styleFrom(
-                          shape: StadiumBorder(),
+                          shape: const StadiumBorder(),
                           backgroundColor: kPrimaryGoldColor),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        deliveryListProvider.cancelDelivery(context, widget.id.toString());
+                        deliveryListProvider.cancelDelivery(
+                            context, widget.id.toString());
                       },
-                      child: Text("Reject Price/ Cancel Delivery"),
+                      child: const Text("Reject Price/ Cancel Delivery"),
                       style: ElevatedButton.styleFrom(
-                          shape: StadiumBorder(), backgroundColor: Colors.red),
+                          shape: const StadiumBorder(),
+                          backgroundColor: Colors.red),
                     ),
                   ],
                 )),
@@ -340,7 +341,8 @@ class CompletedVansDeliveryCard extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<CompletedVansDeliveryCard> createState() => _CompletedVansDeliveryCardState();
+  State<CompletedVansDeliveryCard> createState() =>
+      _CompletedVansDeliveryCardState();
 }
 
 class _CompletedVansDeliveryCardState extends State<CompletedVansDeliveryCard> {
@@ -352,7 +354,7 @@ class _CompletedVansDeliveryCardState extends State<CompletedVansDeliveryCard> {
     return InkWell(
       onTap: () {
         (widget.type == "bulk")
-            ? changeScreen(context, PendingDeliveries())
+            ? changeScreen(context, const PendingDeliveries())
             : changeScreen(
                 context,
                 DeliveryDetailsScreen(
@@ -389,10 +391,10 @@ class _CompletedVansDeliveryCardState extends State<CompletedVansDeliveryCard> {
               alignment: Alignment.topRight,
               child: Container(
                 color: kPrimaryGoldColor,
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   widget.type ?? "Single",
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 16,
                       color: Colors.white),
@@ -401,7 +403,7 @@ class _CompletedVansDeliveryCardState extends State<CompletedVansDeliveryCard> {
             ),
             Text(
               "Delivery #${widget.title}",
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
             ),
             SizedBox(
               height: 4.appHeight(context),
@@ -427,7 +429,7 @@ class _CompletedVansDeliveryCardState extends State<CompletedVansDeliveryCard> {
                 ],
               ),
             ),
-            Divider()
+            const Divider()
           ],
         ),
       ),

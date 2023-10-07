@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gold_line/screens/authentication/sign_up.dart';
-import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../utility/helpers/dimensions.dart';
 import '../../utility/providers/user_provider.dart';
+import '../home/home_screen.dart';
 
 class KycInfo extends StatefulWidget {
   const KycInfo({super.key});
@@ -60,10 +59,9 @@ class KycInfoState extends State<KycInfo> {
                 SizedBox(
                   height: getHeight(40, context),
                 ),
-
                 Padding(
                   padding:
-                  EdgeInsets.symmetric(horizontal: getWidth(30, context)),
+                      EdgeInsets.symmetric(horizontal: getWidth(30, context)),
                   child: TextField(
                     controller: userProvider.email,
                     decoration: InputDecoration(
@@ -111,10 +109,12 @@ class KycInfoState extends State<KycInfo> {
                       color: kPrimaryGoldColor,
                       borderRadius: BorderRadius.circular(20)),
                   child: TextButton(
-                    onPressed: () async{
-                     await  userProvider.updateProfile(context);
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (_) => const MapWidget()));
+                    onPressed: () async {
+                      await userProvider.updateProfile(context);
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const HomeScreen()));
                     },
                     child: const Text(
                       'Continue',

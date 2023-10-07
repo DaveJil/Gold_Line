@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gold_line/screens/map/map_widget.dart';
+import 'package:gold_line/screens/home/home_screen.dart';
 import 'package:gold_line/screens/splashscreen.dart';
 import 'package:gold_line/utility/services/push_notifications.dart';
 import 'package:provider/provider.dart';
@@ -29,11 +29,11 @@ class _GoldLineState extends State<GoldLine> {
       case Status.Uninitialized:
         return const SplashScreen();
       case Status.Unauthenticated:
-        return SplashScreen();
+        return const SplashScreen();
       case Status.Authenticated:
-        return MapWidget();
+        return const HomeScreen();
       default:
-        return SplashScreen();
+        return const SplashScreen();
     }
   }
 }

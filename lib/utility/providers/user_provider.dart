@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../models/user_profile/user_profile.dart';
 import '../../models/user_profile/get_data_model.dart';
-import '../../screens/map/map_widget.dart';
+import '../../screens/home/home_screen.dart';
 import '../api.dart';
 import '../helpers/upload_image.dart';
 
@@ -118,7 +118,7 @@ class UserProvider with ChangeNotifier {
         print(deviceToken);
         status = Status.Authenticated;
 
-        removeScreenUntil(context, const MapWidget());
+        removeScreenUntil(context, const HomeScreen());
       } else {
         String message = response['message'].toString();
 
@@ -341,7 +341,7 @@ class UserProvider with ChangeNotifier {
     try {
       final response = await CallApi().postData(formData, "bank/new");
       if (response['code'] == 'success') {
-        removeScreenUntil(context, MapWidget());
+        removeScreenUntil(context, HomeScreen());
       } else {
         String message = response['message'].toString();
         print(message);

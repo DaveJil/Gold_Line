@@ -3,11 +3,13 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:gold_line/screens/bottom_sheets/searching%20for%20driver.dart';
 import 'package:gold_line/utility/helpers/controllers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
@@ -24,18 +26,6 @@ import '../api.dart';
 import '../helpers/constants.dart';
 import '../helpers/custom_display_widget.dart';
 import '../services/map_request.dart';
-
-enum Show {
-  HOME,
-  CASH_PAYMENT,
-  FLUTTERWAVE_PAYMENT,
-  SEARCHING_FOR_DRIVER,
-  DRIVER_FOUND,
-  TRIP,
-  CHECKOUT_DELIVERY,
-  CHECKOUT_INTERCITY_RIDE,
-  ORDER_STATUS
-}
 
 enum PackageSize { none, small, medium, large }
 
@@ -91,7 +81,6 @@ class MapProvider with ChangeNotifier {
   BitmapDescriptor? driverPin;
   UserProfile? user;
 
-  Show show = Show.HOME;
   String? selectSize;
   String? sizeColor;
 
@@ -106,17 +95,12 @@ class MapProvider with ChangeNotifier {
   Color packageColor = Colors.white;
 
   final Completer<GoogleMapController> _controller = Completer();
-
-  //  Driver request related variables
-  bool lookingForDriver = false;
-  bool alertsOnUi = false;
-  bool driverFound = false;
-  bool driverArrived = false;
-  bool deliveryCompleted = false;
   int timeCounter = 0;
   double percentage = 0;
   Timer? periodicTimer;
   List<LatLng> polylineCoordinates = [];
+
+  bool isButtonDisabled = false;
 
   String? requestedDestination;
   int? deliveryId;
@@ -434,13 +418,16 @@ class MapProvider with ChangeNotifier {
 
   setPickUpLocation(int index) async {
     final placeId = predictions[index].placeId!;
+    print(placeId);
     final details = await googlePlace.details.get(placeId);
+    print(details);
     pickUpLocationController.text = predictions[index].description!;
-
+    print(details);
     // pickUpLocationController.text = details!.result!.formattedAddress!;
     predictions = [];
     notifyListeners();
     pickupLocation = details!.result;
+    print(pickupLocation);
     notifyListeners();
     pickUpLatLng = LatLng(pickupLocation!.geometry!.location!.lat!,
         pickupLocation!.geometry!.location!.lng!);
@@ -453,6 +440,7 @@ class MapProvider with ChangeNotifier {
   setDropOffLocation(int index) async {
     final placeId = predictions[index].placeId!;
     final details = await googlePlace.details.get(placeId);
+    print(details);
     dropOffLocationController.text = predictions[index].description!;
 
     // dropOffLocationController.text = details!.result!.formattedAddress!;
@@ -509,10 +497,6 @@ class MapProvider with ChangeNotifier {
   clearPoly() {
     _poly.clear();
     notifyListeners();
-  }
-
-  navigateToHomeWidget() {
-    changeWidgetShowed(showWidget: Show.HOME);
   }
 
   Future createDeliveryRequest(BuildContext context) async {
@@ -786,17 +770,26 @@ class MapProvider with ChangeNotifier {
   }
 
   Future updatePaymentMethod(
-      String paymentMethod, String paymentGateway, BuildContext context) async {
+    String paymentMethod,
+    String paymentGateway,
+    BuildContext context,
+  ) async {
     Map<String, dynamic> values = {
       "payment_gateway": paymentGateway,
       "payment_method": paymentMethod,
+      "order_id": deliveryId,
+      "payment_for": "delivery",
+      "amount": deliveryPrice
     };
     isLoading = true;
     try {
+      print(deliveryId);
       final response = await CallApi()
           .postData(values, 'user/delivery/create-payment/$deliveryId');
-      if (response['success'] == "success") {
+      if (kDebugMode) {}
+      if (response['code'] == "success") {
         isLoading = false;
+        if (paymentMethod == "wallet") {}
         notifyListeners();
       } else {
         return CustomDisplayWidget.displaySnackBar(
@@ -831,7 +824,8 @@ class MapProvider with ChangeNotifier {
           await CallApi().postData(values, 'user/delivery/submit/$deliveryId');
       String message = response["message"];
       //print(message);
-      changeWidgetShowed(showWidget: Show.CASH_PAYMENT);
+
+      changeScreenReplacement(SearchingForDriver());
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {
@@ -848,7 +842,7 @@ class MapProvider with ChangeNotifier {
           await CallApi().postData(values, 'user/delivery/submit/$deliveryId');
       String message = response["message"];
       //print(message);
-      changeWidgetShowed(showWidget: Show.SEARCHING_FOR_DRIVER);
+      changeScreenReplacement(SearchingForDriver());
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {
@@ -904,27 +898,6 @@ class MapProvider with ChangeNotifier {
       center = pickupCoordinates;
     }
     notifyListeners();
-  }
-
-  checkDeliveryStatus() async {
-    try {
-      final response = await CallApi().getData('user/delivery/$deliveryId');
-
-      final body = response;
-      String deliveryStatus = body['data']['status'];
-      //print(deliveryStatus);
-
-      notifyListeners();
-      if (deliveryStatus == "accepted") {
-        changeWidgetShowed(showWidget: Show.DRIVER_FOUND);
-      } else {
-        return Future.delayed(Duration(seconds: 3), checkDeliveryStatus);
-      }
-    } on SocketException {
-      throw const SocketException('No internet connection');
-    } catch (err) {
-      throw Exception(err.toString());
-    }
   }
 
   getRiderDetails() async {
@@ -987,11 +960,6 @@ class MapProvider with ChangeNotifier {
 
   changeMainContext(BuildContext context) {
     mainContext = context;
-    notifyListeners();
-  }
-
-  changeWidgetShowed({Show? showWidget}) {
-    show = showWidget!;
     notifyListeners();
   }
 

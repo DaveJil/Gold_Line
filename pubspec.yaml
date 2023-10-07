@@ -113,6 +113,7 @@ flutter:
       - assets/
       - assets/markers/
       - assets/goldline.jks
+      - assets/images/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

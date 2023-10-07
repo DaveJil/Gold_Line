@@ -9,14 +9,14 @@ import '../../my_deliveries/select_type.dart';
 import '../../profile/main_menu.dart';
 import '../../request_delivery/delivery_details.dart';
 
-class HomeContainer extends StatefulWidget {
-  const HomeContainer({Key? key}) : super(key: key);
+class BottomNav extends StatefulWidget {
+  const BottomNav({Key? key}) : super(key: key);
 
   @override
-  State<HomeContainer> createState() => _HomeContainerState();
+  State<BottomNav> createState() => _BottomNavState();
 }
 
-class _HomeContainerState extends State<HomeContainer> {
+class _BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;

@@ -8,7 +8,7 @@ import '../../models/delivery_model/delivery.dart';
 import '../../models/delivery_model/intercity_ride.dart';
 import '../../models/notifications/notifications.dart';
 import '../../models/transaction/transaction.dart';
-import '../../screens/map/map_widget.dart';
+import '../../screens/home/home_screen.dart';
 import '../api.dart';
 import '../helpers/custom_display_widget.dart';
 import '../helpers/routing.dart';
@@ -385,7 +385,7 @@ class GetListProvider extends ChangeNotifier {
       CustomDisplayWidget.displayAwesomeSuccessSnackBar(context, code, message);
 
       if (code == "success") {
-        changeScreenReplacement(context, MapWidget());
+        changeScreenReplacement(context, HomeScreen());
       }
     } on SocketException {
       throw const SocketException('No internet connection');

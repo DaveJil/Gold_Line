@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gold_line/screens/bottom_sheets/searching%20for%20driver.dart';
+import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utility/helpers/custom_button.dart';
@@ -65,9 +67,8 @@ class CashPaymentWidget extends StatelessWidget {
                           height: 60,
                           fontSize: 18,
                           onPressed: () async {
-                            // await mapProvider.updatePaymentMethod();
-                            mapProvider.changeWidgetShowed(
-                                showWidget: Show.SEARCHING_FOR_DRIVER);
+                            changeScreenReplacement(
+                                context, SearchingForDriver());
                           },
                           text: "Continue",
                         ),

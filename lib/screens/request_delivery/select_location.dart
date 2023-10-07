@@ -3,7 +3,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:gold_line/screens/map/map_widget.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
@@ -11,10 +10,19 @@ import 'package:gold_line/utility/providers/map_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../utility/helpers/controllers.dart';
+import '../home/widgets/checkout_bottom.dart';
+import '../home/widgets/inter_city_ride_checkout.dart';
 
-class SelectLocationScreen extends StatelessWidget {
+class SelectLocationScreen extends StatefulWidget {
   final String deliveryType;
-  SelectLocationScreen({super.key, required this.deliveryType});
+  const SelectLocationScreen({super.key, required this.deliveryType});
+
+  @override
+  State<SelectLocationScreen> createState() => _SelectLocationScreenState();
+}
+
+class _SelectLocationScreenState extends State<SelectLocationScreen> {
+  bool isButtonEnabled = true;
 
   @override
   Widget build(BuildContext context) {
@@ -192,30 +200,35 @@ class SelectLocationScreen extends StatelessWidget {
                       backgroundColor: Colors.white,
                       elevation: 20),
                   onPressed: () async {
-                    if (deliveryType == "DELIVERY") {
-                      await locationProvider.createDeliveryRequest(context);
-                      var response =
-                          await locationProvider.processDelivery(context);
-                      if (response == true) {
-                        ////print('navigate');
-                        locationProvider.changeWidgetShowed(
-                            showWidget: Show.CHECKOUT_DELIVERY);
+                    if (isButtonEnabled == true) {
+                      setState(() {
+                        isButtonEnabled = false;
+                      });
+                      if (widget.deliveryType == "DELIVERY") {
+                        await locationProvider.createDeliveryRequest(context);
+                        var response =
+                            await locationProvider.processDelivery(context);
+                        if (response == true) {
+                          changeScreenReplacement(
+                              context, DeliverySummaryWidget());
+                        } else {
+                          return;
+                        }
+                      } else if (widget.deliveryType == "RIDE") {
+                        await locationProvider
+                            .createInterstateRideRequest(context);
+                        await locationProvider.processDelivery(context);
+                        var response =
+                            await locationProvider.processDelivery(context);
+                        if (response == true) {
+                          changeScreenReplacement(
+                              context, InterCityRideSummaryWidget());
 
-                        changeScreenReplacement(context, MapWidget());
+                          changeScreenReplacement(
+                              context, InterCityRideSummaryWidget());
+                        }
                       } else {
                         return;
-                      }
-                    } else if (deliveryType == "RIDE") {
-                      await locationProvider
-                          .createInterstateRideRequest(context);
-                      await locationProvider.processDelivery(context);
-                      var response =
-                          await locationProvider.processDelivery(context);
-                      if (response == true) {
-                        locationProvider.changeWidgetShowed(
-                            showWidget: Show.CHECKOUT_INTERCITY_RIDE);
-
-                        changeScreenReplacement(context, MapWidget());
                       }
                     } else {
                       return;

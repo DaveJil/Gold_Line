@@ -14,16 +14,16 @@ import '../../utility/helpers/delivery_input.dart';
 
 enum ProductSize { small, medium, large, multiple }
 
-class DeliveryDetails extends StatefulWidget {
+class MultipleDeliveryDetails extends StatefulWidget {
   static const String iD = '/senderDeliveryScreen';
 
-  const DeliveryDetails({Key? key}) : super(key: key);
+  const MultipleDeliveryDetails({Key? key}) : super(key: key);
 
   @override
-  DeliveryDetailsState createState() => DeliveryDetailsState();
+  MultipleDeliveryDetailsState createState() => MultipleDeliveryDetailsState();
 }
 
-class DeliveryDetailsState extends State<DeliveryDetails> {
+class MultipleDeliveryDetailsState extends State<MultipleDeliveryDetails> {
   bool onTapped = false;
 
   bool value = false;
@@ -230,7 +230,7 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
                 padding: EdgeInsets.symmetric(horizontal: 50.appWidth(context)),
                 child: CustomButton(
                     onPressed: () {
-                      changeScreenReplacement(
+                      changeScreen(
                           context,
                           const SelectLocationScreen(
                             deliveryType: "DELIVERY",

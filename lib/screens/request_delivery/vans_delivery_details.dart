@@ -1,8 +1,5 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gold_line/screens/my_deliveries/vans_and_trucks/my_deliveries.dart';
-import 'package:gold_line/screens/request_delivery/select_location.dart';
 import 'package:gold_line/utility/helpers/controllers.dart';
 import 'package:gold_line/utility/helpers/custom_button.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
@@ -12,7 +9,6 @@ import 'package:provider/provider.dart';
 
 import '../../utility/helpers/constants.dart';
 import '../../utility/helpers/delivery_input.dart';
-import '../map/map_widget.dart';
 
 enum ProductSize { small, medium, large, multiple }
 
@@ -129,9 +125,7 @@ class VanDeliveryDetailsState extends State<VanDeliveryDetails> {
             const SizedBox(
               height: 12,
             ),
-
             CustomDeliveryTextField(
-
               hint: "Receiver Mobile Number",
               icon: const Icon(Icons.phone),
               controller: receiverPhone,
@@ -139,9 +133,7 @@ class VanDeliveryDetailsState extends State<VanDeliveryDetails> {
             const SizedBox(
               height: 12,
             ),
-
             CustomDeliveryTextField(
-
               hint: "Enter Price",
               icon: const Icon(Icons.wallet),
               controller: vanPrice,
@@ -149,7 +141,6 @@ class VanDeliveryDetailsState extends State<VanDeliveryDetails> {
             const SizedBox(
               height: 12,
             ),
-
             CustomDeliveryTextField(
               hint: "Package Description",
               icon: const Icon(Icons.description),
@@ -173,11 +164,10 @@ class VanDeliveryDetailsState extends State<VanDeliveryDetails> {
             SizedBox(
               height: getHeight(20, context),
             ),
-             Padding(
-              padding:
-              EdgeInsets.symmetric(horizontal: 50.appWidth(context)),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 50.appWidth(context)),
               child: CustomButton(
-                  onPressed: () async{
+                  onPressed: () async {
                     await mapProvider.createVanDeliveryRequest(context);
                     changeScreenReplacement(context, MyVansDeliveriesScreen());
                   },
@@ -243,29 +233,23 @@ class _SelectCityState extends State<SelectCity> {
       "Taraba",
       "Yobe",
       "Zamfara"
-
-
     ];
 
     return Container(
-
-      height: MediaQuery.of(context).size.height /18,
+      height: MediaQuery.of(context).size.height / 18,
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-          horizontal: 15, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
       decoration: BoxDecoration(
         border: Border.all(
           width: 2.0,
           // color: const Color.fromARGB(255, 205, 226, 243),
-          color: const Color.fromARGB(255, 117, 117, 117)
-              .withOpacity(0.4),
+          color: const Color.fromARGB(255, 117, 117, 117).withOpacity(0.4),
         ),
         borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
       ),
       child: DropdownButton<String>(
-
         focusColor: kPrimaryGoldColor.withOpacity(0.6),
         dropdownColor: Colors.white70,
         isExpanded: true,
@@ -296,12 +280,6 @@ class _SelectCityState extends State<SelectCity> {
     );
   }
 }
-
-
-
-
-
-
 
 class DeliveryOption extends StatefulWidget {
   const DeliveryOption({Key? key}) : super(key: key);
@@ -349,5 +327,3 @@ class _DeliveryOptionState extends State<DeliveryOption> {
     );
   }
 }
-
-
