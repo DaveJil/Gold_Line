@@ -24,6 +24,7 @@ class GetListProvider extends ChangeNotifier {
     var response = await CallApi().getData('user/deliveries');
     print(response);
     final result = response["data"];
+
     final data = result.map((e) => DeliveryModel.fromJson(e)).toList();
     //////print("dat = $data");
     return data;
@@ -35,9 +36,9 @@ class GetListProvider extends ChangeNotifier {
           await CallApi().getData('user/deliveries?status=pending');
       print(response);
       final data = response['data'];
-      //print(data);
+      print(data);
       final result = data.map((e) => DeliveryModel.fromJson(e)).toList();
-      //print(result);
+      print(result);
       return result;
     } on SocketException {
       throw const SocketException('No internet connection');
