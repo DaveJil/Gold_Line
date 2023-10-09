@@ -155,6 +155,16 @@ class _DeliveryCardState extends State<DeliveryCard> {
               riderPlateNumber: widget.riderPlateNumber,
               date: widget.date,
               paymentMethod: widget.paymentMethod,
+              paymentBy: widget.paymentBy,
+              paymentStatus: widget.paymentStatus,
+              pickUpLatitude: widget.pickUpLatitude,
+              pickUpLongitude: widget.pickUpLongitude,
+              dropOffLatitude: widget.dropOffLatitude,
+              dropOffLongitude: widget.dropOffLongitude,
+              senderPhone: widget.senderPhone,
+              senderName: widget.senderName,
+              receiverPhone: widget.receiverPhone,
+              receiverName: widget.receiverName,
             ));
       },
       child: Padding(

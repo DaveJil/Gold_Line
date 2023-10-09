@@ -10,7 +10,8 @@ import '../../utility/providers/getTransactionHistory.dart';
 class FlutterwavePaymentScreen extends StatefulWidget {
   static const String iD = '/paymentScreen';
   final GlobalKey<ScaffoldState>? scaffoldState;
-  FlutterwavePaymentScreen({Key? key, this.scaffoldState}) : super(key: key);
+  const FlutterwavePaymentScreen({Key? key, this.scaffoldState})
+      : super(key: key);
 
   @override
   _FlutterwavePaymentScreenState createState() =>
@@ -149,13 +150,16 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
               onPressed: () async {
                 if (paymentProvider.orderPaymentMethod ==
                     OrderPaymentMethod.cash) {
+                  print(paymentProvider.orderPaymentMethod);
+
                   await mapProvider.updatePaymentMethod(
                       "cash", "cash", context);
-                  await mapProvider.submitCashDelivery();
+                  await mapProvider.submitCashDelivery(context);
                 }
 
                 if (paymentProvider.orderPaymentMethod ==
                     OrderPaymentMethod.card) {
+                  print(paymentProvider.orderPaymentMethod);
                   await mapProvider.updatePaymentMethod(
                       "card", "paystack", context);
 
@@ -164,8 +168,13 @@ class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
                 }
                 if (paymentProvider.orderPaymentMethod ==
                     OrderPaymentMethod.wallet) {
-                  await mapProvider.updatePaymentMethod(
+                  print(paymentProvider.orderPaymentMethod);
+
+                  final payment = await mapProvider.updatePaymentMethod(
                       "wallet", "wallet", context);
+                  if (payment == true) {
+                    await mapProvider.submitWalletDelivery(context);
+                  }
                 }
               },
               text: "Pay",

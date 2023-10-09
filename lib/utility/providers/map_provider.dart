@@ -3,13 +3,13 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:gold_line/screens/bottom_sheets/searching%20for%20driver.dart';
+import 'package:gold_line/screens/profile/wallet/wallet.dart';
 import 'package:gold_line/utility/helpers/controllers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
@@ -25,6 +25,7 @@ import '../../models/user_profile/user_profile.dart';
 import '../api.dart';
 import '../helpers/constants.dart';
 import '../helpers/custom_display_widget.dart';
+import '../helpers/routing.dart';
 import '../services/map_request.dart';
 
 enum PackageSize { none, small, medium, large }
@@ -769,13 +770,13 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future updatePaymentMethod(
+  Future<bool> updatePaymentMethod(
     String paymentMethod,
     String paymentGateway,
     BuildContext context,
   ) async {
     Map<String, dynamic> values = {
-      "payment_gateway": paymentGateway,
+      "gateway": paymentGateway,
       "payment_method": paymentMethod,
       "order_id": deliveryId,
       "payment_for": "delivery",
@@ -786,15 +787,18 @@ class MapProvider with ChangeNotifier {
       print(deliveryId);
       final response = await CallApi()
           .postData(values, 'user/delivery/create-payment/$deliveryId');
-      if (kDebugMode) {}
+
       if (response['code'] == "success") {
         isLoading = false;
-        if (paymentMethod == "wallet") {}
         notifyListeners();
-      } else {
-        return CustomDisplayWidget.displaySnackBar(
-            context, "Generating payment unsucessful");
+        return true;
+      } else if (response['code'] == "insufficient-fund") {
+        CustomDisplayWidget.displaySnackBar(
+            context, "Insuffucient Funds. Deposit ");
+        changeScreenReplacement(context, WalletScreen());
+        return false;
       }
+      return true;
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {
@@ -808,6 +812,7 @@ class MapProvider with ChangeNotifier {
     try {
       final response =
           await CallApi().postData(values, 'user/delivery/submit/$deliveryId');
+      print(response);
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {
@@ -815,34 +820,35 @@ class MapProvider with ChangeNotifier {
     }
   }
 
-  Future submitCashDelivery() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
+  Future submitCashDelivery(BuildContext context) async {
     Map<String, dynamic> values = {"payment_method": "cash"};
+    print(deliveryId);
 
     try {
       final response =
           await CallApi().postData(values, 'user/delivery/submit/$deliveryId');
-      String message = response["message"];
+      print(response);
+      // String message = response["message"];
       //print(message);
 
-      changeScreenReplacement(SearchingForDriver());
+      changeScreenReplacement(context, SearchingForDriver());
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {
+      print(err.toString());
       throw Exception(err.toString());
     }
   }
 
-  Future submitWalletDelivery() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    Map<String, dynamic> values = {"payment_method": "cash"};
-
+  Future submitWalletDelivery(BuildContext context) async {
     try {
+      Map<String, dynamic> values = {"payment_status": "paid"};
+
       final response =
           await CallApi().postData(values, 'user/delivery/submit/$deliveryId');
-      String message = response["message"];
-      //print(message);
-      changeScreenReplacement(SearchingForDriver());
+      print(response);
+
+      changeScreenReplacement(context, SearchingForDriver());
     } on SocketException {
       throw const SocketException('No internet connection');
     } catch (err) {
@@ -1015,17 +1021,6 @@ class MapProvider with ChangeNotifier {
         c((lat2 - lat1) * p) / 2 +
         c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
     return 12742 * asin(sqrt(a));
-  }
-
-  void changeScreen(Widget widget) {
-    Navigator.push(
-        mainContext!, MaterialPageRoute(builder: (context) => widget));
-  }
-
-// request here
-  void changeScreenReplacement(Widget widget) {
-    Navigator.push(
-        mainContext!, MaterialPageRoute(builder: (context) => widget));
   }
 
   Future<void> selectDate(BuildContext context) async {

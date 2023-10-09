@@ -32,18 +32,17 @@ class _SearchingForDriverState extends State<SearchingForDriver> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: getHeight(10, context),
+              height: getHeight(100, context),
             ),
-            SizedBox(
-              child: SvgPicture.asset("assets/homedispatch.svg"),
-            ),
-            const AutoSizeText(
-              "Delivery Created Successfully..",
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                color: kPrimaryGoldColor,
+            Center(
+              child: const AutoSizeText(
+                "Delivery Created Successfully..",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
+                  color: kPrimaryGoldColor,
+                ),
               ),
             ),
             SizedBox(
@@ -51,8 +50,8 @@ class _SearchingForDriverState extends State<SearchingForDriver> {
             ),
             Center(
               child: SizedBox(
-                height: 100.appHeight(context),
-                child: Image.asset("assets/tick.png"),
+                height: 200.appHeight(context),
+                child: SvgPicture.asset("assets/homedispatch.svg"),
               ),
             ),
             SizedBox(
@@ -67,49 +66,40 @@ class _SearchingForDriverState extends State<SearchingForDriver> {
             SizedBox(
               height: 10.appHeight(context),
             ),
-            SizedBox(
-              height: 50.appHeight(context),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      removeScreenUntil(context, HomeScreen());
-                    },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 20,
-                      backgroundColor: kPrimaryGoldColor,
-                    ),
-                    child: const Text(
-                      "Home",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      changeScreenReplacement(
-                          context, const MyDeliveriesOptionScreen());
-                    },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 20,
-                      backgroundColor: Colors.white70,
-                    ),
-                    child: const Text(
-                      "My Deliveries",
-                      style: TextStyle(
-                          color: kPrimaryGoldColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                ],
+            ElevatedButton(
+              onPressed: () {
+                removeScreenUntil(context, HomeScreen());
+              },
+              style: ElevatedButton.styleFrom(
+                elevation: 20,
+                backgroundColor: kPrimaryGoldColor,
+              ),
+              child: const Text(
+                "Home",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                changeScreenReplacement(
+                    context, const MyDeliveriesOptionScreen());
+              },
+              style: ElevatedButton.styleFrom(
+                elevation: 20,
+                backgroundColor: Colors.white70,
+              ),
+              child: const Text(
+                "My Deliveries",
+                style: TextStyle(
+                    color: kPrimaryGoldColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700),
               ),
             ),
             SizedBox(
