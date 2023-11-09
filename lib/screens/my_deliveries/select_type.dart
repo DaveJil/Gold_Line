@@ -31,7 +31,7 @@ class _MyDeliveriesOptionScreen extends State<MyDeliveriesOptionScreen> {
             Navigator.pop(context);
           },
         ),
-        title: AutoSizeText(
+        title: const AutoSizeText(
           'Choose Booking Option',
           style: TextStyle(
             color: kPrimaryGoldColor,
@@ -58,16 +58,16 @@ class _MyDeliveriesOptionScreen extends State<MyDeliveriesOptionScreen> {
           ),
           InkWell(
             onTap: () {
-              changeScreen(context, MyDeliveriesScreen());
+              changeScreen(context, const MyDeliveriesScreen());
             },
-            child: ListTile(
+            child: const ListTile(
               tileColor: Colors.white70,
               title: Text('Normal Delivery',
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w800,
                   )),
-              leading: const Icon(Icons.delivery_dining),
+              leading: Icon(Icons.delivery_dining),
             ),
           ),
           SizedBox(
@@ -75,16 +75,16 @@ class _MyDeliveriesOptionScreen extends State<MyDeliveriesOptionScreen> {
           ),
           InkWell(
             onTap: () {
-              changeScreen(context, MyInterStateDeliveriesScreen());
+              changeScreen(context, const MyInterStateDeliveriesScreen());
             },
-            child: ListTile(
+            child: const ListTile(
               tileColor: Colors.white70,
               title: Text('Inter-State Delivery',
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w800,
                   )),
-              leading: const Icon(Icons.delivery_dining_outlined),
+              leading: Icon(Icons.delivery_dining_outlined),
             ),
           ),
           SizedBox(
@@ -92,16 +92,16 @@ class _MyDeliveriesOptionScreen extends State<MyDeliveriesOptionScreen> {
           ),
           InkWell(
             onTap: () {
-              changeScreen(context, MyInternationalDeliveriesScreen());
+              changeScreen(context, const MyInternationalDeliveriesScreen());
             },
-            child: ListTile(
+            child: const ListTile(
               tileColor: Colors.white70,
               title: Text('International Delivery',
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w800,
                   )),
-              leading: const Icon(Icons.airplanemode_active),
+              leading: Icon(Icons.airplanemode_active),
             ),
           ),
           SizedBox(
@@ -111,14 +111,14 @@ class _MyDeliveriesOptionScreen extends State<MyDeliveriesOptionScreen> {
             onTap: () {
               changeScreen(context, const MyVansDeliveriesScreen());
             },
-            child: ListTile(
+            child: const ListTile(
               tileColor: Colors.white70,
               title: Text('Vans And Trucks',
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w800,
                   )),
-              leading: const Icon(FontAwesomeIcons.truckPickup),
+              leading: Icon(FontAwesomeIcons.truckPickup),
             ),
           ),
           SizedBox(
@@ -128,14 +128,14 @@ class _MyDeliveriesOptionScreen extends State<MyDeliveriesOptionScreen> {
             onTap: () {
               changeScreen(context, const MyVansDeliveriesScreen());
             },
-            child: ListTile(
+            child: const ListTile(
               tileColor: Colors.white70,
               title: Text('Inter City Rides',
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w800,
                   )),
-              leading: const Icon(FontAwesomeIcons.car),
+              leading: Icon(FontAwesomeIcons.car),
             ),
           ),
         ],

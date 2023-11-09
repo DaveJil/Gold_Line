@@ -16,7 +16,8 @@ class _RideCancelReasonState extends State<RideCancelReason> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(color: Colors.white,
+      decoration: const BoxDecoration(
+          color: Colors.white,
 //                        borderRadius: BorderRadius.only(
 //                            topLeft: Radius.circular(20),
 //                            topRight: Radius.circular(20)),
@@ -28,8 +29,8 @@ class _RideCancelReasonState extends State<RideCancelReason> {
         padding: const EdgeInsets.all(6.0),
         child: ListView(
           children: [
-            Row(
-              children: const [
+            const Row(
+              children: [
                 Text(
                   'Why Do you Want to Cancel',
                   style: TextStyle(
@@ -131,7 +132,7 @@ class _RideCancelReasonState extends State<RideCancelReason> {
             onChanged: (value) {
               reasonProvider.rideCancelReason = value;
               setState(() {
-                print(value);
+                debugPrint(value);
                 reasonProvider.rideCancelReason = value;
               });
             },

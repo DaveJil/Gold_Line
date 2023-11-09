@@ -61,10 +61,10 @@ class NewVansDeliveryCard extends StatelessWidget {
                     onPressed: () async {
                       deliveryListProvider.cancelDelivery(context, id!);
                     },
-                    child: const Text("Reject"),
                     style: ElevatedButton.styleFrom(
                         shape: const StadiumBorder(),
                         backgroundColor: Colors.red),
+                    child: const Text("Reject"),
                   ),
                 ],
               )
@@ -204,10 +204,10 @@ class _VansDeliveryCardState extends State<VansDeliveryCard> {
                         mapProvider.deliveryPrice = widget.price!;
                         payStackDelivery(widget.price, context);
                       },
-                      child: const Text("Accept/Make Payment"),
                       style: ElevatedButton.styleFrom(
                           shape: const StadiumBorder(),
                           backgroundColor: kPrimaryGoldColor),
+                      child: const Text("Accept/Make Payment"),
                     ),
                     const SizedBox(
                       width: 10,
@@ -217,10 +217,10 @@ class _VansDeliveryCardState extends State<VansDeliveryCard> {
                         deliveryListProvider.cancelDelivery(
                             context, widget.id.toString());
                       },
-                      child: const Text("Reject Price/ Cancel Delivery"),
                       style: ElevatedButton.styleFrom(
                           shape: const StadiumBorder(),
                           backgroundColor: Colors.red),
+                      child: const Text("Reject Price/ Cancel Delivery"),
                     ),
                   ],
                 )),
@@ -267,7 +267,7 @@ class _VansDeliveryCardState extends State<VansDeliveryCard> {
             onChanged: (value) {
               reasonProvider.rideCancelReason = value;
               setState(() {
-                print(value);
+                debugPrint(value);
                 reasonProvider.rideCancelReason = value;
               });
             },
@@ -348,9 +348,6 @@ class CompletedVansDeliveryCard extends StatefulWidget {
 class _CompletedVansDeliveryCardState extends State<CompletedVansDeliveryCard> {
   @override
   Widget build(BuildContext context) {
-    final deliveryListProvider =
-        Provider.of<MapProvider>(context, listen: false);
-
     return InkWell(
       onTap: () {
         (widget.type == "bulk")

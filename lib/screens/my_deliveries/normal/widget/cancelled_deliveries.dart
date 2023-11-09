@@ -20,7 +20,7 @@ class _CancelledDeliveriesState extends State<CancelledDeliveries> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final deliveryListProvider =
           Provider.of<GetListProvider>(context, listen: false);
-      deliveries = deliveryListProvider.checkCancelledDelivery();
+      deliveries = deliveryListProvider.checkCancelledDelivery(context);
     });
     super.initState();
   }
@@ -43,7 +43,7 @@ class _CancelledDeliveriesState extends State<CancelledDeliveries> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              Text(
+              const Text(
                 "Cancelled Deliveries",
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
               ),
@@ -51,7 +51,7 @@ class _CancelledDeliveriesState extends State<CancelledDeliveries> {
                 height: 10.appHeight(context),
               ),
               FutureBuilder(
-                  future: deliveryListProvider.checkCancelledDelivery(),
+                  future: deliveryListProvider.checkCancelledDelivery(context),
                   builder: (context, snapshot) {
                     // Checking if future is resolved
                     if (snapshot.connectionState == ConnectionState.done) {
@@ -60,7 +60,7 @@ class _CancelledDeliveriesState extends State<CancelledDeliveries> {
                         return Center(
                           child: Text(
                             '${snapshot.error} occurred',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 18, color: kPrimaryGoldColor),
                           ),
                         );
@@ -114,7 +114,7 @@ class _CancelledDeliveriesState extends State<CancelledDeliveries> {
                       }
                     }
 
-                    return CircularProgressIndicator(
+                    return const CircularProgressIndicator(
                       color: kPrimaryGoldColor,
                     );
                   }),

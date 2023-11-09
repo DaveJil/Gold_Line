@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gold_line/screens/request_delivery/inter_city_ride_details.dart';
-import 'package:gold_line/screens/request_delivery/multiple_delivery_details.dart';
 import 'package:gold_line/screens/request_delivery/vans_delivery_details.dart';
 import 'package:gold_line/utility/helpers/custom_display_widget.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
@@ -60,7 +59,7 @@ class _RequestDeliveryTypeState extends State<RequestDeliveryType> {
                     "Send Goods from one place to\ndifferent locations now on the\n Goldline app.",
                 image: "assets/multipledispatch.svg",
                 onTap: () {
-                  changeScreen(context, MultipleDeliveryDetails());
+                  // changeScreen(context, MultipleDeliveryDetails());
                 },
               ),
               SizedBox(

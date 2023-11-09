@@ -5,18 +5,13 @@ import 'package:provider/provider.dart';
 
 import '../../../utility/helpers/custom_button.dart';
 import '../../../utility/providers/map_provider.dart';
-import '../../../utility/providers/user_provider.dart';
-import '../../../utility/services/calls_and_sms.dart';
 
 class CashPaymentWidget extends StatelessWidget {
-  final CallsAndMessagesService? _service = CallsAndMessagesService();
-
-  CashPaymentWidget({Key? key}) : super(key: key);
+  const CashPaymentWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     MapProvider mapProvider = Provider.of<MapProvider>(context);
-    UserProvider userProvider = Provider.of<UserProvider>(context);
 
     return DraggableScrollableSheet(
         initialChildSize: 0.2,
@@ -68,7 +63,7 @@ class CashPaymentWidget extends StatelessWidget {
                           fontSize: 18,
                           onPressed: () async {
                             changeScreenReplacement(
-                                context, SearchingForDriver());
+                                context, const SearchingForDriver());
                           },
                           text: "Continue",
                         ),

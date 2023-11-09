@@ -7,6 +7,7 @@ import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:gold_line/utility/providers/map_provider.dart';
+import 'package:gold_line/utility/providers/select_location_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../utility/helpers/controllers.dart';
@@ -27,6 +28,9 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
   @override
   Widget build(BuildContext context) {
     final locationProvider = Provider.of<MapProvider>(context);
+    final multipleLocationDelivery =
+        Provider.of<MultipleLocationDelivery>(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -38,41 +42,51 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              TextField(
-                controller: pickUpLocationController,
-                autofocus: false,
-                focusNode: locationProvider.startFocusNode,
-                style: TextStyle(fontSize: 24),
-                decoration: InputDecoration(
-                    hintText: 'Pickup Location',
-                    hintStyle: const TextStyle(
-                        fontWeight: FontWeight.w500, fontSize: 24),
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                    border: InputBorder.none,
-                    suffixIcon: pickUpLocationController.text.isNotEmpty
-                        ? IconButton(
-                            onPressed: () {
-                              locationProvider.clearPickUpLocationPredictions();
-                            },
-                            icon: Icon(Icons.clear_outlined),
-                          )
-                        : null),
-                onChanged: (pickupValue) {
-                  if (locationProvider.debounce?.isActive ?? false) {
-                    locationProvider.debounce!.cancel();
-                  }
-                  locationProvider.debounce =
-                      Timer(const Duration(milliseconds: 1000), () {
-                    if (pickupValue.isNotEmpty) {
-                      //places api
-                      locationProvider.autoCompleteSearch(pickupValue);
-                    } else {
-                      //clear out the results
-                      locationProvider.setPickUpPredictions();
-                    }
-                  });
+              InkWell(
+                onTap: () {
+                  locationProvider.selectPickupAddress(context);
                 },
+                child: TextField(
+                  onTap: () {
+                    locationProvider.setPickUpLocation(context);
+                  },
+                  controller: pickUpLocationController,
+                  autofocus: false,
+                  focusNode: locationProvider.endFocusNode,
+                  style: TextStyle(fontSize: 24),
+                  decoration: InputDecoration(
+                      hintText: 'PickUp Location',
+                      hintStyle: const TextStyle(
+                          fontWeight: FontWeight.w500, fontSize: 24),
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: InputBorder.none,
+                      suffixIcon: pickUpLocationController.text.isNotEmpty
+                          ? IconButton(
+                              onPressed: () {
+                                locationProvider
+                                    .clearPickUpLocationPredictions();
+                              },
+                              icon: Icon(Icons.clear_outlined),
+                            )
+                          : null),
+                  onChanged: (value) {
+                    if (locationProvider.debounce?.isActive ?? false) {
+                      locationProvider.debounce!.cancel();
+                    }
+                    locationProvider.debounce =
+                        Timer(const Duration(milliseconds: 1000), () {
+                      if (value.isNotEmpty) {
+                        //places api
+                        locationProvider.autoCompleteSearch(value);
+                      } else {
+                        //clear out the results
+                        locationProvider.predictions = [];
+                        locationProvider.pickupLocation = null;
+                      }
+                    });
+                  },
+                ),
               ),
               SizedBox(height: 10),
               Row(
@@ -95,83 +109,91 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
                 ],
               ),
               SizedBox(height: 30),
-              TextField(
-                controller: dropOffLocationController,
-                autofocus: false,
-                focusNode: locationProvider.endFocusNode,
-                style: TextStyle(fontSize: 24),
-                decoration: InputDecoration(
-                    hintText: 'DropOff Location',
-                    hintStyle: const TextStyle(
-                        fontWeight: FontWeight.w500, fontSize: 24),
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                    border: InputBorder.none,
-                    suffixIcon: dropOffLocationController.text.isNotEmpty
-                        ? IconButton(
-                            onPressed: () {
-                              locationProvider
-                                  .clearDropOffLocationPredictions();
-                            },
-                            icon: Icon(Icons.clear_outlined),
-                          )
-                        : null),
-                onChanged: (value) {
-                  if (locationProvider.debounce?.isActive ?? false) {
-                    locationProvider.debounce!.cancel();
-                  }
-                  locationProvider.debounce =
-                      Timer(const Duration(milliseconds: 1000), () {
-                    if (value.isNotEmpty) {
-                      //places api
-                      locationProvider.autoCompleteSearch(value);
-                    } else {
-                      //clear out the results
-                      locationProvider.predictions = [];
-                      locationProvider.dropoffLocation = null;
-                    }
-                  });
+              InkWell(
+                onTap: () {
+                  locationProvider.setDropOffLocation(context);
                 },
+                child: TextField(
+                  onTap: () {
+                    locationProvider.setDropOffLocation(context);
+                  },
+                  controller: dropOffLocationController,
+                  autofocus: false,
+                  focusNode: locationProvider.endFocusNode,
+                  style: TextStyle(fontSize: 24),
+                  decoration: InputDecoration(
+                      hintText: 'DropOff Location',
+                      hintStyle: const TextStyle(
+                          fontWeight: FontWeight.w500, fontSize: 24),
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: InputBorder.none,
+                      suffixIcon: dropOffLocationController.text.isNotEmpty
+                          ? IconButton(
+                              onPressed: () {
+                                locationProvider
+                                    .clearDropOffLocationPredictions();
+                              },
+                              icon: Icon(Icons.clear_outlined),
+                            )
+                          : null),
+                  onChanged: (value) {
+                    if (locationProvider.debounce?.isActive ?? false) {
+                      locationProvider.debounce!.cancel();
+                    }
+                    locationProvider.debounce =
+                        Timer(const Duration(milliseconds: 1000), () {
+                      if (value.isNotEmpty) {
+                        //places api
+                        locationProvider.autoCompleteSearch(value);
+                      } else {
+                        //clear out the results
+                        locationProvider.predictions = [];
+                        locationProvider.dropoffLocation = null;
+                      }
+                    });
+                  },
+                ),
               ),
-              ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: locationProvider.predictions.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: CircleAvatar(
-                        child: Icon(
-                          Icons.pin_drop,
-                          color: Colors.white,
-                        ),
-                      ),
-                      title: Text(
-                        locationProvider.predictions[index].description
-                            .toString(),
-                      ),
-                      onTap: () async {
-                        final placeId =
-                            locationProvider.predictions[index].placeId!;
-                        final details = await locationProvider
-                            .googlePlace.details
-                            .get(placeId);
-
-                        if (details != null && details.result != null) {
-                          if (locationProvider.startFocusNode.hasFocus) {
-                            locationProvider.setPickUpLocation(index);
-                          } else if (locationProvider.endFocusNode.hasFocus) {
-                            locationProvider.setDropOffLocation(index);
-                          }
-
-                          if (locationProvider.pickupLocation != null &&
-                              locationProvider.dropoffLocation != null) {
-                          } else if (locationProvider
-                                      .useCurrentLocationPickUp ==
-                                  true &&
-                              locationProvider.dropoffLocation != null) {}
-                        }
-                      },
-                    );
-                  }),
+              // ListView.builder(
+              //     shrinkWrap: true,
+              //     itemCount: locationProvider.predictions.length,
+              //     itemBuilder: (context, index) {
+              //       return ListTile(
+              //         leading: CircleAvatar(
+              //           child: Icon(
+              //             Icons.pin_drop,
+              //             color: Colors.white,
+              //           ),
+              //         ),
+              //         title: Text(
+              //           locationProvider.predictions[index].description
+              //               .toString(),
+              //         ),
+              //         onTap: () async {
+              //           final placeId =
+              //               locationProvider.predictions[index].placeId!;
+              //           final details = await locationProvider
+              //               .googlePlace.details
+              //               .get(placeId);
+              //
+              //           if (details != null && details.result != null) {
+              //             if (locationProvider.startFocusNode.hasFocus) {
+              //               locationProvider.setPickUpLocation(index);
+              //             } else if (locationProvider.endFocusNode.hasFocus) {
+              //               locationProvider.setDropOffLocation(index);
+              //             }
+              //
+              //             if (locationProvider.pickupLocation != null &&
+              //                 locationProvider.dropoffLocation != null) {
+              //             } else if (locationProvider
+              //                         .useCurrentLocationPickUp ==
+              //                     true &&
+              //                 locationProvider.dropoffLocation != null) {}
+              //           }
+              //         },
+              //       );
+              //     }),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -234,10 +256,13 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
                       return;
                     }
                   },
-                  child: const Text(
-                    'Continue',
-                    style: TextStyle(color: kPrimaryGoldColor, fontSize: 22),
-                  )),
+                  child: isButtonEnabled
+                      ? const Text(
+                          'Continue',
+                          style:
+                              TextStyle(color: kPrimaryGoldColor, fontSize: 22),
+                        )
+                      : CircularProgressIndicator()),
             ],
           ),
         ),

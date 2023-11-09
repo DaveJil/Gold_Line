@@ -20,7 +20,7 @@ class _CompletedDeliveriesState extends State<CompletedDeliveries> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final deliveryListProvider =
           Provider.of<GetListProvider>(context, listen: false);
-      deliveries = deliveryListProvider.checkCompletedDelivery();
+      deliveries = deliveryListProvider.checkCompletedDelivery(context);
     });
     super.initState();
   }
@@ -51,7 +51,7 @@ class _CompletedDeliveriesState extends State<CompletedDeliveries> {
                 height: 10.appHeight(context),
               ),
               FutureBuilder(
-                  future: deliveryListProvider.checkCompletedDelivery(),
+                  future: deliveryListProvider.checkCompletedDelivery(context),
                   builder: (context, snapshot) {
                     // Checking if future is resolved
                     if (snapshot.connectionState == ConnectionState.done) {

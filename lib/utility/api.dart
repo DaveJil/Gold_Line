@@ -1,5 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gold_line/goldline.dart';
+import 'package:gold_line/utility/helpers/constants.dart';
+import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -130,25 +135,48 @@ class CallApi {
 
   Map<String, dynamic> _processResponse(http.Response response) {
     var data = json.decode(response.body);
-    switch (response.statusCode) {
-      case 200:
-        return data;
-      case 409:
-        throw AppException(message: '${data['message']}');
-      case 412:
-        throw AppException(message: '${data['message']}');
-      default:
-        return data;
-    }
+    return data;
   }
 }
 
-class AppException implements Exception {
+class AppException extends StatelessWidget {
   final String message;
   AppException({required this.message});
 
   @override
-  String toString() {
-    return message;
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Icon(
+              FontAwesomeIcons.ban,
+              size: 100,
+              color: kPrimaryGoldColor,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              message,
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            TextButton(
+                onPressed: () {
+                  removeScreenUntil(context, GoldLine());
+                },
+                child: Text(
+                  "Go back",
+                  style: TextStyle(color: kPrimaryGoldColor),
+                ))
+          ],
+        ),
+      ),
+    );
   }
 }

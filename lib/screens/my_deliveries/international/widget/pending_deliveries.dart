@@ -20,7 +20,8 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final deliveryListProvider =
           Provider.of<GetListProvider>(context, listen: false);
-      deliveries = deliveryListProvider.checkPendingInternationalDelivery();
+      deliveries =
+          deliveryListProvider.checkPendingInternationalDelivery(context);
     });
     super.initState();
   }
@@ -51,7 +52,8 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
               ),
               SingleChildScrollView(
                 child: FutureBuilder(
-                    future: deliveryListProvider.checkPendingInternationalDelivery(),
+                    future: deliveryListProvider
+                        .checkPendingInternationalDelivery(context),
                     builder: (context, snapshot) {
                       // Checking if future is resolved
                       if (snapshot.connectionState == ConnectionState.done) {

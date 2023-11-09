@@ -5,7 +5,7 @@ import 'constants.dart';
 
 class CustomDeliveryTextField extends StatefulWidget {
   final String hint;
-  final Widget icon;
+  final Widget? icon;
   final TextEditingController controller;
   final Function? onChanged;
   final String? Function(String?)? validator;
@@ -14,7 +14,7 @@ class CustomDeliveryTextField extends StatefulWidget {
   const CustomDeliveryTextField(
       {Key? key,
       required this.hint,
-      required this.icon,
+      this.icon,
       required this.controller,
       this.validator,
       this.focusNode,
@@ -37,7 +37,7 @@ class _CustomDeliveryTextFieldState extends State<CustomDeliveryTextField> {
               horizontal: 10.appWidth(context), vertical: 5.appHeight(context)),
           child: Row(
             children: [
-              widget.icon,
+              widget.icon ?? SizedBox(),
               const SizedBox(
                 width: 10,
               ),

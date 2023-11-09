@@ -24,7 +24,7 @@ class _MyInterStateDeliveriesScreenState
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: kPrimaryGoldColor,
-          bottom: TabBar(
+          bottom: const TabBar(
             indicatorWeight: 5,
             indicatorColor: Colors.blueGrey,
             tabs: [
@@ -47,7 +47,7 @@ class _MyInterStateDeliveriesScreenState
             ],
           ),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
             PendingDeliveries(),
             AcceptedDeliveries(),

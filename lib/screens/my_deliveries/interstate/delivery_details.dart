@@ -2,10 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
-import 'package:provider/provider.dart';
 
 import '../../../utility/helpers/constants.dart';
-import '../../../utility/providers/get_list_provider.dart';
 
 class DeliveryDetailsScreen extends StatefulWidget {
   final String? title;
@@ -65,8 +63,7 @@ class DeliveryDetailsScreen extends StatefulWidget {
 class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
   @override
   Widget build(BuildContext context) {
-    final deliveryListProvider =
-    Provider.of<GetListProvider>(context, listen: false);
+
 
     return Scaffold(
       appBar: AppBar(
@@ -134,9 +131,9 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: CircleAvatar(
-                                      child: Icon(Icons.edit_document, color: kPrimaryGoldColor, size: 14.r,),
                                       backgroundColor: kPrimaryGoldColor.withOpacity(0.1),
                                       radius: 16.r,
+                                      child: Icon(Icons.edit_document, color: kPrimaryGoldColor, size: 14.r,),
                                     ),
                                   ),
                                 ),
@@ -148,7 +145,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Text("Sender Name: ", style: TextStyle(fontWeight: FontWeight.bold),),
+                                          const Text("Sender Name: ", style: TextStyle(fontWeight: FontWeight.bold),),
                                           Text("${widget.senderName}")
                                         ],
                                       ),
@@ -157,7 +154,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          Text("Sender Phone: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                                          const Text("Sender Phone: ", style: TextStyle(fontWeight: FontWeight.bold)),
                                           Text("${widget.senderPhone}")
                                         ],
                                       ),
@@ -175,9 +172,9 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                     alignment: Alignment.centerRight,
                                     child: Center(
                                       child: CircleAvatar(
-                                        child: Icon(Icons.call, color: Colors.black, size: 9.r,),
                                         backgroundColor: Colors.grey,
                                         radius: 12.r,
+                                        child: Icon(Icons.call, color: Colors.black, size: 9.r,),
                                       ),
                                     ),
                                   ),
@@ -202,9 +199,9 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: CircleAvatar(
-                                      child: Icon(Icons.person, color: kPrimaryGoldColor, size: 14.r,),
                                       backgroundColor: kPrimaryGoldColor.withOpacity(0.1),
                                       radius: 16.r,
+                                      child: Icon(Icons.person, color: kPrimaryGoldColor, size: 14.r,),
                                     ),
                                   ),
                                 ),
@@ -216,7 +213,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Text("Receiver Name: ", style: TextStyle(fontWeight: FontWeight.bold),),
+                                          const Text("Receiver Name: ", style: TextStyle(fontWeight: FontWeight.bold),),
                                           Text("${widget.receiverName}")
                                         ],
                                       ),
@@ -225,7 +222,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          Text("Receiver Phone: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                                          const Text("Receiver Phone: ", style: TextStyle(fontWeight: FontWeight.bold)),
                                           Text("${widget.receiverPhone}")
                                         ],
                                       ),
@@ -243,9 +240,9 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                     alignment: Alignment.centerRight,
                                     child: Center(
                                       child: CircleAvatar(
-                                        child: Icon(Icons.call, color: Colors.black, size: 9.r,),
                                         backgroundColor: Colors.grey,
                                         radius: 12.r,
+                                        child: Icon(Icons.call, color: Colors.black, size: 9.r,),
                                       ),
                                     ),
                                   ),
@@ -295,9 +292,9 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: CircleAvatar(
-                                      child: Icon(Icons.motorcycle, color: kPrimaryGoldColor, size: 14.r,),
                                       backgroundColor: kPrimaryGoldColor.withOpacity(0.1),
                                       radius: 16.r,
+                                      child: Icon(Icons.motorcycle, color: kPrimaryGoldColor, size: 14.r,),
                                     ),
                                   ),
                                 ),
@@ -309,7 +306,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          AutoSizeText("Rider's Name: ", style: TextStyle(fontWeight: FontWeight.bold),),
+                                          const AutoSizeText("Rider's Name: ", style: TextStyle(fontWeight: FontWeight.bold),),
                                           Text("${widget.riderFirstName!} ${widget.riderLastName!}")
                                         ],
                                       ),
@@ -318,7 +315,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          Text("Rider's Phone: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                                          const Text("Rider's Phone: ", style: TextStyle(fontWeight: FontWeight.bold)),
                                           Text("${widget.riderPhoneNumber}",
                                             softWrap: true,
                                             overflow: TextOverflow.ellipsis,
@@ -333,7 +330,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          Text("Bike's Plate Number: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                                          const Text("Bike's Plate Number: ", style: TextStyle(fontWeight: FontWeight.bold)),
                                           Text("${widget.riderPlateNumber}", softWrap: true,
                                             overflow: TextOverflow.ellipsis,
                                             style:  TextStyle(
@@ -387,9 +384,9 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: CircleAvatar(
-                                      child: Icon(Icons.payments, color: kPrimaryGoldColor, size: 14.r,),
                                       backgroundColor: kPrimaryGoldColor.withOpacity(0.1),
                                       radius: 16.r,
+                                      child: Icon(Icons.payments, color: kPrimaryGoldColor, size: 14.r,),
                                     ),
                                   ),
                                 ),
@@ -401,7 +398,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Text("Amount: ", style: TextStyle(fontWeight: FontWeight.bold),),
+                                          const Text("Amount: ", style: TextStyle(fontWeight: FontWeight.bold),),
                                           Text("${widget.price}")
                                         ],
                                       ),
@@ -410,7 +407,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          Text("Payment Method: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                                          const Text("Payment Method: ", style: TextStyle(fontWeight: FontWeight.bold)),
                                           Text("${widget.paymentMethod}")
                                         ],
                                       ),
@@ -419,7 +416,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          Text("Payment By: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                                          const Text("Payment By: ", style: TextStyle(fontWeight: FontWeight.bold)),
                                           Text("${widget.paymentBy}")
                                         ],
                                       ),
@@ -428,7 +425,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          Text("Payment Status: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                                          const Text("Payment Status: ", style: TextStyle(fontWeight: FontWeight.bold)),
                                           Text("${widget.paymentStatus}")
                                         ],
                                       ),

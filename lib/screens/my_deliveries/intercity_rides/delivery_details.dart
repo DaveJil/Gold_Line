@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
-import 'package:provider/provider.dart';
 
 import '../../../utility/helpers/constants.dart';
-import '../../../utility/providers/get_list_provider.dart';
 
 class InterCityRideDetailsScreen extends StatefulWidget {
   final String? title;
@@ -65,8 +63,6 @@ class _InterCityRideDetailsScreenState
     extends State<InterCityRideDetailsScreen> {
   @override
   Widget build(BuildContext context) {
-    final deliveryListProvider =
-        Provider.of<GetListProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -152,14 +148,14 @@ class _InterCityRideDetailsScreenState
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: CircleAvatar(
+                                      backgroundColor:
+                                          kPrimaryGoldColor.withOpacity(0.1),
+                                      radius: 16.r,
                                       child: Icon(
                                         Icons.edit_document,
                                         color: kPrimaryGoldColor,
                                         size: 14.r,
                                       ),
-                                      backgroundColor:
-                                          kPrimaryGoldColor.withOpacity(0.1),
-                                      radius: 16.r,
                                     ),
                                   ),
                                 ),
@@ -172,7 +168,7 @@ class _InterCityRideDetailsScreenState
                                     children: [
                                       Row(
                                         children: [
-                                          Text(
+                                          const Text(
                                             "Name:",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold),
@@ -185,7 +181,7 @@ class _InterCityRideDetailsScreenState
                                       ),
                                       Row(
                                         children: [
-                                          Text("Phone: ",
+                                          const Text("Phone: ",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold)),
                                           Text("${widget.senderPhone}")
@@ -214,13 +210,13 @@ class _InterCityRideDetailsScreenState
                                     alignment: Alignment.centerRight,
                                     child: Center(
                                       child: CircleAvatar(
+                                        backgroundColor: Colors.grey,
+                                        radius: 12.r,
                                         child: Icon(
                                           Icons.call,
                                           color: Colors.black,
                                           size: 9.r,
                                         ),
-                                        backgroundColor: Colors.grey,
-                                        radius: 12.r,
                                       ),
                                     ),
                                   ),
@@ -239,14 +235,14 @@ class _InterCityRideDetailsScreenState
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: CircleAvatar(
+                                      backgroundColor:
+                                          kPrimaryGoldColor.withOpacity(0.1),
+                                      radius: 16.r,
                                       child: Icon(
                                         FontAwesomeIcons.car,
                                         color: kPrimaryGoldColor,
                                         size: 14.r,
                                       ),
-                                      backgroundColor:
-                                          kPrimaryGoldColor.withOpacity(0.1),
-                                      radius: 16.r,
                                     ),
                                   ),
                                 ),
@@ -259,7 +255,7 @@ class _InterCityRideDetailsScreenState
                                     children: [
                                       Row(
                                         children: [
-                                          Text(
+                                          const Text(
                                             "Transport Type ",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold),
@@ -272,7 +268,7 @@ class _InterCityRideDetailsScreenState
                                       ),
                                       Row(
                                         children: [
-                                          Text("Vehicle Type: ",
+                                          const Text("Vehicle Type: ",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold)),
                                           Text("${widget.transportVehicleType}")
@@ -283,7 +279,7 @@ class _InterCityRideDetailsScreenState
                                       ),
                                       Row(
                                         children: [
-                                          Text("Booking Type: ",
+                                          const Text("Booking Type: ",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold)),
                                           Text("${widget.transportType}")
@@ -294,7 +290,7 @@ class _InterCityRideDetailsScreenState
                                       ),
                                       Row(
                                         children: [
-                                          Text("Number of Seats Booked: ",
+                                          const Text("Number of Seats Booked: ",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold)),
                                           Text("${widget.seats}")
@@ -312,13 +308,13 @@ class _InterCityRideDetailsScreenState
                                     alignment: Alignment.centerRight,
                                     child: Center(
                                       child: CircleAvatar(
+                                        backgroundColor: Colors.grey,
+                                        radius: 12.r,
                                         child: Icon(
                                           FontAwesomeIcons.car,
                                           color: Colors.black,
                                           size: 9.r,
                                         ),
-                                        backgroundColor: Colors.grey,
-                                        radius: 12.r,
                                       ),
                                     ),
                                   ),
@@ -371,14 +367,14 @@ class _InterCityRideDetailsScreenState
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: CircleAvatar(
+                                      backgroundColor:
+                                          kPrimaryGoldColor.withOpacity(0.1),
+                                      radius: 16.r,
                                       child: Icon(
                                         Icons.motorcycle,
                                         color: kPrimaryGoldColor,
                                         size: 14.r,
                                       ),
-                                      backgroundColor:
-                                          kPrimaryGoldColor.withOpacity(0.1),
-                                      radius: 16.r,
                                     ),
                                   ),
                                 ),
@@ -391,7 +387,7 @@ class _InterCityRideDetailsScreenState
                                     children: [
                                       Row(
                                         children: [
-                                          AutoSizeText(
+                                          const AutoSizeText(
                                             "Driver's Name: ",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold),
@@ -405,7 +401,7 @@ class _InterCityRideDetailsScreenState
                                       ),
                                       Row(
                                         children: [
-                                          Text("Driver's Phone: ",
+                                          const Text("Driver's Phone: ",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold)),
                                           Text(
@@ -423,7 +419,7 @@ class _InterCityRideDetailsScreenState
                                       ),
                                       Row(
                                         children: [
-                                          Text("Car Plate Number: ",
+                                          const Text("Car Plate Number: ",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold)),
                                           Text(
@@ -487,14 +483,14 @@ class _InterCityRideDetailsScreenState
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: CircleAvatar(
+                                      backgroundColor:
+                                          kPrimaryGoldColor.withOpacity(0.1),
+                                      radius: 16.r,
                                       child: Icon(
                                         Icons.payments,
                                         color: kPrimaryGoldColor,
                                         size: 14.r,
                                       ),
-                                      backgroundColor:
-                                          kPrimaryGoldColor.withOpacity(0.1),
-                                      radius: 16.r,
                                     ),
                                   ),
                                 ),
@@ -507,7 +503,7 @@ class _InterCityRideDetailsScreenState
                                     children: [
                                       Row(
                                         children: [
-                                          Text(
+                                          const Text(
                                             "Amount: ",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold),
@@ -520,7 +516,7 @@ class _InterCityRideDetailsScreenState
                                       ),
                                       Row(
                                         children: [
-                                          Text("Payment Method: ",
+                                          const Text("Payment Method: ",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold)),
                                           Text("${widget.paymentMethod}")
@@ -529,7 +525,7 @@ class _InterCityRideDetailsScreenState
                                       SizedBox(
                                         height: 5.h,
                                       ),
-                                      Row(
+                                      const Row(
                                         children: [
                                           Text("Payment By: ",
                                               style: TextStyle(
@@ -542,7 +538,7 @@ class _InterCityRideDetailsScreenState
                                       ),
                                       Row(
                                         children: [
-                                          Text("Payment Status: ",
+                                          const Text("Payment Status: ",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold)),
                                           Text("${widget.paymentStatus}")

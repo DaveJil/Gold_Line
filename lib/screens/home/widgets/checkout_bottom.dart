@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:gold_line/screens/payment_screen/flutterwave_ui_payment.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
+import 'package:gold_line/utility/helpers/delivery_input.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ class DeliverySummaryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController couponController = TextEditingController();
     final ScrollController myScrollController = ScrollController();
     MapProvider mapProvider = Provider.of<MapProvider>(context);
 
@@ -147,8 +149,21 @@ class DeliverySummaryWidget extends StatelessWidget {
                   style: const TextStyle(fontSize: 16),
                 ),
                 const SizedBox(
-                  height: 7,
+                  height: 10,
                 ),
+                Text(
+                  " Do you have any coupons",
+                ),
+                CustomDeliveryTextField(
+                  hint: 'Coupons',
+                  controller: couponController,
+                ),
+                TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      "VALIDATE COUPON",
+                      style: TextStyle(color: kPrimaryGoldColor),
+                    )),
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
