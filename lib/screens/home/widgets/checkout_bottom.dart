@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:gold_line/screens/payment_screen/flutterwave_ui_payment.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
-import 'package:gold_line/utility/helpers/delivery_input.dart';
 import 'package:gold_line/utility/helpers/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -36,8 +35,9 @@ class DeliverySummaryWidget extends StatelessWidget {
               ]),
           child: Padding(
             padding: const EdgeInsets.all(15.0),
-            child: ListView(
-              controller: myScrollController,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
                   height: 12,
@@ -149,18 +149,21 @@ class DeliverySummaryWidget extends StatelessWidget {
                   style: const TextStyle(fontSize: 16),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 40,
                 ),
-                Text(
-                  " Do you have any coupons",
+                const Text(
+                  "Do you have any coupons",
+                  style: TextStyle(color: kPrimaryGoldColor),
                 ),
-                CustomDeliveryTextField(
-                  hint: 'Coupons',
+                TextFormField(
                   controller: couponController,
+                  decoration: const InputDecoration(
+                      hintText: "Enter coupon code ",
+                      border: OutlineInputBorder()),
                 ),
                 TextButton(
                     onPressed: () {},
-                    child: Text(
+                    child: const Text(
                       "VALIDATE COUPON",
                       style: TextStyle(color: kPrimaryGoldColor),
                     )),
@@ -172,7 +175,7 @@ class DeliverySummaryWidget extends StatelessWidget {
                       fontSize: 18,
                       onPressed: () async {
                         changeScreenReplacement(
-                            context, FlutterwavePaymentScreen());
+                            context, const FlutterwavePaymentScreen());
                       },
                       text: "Proceed to pay ₦${mapProvider.deliveryPrice}",
                     ),

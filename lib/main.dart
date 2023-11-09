@@ -62,11 +62,34 @@ Future<void> main() async {
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) {
-          return MaterialApp(
-            home: AppException(
-              message: "Something Went Wrong Try Again",
-            ),
-            debugShowCheckedModeBanner: false,
+          return MultiProvider(
+            providers: [
+              ChangeNotifierProvider<MapProvider>(
+                  create: (BuildContext context) {
+                return MapProvider();
+              }),
+              ChangeNotifierProvider<UserProvider>(
+                  create: (BuildContext context) {
+                return UserProvider.initialize();
+              }),
+              ChangeNotifierProvider<GetListProvider>(
+                  create: (BuildContext context) {
+                return GetListProvider();
+              }),
+              ChangeNotifierProvider<OrderPaymentProvider>(
+                  create: (BuildContext context) {
+                return OrderPaymentProvider();
+              }),
+              ChangeNotifierProvider<MultipleLocationDelivery>(
+                  create: (BuildContext context) {
+                return MultipleLocationDelivery();
+              }),
+            ],
+            child: MaterialApp(
+                debugShowCheckedModeBanner: false,
+                home: AppException(
+                  message: "Something went wong. Try again",
+                )),
           );
         }));
   };
