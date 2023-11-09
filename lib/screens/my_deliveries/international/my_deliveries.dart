@@ -11,10 +11,12 @@ class MyInternationalDeliveriesScreen extends StatefulWidget {
   const MyInternationalDeliveriesScreen({Key? key}) : super(key: key);
 
   @override
-  State<MyInternationalDeliveriesScreen> createState() => _MyInternationalDeliveriesScreenState();
+  State<MyInternationalDeliveriesScreen> createState() =>
+      _MyInternationalDeliveriesScreenState();
 }
 
-class _MyInternationalDeliveriesScreenState extends State<MyInternationalDeliveriesScreen> {
+class _MyInternationalDeliveriesScreenState
+    extends State<MyInternationalDeliveriesScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -22,7 +24,7 @@ class _MyInternationalDeliveriesScreenState extends State<MyInternationalDeliver
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: kPrimaryGoldColor,
-          bottom: TabBar(
+          bottom: const TabBar(
             indicatorWeight: 5,
             indicatorColor: Colors.blueGrey,
             tabs: [
@@ -45,7 +47,7 @@ class _MyInternationalDeliveriesScreenState extends State<MyInternationalDeliver
             ],
           ),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
             PendingDeliveries(),
             AcceptedDeliveries(),

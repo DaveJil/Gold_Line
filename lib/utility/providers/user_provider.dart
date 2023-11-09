@@ -129,9 +129,19 @@ class UserProvider with ChangeNotifier {
         return message;
       }
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(context,
+          AppException(message: "No Internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     }
   }
 
@@ -182,9 +192,19 @@ class UserProvider with ChangeNotifier {
         return message;
       }
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(context,
+          AppException(message: "No Internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     }
   }
 
@@ -212,9 +232,19 @@ class UserProvider with ChangeNotifier {
         return message;
       }
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(context,
+          AppException(message: "No Internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     }
   }
 
@@ -244,9 +274,19 @@ class UserProvider with ChangeNotifier {
         return message;
       }
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(context,
+          AppException(message: "No Internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     }
   }
 
@@ -275,9 +315,19 @@ class UserProvider with ChangeNotifier {
         return message;
       }
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(context,
+          AppException(message: "No Internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     }
   }
 
@@ -296,9 +346,19 @@ class UserProvider with ChangeNotifier {
       getUserData(context);
       changeScreenReplacement(context, UserProfileScreen());
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(context,
+          AppException(message: "No Internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     }
   }
 
@@ -324,9 +384,19 @@ class UserProvider with ChangeNotifier {
       }
       notifyListeners();
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(context,
+          AppException(message: "No Internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     }
   }
 
@@ -350,11 +420,16 @@ class UserProvider with ChangeNotifier {
         return message;
       }
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreen(context,
+          AppException(message: "No Internet Connection. Try again later"));
     } on TimeoutException catch (_) {
       throw AppException(message: 'Service timeout, check internet connection');
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreen(context,
+          AppException(message: "Something went wrong. Try again later"));
     }
   }
 

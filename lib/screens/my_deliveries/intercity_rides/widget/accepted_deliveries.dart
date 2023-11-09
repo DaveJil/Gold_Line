@@ -20,7 +20,7 @@ class _AcceptedInterCityRidesState extends State<AcceptedInterCityRides> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final deliveryListProvider =
           Provider.of<GetListProvider>(context, listen: false);
-      deliveries = deliveryListProvider.checkAcceptedVInterCityRides();
+      deliveries = deliveryListProvider.checkAcceptedVInterCityRides(context);
     });
     super.initState();
   }
@@ -42,7 +42,7 @@ class _AcceptedInterCityRidesState extends State<AcceptedInterCityRides> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              Text(
+              const Text(
                 "Accepted Deliveries",
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
               ),
@@ -51,8 +51,8 @@ class _AcceptedInterCityRidesState extends State<AcceptedInterCityRides> {
               ),
               SingleChildScrollView(
                 child: FutureBuilder(
-                    future:
-                        deliveryListProvider.checkAcceptedInterStateDelivery(),
+                    future: deliveryListProvider
+                        .checkAcceptedInterStateDelivery(context),
                     builder: (context, snapshot) {
                       // Checking if future is resolved
                       if (snapshot.connectionState == ConnectionState.done) {
@@ -61,7 +61,7 @@ class _AcceptedInterCityRidesState extends State<AcceptedInterCityRides> {
                           return Center(
                             child: Text(
                               '${snapshot.error} occurred',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18, color: kPrimaryGoldColor),
                             ),
                           );
@@ -120,7 +120,7 @@ class _AcceptedInterCityRidesState extends State<AcceptedInterCityRides> {
                         }
                       }
 
-                      return CircularProgressIndicator(
+                      return const CircularProgressIndicator(
                         color: kPrimaryGoldColor,
                       );
                     }),

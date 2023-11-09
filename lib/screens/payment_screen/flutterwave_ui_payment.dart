@@ -14,11 +14,11 @@ class FlutterwavePaymentScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  _FlutterwavePaymentScreenState createState() =>
-      _FlutterwavePaymentScreenState();
+  FlutterwavePaymentScreenState createState() =>
+      FlutterwavePaymentScreenState();
 }
 
-class _FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
+class FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
   @override
   Widget build(BuildContext context) {
     final MapProvider mapProvider = Provider.of<MapProvider>(context);

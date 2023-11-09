@@ -101,70 +101,6 @@ class MultipleDeliveryDetailsState extends State<MultipleDeliveryDetails> {
                 icon: const Icon(Icons.phone),
                 controller: senderPhone,
               ),
-              const SizedBox(
-                height: 12,
-              ),
-              CustomDeliveryTextField(
-                hint: "Receiver Name",
-                icon: const Icon(Icons.person),
-                controller: receiverName,
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              CustomDeliveryTextField(
-                hint: "Receiver Mobile Number",
-                icon: const Icon(Icons.phone),
-                controller: receiverPhone,
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              CustomDeliveryTextField(
-                hint: "Package Description",
-                icon: const Icon(Icons.description),
-                controller: description,
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              CustomDeliveryTextField(
-                hint: "Special Instruction",
-                icon: const Icon(Icons.question_mark),
-                controller: instruction,
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              const BuildCheckBox(),
-              SizedBox(
-                height: getHeight(20, context),
-              ),
-              Row(
-                children: [
-                  Text(
-                    "Size Of Item:",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: getHeight(20, context),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(width: getWidth(5, context)),
-                  Expanded(
-                    child: Divider(
-                      color: Colors.grey[600],
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: getHeight(20, context),
-              ),
-              const BuildItemSize(),
-              SizedBox(
-                height: getHeight(20, context),
-              ),
               Row(
                 children: [
                   Text(
@@ -616,6 +552,85 @@ class _SelectCityState extends State<SelectCity> {
           provider.cityDropDownValue = newValue;
         });
       },
+    );
+  }
+}
+
+class BuildEachMultipleDetail extends StatelessWidget {
+  final int index;
+  const BuildEachMultipleDetail({Key? key, required this.index})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text("Package ${index}"),
+        const SizedBox(
+          height: 12,
+        ),
+        CustomDeliveryTextField(
+          hint: "Receiver Name",
+          icon: const Icon(Icons.person),
+          controller: receiverName,
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+        CustomDeliveryTextField(
+          hint: "Receiver Mobile Number",
+          icon: const Icon(Icons.phone),
+          controller: receiverPhone,
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+        CustomDeliveryTextField(
+          hint: "Package Description",
+          icon: const Icon(Icons.description),
+          controller: description,
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+        CustomDeliveryTextField(
+          hint: "Special Instruction",
+          icon: const Icon(Icons.question_mark),
+          controller: instruction,
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+        const BuildCheckBox(),
+        SizedBox(
+          height: getHeight(20, context),
+        ),
+        Row(
+          children: [
+            Text(
+              "Size Of Item:",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: getHeight(20, context),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(width: getWidth(5, context)),
+            Expanded(
+              child: Divider(
+                color: Colors.grey[600],
+              ),
+            )
+          ],
+        ),
+        SizedBox(
+          height: getHeight(20, context),
+        ),
+        const BuildItemSize(),
+        SizedBox(
+          height: getHeight(20, context),
+        ),
+      ],
     );
   }
 }

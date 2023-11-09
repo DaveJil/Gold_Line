@@ -29,8 +29,8 @@ class _RideCancelReasonState extends State<RideCancelReason> {
         padding: const EdgeInsets.all(6.0),
         child: ListView(
           children: [
-            Row(
-              children: const [
+            const Row(
+              children: [
                 Text(
                   'Why Do you Want to Cancel',
                   style: TextStyle(

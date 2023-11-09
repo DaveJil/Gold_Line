@@ -22,7 +22,7 @@ class _MyVansDeliveriesScreenState extends State<MyVansDeliveriesScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: kPrimaryGoldColor,
-          bottom: TabBar(
+          bottom: const TabBar(
             indicatorWeight: 5,
             indicatorColor: Colors.blueGrey,
             tabs: [
@@ -45,7 +45,7 @@ class _MyVansDeliveriesScreenState extends State<MyVansDeliveriesScreen> {
             ],
           ),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
             PendingDeliveries(),
             AcceptedDeliveries(),

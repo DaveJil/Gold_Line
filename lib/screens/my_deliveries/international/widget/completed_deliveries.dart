@@ -20,7 +20,8 @@ class _CompletedDeliveriesState extends State<CompletedDeliveries> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final deliveryListProvider =
           Provider.of<GetListProvider>(context, listen: false);
-      deliveries = deliveryListProvider.checkCompletedInternationalDelivery();
+      deliveries =
+          deliveryListProvider.checkCompletedInternationalDelivery(context);
     });
     super.initState();
   }
@@ -43,7 +44,7 @@ class _CompletedDeliveriesState extends State<CompletedDeliveries> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              Text(
+              const Text(
                 "Completed Deliveries",
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
               ),
@@ -51,7 +52,8 @@ class _CompletedDeliveriesState extends State<CompletedDeliveries> {
                 height: 10.appHeight(context),
               ),
               FutureBuilder(
-                  future: deliveryListProvider.checkCompletedInternationalDelivery(),
+                  future: deliveryListProvider
+                      .checkCompletedInternationalDelivery(context),
                   builder: (context, snapshot) {
                     // Checking if future is resolved
                     if (snapshot.connectionState == ConnectionState.done) {
@@ -60,7 +62,7 @@ class _CompletedDeliveriesState extends State<CompletedDeliveries> {
                         return Center(
                           child: Text(
                             '${snapshot.error} occurred',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 18, color: kPrimaryGoldColor),
                           ),
                         );
@@ -114,7 +116,7 @@ class _CompletedDeliveriesState extends State<CompletedDeliveries> {
                       }
                     }
 
-                    return CircularProgressIndicator(
+                    return const CircularProgressIndicator(
                       color: kPrimaryGoldColor,
                     );
                   }),

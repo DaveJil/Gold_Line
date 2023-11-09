@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -60,9 +61,17 @@ Future getWalletBalance(BuildContext context) async {
       return balance;
     }
   } on SocketException {
-    throw const SocketException('No internet connection');
+    changeScreenReplacement(context,
+        AppException(message: "No/Poor internet COnnection. Try again later"));
+  } on TimeoutException {
+    changeScreenReplacement(context,
+        AppException(message: "No/Poor internet Connection. Try again later"));
+  } on Exception {
+    changeScreenReplacement(
+        context, AppException(message: "Something Went Wrong Try again Later"));
   } catch (err) {
-    throw Exception(err.toString());
+    changeScreenReplacement(context,
+        AppException(message: "Something went wrong. Try again later"));
   }
 }
 
@@ -87,9 +96,17 @@ Future deposit(String amount, BuildContext context) async {
       }
     }
   } on SocketException {
-    throw const SocketException('No internet connection');
+    changeScreenReplacement(context,
+        AppException(message: "No/Poor internet COnnection. Try again later"));
+  } on TimeoutException {
+    changeScreenReplacement(context,
+        AppException(message: "No/Poor internet Connection. Try again later"));
+  } on Exception {
+    changeScreenReplacement(
+        context, AppException(message: "Something Went Wrong Try again Later"));
   } catch (err) {
-    throw Exception(err.toString());
+    changeScreenReplacement(context,
+        AppException(message: "Something went wrong. Try again later"));
   }
 }
 
@@ -115,9 +132,17 @@ Future interWalletTransfer(
       }
     }
   } on SocketException {
-    throw const SocketException('No internet connection');
+    changeScreenReplacement(context,
+        AppException(message: "No/Poor internet COnnection. Try again later"));
+  } on TimeoutException {
+    changeScreenReplacement(context,
+        AppException(message: "No/Poor internet Connection. Try again later"));
+  } on Exception {
+    changeScreenReplacement(
+        context, AppException(message: "Something Went Wrong Try again Later"));
   } catch (err) {
-    throw Exception(err.toString());
+    changeScreenReplacement(context,
+        AppException(message: "Something went wrong. Try again later"));
   }
 }
 
@@ -151,9 +176,17 @@ Future withdraw(String amount, BuildContext context) async {
       }
     }
   } on SocketException {
-    throw const SocketException('No internet connection');
+    changeScreenReplacement(context,
+        AppException(message: "No/Poor internet COnnection. Try again later"));
+  } on TimeoutException {
+    changeScreenReplacement(context,
+        AppException(message: "No/Poor internet Connection. Try again later"));
+  } on Exception {
+    changeScreenReplacement(
+        context, AppException(message: "Something Went Wrong Try again Later"));
   } catch (err) {
-    throw Exception(err.toString());
+    changeScreenReplacement(context,
+        AppException(message: "Something went wrong. Try again later"));
   }
 }
 
@@ -253,7 +286,7 @@ void verifyDeliveryPayment(String? amount, BuildContext context) async {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
     final provider = Provider.of<MapProvider>(context);
-    await provider.submitCardDelivery();
+    await provider.submitCardDelivery(context);
     removeScreenUntil(context, SearchingForDriver());
   } else {
     String message = response['data']['gateway_response'];

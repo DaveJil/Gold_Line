@@ -1,8 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/delivery_model/delivery.dart';
 import '../../models/delivery_model/intercity_ride.dart';
@@ -20,7 +20,7 @@ class GetListProvider extends ChangeNotifier {
   List<DeliveryModel> _deliveryList = [];
   List<DeliveryModel> get deliveryList => _deliveryList;
 
-  Future getDeliveryList() async {
+  Future getDeliveryList(BuildContext context) async {
     var response = await CallApi().getData('user/deliveries');
     print(response);
     final result = response["data"];
@@ -30,7 +30,7 @@ class GetListProvider extends ChangeNotifier {
     return data;
   }
 
-  Future checkPendingDelivery() async {
+  Future checkPendingDelivery(BuildContext context) async {
     try {
       final response =
           await CallApi().getData('user/deliveries?status=pending');
@@ -41,13 +41,26 @@ class GetListProvider extends ChangeNotifier {
       print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkAcceptedDelivery() async {
+  Future checkAcceptedDelivery(BuildContext context) async {
     try {
       final response =
           await CallApi().getData('user/deliveries?status=accepted');
@@ -58,13 +71,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkCompletedDelivery() async {
+  Future checkCompletedDelivery(BuildContext context) async {
     try {
       final response =
           await CallApi().getData('user/deliveries?status=completed');
@@ -75,13 +101,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkCancelledDelivery() async {
+  Future checkCancelledDelivery(BuildContext context) async {
     try {
       final response =
           await CallApi().getData('user/deliveries?status=canceled');
@@ -92,13 +131,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkPendingInterStateDelivery() async {
+  Future checkPendingInterStateDelivery(BuildContext context) async {
     try {
       final response =
           await CallApi().getData('user/interstate/deliveries?status=pending');
@@ -109,13 +161,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkAcceptedInterStateDelivery() async {
+  Future checkAcceptedInterStateDelivery(BuildContext context) async {
     try {
       final response =
           await CallApi().getData('user/interstate/deliveries?status=accepted');
@@ -126,13 +191,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkCompletedInterStateDelivery() async {
+  Future checkCompletedInterStateDelivery(BuildContext context) async {
     try {
       final response = await CallApi()
           .getData('user/interstate/deliveries?status=completed');
@@ -143,13 +221,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkCancelledInterStateDelivery() async {
+  Future checkCancelledInterStateDelivery(BuildContext context) async {
     try {
       final response =
           await CallApi().getData('user/interstate/deliveries?status=canceled');
@@ -160,13 +251,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkPendingInternationalDelivery() async {
+  Future checkPendingInternationalDelivery(BuildContext context) async {
     try {
       final response = await CallApi()
           .getData('user/international/deliveries?status=pending');
@@ -177,13 +281,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkAcceptedInternationalDelivery() async {
+  Future checkAcceptedInternationalDelivery(BuildContext context) async {
     try {
       final response = await CallApi()
           .getData('user/international/deliveries?status=accepted');
@@ -194,13 +311,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkCompletedInternationalDelivery() async {
+  Future checkCompletedInternationalDelivery(BuildContext context) async {
     try {
       final response = await CallApi()
           .getData('user/international/deliveries?status=completed');
@@ -211,13 +341,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkCancelledInternationalDelivery() async {
+  Future checkCancelledInternationalDelivery(BuildContext context) async {
     try {
       final response = await CallApi()
           .getData('user/international/deliveries?status=canceled');
@@ -228,13 +371,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkPendingVansDelivery() async {
+  Future checkPendingVansDelivery(BuildContext context) async {
     try {
       final response =
           await CallApi().getData('user/cargo/deliveries?status=pending');
@@ -245,13 +401,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkAcceptedVansStateDelivery() async {
+  Future checkAcceptedVansStateDelivery(BuildContext context) async {
     try {
       final response =
           await CallApi().getData('user/cargo/deliveries?status=processing');
@@ -262,13 +431,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkCompletedVansStateDelivery() async {
+  Future checkCompletedVansStateDelivery(BuildContext context) async {
     try {
       final response =
           await CallApi().getData('user/cargo/deliveries?status=completed');
@@ -279,13 +461,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkCancelledVansStateDelivery() async {
+  Future checkCancelledVansStateDelivery(BuildContext context) async {
     try {
       final response =
           await CallApi().getData('user/cargo/deliveries?status=canceled');
@@ -296,13 +491,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkPendingInterCityRides() async {
+  Future checkPendingInterCityRides(BuildContext context) async {
     try {
       final response = await CallApi()
           .getData('user/interstate-transport/deliveries?status=pending');
@@ -313,13 +521,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkAcceptedVInterCityRides() async {
+  Future checkAcceptedVInterCityRides(BuildContext context) async {
     try {
       final response = await CallApi()
           .getData('user/interstate-transport/deliveries?status=accepted');
@@ -330,13 +551,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkCompletedInterCityRides() async {
+  Future checkCompletedInterCityRides(BuildContext context) async {
     try {
       final response = await CallApi()
           .getData('user/interstate-transport/deliveries?status=completed');
@@ -347,13 +581,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future checkCancelledIntercityRides() async {
+  Future checkCancelledIntercityRides(BuildContext context) async {
     try {
       final response =
           await CallApi().getData('user/cargo/deliveries?status=canceled');
@@ -364,14 +611,26 @@ class GetListProvider extends ChangeNotifier {
       //print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreen(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
   Future cancelDelivery(BuildContext context, String deliveryIde) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
     Map<String, dynamic> request = {
       'delivery_id': deliveryIde,
       'reason_option': rideCancelReason ?? "other",
@@ -389,33 +648,57 @@ class GetListProvider extends ChangeNotifier {
         changeScreenReplacement(context, HomeScreen());
       }
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
   Future confirmPickUp(BuildContext context, String? deliveryIde) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-
     try {
       final response =
           await CallApi().postData("", 'user/delivery/start/$deliveryIde');
       String message = response["message"];
       //print(message);
       Navigator.pop(context);
-      checkPendingDelivery();
+      checkPendingDelivery(context);
 
       CustomDisplayWidget.displayAwesomeSuccessSnackBar(
           context, message, message);
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
-  Future<List<Transactions>?> getTransactionList() async {
+  Future<List<Transactions>?> getTransactionList(BuildContext context) async {
     try {
       final response = await CallApi().getData('user/transaction');
       print(response);
@@ -425,9 +708,22 @@ class GetListProvider extends ChangeNotifier {
       print(result);
       return result;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      print(err.toString());
     }
   }
 
@@ -435,7 +731,8 @@ class GetListProvider extends ChangeNotifier {
   List<NotificationsModel> get notificationsList => _notificationsList;
   NotificationsModel? notificationsModel;
 
-  Future<List<NotificationsModel>?> getNotificationsList() async {
+  Future<List<NotificationsModel>?> getNotificationsList(
+      BuildContext context) async {
     try {
       var response = await CallApi().getData('notifications');
       if (response.statusCode == 200) {

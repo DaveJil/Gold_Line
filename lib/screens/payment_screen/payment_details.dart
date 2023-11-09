@@ -36,7 +36,6 @@ class _PaymentDetailsState extends State<PaymentDetails> {
     Size size = MediaQuery.of(context).size;
     final userProvider = Provider.of<UserProvider>(context);
 
-
     return Scaffold(
       key: _key,
       backgroundColor: Colors.white,
@@ -80,9 +79,9 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                     ],
                   ),
                   SizedBox(height: size.height / 35),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Expanded(
                         child: Divider(
                           thickness: 1.2,
@@ -131,8 +130,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                     height: size.height / 20,
                     child: TextFormField(
                       // controller: authProvider.bankAccountName,
-                      controller:
-                      userProvider.accountNameController,
+                      controller: userProvider.accountNameController,
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
@@ -152,8 +150,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                     height: size.height / 20,
                     child: TextFormField(
                       // controller: authProvider.bankAccountNumber,
-                      controller:
-                      userProvider.accountNumberController,
+                      controller: userProvider.accountNumberController,
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w500,

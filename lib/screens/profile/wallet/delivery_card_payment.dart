@@ -8,19 +8,21 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class DeliveryCardPayment extends StatefulWidget {
   final String url, amount;
-  const DeliveryCardPayment({Key? key, required this.url, required this.amount}) : super(key: key);
+  const DeliveryCardPayment({Key? key, required this.url, required this.amount})
+      : super(key: key);
 
   @override
   State<DeliveryCardPayment> createState() => _DeliveryCardPaymentState();
 }
 
 class _DeliveryCardPaymentState extends State<DeliveryCardPayment> {
-  final Completer<WebViewController> controllerCompleter = Completer<WebViewController>();
+  final Completer<WebViewController> controllerCompleter =
+      Completer<WebViewController>();
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: ()async {
+      onWillPop: () async {
         final WebViewController controller = await controllerCompleter.future;
         if (await controller.canGoBack()) {
           verifyDeliveryPayment(widget.amount, context);
@@ -33,12 +35,11 @@ class _DeliveryCardPaymentState extends State<DeliveryCardPayment> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Paystack Checkout'),
+          title: const Text('Paystack Checkout'),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
+            icon: const Icon(Icons.arrow_back_ios),
             onPressed: () {
               verifyDeliveryPayment(widget.amount, context);
-
             },
           ),
         ),
@@ -47,22 +48,21 @@ class _DeliveryCardPaymentState extends State<DeliveryCardPayment> {
           javascriptMode: JavascriptMode.unrestricted,
           userAgent: 'Flutter;Webview',
           navigationDelegate: (navigation) async {
-            if(navigation.url == 'https://standard.paystack.co/close'){
+            if (navigation.url == 'https://standard.paystack.co/close') {
               deposit(widget.amount, context);
               Navigator.of(context).pop(); //close webview
               changeScreen(context, const WalletScreen());
             }
-            if(navigation.url == "https://hello.pstk.xyz/callback"){
+            if (navigation.url == "https://hello.pstk.xyz/callback") {
               Navigator.of(context).pop(); //close webview
             }
             return NavigationDecision.navigate;
           },
-
           onPageFinished: (String url) {
             if (url.contains('/transaction/verify/')) {
               print("complete");
               Navigator.pop(context);
-              changeScreen(context, WalletScreen());
+              changeScreen(context, const WalletScreen());
               // Handle payment completion
             }
           },

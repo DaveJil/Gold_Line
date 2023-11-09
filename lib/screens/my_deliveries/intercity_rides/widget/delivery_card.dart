@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import '../../../../utility/helpers/constants.dart';
 import '../../../../utility/helpers/custom_button.dart';
 import '../../../../utility/providers/get_list_provider.dart';
-import '../../../../utility/providers/map_provider.dart';
 import '../delivery_details.dart';
 
 class NewInterCityRideCard extends StatelessWidget {
@@ -46,7 +45,8 @@ class NewInterCityRideCard extends StatelessWidget {
             children: [
               Text(
                 "Delivery #$title",
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
               ),
               Text("Pick Up Location: $pickUpLocation"),
               SizedBox(
@@ -61,9 +61,10 @@ class NewInterCityRideCard extends StatelessWidget {
                     onPressed: () async {
                       deliveryListProvider.cancelDelivery(context, id!);
                     },
-                    child: Text("Reject"),
                     style: ElevatedButton.styleFrom(
-                        shape: StadiumBorder(), backgroundColor: Colors.red),
+                        shape: const StadiumBorder(),
+                        backgroundColor: Colors.red),
+                    child: const Text("Reject"),
                   ),
                 ],
               )
@@ -165,7 +166,7 @@ class _InterCityRideCardState extends State<InterCityRideCard> {
           children: [
             Text(
               "Delivery #${widget.title}",
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
             ),
             SizedBox(
               height: 4.appHeight(context),
@@ -203,19 +204,19 @@ class _InterCityRideCardState extends State<InterCityRideCard> {
                             context: context,
                             builder: (_) {
                               return CupertinoAlertDialog(
-                                title: Text("Confirm Pick Up"),
-                                content: Text(
+                                title: const Text("Confirm Pick Up"),
+                                content: const Text(
                                     "Click Confirm to confirm that rider has picked up your package"),
                                 actions: [
                                   CupertinoDialogAction(
-                                    child: Text("CONFIRM"),
+                                    child: const Text("CONFIRM"),
                                     onPressed: () {
                                       deliveryListProvider.confirmPickUp(
                                           context, widget.title);
                                     },
                                   ),
                                   CupertinoDialogAction(
-                                    child: Text("CANCEL"),
+                                    child: const Text("CANCEL"),
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
@@ -224,12 +225,12 @@ class _InterCityRideCardState extends State<InterCityRideCard> {
                               );
                             });
                       },
-                      child: Text("Confirm Pick Up"),
                       style: ElevatedButton.styleFrom(
-                          shape: StadiumBorder(),
+                          shape: const StadiumBorder(),
                           backgroundColor: kPrimaryGoldColor),
+                      child: const Text("Confirm Pick Up"),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     ElevatedButton(
@@ -250,8 +251,8 @@ class _InterCityRideCardState extends State<InterCityRideCard> {
                                   padding: const EdgeInsets.all(6.0),
                                   child: ListView(
                                     children: [
-                                      Row(
-                                        children: const [
+                                      const Row(
+                                        children: [
                                           Text(
                                             'Why Do you Want to Cancel',
                                             style: TextStyle(
@@ -328,9 +329,10 @@ class _InterCityRideCardState extends State<InterCityRideCard> {
                         // deliveryListProvider.cancelDelivery(
                         //     context, id!.toString());
                       },
-                      child: Text("Cancel Delivery"),
                       style: ElevatedButton.styleFrom(
-                          shape: StadiumBorder(), backgroundColor: Colors.red),
+                          shape: const StadiumBorder(),
+                          backgroundColor: Colors.red),
+                      child: const Text("Cancel Delivery"),
                     ),
                   ],
                 )),
@@ -459,13 +461,10 @@ class _CompletedInterCityRideCardState
     extends State<CompletedInterCityRideCard> {
   @override
   Widget build(BuildContext context) {
-    final deliveryListProvider =
-        Provider.of<MapProvider>(context, listen: false);
-
     return InkWell(
       onTap: () {
         (widget.type == "bulk")
-            ? changeScreen(context, PendingDeliveries())
+            ? changeScreen(context, const PendingDeliveries())
             : changeScreen(
                 context,
                 InterCityRideDetailsScreen(
@@ -500,10 +499,10 @@ class _CompletedInterCityRideCardState
               alignment: Alignment.topRight,
               child: Container(
                 color: kPrimaryGoldColor,
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   widget.type ?? "Single",
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 16,
                       color: Colors.white),
@@ -512,7 +511,7 @@ class _CompletedInterCityRideCardState
             ),
             Text(
               "Delivery #${widget.title}",
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
             ),
             SizedBox(
               height: 4.appHeight(context),
@@ -538,7 +537,7 @@ class _CompletedInterCityRideCardState
                 ],
               ),
             ),
-            Divider()
+            const Divider()
           ],
         ),
       ),

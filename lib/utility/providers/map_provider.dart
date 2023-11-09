@@ -4,13 +4,17 @@ import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart'
+    as hoc;
 // import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:gold_line/screens/bottom_sheets/searching%20for%20driver.dart';
 import 'package:gold_line/screens/profile/wallet/wallet.dart';
+import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/controllers.dart';
+import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_place/google_place.dart' as compon;
@@ -23,7 +27,6 @@ import '../../models/driver_profile/driver_profile.dart';
 import '../../models/route_model.dart';
 import '../../models/user_profile/user_profile.dart';
 import '../api.dart';
-import '../helpers/constants.dart';
 import '../helpers/custom_display_widget.dart';
 import '../helpers/routing.dart';
 import '../services/map_request.dart';
@@ -38,8 +41,8 @@ class MapProvider with ChangeNotifier {
   static const PICKUP_MARKER_ID = 'pickup';
   static const LOCATION_MARKER_ID = 'location';
 
-  compon.DetailsResult? pickupLocation;
-  compon.DetailsResult? dropoffLocation;
+  PlaceDetails? pickupLocation;
+  PlaceDetails? dropoffLocation;
 
   String? pickUpLocationAddress;
   String? dropOffLocationAddress;
@@ -119,8 +122,6 @@ class MapProvider with ChangeNotifier {
   Timer? debounce;
   bool useCurrentLocationPickUp = false;
   bool useCurrentLocationDropOff = false;
-
-  GoogleMapsPlaces places = GoogleMapsPlaces(apiKey: GOOGLE_MAPS_API_KEY);
 
   String? requestStatus = "";
   double? requestedDestinationLat;
@@ -376,12 +377,11 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void selectPickupAddress(BuildContext context) async {}
+
   setPickUpPredictions() {
     predictions = [];
     pickupLocation = null;
-    pickUpLatLng = LatLng(pickupLocation!.geometry!.location!.lat!,
-        pickupLocation!.geometry!.location!.lng!);
-    notifyListeners();
   }
 
   useCheckBoxForCurrentPickUp() async {
@@ -417,18 +417,41 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  setPickUpLocation(int index) async {
-    final placeId = predictions[index].placeId!;
-    print(placeId);
-    final details = await googlePlace.details.get(placeId);
-    print(details);
-    pickUpLocationController.text = predictions[index].description!;
-    print(details);
-    // pickUpLocationController.text = details!.result!.formattedAddress!;
-    predictions = [];
+  setPickUpLocation(BuildContext context) async {
+    var place = await hoc.PlacesAutocomplete.show(
+        context: context,
+        apiKey: GOOGLE_MAPS_API_KEY,
+        mode: hoc.Mode.overlay,
+        types: [],
+        strictbounds: false,
+        components: [Component(Component.country, 'ng')],
+        //google_map_webservice package
+        onError: (err) {
+          print(err);
+        });
     notifyListeners();
-    pickupLocation = details!.result;
-    print(pickupLocation);
+
+    if (place != null) {
+      // setState(() {
+      //   location = place.description.toString();
+      // });
+      final plist = GoogleMapsPlaces(
+        apiKey: GOOGLE_MAPS_API_KEY,
+        apiHeaders: await GoogleApiHeaders().getHeaders(),
+      );
+      String placeId = place.placeId ?? "0";
+      final details = await plist.getDetailsByPlaceId(placeId);
+      print(details);
+      pickUpLocationController.text = place.description!;
+      print(details);
+      // pickUpLocationController.text = details!.result!.formattedAddress!;
+      predictions = [];
+      notifyListeners();
+      pickupLocation = details.result;
+      print(pickupLocation);
+
+      notifyListeners();
+    }
     notifyListeners();
     pickUpLatLng = LatLng(pickupLocation!.geometry!.location!.lat!,
         pickupLocation!.geometry!.location!.lng!);
@@ -438,19 +461,41 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  setDropOffLocation(int index) async {
-    final placeId = predictions[index].placeId!;
-    final details = await googlePlace.details.get(placeId);
-    print(details);
-    dropOffLocationController.text = predictions[index].description!;
+  setDropOffLocation(BuildContext context) async {
+    var place = await hoc.PlacesAutocomplete.show(
+        context: context,
+        apiKey: GOOGLE_MAPS_API_KEY,
+        mode: hoc.Mode.overlay,
+        types: [],
+        strictbounds: false,
+        components: [Component(Component.country, 'ng')],
+        //google_map_webservice package
+        onError: (err) {
+          print(err);
+        });
 
-    // dropOffLocationController.text = details!.result!.formattedAddress!;
-    predictions = [];
+    if (place != null) {
+      final plist = GoogleMapsPlaces(
+        apiKey: GOOGLE_MAPS_API_KEY,
+        apiHeaders: await GoogleApiHeaders().getHeaders(),
+      );
+      String placeId = place.placeId ?? "0";
+      final details = await plist.getDetailsByPlaceId(placeId);
+      print(details);
+      dropOffLocationController.text = place.description!;
+      print(details);
+      // pickUpLocationController.text = details!.result!.formattedAddress!;
+      predictions = [];
+      notifyListeners();
+      dropoffLocation = details.result;
+      print(dropoffLocation);
+
+      notifyListeners();
+    }
     notifyListeners();
-    dropoffLocation = details!.result;
-
     dropOffLatLng = LatLng(dropoffLocation!.geometry!.location!.lat!,
         dropoffLocation!.geometry!.location!.lng!);
+    notifyListeners();
     dropOffState = await getStateFromCoordinates(point: dropOffLatLng!);
     dropOffCountry = await getCountryFromCoordinates(point: dropOffLatLng!);
     notifyListeners();
@@ -538,6 +583,8 @@ class MapProvider with ChangeNotifier {
     };
 
     try {
+      print(values);
+
       if (deliveryDropDownValue == "International") {
         values["country"] = pickUpCountry;
         values["dropoff_country"] = dropOffCountry;
@@ -632,9 +679,22 @@ class MapProvider with ChangeNotifier {
       }
       notifyListeners();
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(context,
+          AppException(message: "No Internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message:
+                  "Details Not Filled Properly. Go bak and fill all required details for Delivery"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     }
     notifyListeners();
   }
@@ -674,9 +734,22 @@ class MapProvider with ChangeNotifier {
       }
       notifyListeners();
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(context,
+          AppException(message: "No Internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message:
+                  "Details Not Filled Properly. Go bak and fill all required details for Delivery"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     }
     notifyListeners();
   }
@@ -763,9 +836,22 @@ class MapProvider with ChangeNotifier {
       }
       notifyListeners();
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(context,
+          AppException(message: "No Internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message:
+                  "Details Not Filled Properly. Go bak and fill all required details for Delivery"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     }
     notifyListeners();
   }
@@ -800,13 +886,27 @@ class MapProvider with ChangeNotifier {
       }
       return true;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(context,
+          AppException(message: "No Internet Connection. Try again later"));
+      return false;
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+      return false;
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong try again later"));
+      return false;
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+      return false;
     }
   }
 
-  Future submitCardDelivery() async {
+  Future submitCardDelivery(BuildContext context) async {
     Map<String, dynamic> values = {"payment_status": "paid"};
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
@@ -814,9 +914,19 @@ class MapProvider with ChangeNotifier {
           await CallApi().postData(values, 'user/delivery/submit/$deliveryId');
       print(response);
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(context,
+          AppException(message: "No Internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     }
   }
 
@@ -833,10 +943,20 @@ class MapProvider with ChangeNotifier {
 
       changeScreenReplacement(context, SearchingForDriver());
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(context,
+          AppException(message: "No Internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
       print(err.toString());
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     }
   }
 
@@ -850,9 +970,19 @@ class MapProvider with ChangeNotifier {
 
       changeScreenReplacement(context, SearchingForDriver());
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(context,
+          AppException(message: "No Internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     }
   }
 
@@ -882,9 +1012,24 @@ class MapProvider with ChangeNotifier {
 
       return false;
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(context,
+          AppException(message: "No Internet Connection. Try again later"));
+      return false;
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+      return false;
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
+      return false;
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
+
+      return false;
     }
   }
 
@@ -906,7 +1051,7 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  getRiderDetails() async {
+  getRiderDetails(BuildContext context) async {
     try {
       final response = await CallApi().getData('user/delivery/$deliveryId');
 
@@ -921,9 +1066,19 @@ class MapProvider with ChangeNotifier {
 
       notifyListeners();
     } on SocketException {
-      throw const SocketException('No internet connection');
+      changeScreenReplacement(context,
+          AppException(message: "No Internet Connection. Try again later"));
+    } on TimeoutException {
+      changeScreenReplacement(
+          context,
+          AppException(
+              message: "No/Poor internet Connection. Try again later"));
+    } on Exception {
+      changeScreenReplacement(context,
+          AppException(message: "Something Went Wrong Try again Later"));
     } catch (err) {
-      throw Exception(err.toString());
+      changeScreenReplacement(context,
+          AppException(message: "Something went wrong. Try again later"));
     }
   }
 

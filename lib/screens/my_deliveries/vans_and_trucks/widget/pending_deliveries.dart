@@ -20,7 +20,7 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final deliveryListProvider =
           Provider.of<GetListProvider>(context, listen: false);
-      deliveries = deliveryListProvider.checkPendingDelivery();
+      deliveries = deliveryListProvider.checkPendingDelivery(context);
     });
     super.initState();
   }
@@ -42,7 +42,7 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              Text(
+              const Text(
                 "Pending Deliveries",
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
               ),
@@ -51,7 +51,8 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
               ),
               SingleChildScrollView(
                 child: FutureBuilder(
-                    future: deliveryListProvider.checkPendingVansDelivery(),
+                    future:
+                        deliveryListProvider.checkPendingVansDelivery(context),
                     builder: (context, snapshot) {
                       // Checking if future is resolved
                       if (snapshot.connectionState == ConnectionState.done) {
@@ -60,7 +61,7 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
                           return Center(
                             child: Text(
                               '${snapshot.error} occurred',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18, color: kPrimaryGoldColor),
                             ),
                           );
@@ -119,7 +120,7 @@ class _PendingDeliveriesState extends State<PendingDeliveries> {
                         }
                       }
 
-                      return CircularProgressIndicator(
+                      return const CircularProgressIndicator(
                         color: kPrimaryGoldColor,
                       );
                     }),
