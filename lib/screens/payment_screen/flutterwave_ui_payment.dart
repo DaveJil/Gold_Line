@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';
 import 'package:gold_line/utility/providers/map_provider.dart';
 import 'package:provider/provider.dart';
@@ -45,101 +46,100 @@ class FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
                 ),
               ],
             ),
-            SizedBox(height: size.height / 80),
-            SizedBox(
+            SizedBox(height: 50),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(width: 0.5, color: Colors.grey[400]!),
+                  borderRadius: BorderRadius.circular(9),
+                  color: paymentProvider.orderPaymentMethod ==
+                          OrderPaymentMethod.cash
+                      ? kPrimaryGoldColor
+                      : Colors.white),
               width: size.width,
-              height: size.height / 16,
-              child: InkWell(
-                onTap: (() {
+              height: 60,
+              child: ListTile(
+                onTap: () {
                   setState(() {
                     paymentProvider.setTransactionsTypeEnum =
                         OrderPaymentMethod.cash;
                   });
-                  //////print("optionIsCash is now $optionIsCash");
-                }),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.only(left: 5),
-                  minVerticalPadding: 5,
-                  leading: const Icon(FontAwesomeIcons.moneyBill1,
-                      color: Colors.black),
-                  minLeadingWidth: 5,
-                  title: const Text(
-                    "Cash",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+                },
+                contentPadding: const EdgeInsets.only(left: 20),
+                minVerticalPadding: 5,
+                leading: const Icon(FontAwesomeIcons.moneyBill1,
+                    color: Colors.black),
+                minLeadingWidth: 5,
+                title: const Text(
+                  "Cash",
+                  style: TextStyle(
+                    color: Colors.black,
                   ),
-                  trailing: Icon(Icons.circle,
-                      size: 30,
-                      color: paymentProvider.orderPaymentMethod ==
-                              OrderPaymentMethod.cash
-                          ? Colors.blue
-                          : Colors.black38),
                 ),
               ),
             ),
             SizedBox(
+              height: 20,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(9),
+                  border: Border.all(width: 0.5, color: Colors.grey[400]!),
+                  color: paymentProvider.orderPaymentMethod ==
+                          OrderPaymentMethod.card
+                      ? kPrimaryGoldColor
+                      : Colors.white),
               width: size.width,
-              height: size.height / 16,
-              child: InkWell(
-                onTap: (() {
+              height: 60,
+              child: ListTile(
+                onTap: () {
                   setState(() {
                     paymentProvider.setTransactionsTypeEnum =
                         OrderPaymentMethod.card;
                   });
-                  //////print("optionIsCash is now $optionIsCash");
-                }),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.only(left: 5),
-                  minVerticalPadding: 5,
-                  leading: const Icon(FontAwesomeIcons.creditCard,
-                      color: Colors.black),
-                  minLeadingWidth: 5,
-                  title: const Text(
-                    "Card/Bank Transfer",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+                },
+                contentPadding: const EdgeInsets.only(left: 20),
+                minVerticalPadding: 5,
+                leading: Icon(FontAwesomeIcons.globe, color: Colors.black),
+                minLeadingWidth: 5,
+                title: const Text(
+                  "Paystack",
+                  style: TextStyle(
+                    color: Colors.black,
                   ),
-                  trailing: Icon(Icons.circle,
-                      size: 30,
-                      color: paymentProvider.orderPaymentMethod ==
-                              OrderPaymentMethod.card
-                          ? Colors.blue
-                          : Colors.black38),
                 ),
               ),
             ),
-
             SizedBox(
+              height: 20,
+            ),
+
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(9),
+                  border: Border.all(width: 0.5, color: Colors.grey[400]!),
+                  color: paymentProvider.orderPaymentMethod ==
+                          OrderPaymentMethod.wallet
+                      ? kPrimaryGoldColor
+                      : Colors.white),
               width: size.width,
-              height: size.height / 16,
-              child: InkWell(
-                onTap: (() {
+              height: 60,
+              child: ListTile(
+                onTap: () {
                   setState(() {
                     paymentProvider.setTransactionsTypeEnum =
                         OrderPaymentMethod.wallet;
                   });
-                  //////print("optionIsCash is now $optionIsCash");
-                }),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.only(left: 5, bottom: 20),
-                  minVerticalPadding: 5,
-                  leading:
-                      const Icon(FontAwesomeIcons.wallet, color: Colors.black),
-                  minLeadingWidth: 5,
-                  title: const Text(
-                    "Wallet",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+                },
+                contentPadding: const EdgeInsets.only(left: 20),
+                minVerticalPadding: 5,
+                leading:
+                    const Icon(FontAwesomeIcons.wallet, color: Colors.black),
+                minLeadingWidth: 5,
+                title: const Text(
+                  "Wallet",
+                  style: TextStyle(
+                    color: Colors.black,
                   ),
-                  trailing: Icon(Icons.circle,
-                      size: 30,
-                      color: paymentProvider.orderPaymentMethod ==
-                              OrderPaymentMethod.wallet
-                          ? Colors.blue
-                          : Colors.black38),
                 ),
               ),
             ),

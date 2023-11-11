@@ -33,7 +33,7 @@ class GetListProvider extends ChangeNotifier {
   Future checkPendingDelivery(BuildContext context) async {
     try {
       final response =
-          await CallApi().getData('user/deliveries?status=pending');
+          await CallApi().getData('user/deliveries?status=processing');
       print(response);
       final data = response['data'];
       print(data);
@@ -152,8 +152,8 @@ class GetListProvider extends ChangeNotifier {
 
   Future checkPendingInterStateDelivery(BuildContext context) async {
     try {
-      final response =
-          await CallApi().getData('user/interstate/deliveries?status=pending');
+      final response = await CallApi()
+          .getData('user/interstate/deliveries?status=processing');
       print(response);
       final data = response['data'];
       //print(data);
@@ -273,7 +273,7 @@ class GetListProvider extends ChangeNotifier {
   Future checkPendingInternationalDelivery(BuildContext context) async {
     try {
       final response = await CallApi()
-          .getData('user/international/deliveries?status=pending');
+          .getData('user/international/deliveries?status=processing');
       print(response);
       final data = response['data'];
       //print(data);
@@ -393,7 +393,7 @@ class GetListProvider extends ChangeNotifier {
   Future checkPendingVansDelivery(BuildContext context) async {
     try {
       final response =
-          await CallApi().getData('user/cargo/deliveries?status=pending');
+          await CallApi().getData('user/cargo/deliveries?status=processing');
       print(response);
       final data = response['data'];
       //print(data);
@@ -513,7 +513,7 @@ class GetListProvider extends ChangeNotifier {
   Future checkPendingInterCityRides(BuildContext context) async {
     try {
       final response = await CallApi()
-          .getData('user/interstate-transport/deliveries?status=pending');
+          .getData('user/interstate-transport/deliveries?status=processing');
       print(response);
       final data = response['data'];
       //print(data);

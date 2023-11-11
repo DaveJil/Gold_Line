@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gold_line/goldline.dart';
-import 'package:gold_line/utility/api.dart';
 import 'package:gold_line/utility/providers/getTransactionHistory.dart';
 import 'package:gold_line/utility/providers/get_list_provider.dart';
 import 'package:gold_line/utility/providers/map_provider.dart';
@@ -51,48 +50,48 @@ Future<void> main() async {
     sound: true,
   );
 
-  FlutterError.onError = (details) {
-    // Handle the unhandled exception and navigate to an error screen.
-    print('Unhandled Flutter error: ${details.exception}');
-
-    FlutterError.presentError(details);
-    // Navigate to the error screen
-    runApp(ScreenUtilInit(
-        designSize: const Size(375, 812),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        builder: (context, child) {
-          return MultiProvider(
-            providers: [
-              ChangeNotifierProvider<MapProvider>(
-                  create: (BuildContext context) {
-                return MapProvider();
-              }),
-              ChangeNotifierProvider<UserProvider>(
-                  create: (BuildContext context) {
-                return UserProvider.initialize();
-              }),
-              ChangeNotifierProvider<GetListProvider>(
-                  create: (BuildContext context) {
-                return GetListProvider();
-              }),
-              ChangeNotifierProvider<OrderPaymentProvider>(
-                  create: (BuildContext context) {
-                return OrderPaymentProvider();
-              }),
-              ChangeNotifierProvider<MultipleLocationDelivery>(
-                  create: (BuildContext context) {
-                return MultipleLocationDelivery();
-              }),
-            ],
-            child: MaterialApp(
-                debugShowCheckedModeBanner: false,
-                home: AppException(
-                  message: "Something went wong. Try again",
-                )),
-          );
-        }));
-  };
+  // FlutterError.onError = (details) {
+  //   // Handle the unhandled exception and navigate to an error screen.
+  //   print('Unhandled Flutter error: ${details.exception}');
+  //
+  //   FlutterError.presentError(details);
+  //   // Navigate to the error screen
+  //   runApp(ScreenUtilInit(
+  //       designSize: const Size(375, 812),
+  //       minTextAdapt: true,
+  //       splitScreenMode: true,
+  //       builder: (context, child) {
+  //         return MultiProvider(
+  //           providers: [
+  //             ChangeNotifierProvider<MapProvider>(
+  //                 create: (BuildContext context) {
+  //               return MapProvider();
+  //             }),
+  //             ChangeNotifierProvider<UserProvider>(
+  //                 create: (BuildContext context) {
+  //               return UserProvider.initialize();
+  //             }),
+  //             ChangeNotifierProvider<GetListProvider>(
+  //                 create: (BuildContext context) {
+  //               return GetListProvider();
+  //             }),
+  //             ChangeNotifierProvider<OrderPaymentProvider>(
+  //                 create: (BuildContext context) {
+  //               return OrderPaymentProvider();
+  //             }),
+  //             ChangeNotifierProvider<MultipleLocationDelivery>(
+  //                 create: (BuildContext context) {
+  //               return MultipleLocationDelivery();
+  //             }),
+  //           ],
+  //           child: MaterialApp(
+  //               debugShowCheckedModeBanner: false,
+  //               home: AppException(
+  //                 message: "Something went wong. Try again",
+  //               )),
+  //         );
+  //       }));
+  // };
   runApp(ScreenUtilInit(
       designSize: const Size(375, 812),
       minTextAdapt: true,

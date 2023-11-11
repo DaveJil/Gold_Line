@@ -52,7 +52,7 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
                   },
                   controller: pickUpLocationController,
                   autofocus: false,
-                  focusNode: locationProvider.endFocusNode,
+                  focusNode: locationProvider.startFocusNode,
                   style: TextStyle(fontSize: 24),
                   decoration: InputDecoration(
                       hintText: 'PickUp Location',
@@ -216,53 +216,56 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
               SizedBox(
                 height: getHeight(30, context),
               ),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: StadiumBorder(),
-                      backgroundColor: Colors.white,
-                      elevation: 20),
-                  onPressed: () async {
-                    if (isButtonEnabled == true) {
-                      setState(() {
-                        isButtonEnabled = false;
-                      });
-                      if (widget.deliveryType == "DELIVERY") {
-                        await locationProvider.createDeliveryRequest(context);
-                        var response =
-                            await locationProvider.processDelivery(context);
-                        if (response == true) {
-                          changeScreenReplacement(
-                              context, DeliverySummaryWidget());
+              SizedBox(
+                width: double.infinity,
+                height: 60,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        shape: StadiumBorder(),
+                        backgroundColor: kPrimaryGoldColor,
+                        elevation: 20),
+                    onPressed: () async {
+                      if (isButtonEnabled == true) {
+                        setState(() {
+                          isButtonEnabled = false;
+                        });
+                        if (widget.deliveryType == "DELIVERY") {
+                          await locationProvider.createDeliveryRequest(context);
+                          var response =
+                              await locationProvider.processDelivery(context);
+                          if (response == true) {
+                            changeScreenReplacement(
+                                context, DeliverySummaryWidget());
+                          } else {
+                            return;
+                          }
+                        } else if (widget.deliveryType == "RIDE") {
+                          await locationProvider
+                              .createInterstateRideRequest(context);
+                          await locationProvider.processDelivery(context);
+                          var response =
+                              await locationProvider.processDelivery(context);
+                          if (response == true) {
+                            changeScreenReplacement(
+                                context, InterCityRideSummaryWidget());
+
+                            changeScreenReplacement(
+                                context, InterCityRideSummaryWidget());
+                          }
                         } else {
                           return;
-                        }
-                      } else if (widget.deliveryType == "RIDE") {
-                        await locationProvider
-                            .createInterstateRideRequest(context);
-                        await locationProvider.processDelivery(context);
-                        var response =
-                            await locationProvider.processDelivery(context);
-                        if (response == true) {
-                          changeScreenReplacement(
-                              context, InterCityRideSummaryWidget());
-
-                          changeScreenReplacement(
-                              context, InterCityRideSummaryWidget());
                         }
                       } else {
                         return;
                       }
-                    } else {
-                      return;
-                    }
-                  },
-                  child: isButtonEnabled
-                      ? const Text(
-                          'Continue',
-                          style:
-                              TextStyle(color: kPrimaryGoldColor, fontSize: 22),
-                        )
-                      : CircularProgressIndicator()),
+                    },
+                    child: isButtonEnabled
+                        ? const Text(
+                            'Continue',
+                            style: TextStyle(color: Colors.white, fontSize: 22),
+                          )
+                        : CircularProgressIndicator()),
+              ),
             ],
           ),
         ),

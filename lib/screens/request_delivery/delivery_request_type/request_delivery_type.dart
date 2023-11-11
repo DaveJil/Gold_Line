@@ -59,6 +59,9 @@ class _RequestDeliveryTypeState extends State<RequestDeliveryType> {
                     "Send Goods from one place to\ndifferent locations now on the\n Goldline app.",
                 image: "assets/multipledispatch.svg",
                 onTap: () {
+                  CustomDisplayWidget.displayAwesomeNotificationSnackBar(
+                      context, "Coming soon", "coming soon");
+
                   // changeScreen(context, MultipleDeliveryDetails());
                 },
               ),
