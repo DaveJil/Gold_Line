@@ -47,7 +47,7 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
         centerTitle: false,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +88,7 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
             const SizedBox(
               height: 12,
             ),
-            Row(
+            const Row(
               children: [
                 Text(
                   "Luggage Size",
@@ -100,11 +100,11 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
             const SizedBox(
               height: 12,
             ),
-            BuildItemSize(),
+            const BuildItemSize(),
             const SizedBox(
               height: 12,
             ),
-            BookingTypeRadioButton(),
+            const BookingTypeRadioButton(),
             const SizedBox(
               height: 12,
             ),
@@ -119,7 +119,7 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
                   ),
                 ),
                 SizedBox(width: 8.appWidth(context)),
-                Expanded(
+                const Expanded(
                   child: SelectVehicle(),
                 )
               ],
@@ -138,7 +138,7 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
                   ),
                 ),
                 SizedBox(width: 8.appWidth(context)),
-                Expanded(
+                const Expanded(
                   child: SelectRoute(),
                 )
               ],
@@ -157,7 +157,7 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
                   ),
                 ),
                 SizedBox(width: 8.appWidth(context)),
-                Expanded(
+                const Expanded(
                   child: SelectDepartureTime(),
                 )
               ],
@@ -179,8 +179,8 @@ class _InterCityRideDetailsState extends State<InterCityRideDetails> {
               padding: EdgeInsets.symmetric(horizontal: 50.appWidth(context)),
               child: CustomButton(
                   onPressed: () async {
-                    changeScreen(
-                        context, SelectLocationScreen(deliveryType: "RIDE"));
+                    changeScreen(context,
+                        const SelectLocationScreen(deliveryType: "RIDE"));
                   },
                   text: "Select Location"),
             )
@@ -428,10 +428,10 @@ class _BuildItemSizeState extends State<BuildItemSize> {
               child: SizedBox(
                 height: getHeight(70, context),
                 width: getWidth(60, context),
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
+                  children: [
                     Icon(
                       FontAwesomeIcons.boxOpen,
                       size: 15,
@@ -470,10 +470,10 @@ class _BuildItemSizeState extends State<BuildItemSize> {
               child: SizedBox(
                 height: getHeight(70, context),
                 width: getWidth(80, context),
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
+                  children: [
                     Icon(
                       FontAwesomeIcons.boxOpen,
                       size: 15,
@@ -511,10 +511,10 @@ class _BuildItemSizeState extends State<BuildItemSize> {
               child: SizedBox(
                 height: getHeight(70, context),
                 width: getWidth(70, context),
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
+                  children: [
                     Icon(
                       FontAwesomeIcons.boxOpen,
                       size: 15,

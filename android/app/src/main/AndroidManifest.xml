@@ -26,7 +26,7 @@
 
 
     <application
-        android:label="gold_line"
+        android:label="GoldLine"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

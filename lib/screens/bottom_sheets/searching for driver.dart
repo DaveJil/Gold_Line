@@ -24,92 +24,100 @@ class _SearchingForDriverState extends State<SearchingForDriver> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: 40.appWidth(context), vertical: 10.appHeight(context)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: getHeight(100, context),
-            ),
-            Center(
-              child: const AutoSizeText(
-                "Delivery Created Successfully..",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                  color: kPrimaryGoldColor,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: 30.appWidth(context),
+              vertical: 10.appHeight(context)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 10.appHeight(context),
+              ),
+              Center(
+                child: SizedBox(
+                  height: 280.appHeight(context),
+                  child: SvgPicture.asset("assets/booksucess.svg"),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 10.appHeight(context),
-            ),
-            Center(
-              child: SizedBox(
-                height: 200.appHeight(context),
-                child: SvgPicture.asset("assets/homedispatch.svg"),
-              ),
-            ),
-            SizedBox(
-              height: 10.appHeight(context),
-            ),
-            const Center(
-              child: Text(
-                "A Rider/Driver will PICKUP within the hour/at selcted departure time.\nYou will be notified when the rider/driver is assigned to pick up\nCheck My Deliveries Page for delivery status and details of the rider/driver. \nOR Call 0813 896 9994 for Support",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-              ),
-            ),
-            SizedBox(
-              height: 10.appHeight(context),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                removeScreenUntil(context, HomeScreen());
-              },
-              style: ElevatedButton.styleFrom(
-                elevation: 20,
-                backgroundColor: kPrimaryGoldColor,
-              ),
-              child: const Text(
-                "Home",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                changeScreenReplacement(
-                    context, const MyDeliveriesOptionScreen());
-              },
-              style: ElevatedButton.styleFrom(
-                elevation: 20,
-                backgroundColor: Colors.white70,
-              ),
-              child: const Text(
-                "My Deliveries",
-                style: TextStyle(
+              const Center(
+                child: AutoSizeText(
+                  "Booking Created Successfully",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w700,
                     color: kPrimaryGoldColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700),
+                  ),
+                ),
               ),
-            ),
-            SizedBox(
-              height: 10.appHeight(context),
-            ),
-            const AutoSizeText(
-                'Note that Cancellation Prices may apply depending on the circumstances.'),
-            const AutoSizeText(
-                'Check for delivery status updates on "My Deliveries" option.')
-          ],
+              SizedBox(
+                height: 40.appHeight(context),
+              ),
+              const Center(
+                child: Text(
+                  "A Rider/Driver will Pickup within the Hour.\nYou will be notified when the rider/driver is assigned to pickup.\nCheck my Deliveries Page for  delivery Status and details of the rider/driver. or Call  08138969994 for Support.",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(
+                height: 60.appHeight(context),
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    changeScreenReplacement(
+                        context, const MyDeliveriesOptionScreen());
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white70, shape: StadiumBorder()),
+                  child: const Text(
+                    "Go To My Bookings",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20.appHeight(context),
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    removeScreenUntil(context, const HomeScreen());
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: kPrimaryGoldColor,
+                      shape: StadiumBorder()),
+                  child: const Text(
+                    "Home",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              const AutoSizeText(
+                  textAlign: TextAlign.center,
+                  'Note that Cancellation Prices may apply depending on the circumstances.'),
+              const AutoSizeText(
+                  textAlign: TextAlign.center,
+                  'Check for delivery status updates on "My Deliveries" option.')
+            ],
+          ),
         ),
       ),
     );
