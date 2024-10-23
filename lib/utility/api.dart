@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CallApi {
-  final String _url = 'https://goldline.herokuapp.com/api/';
+  final String _url = 'https://goldline-768391bd9db6.herokuapp.com/api/';
   final String _urlTry = 'https://areaconnect.com.ng/api/';
 
   postData(data, apiUrl) async {
