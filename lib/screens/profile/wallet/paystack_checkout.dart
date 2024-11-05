@@ -33,9 +33,9 @@ class _PayStackCheckOutState extends State<PayStackCheckOut> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Paystack Checkout'),
+          title: const Text('Paystack Checkout'),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
+            icon: const Icon(Icons.arrow_back_ios),
             onPressed: () {
               verifyTransaction(widget.amount, context);
 
@@ -62,7 +62,7 @@ class _PayStackCheckOutState extends State<PayStackCheckOut> {
             if (url.contains('/transaction/verify/')) {
               print("complete");
               Navigator.pop(context);
-              changeScreen(context, WalletScreen());
+              changeScreen(context, const WalletScreen());
               // Handle payment completion
             }
           },

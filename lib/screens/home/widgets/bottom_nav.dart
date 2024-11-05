@@ -35,7 +35,7 @@ class _BottomNavState extends State<BottomNav> {
           ),
           InkWell(
             onTap: () {
-              changeScreen(context, MainMenu());
+              changeScreen(context, const MainMenu());
             },
             child: Center(
               child: Column(
@@ -72,7 +72,7 @@ class _BottomNavState extends State<BottomNav> {
           ),
           InkWell(
             onTap: () {
-              changeScreen(context, DeliveryDetails());
+              changeScreen(context, const DeliveryDetails());
             },
             child: Center(
               child: Column(
@@ -109,7 +109,7 @@ class _BottomNavState extends State<BottomNav> {
           ),
           InkWell(
             onTap: () {
-              changeScreen(context, MyDeliveriesOptionScreen());
+              changeScreen(context, const MyDeliveriesOptionScreen());
             },
             child: Center(
               child: Column(

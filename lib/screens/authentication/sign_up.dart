@@ -30,7 +30,7 @@ class SignUpScreenState extends State<SignUpScreen> {
         child: SingleChildScrollView(
           child: Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
@@ -59,7 +59,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                     ),
                     TextFormField(
                       controller: userProvider.firstName,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
                               width: 1,
@@ -113,7 +113,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                         }
                         return null;
                       },
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                             width: 1,
@@ -139,7 +139,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                         }
                         return null;
                       },
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                             width: 1,
@@ -168,7 +168,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                         return null;
                       },
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
                               width: 1,
@@ -187,7 +187,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                     ),
                     TextFormField(
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
                               width: 1,
@@ -211,7 +211,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                     SizedBox(
                       height: getHeight(20, context),
                     ),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -225,7 +225,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                     ),
                     TextFormField(
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
                               width: 1,
@@ -247,7 +247,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (_) => SignInScreen()));
                       },
-                      child: AutoSizeText(
+                      child: const AutoSizeText(
                         'Already have an account? Login',
                         style: TextStyle(
                           color: kPrimaryGoldColor,

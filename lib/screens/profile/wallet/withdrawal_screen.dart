@@ -17,9 +17,9 @@ class WithdrawalScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: kPrimaryGoldColor,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
-            changeScreenReplacement(context, WalletScreen());
+            changeScreenReplacement(context, const WalletScreen());
           },
         ),
       ),
@@ -32,21 +32,21 @@ class WithdrawalScreen extends StatelessWidget {
             children: [
               TextFormField(
                 controller: amount,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Enter amount you want to withdraw',
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     backgroundColor: kPrimaryGoldColor),
                 onPressed: () {
                   withdraw(amount.text, context);
                 },
-                child: Text('Withdraw'),
+                child: const Text('Withdraw'),
               ),
-              SizedBox(height: 16.0),
-              Text(
+              const SizedBox(height: 16.0),
+              const Text(
                   "AreaConnect Withdrawals are processed Within 1-3 working days after requst has been made. You can contact support team with any issues")
             ],
           ),

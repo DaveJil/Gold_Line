@@ -46,7 +46,7 @@ class FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             Container(
               decoration: BoxDecoration(
                   border: Border.all(width: 0.5, color: Colors.grey[400]!),
@@ -77,7 +77,7 @@ class FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
@@ -99,7 +99,7 @@ class FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
                 },
                 contentPadding: const EdgeInsets.only(left: 20),
                 minVerticalPadding: 5,
-                leading: Icon(FontAwesomeIcons.globe, color: Colors.black),
+                leading: const Icon(FontAwesomeIcons.globe, color: Colors.black),
                 minLeadingWidth: 5,
                 title: const Text(
                   "Paystack",
@@ -109,7 +109,7 @@ class FlutterwavePaymentScreenState extends State<FlutterwavePaymentScreen> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
 

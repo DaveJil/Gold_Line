@@ -2,11 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.imotionnigeria.goldline">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -18,20 +21,13 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
-<!--    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />-->
-<!--    <permission android:name="<com.imotionnigeria.goldline>.permission.C2D_MESSAGE"-->
-<!--        android:protectionLevel="signature" />-->
-<!--    <uses-permission android:name="com.imotionnigeria.goldline>.permission.C2D_MESSAGE" />-->
-
-
-
     <application
         android:label="GoldLine"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
-       <meta-data android:name="com.google.android.geo.API_KEY"
-           android:value="AIzaSyAJa8NMwKE5L8wbXm_3LJdkQHC_7ipu4no"/>
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAJa8NMwKE5L8wbXm_3LJdkQHC_7ipu4no"/>
 
         <activity
             android:name=".MainActivity"
@@ -46,9 +42,9 @@
                  while the Flutter UI initializes. After that, this theme continues
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
-              android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme"
+                />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

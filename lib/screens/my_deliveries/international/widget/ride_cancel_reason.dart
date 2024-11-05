@@ -122,7 +122,7 @@ class _RideCancelReasonState extends State<RideCancelReason> {
               ),
               borderRadius: const BorderRadius.all(Radius.circular(3))),
           child: Radio<String>(
-            fillColor: MaterialStateColor.resolveWith((states) =>
+            fillColor: WidgetStateColor.resolveWith((states) =>
                 reasonProvider.rideCancelReason == reason[btnValue]
                     ? kPrimaryGoldColor
                     : Colors.white),

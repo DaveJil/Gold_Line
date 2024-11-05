@@ -67,19 +67,19 @@ class MapProvider with ChangeNotifier {
   String? deliveryPrice = "0";
 
   String? countryCode;
-  Set<Marker> _markers = {};
+  final Set<Marker> _markers = {};
   Set<Polyline> _poly = {};
 
   Set<Polyline> get poly => _poly;
   Set<Polyline> _routeToDestinationPolys = {};
-  Set<Polyline> _routeToDriverpoly = {};
+  final Set<Polyline> _routeToDriverpoly = {};
 
   Set<Marker> get markers => _markers;
 
   GoogleMapController? _mapController;
 
   GoogleMapController? get mapController => _mapController;
-  GoogleMapsServices _googleMapsServices = GoogleMapsServices();
+  final GoogleMapsServices _googleMapsServices = GoogleMapsServices();
 
   BitmapDescriptor? locationPin;
   BitmapDescriptor? driverPin;
@@ -142,7 +142,7 @@ class MapProvider with ChangeNotifier {
   String selectedBookingDate = "Select Departure Date";
   String selectedBookingTime = "Select Departure Time";
 
-  TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
+  TimeOfDay selectedTime = const TimeOfDay(hour: 00, minute: 00);
   String deliveryDropDownValue = 'Select Delivery Option';
   String vansDropDownValue = 'Select Delivery Type';
 
@@ -282,19 +282,19 @@ class MapProvider with ChangeNotifier {
   }
 
   Future sendRequest({LatLng? origin, LatLng? destination}) async {
-    LatLng _org;
-    LatLng _dest;
+    LatLng org;
+    LatLng dest;
 
     if (origin == null && destination == null) {
-      _org = pickUpLatLng!;
-      _dest = dropOffLatLng!;
+      org = pickUpLatLng!;
+      dest = dropOffLatLng!;
     } else {
-      _org = origin!;
-      _dest = destination!;
+      org = origin!;
+      dest = destination!;
     }
 
     RouteModel route =
-        await _googleMapsServices.getRouteByCoordinates(_org, _dest);
+        await _googleMapsServices.getRouteByCoordinates(org, dest);
     routeModel = route;
 
     if (origin == null) {
@@ -335,11 +335,11 @@ class MapProvider with ChangeNotifier {
       PointLatLng(dropOffLatLng!.latitude, dropOffLatLng!.longitude),
     );
     if (result.points.isNotEmpty) {
-      result.points.forEach(
-        (PointLatLng point) => polylineCoordinates.add(
+      for (var point in result.points) {
+        polylineCoordinates.add(
           LatLng(point.latitude, point.longitude),
-        ),
-      );
+        );
+      }
       notifyListeners();
     }
     notifyListeners();
@@ -437,7 +437,7 @@ class MapProvider with ChangeNotifier {
       // });
       final plist = GoogleMapsPlaces(
         apiKey: GOOGLE_MAPS_API_KEY,
-        apiHeaders: await GoogleApiHeaders().getHeaders(),
+        apiHeaders: await const GoogleApiHeaders().getHeaders(),
       );
       String placeId = place.placeId ?? "0";
       final details = await plist.getDetailsByPlaceId(placeId);
@@ -453,8 +453,8 @@ class MapProvider with ChangeNotifier {
       notifyListeners();
     }
     notifyListeners();
-    pickUpLatLng = LatLng(pickupLocation!.geometry!.location!.lat!,
-        pickupLocation!.geometry!.location!.lng!);
+    pickUpLatLng = LatLng(pickupLocation!.geometry!.location.lat,
+        pickupLocation!.geometry!.location.lng);
     notifyListeners();
     pickUpState = await getStateFromCoordinates(point: pickUpLatLng!);
     pickUpCountry = await getCountryFromCoordinates(point: pickUpLatLng!);
@@ -477,7 +477,7 @@ class MapProvider with ChangeNotifier {
     if (place != null) {
       final plist = GoogleMapsPlaces(
         apiKey: GOOGLE_MAPS_API_KEY,
-        apiHeaders: await GoogleApiHeaders().getHeaders(),
+        apiHeaders: await const GoogleApiHeaders().getHeaders(),
       );
       String placeId = place.placeId ?? "0";
       final details = await plist.getDetailsByPlaceId(placeId);
@@ -493,8 +493,8 @@ class MapProvider with ChangeNotifier {
       notifyListeners();
     }
     notifyListeners();
-    dropOffLatLng = LatLng(dropoffLocation!.geometry!.location!.lat!,
-        dropoffLocation!.geometry!.location!.lng!);
+    dropOffLatLng = LatLng(dropoffLocation!.geometry!.location.lat,
+        dropoffLocation!.geometry!.location.lng);
     notifyListeners();
     dropOffState = await getStateFromCoordinates(point: dropOffLatLng!);
     dropOffCountry = await getCountryFromCoordinates(point: dropOffLatLng!);
@@ -878,7 +878,7 @@ class MapProvider with ChangeNotifier {
       } else if (response['code'] == "insufficient-fund") {
         CustomDisplayWidget.displaySnackBar(
             context, "Insuffucient Funds. Deposit ");
-        changeScreenReplacement(context, WalletScreen());
+        changeScreenReplacement(context, const WalletScreen());
         return false;
       }
       return true;
@@ -938,7 +938,7 @@ class MapProvider with ChangeNotifier {
       // String message = response["message"];
       //print(message);
 
-      changeScreenReplacement(context, SearchingForDriver());
+      changeScreenReplacement(context, const SearchingForDriver());
     } on SocketException {
       changeScreenReplacement(context,
           AppException(message: "No Internet Connection. Try again later"));
@@ -965,7 +965,7 @@ class MapProvider with ChangeNotifier {
           await CallApi().postData(values, 'user/delivery/submit/$deliveryId');
       print(response);
 
-      changeScreenReplacement(context, SearchingForDriver());
+      changeScreenReplacement(context, const SearchingForDriver());
     } on SocketException {
       changeScreenReplacement(context,
           AppException(message: "No Internet Connection. Try again later"));
@@ -1079,16 +1079,16 @@ class MapProvider with ChangeNotifier {
     }
   }
 
-  Timer checkStatusTimer = Timer.periodic(Duration(seconds: 10), (timer) {});
+  Timer checkStatusTimer = Timer.periodic(const Duration(seconds: 10), (timer) {});
 
   void _updateLocationMarker(
       {required CameraPosition cameraPosition,
       required String markerId,
       required String markerTitle}) {
     try {
-      Marker _marker =
+      Marker marker =
           markers.singleWhere((element) => element.markerId.value == markerId);
-      markers.remove(_marker);
+      markers.remove(marker);
       _addMarker(
           markerPosition: cameraPosition.target,
           id: markerId,

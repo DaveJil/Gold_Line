@@ -75,7 +75,7 @@ class _SearchingForDriverState extends State<SearchingForDriver> {
                         context, const MyDeliveriesOptionScreen());
                   },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white70, shape: StadiumBorder()),
+                      backgroundColor: Colors.white70, shape: const StadiumBorder()),
                   child: const Text(
                     "Go To My Bookings",
                     style: TextStyle(
@@ -97,7 +97,7 @@ class _SearchingForDriverState extends State<SearchingForDriver> {
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: kPrimaryGoldColor,
-                      shape: StadiumBorder()),
+                      shape: const StadiumBorder()),
                   child: const Text(
                     "Home",
                     style: TextStyle(

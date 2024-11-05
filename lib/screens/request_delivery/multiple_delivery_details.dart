@@ -427,7 +427,7 @@ class _PayerRadioButtonState extends State<PayerRadioButton> {
               ),
               borderRadius: const BorderRadius.all(Radius.circular(3))),
           child: Radio<String>(
-            fillColor: MaterialStateColor.resolveWith((states) =>
+            fillColor: WidgetStateColor.resolveWith((states) =>
                 mapProvider.whoFuckingPays == payer[btnValue]
                     ? kPrimaryGoldColor
                     : Colors.white),
@@ -565,7 +565,7 @@ class BuildEachMultipleDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text("Package ${index}"),
+        Text("Package $index"),
         const SizedBox(
           height: 12,
         ),

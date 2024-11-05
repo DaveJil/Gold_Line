@@ -41,15 +41,15 @@ class TransactionItem extends StatelessWidget {
     return Card(
       child: ListTile(
         leading: (inOut == "out")
-            ? Icon(
+            ? const Icon(
                 FontAwesomeIcons.download,
                 color: Colors.red,
               )
-            : Icon(
+            : const Icon(
                 FontAwesomeIcons.upload,
                 color: Colors.green,
               ),
-        title: Text("${title!}"),
+        title: Text(title!),
         subtitle: Text(createdAt!),
         trailing: Text("₦$amount"),
       ),

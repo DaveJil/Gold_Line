@@ -37,7 +37,7 @@ class _CustomDeliveryTextFieldState extends State<CustomDeliveryTextField> {
               horizontal: 10.appWidth(context), vertical: 5.appHeight(context)),
           child: Row(
             children: [
-              widget.icon ?? SizedBox(),
+              widget.icon ?? const SizedBox(),
               const SizedBox(
                 width: 10,
               ),
@@ -52,7 +52,7 @@ class _CustomDeliveryTextFieldState extends State<CustomDeliveryTextField> {
                   },
                   validator: widget.validator,
                   decoration: InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
+                    enabledBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(
                         width: 3,
                         color: Colors.black12,

@@ -590,7 +590,7 @@ class _BookingTypeRadioButtonState extends State<BookingTypeRadioButton> {
               ),
               borderRadius: const BorderRadius.all(Radius.circular(3))),
           child: Radio<String>(
-            fillColor: MaterialStateColor.resolveWith((states) =>
+            fillColor: WidgetStateColor.resolveWith((states) =>
                 mapProvider.interCityBookingType == bookingType[btnValue]
                     ? kPrimaryGoldColor
                     : Colors.white),

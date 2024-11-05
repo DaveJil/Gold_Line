@@ -60,7 +60,7 @@ class LoginChoiceState extends State<LoginChoice> {
                 SizedBox(
                   height: getHeight(20, context),
                 ),
-                Center(
+                const Center(
                   child: Text(
                     'Welcome, \n Please Choose your Login / SignUp Option',
                     textAlign: TextAlign.center,
@@ -91,19 +91,19 @@ class LoginChoiceState extends State<LoginChoice> {
                       child: CustomButton(
                         width: getWidth(320, context),
                         onPressed: () {
-                          changeScreen(context, SignUpScreen());
+                          changeScreen(context, const SignUpScreen());
                         },
                         text: 'Sign Up As Agent',
                         fontSize: getHeight(13, context),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Expanded(
                       child: CustomButton(
                         onPressed: () {
-                          changeScreen(context, SignUpScreen());
+                          changeScreen(context, const SignUpScreen());
                         },
                         text: 'Sign Up As User',
                         fontSize: getHeight(14, context),

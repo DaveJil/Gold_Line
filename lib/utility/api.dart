@@ -141,7 +141,7 @@ class CallApi {
 
 class AppException extends StatelessWidget {
   final String message;
-  AppException({required this.message});
+  const AppException({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -163,14 +163,14 @@ class AppException extends StatelessWidget {
               message,
               style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextButton(
                 onPressed: () {
-                  removeScreenUntil(context, GoldLine());
+                  removeScreenUntil(context, const GoldLine());
                 },
-                child: Text(
+                child: const Text(
                   "Go back",
                   style: TextStyle(color: kPrimaryGoldColor),
                 ))

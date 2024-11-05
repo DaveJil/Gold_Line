@@ -17,7 +17,7 @@ class GetListProvider extends ChangeNotifier {
   TextEditingController cancelDescription = TextEditingController();
   String? rideCancelReason;
 
-  List<DeliveryModel> _deliveryList = [];
+  final List<DeliveryModel> _deliveryList = [];
   List<DeliveryModel> get deliveryList => _deliveryList;
 
   Future getDeliveryList(BuildContext context) async {
@@ -645,7 +645,7 @@ class GetListProvider extends ChangeNotifier {
       CustomDisplayWidget.displayAwesomeSuccessSnackBar(context, code, message);
 
       if (code == "success") {
-        changeScreenReplacement(context, HomeScreen());
+        changeScreenReplacement(context, const HomeScreen());
       }
     } on SocketException {
       changeScreenReplacement(
@@ -725,9 +725,10 @@ class GetListProvider extends ChangeNotifier {
           AppException(message: "Something went wrong. Try again later"));
       print(err.toString());
     }
+    return null;
   }
 
-  List<NotificationsModel> _notificationsList = [];
+  final List<NotificationsModel> _notificationsList = [];
   List<NotificationsModel> get notificationsList => _notificationsList;
   NotificationsModel? notificationsModel;
 
@@ -748,5 +749,6 @@ class GetListProvider extends ChangeNotifier {
       //print(e);
     }
     notifyListeners();
+    return null;
   }
 }

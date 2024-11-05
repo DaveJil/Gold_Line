@@ -25,7 +25,7 @@ class InterCityRideSummaryWidget extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(20), topRight: Radius.circular(20)),
             boxShadow: [
               BoxShadow(
@@ -52,7 +52,7 @@ class InterCityRideSummaryWidget extends StatelessWidget {
                       size: getHeight(24, context),
                     ),
                   ),
-                  Text(
+                  const Text(
                     "Summary",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -62,7 +62,7 @@ class InterCityRideSummaryWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
@@ -72,10 +72,10 @@ class InterCityRideSummaryWidget extends StatelessWidget {
                     color: Colors.grey,
                     size: getHeight(24, context),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  AutoSizeText(
+                  const AutoSizeText(
                     "Booking Personal Details",
                     style: TextStyle(fontSize: 20),
                   ),
@@ -89,10 +89,10 @@ class InterCityRideSummaryWidget extends StatelessWidget {
                   Phone: ${interCityBookingPhone.text}  
                   Number of seats: ${interCityBookingNumberOfSeats.text}        
                              ''',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Row(
@@ -102,7 +102,7 @@ class InterCityRideSummaryWidget extends StatelessWidget {
                     color: Colors.grey,
                     size: getHeight(24, context),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   const AutoSizeText(
@@ -119,8 +119,8 @@ class InterCityRideSummaryWidget extends StatelessWidget {
                   Departure Date: ${mapProvider.selectedBookingDate}
                   Departure Time: ${mapProvider.departureTimeDownDownValue}
                   Booking Type: ${mapProvider.interCityBookingType}            
-                   ''', style: TextStyle(fontSize: 16)),
-              SizedBox(
+                   ''', style: const TextStyle(fontSize: 16)),
+              const SizedBox(
                 height: 10,
               ),
               Center(
@@ -131,13 +131,13 @@ class InterCityRideSummaryWidget extends StatelessWidget {
                     fontSize: 18,
                     onPressed: () async {
                       changeScreenReplacement(
-                          context, FlutterwavePaymentScreen());
+                          context, const FlutterwavePaymentScreen());
                     },
                     text: "Proceed to pay ₦${mapProvider.deliveryPrice}",
                   ),
                 ),
               ),
-              AutoSizeText(
+              const AutoSizeText(
                   'Note that this price is an estimated price. Price may differ after delivery.'),
             ],
           ),

@@ -35,7 +35,7 @@ class CustomDisplayWidget {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('Okay'),
+            child: const Text('Okay'),
           )
         ],
       ),

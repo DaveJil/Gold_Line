@@ -48,7 +48,7 @@ class _MainMenuState extends State<MainMenu> {
             Navigator.pop(context);
           },
         ),
-        title: AutoSizeText(
+        title: const AutoSizeText(
           ' Profile',
           style: TextStyle(
             color: Colors.white,
@@ -100,7 +100,7 @@ class _MainMenuState extends State<MainMenu> {
                                       return Center(
                                         child: Text(
                                           '${snapshot.error} occurred',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 18,
                                           ),
                                         ),
@@ -113,7 +113,7 @@ class _MainMenuState extends State<MainMenu> {
                                       //print(datum!.avatar);
                                       //print(datum);
                                       return Container(
-                                        padding: EdgeInsets.all(16),
+                                        padding: const EdgeInsets.all(16),
                                         height: getHeight(150, context),
                                         width: getHeight(136, context),
                                         decoration: BoxDecoration(
@@ -274,7 +274,7 @@ class _MainMenuState extends State<MainMenu> {
                           size: getHeight(20, context),
                         ),
                         onTap: () {
-                          changeScreen(context, WalletScreen());
+                          changeScreen(context, const WalletScreen());
                         },
                       ),
                       SizedBox(
@@ -402,7 +402,7 @@ class _MainMenuState extends State<MainMenu> {
                             },
                             text: 'Log Out',
                           ),
-                          SizedBox(width: 10,),
+                          const SizedBox(width: 10,),
                           CustomButton(
                             color: Colors.redAccent,
                             onPressed: () {

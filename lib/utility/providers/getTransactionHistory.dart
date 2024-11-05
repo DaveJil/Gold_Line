@@ -87,12 +87,12 @@ Future deposit(String amount, BuildContext context) async {
     print(response);
     String code = response['code'];
     if (code == "success") {
-      changeScreenReplacement(context, WalletScreen());
+      changeScreenReplacement(context, const WalletScreen());
     } else {
       String message = response['message'];
       {
         CustomDisplayWidget.displaySnackBar(context, message);
-        changeScreenReplacement(context, WalletScreen());
+        changeScreenReplacement(context, const WalletScreen());
       }
     }
   } on SocketException {
@@ -121,14 +121,14 @@ Future interWalletTransfer(
     print(response);
     String code = response['code'];
     if (code == "success") {
-      changeScreenReplacement(context, WalletScreen());
+      changeScreenReplacement(context, const WalletScreen());
       CustomDisplayWidget.displaySnackBar(context, "Transfer sucessful");
-      changeScreenReplacement(context, WalletScreen());
+      changeScreenReplacement(context, const WalletScreen());
     } else {
       String message = response['message'];
       {
         CustomDisplayWidget.displaySnackBar(context, message);
-        changeScreenReplacement(context, WalletScreen());
+        changeScreenReplacement(context, const WalletScreen());
       }
     }
   } on SocketException {
@@ -162,7 +162,7 @@ Future withdraw(String amount, BuildContext context) async {
     if (code == "success") {
       CustomDisplayWidget.displaySnackBar(context, message);
 
-      changeScreenReplacement(context, WalletScreen());
+      changeScreenReplacement(context, const WalletScreen());
     } else {
       String message = response['message'];
       String code = response['code'];
@@ -172,7 +172,7 @@ Future withdraw(String amount, BuildContext context) async {
       if (code == "bank-not-found") {
         await CustomDisplayWidget.displaySnackBar(context, message);
 
-        changeScreenReplacement(context, PaymentDetails());
+        changeScreenReplacement(context, const PaymentDetails());
       }
     }
   } on SocketException {
@@ -260,14 +260,14 @@ void verifyTransaction(String? amount, BuildContext context) async {
         .showSnackBar(SnackBar(content: Text(message)));
     await getWalletBalance(context);
 
-    removeScreenUntil(context, WalletScreen());
+    removeScreenUntil(context, const WalletScreen());
   } else {
     String message = response['data']['gateway_response'];
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
     await getWalletBalance(context);
 
-    removeScreenUntil(context, WalletScreen());
+    removeScreenUntil(context, const WalletScreen());
   }
 
   reference = '';
@@ -287,12 +287,12 @@ void verifyDeliveryPayment(String? amount, BuildContext context) async {
         .showSnackBar(SnackBar(content: Text(message)));
     final provider = Provider.of<MapProvider>(context);
     await provider.submitCardDelivery(context);
-    removeScreenUntil(context, SearchingForDriver());
+    removeScreenUntil(context, const SearchingForDriver());
   } else {
     String message = response['data']['gateway_response'];
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
-    removeScreenUntil(context, WalletScreen());
+    removeScreenUntil(context, const WalletScreen());
   }
 
   reference = '';

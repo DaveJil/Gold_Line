@@ -64,7 +64,7 @@ class KycInfoState extends State<KycInfo> {
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
                   child: TextField(
                     controller: userProvider.email,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Email',
                         hintText: 'Enter your email'),
@@ -78,7 +78,7 @@ class KycInfoState extends State<KycInfo> {
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
                   child: TextField(
                     controller: userProvider.phone,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Phone',
                         hintText: 'Enter Phone'),
@@ -92,7 +92,7 @@ class KycInfoState extends State<KycInfo> {
                       EdgeInsets.symmetric(horizontal: getWidth(30, context)),
                   child: TextField(
                     controller: userProvider.userAddress,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Enter Address',
                       hintText: 'Enter valid Address',

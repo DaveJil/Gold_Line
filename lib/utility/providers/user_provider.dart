@@ -220,7 +220,7 @@ class UserProvider with ChangeNotifier {
       String code = response['code'];
 
       if (code == 'success') {
-        changeScreen(context, ProceedLogin());
+        changeScreen(context, const ProceedLogin());
         CustomDisplayWidget.displayAwesomeSuccessSnackBar(context, "Relax",
             "Please Check your Email for password reset link");
       } else {
@@ -262,7 +262,7 @@ class UserProvider with ChangeNotifier {
       String code = response['code'];
 
       if (code == 'success') {
-        changeScreenReplacement(context, UserProfileScreen());
+        changeScreenReplacement(context, const UserProfileScreen());
         CustomDisplayWidget.displayAwesomeSuccessSnackBar(
             context, "", "Password Reset Successfully");
       } else {
@@ -344,7 +344,7 @@ class UserProvider with ChangeNotifier {
       var response = await CallApi().addImage(request, 'profile', file, image);
       print(response);
       getUserData(context);
-      changeScreenReplacement(context, UserProfileScreen());
+      changeScreenReplacement(context, const UserProfileScreen());
     } on SocketException {
       changeScreenReplacement(context,
           AppException(message: "No Internet Connection. Try again later"));
@@ -398,6 +398,7 @@ class UserProvider with ChangeNotifier {
       changeScreenReplacement(context,
           AppException(message: "Something went wrong. Try again later"));
     }
+    return null;
   }
 
   Future addBankDetails(BuildContext context) async {
@@ -411,7 +412,7 @@ class UserProvider with ChangeNotifier {
     try {
       final response = await CallApi().postData(formData, "bank/new");
       if (response['code'] == 'success') {
-        removeScreenUntil(context, HomeScreen());
+        removeScreenUntil(context, const HomeScreen());
       } else {
         String message = response['message'].toString();
         print(message);
@@ -441,7 +442,7 @@ class UserProvider with ChangeNotifier {
     await prefs.setString(ID, "");
     await prefs.setString(TOKEN, "");
     await prefs.setBool(LOGGED_IN, false);
-    removeScreenUntil(context, LoginChoice());
+    removeScreenUntil(context, const LoginChoice());
 
     notifyListeners();
     return Future.delayed(Duration.zero);
@@ -457,7 +458,7 @@ class UserProvider with ChangeNotifier {
     await prefs.setString(ID, "");
     await prefs.setString(TOKEN, "");
     await prefs.setBool(LOGGED_IN, false);
-    removeScreenUntil(context, LoginChoice());
+    removeScreenUntil(context, const LoginChoice());
 
     notifyListeners();
     return Future.delayed(Duration.zero);

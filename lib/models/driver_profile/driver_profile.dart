@@ -32,7 +32,7 @@ class DriverProfile {
 
   String? id;
   String? email;
-  dynamic? emailVerifiedAt;
+  dynamic emailVerifiedAt;
   String? phone;
   DateTime? phoneVerifiedAt;
   dynamic avatar;

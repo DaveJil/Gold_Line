@@ -62,8 +62,8 @@ class StarsWidget extends StatelessWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.star, color: Colors.amber),
-          Icon(
+          const Icon(Icons.star, color: Colors.amber),
+          const Icon(
             Icons.star,
             color: Colors.amber,
           ),
@@ -85,12 +85,12 @@ class StarsWidget extends StatelessWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.star, color: Colors.amber),
-          Icon(
+          const Icon(Icons.star, color: Colors.amber),
+          const Icon(
             Icons.star,
             color: Colors.amber,
           ),
-          Icon(Icons.star, color: Colors.amber),
+          const Icon(Icons.star, color: Colors.amber),
           Icon(
             Icons.star,
             color: Colors.grey.withOpacity(0.4),
@@ -105,13 +105,13 @@ class StarsWidget extends StatelessWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.star, color: Colors.amber),
-          Icon(
+          const Icon(Icons.star, color: Colors.amber),
+          const Icon(
             Icons.star,
             color: Colors.amber,
           ),
-          Icon(Icons.star, color: Colors.amber),
-          Icon(Icons.star, color: Colors.amber),
+          const Icon(Icons.star, color: Colors.amber),
+          const Icon(Icons.star, color: Colors.amber),
           Icon(
             Icons.star,
             color: Colors.grey.withOpacity(0.4),
@@ -119,9 +119,9 @@ class StarsWidget extends StatelessWidget {
         ],
       );
     } else {
-      return Row(
+      return const Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           Icon(Icons.star, color: Colors.amber),
           Icon(
             Icons.star,

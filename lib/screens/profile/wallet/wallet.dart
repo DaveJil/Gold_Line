@@ -25,25 +25,25 @@ class _WalletScreenState extends State<WalletScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
-            removeScreenUntil(context, HomeScreen());
+            removeScreenUntil(context, const HomeScreen());
           },
         ),
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   "Wallet Balance",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                 ),
                 SizedBox(height: 50.appHeight(context)),
-                Text(
+                const Text(
                   "Available Balance",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
@@ -58,7 +58,7 @@ class _WalletScreenState extends State<WalletScreen> {
                           return Center(
                             child: Text(
                               '${snapshot.error} occurred',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18, color: kPrimaryGoldColor),
                             ),
                           );
@@ -69,13 +69,13 @@ class _WalletScreenState extends State<WalletScreen> {
                           final data = snapshot.data;
                           return Text(
                             "₦$data",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 40),
                           );
                         }
                       }
 
-                      return CircularProgressIndicator(
+                      return const CircularProgressIndicator(
                         color: kPrimaryGoldColor,
                       );
                     }),
@@ -89,12 +89,12 @@ class _WalletScreenState extends State<WalletScreen> {
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               backgroundColor: kPrimaryGoldColor,
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   vertical: 15, horizontal: 10)),
                           onPressed: () {
-                            changeScreen(context, DepositScreen());
+                            changeScreen(context, const DepositScreen());
                           },
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -114,12 +114,12 @@ class _WalletScreenState extends State<WalletScreen> {
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.grey[400],
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   vertical: 15, horizontal: 5)),
                           onPressed: () {
                             changeScreen(context, WithdrawalScreen());
                           },
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -152,7 +152,7 @@ class _WalletScreenState extends State<WalletScreen> {
                           return Center(
                             child: Text(
                               '${snapshot.error} occurred',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18, color: kPrimaryGoldColor),
                             ),
                           );
@@ -191,7 +191,7 @@ class _WalletScreenState extends State<WalletScreen> {
                         }
                       }
 
-                      return CircularProgressIndicator(
+                      return const CircularProgressIndicator(
                         color: kPrimaryGoldColor,
                       );
                     }),

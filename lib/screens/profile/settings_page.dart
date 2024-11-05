@@ -18,7 +18,7 @@ class Settings extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           iconSize: getHeight(20, context),
           color: kPrimaryGoldColor,
           onPressed: () {
@@ -58,7 +58,7 @@ class Settings extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => KycInfo()));
+                    context, MaterialPageRoute(builder: (_) => const KycInfo()));
               },
             ),
             SizedBox(
@@ -75,7 +75,7 @@ class Settings extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => ChangePass()));
+                    context, MaterialPageRoute(builder: (_) => const ChangePass()));
               },
             ),
             SizedBox(

@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: InkWell(
         onTap: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => LoginChoice()),
+          MaterialPageRoute(builder: (context) => const LoginChoice()),
         ),
         child: Container(
           decoration: const BoxDecoration(

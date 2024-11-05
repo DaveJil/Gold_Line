@@ -1,8 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:gold_line/screens/authentication/proceed_login.dart';
-import 'package:gold_line/screens/authentication/sign_in.dart';
 import 'package:gold_line/screens/profile/supportScreen.dart';
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/dimensions.dart';

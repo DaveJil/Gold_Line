@@ -27,7 +27,7 @@ class AdvertContainer extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: onPressed,
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
-                child: Text(
+                child: const Text(
                   "Get Started",
                   style: TextStyle(color: Colors.deepOrange),
                 ),

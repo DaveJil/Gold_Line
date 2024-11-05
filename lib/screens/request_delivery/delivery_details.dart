@@ -491,7 +491,7 @@ class _PayerRadioButtonState extends State<PayerRadioButton> {
               ),
               borderRadius: const BorderRadius.all(Radius.circular(3))),
           child: Radio<String>(
-            fillColor: MaterialStateColor.resolveWith((states) =>
+            fillColor: WidgetStateColor.resolveWith((states) =>
                 mapProvider.whoFuckingPays == payer[btnValue]
                     ? kPrimaryGoldColor
                     : Colors.white),

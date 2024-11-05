@@ -158,10 +158,10 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           home: UpgradeAlert(
               upgrader: Upgrader(
-                  showIgnore: false,
-                  showReleaseNotes: false,
+                  //ignoreUpgrade: false,
+                  //showReleaseNotes: false,
                   messages: UpgraderMessages()),
-              child: GoldLine())),
+              child: const GoldLine())),
     );
   }
 }

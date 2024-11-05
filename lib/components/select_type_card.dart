@@ -31,10 +31,10 @@ class SelectTypeCard extends StatelessWidget {
 
             Column(
               children: [
-                Text(titleText!, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700,color: Colors.white), softWrap: true,
+                Text(titleText!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700,color: Colors.white), softWrap: true,
                 textAlign: TextAlign.center,),
                 SizedBox(height: 8.appHeight(context),),
-                Text(subText!, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.white),textAlign: TextAlign.center,),
+                Text(subText!, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.white),textAlign: TextAlign.center,),
 
               ],
 

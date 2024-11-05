@@ -159,7 +159,7 @@ class DeliverySummaryWidget extends StatelessWidget {
                     "Do you have any coupons?",
                     style: TextStyle(color: kPrimaryGoldColor),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   CustomDeliveryTextField(

@@ -12,6 +12,8 @@ import 'package:provider/provider.dart';
 import '../../utility/helpers/custom_button.dart';
 
 class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
+
   @override
   _SignInScreenState createState() => _SignInScreenState();
 }
@@ -57,6 +59,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   controller: userProvider.email,
                   validator: (String? val) {
                     if (!val!.isValidEmail) return 'Enter valid email';
+                    return null;
                   },
                   decoration: const InputDecoration(
                     enabledBorder: UnderlineInputBorder(
@@ -85,6 +88,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   obscureText: true,
                   validator: (String? val) {
                     if (!val!.isValidPassword) return 'Enter valid password';
+                    return null;
                   },
                   decoration: const InputDecoration(
                       enabledBorder: UnderlineInputBorder(

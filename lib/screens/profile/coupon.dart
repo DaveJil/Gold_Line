@@ -29,7 +29,7 @@ class CouponPage extends StatelessWidget {
         ),
         body: Padding(
           padding: const EdgeInsets.all(20),
-          child: Container(
+          child: SizedBox(
             width: getWidth(500, context),
             height: getHeight(400, context),
             child: Text(

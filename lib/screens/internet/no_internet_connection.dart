@@ -34,9 +34,9 @@ class NoInternetConnectionState extends State<NoInternetConnection> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('No/Bad Internet'),
+        title: const Text('No/Bad Internet'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.pop(context);
           },

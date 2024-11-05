@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class Appbar extends StatefulWidget {
+  const Appbar({super.key});
+
   @override
   _AppbarState createState() => _AppbarState();
 }
@@ -14,7 +16,7 @@ class _AppbarState extends State<Appbar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
+          const Text(
             'Home',
             style: TextStyle(
               fontSize: 25.0,

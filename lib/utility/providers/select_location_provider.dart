@@ -42,7 +42,7 @@ class MultipleLocationDelivery extends ChangeNotifier {
       // });
       final plist = GoogleMapsPlaces(
         apiKey: GOOGLE_MAPS_API_KEY,
-        apiHeaders: await GoogleApiHeaders().getHeaders(),
+        apiHeaders: await const GoogleApiHeaders().getHeaders(),
       );
       String placeId = place.placeId ?? "0";
       final details = await plist.getDetailsByPlaceId(placeId);
@@ -57,8 +57,8 @@ class MultipleLocationDelivery extends ChangeNotifier {
       notifyListeners();
     }
     notifyListeners();
-    pickUpLatLng = LatLng(pickupLocation!.geometry!.location!.lat!,
-        pickupLocation!.geometry!.location!.lng!);
+    pickUpLatLng = LatLng(pickupLocation!.geometry!.location.lat,
+        pickupLocation!.geometry!.location.lng);
     notifyListeners();
     // pickUpState = await getStateFromCoordinates(point: pickUpLatLng!);
     // pickUpCountry = await getCountryFromCoordinates(point: pickUpLatLng!);
@@ -81,7 +81,7 @@ class MultipleLocationDelivery extends ChangeNotifier {
     if (place != null) {
       final plist = GoogleMapsPlaces(
         apiKey: GOOGLE_MAPS_API_KEY,
-        apiHeaders: await GoogleApiHeaders().getHeaders(),
+        apiHeaders: await const GoogleApiHeaders().getHeaders(),
       );
       String placeId = place.placeId ?? "0";
       final details = await plist.getDetailsByPlaceId(placeId);
@@ -96,8 +96,8 @@ class MultipleLocationDelivery extends ChangeNotifier {
       notifyListeners();
     }
     notifyListeners();
-    pickUpLatLng = LatLng(pickupLocation!.geometry!.location!.lat!,
-        pickupLocation!.geometry!.location!.lng!);
+    pickUpLatLng = LatLng(pickupLocation!.geometry!.location.lat,
+        pickupLocation!.geometry!.location.lng);
     notifyListeners();
     // pickUpState = await getStateFromCoordinates(point: pickUpLatLng!);
     // pickUpCountry = await getCountryFromCoordinates(point: pickUpLatLng!);

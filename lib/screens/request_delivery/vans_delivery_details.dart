@@ -68,7 +68,7 @@ class VanDeliveryDetailsState extends State<VanDeliveryDetails> {
         centerTitle: false,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,7 +160,7 @@ class VanDeliveryDetailsState extends State<VanDeliveryDetails> {
             SizedBox(
               height: getHeight(20, context),
             ),
-            Center(child: SelectCity()),
+            const Center(child: SelectCity()),
             SizedBox(
               height: getHeight(20, context),
             ),
@@ -169,7 +169,7 @@ class VanDeliveryDetailsState extends State<VanDeliveryDetails> {
               child: CustomButton(
                   onPressed: () async {
                     await mapProvider.createVanDeliveryRequest(context);
-                    changeScreenReplacement(context, MyVansDeliveriesScreen());
+                    changeScreenReplacement(context, const MyVansDeliveriesScreen());
                   },
                   text: "Request Van/Truck"),
             )

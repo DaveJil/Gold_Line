@@ -47,7 +47,7 @@ class _RequestDeliveryTypeState extends State<RequestDeliveryType> {
                     "Get Good and Packages from one\nplace to another now ",
                 image: "assets/dispatch.svg",
                 onTap: () {
-                  changeScreen(context, DeliveryDetails());
+                  changeScreen(context, const DeliveryDetails());
                 },
               ),
               SizedBox(
@@ -74,7 +74,7 @@ class _RequestDeliveryTypeState extends State<RequestDeliveryType> {
                     "Request Vans and Trucks here, make\nyour request, offer your price and\nconnect to the best offer available for\nyour need ",
                 image: "assets/vans_svg.svg",
                 onTap: () {
-                  changeScreen(context, VanDeliveryDetails());
+                  changeScreen(context, const VanDeliveryDetails());
                 },
               ),
               SizedBox(
@@ -99,7 +99,7 @@ class _RequestDeliveryTypeState extends State<RequestDeliveryType> {
                     "Request Inter City Rides from one\ncity to another at your ease, from\nyour location to another.",
                 image: "assets/inter_city.svg",
                 onTap: () {
-                  changeScreen(context, InterCityRideDetails());
+                  changeScreen(context, const InterCityRideDetails());
                 },
               ),
             ],

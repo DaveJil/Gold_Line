@@ -35,9 +35,9 @@ class _DepositScreenState extends State<DepositScreen> {
       appBar: AppBar(
         backgroundColor: kPrimaryGoldColor,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
-            changeScreenReplacement(context, WalletScreen());
+            changeScreenReplacement(context, const WalletScreen());
           },
         ),
       ),
@@ -50,23 +50,23 @@ class _DepositScreenState extends State<DepositScreen> {
             children: [
               TextFormField(
                 controller: amount,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Enter amount you want to deposit',
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
                   // makePayStackPayment(amount.text, context);
                   // payWithPayStack(amount.text, context);
                   payStackDeposit(amount.text, context);
                 },
-                child: Text('Deposit'),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: kPrimaryGoldColor),
+                child: Text('Deposit'),
               ),
-              SizedBox(height: 20.0),
-              Text(
+              const SizedBox(height: 20.0),
+              const Text(
                   "Wallet Top Ups  may encounter delays due to bank network. Ensure you don't quit the paystack checkout until transaction is successful. Contact support for any issues/complaints regarding this")
             ],
           ),
