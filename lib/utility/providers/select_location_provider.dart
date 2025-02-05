@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart'
-    as hoc;
+//import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart' as hoc;
 import 'package:gold_line/utility/helpers/constants.dart';
 import 'package:gold_line/utility/helpers/controllers.dart';
 import 'package:google_api_headers/google_api_headers.dart';
@@ -23,6 +22,8 @@ class MultipleLocationDelivery extends ChangeNotifier {
   LatLng? dropOffLatLng5;
 
   setPickUpLocation(BuildContext context) async {
+    var place;
+    /*
     var place = await hoc.PlacesAutocomplete.show(
         context: context,
         apiKey: GOOGLE_MAPS_API_KEY,
@@ -34,6 +35,8 @@ class MultipleLocationDelivery extends ChangeNotifier {
         onError: (err) {
           print(err);
         });
+
+     */
     notifyListeners();
 
     if (place != null) {
@@ -66,6 +69,8 @@ class MultipleLocationDelivery extends ChangeNotifier {
   }
 
   setDropOffLocation(BuildContext context) async {
+    var place;
+    /*
     var place = await hoc.PlacesAutocomplete.show(
         context: context,
         apiKey: GOOGLE_MAPS_API_KEY,
@@ -78,6 +83,7 @@ class MultipleLocationDelivery extends ChangeNotifier {
           print(err);
         });
 
+     */
     if (place != null) {
       final plist = GoogleMapsPlaces(
         apiKey: GOOGLE_MAPS_API_KEY,

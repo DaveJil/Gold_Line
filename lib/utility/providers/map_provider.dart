@@ -4,8 +4,7 @@ import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart'
-    as hoc;
+//import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart' as hoc;
 // import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
@@ -418,6 +417,8 @@ class MapProvider with ChangeNotifier {
   }
 
   setPickUpLocation(BuildContext context) async {
+    var place;
+    /*
     var place = await hoc.PlacesAutocomplete.show(
         context: context,
         apiKey: GOOGLE_MAPS_API_KEY,
@@ -429,6 +430,8 @@ class MapProvider with ChangeNotifier {
         onError: (err) {
           print(err);
         });
+
+     */
     notifyListeners();
 
     if (place != null) {
@@ -462,6 +465,8 @@ class MapProvider with ChangeNotifier {
   }
 
   setDropOffLocation(BuildContext context) async {
+    var place;
+    /*
     var place = await hoc.PlacesAutocomplete.show(
         context: context,
         apiKey: GOOGLE_MAPS_API_KEY,
@@ -474,6 +479,7 @@ class MapProvider with ChangeNotifier {
           print(err);
         });
 
+     */
     if (place != null) {
       final plist = GoogleMapsPlaces(
         apiKey: GOOGLE_MAPS_API_KEY,
